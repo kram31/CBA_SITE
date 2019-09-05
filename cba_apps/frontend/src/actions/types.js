@@ -1,0 +1,14 @@
+export const GET_SURVEYS = "GET_SURVEYS";
+export const ADD_SURVEY = "ADD_SURVEY";
+export const DELETE_SURVEY = "DELETE_SURVEY";
+export const MODAL_TOGGLE = "MODAL_TOGGLE";
+export const GET_SURVEY = "GET_SURVEY";
+export const REMOVE_SURVEY = "REMOVE_SURVEY";
+export const GET_AGENT = "GET_AGENT";
+export const GET_SKILLS = "GET_SKILLS";
+export const GET_DSAT_CODE1 = "GET_DSAT_CODE1";
+export const GET_BB_DRIVER_CODE2 = "GET_BB_DRIVER_CODE2";
+export const GET_BB_DRIVER_CODE3 = "GET_BB_DRIVER_CODE3";
+export const GET_TEAMS = "GET_TEAMS";
+export const ADD_RCA = "ADD_RCA";
+export const UPDATE_BOTTOMBOX_NOT_COMPLETED = "UPDATE_BOTTOMBOX_NOT_COMPLETED";
