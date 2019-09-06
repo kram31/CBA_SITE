@@ -1,10 +1,13 @@
 from django.db import models
-from agents.models import Agent
 
 
 class Survey(models.Model):
     reference_number = models.CharField(
         'Reference_Number', max_length=100, blank=True, primary_key=True)
+
+    agent = models.ForeignKey(
+        "agents.Agent", on_delete=models.CASCADE, related_name="surveys")
+
     callback_reference_number = models.CharField('Callback Request #',
                                                  max_length=100, blank=True)
     related_incident_record = models.CharField('Related Incident/Records',
@@ -59,9 +62,6 @@ class Survey(models.Model):
     average_score = models.CharField(
         'Average Score', max_length=100, blank=True)
 
-    owner_name = models.CharField('Owner Name', max_length=100)
-    operator_lan_id = models.CharField('Operator Lan ID', max_length=100)
-
     fulfillment = models.CharField(
         'Fulfillment', max_length=100, blank=True)
     follow_up_commnets = models.CharField('Follow up Comments',
@@ -103,10 +103,8 @@ class RCA(models.Model):
         ('No', 'No')
     )
 
-    surveyed_ticket = models.ForeignKey(
-        Survey, on_delete=models.CASCADE, related_name="rcas")
-    agent = models.ForeignKey(
-        'agents.Agent', on_delete=models.CASCADE, related_name="agents")
+    surveyed_ticket = models.OneToOneField(
+        Survey, on_delete=models.CASCADE, related_name="rca")
     support_silo_issue_based = models.CharField(
         "Support Silo Skill based on issue", max_length=100, blank=True)
     service = models.CharField("Service", max_length=100, blank=True)
@@ -119,9 +117,9 @@ class RCA(models.Model):
     dsat_cause = models.ForeignKey(
         'DSAT_Code1', on_delete=models.CASCADE, null=True, related_name="dsat_causes")
     bb_driver_code2 = models.ForeignKey(
-        'BB_Driver_Code2', on_delete=models.CASCADE, null=True)
+        'BB_Driver_Code2', on_delete=models.CASCADE, null=True, related_name="bb_driver_codes_2")
     bb_driver_code3 = models.ForeignKey(
-        'BB_Driver_Code3', on_delete=models.CASCADE, null=True)
+        'BB_Driver_Code3', on_delete=models.CASCADE, null=True, related_name="bb_driver_codes_3")
     actual_issue = models.CharField(
         "Actual issue", max_length=3000, blank=True)
     rca_date = models.DateField("RCA Date", auto_now_add=True)

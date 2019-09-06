@@ -10,8 +10,7 @@ import {
     GET_BB_DRIVER_CODE2,
     GET_BB_DRIVER_CODE3,
     GET_TEAMS,
-    ADD_RCA,
-    UPDATE_BOTTOMBOX_NOT_COMPLETED
+    ADD_RCA
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -36,7 +35,7 @@ const surveyReducer = (state = initialState, action) => {
                 ...state,
                 surveys: action.payload,
                 bottombox_not_completed: action.payload.filter(
-                    survey => survey.bottombox != 0 && !survey.completed
+                    survey => survey.bottombox != 0 && !survey.rca
                 )
             };
         case DELETE_SURVEY:
@@ -100,13 +99,10 @@ const surveyReducer = (state = initialState, action) => {
         case ADD_RCA:
             return {
                 ...state,
-                rcas: [action.payload, ...state.rcas]
-            };
-        case UPDATE_BOTTOMBOX_NOT_COMPLETED:
-            return {
-                ...state,
+                rcas: [action.payload, ...state.rcas],
                 bottombox_not_completed: state.bottombox_not_completed.filter(
-                    item => action.payload != item.reference_number
+                    item =>
+                        action.payload.surveyed_ticket != item.reference_number
                 )
             };
         default:

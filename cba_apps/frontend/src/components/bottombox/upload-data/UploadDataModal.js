@@ -16,7 +16,9 @@ import {
     ModalFooter,
     Form,
     Input,
-    Label
+    Label,
+    ListGroupItem,
+    NavLink
 } from "reactstrap";
 
 import { toggle } from "../../../actions/modalToggleActions";
@@ -97,9 +99,20 @@ class UploadDataModal extends Component {
         const columns = [...headers];
         return (
             <Fragment>
-                <Button color="dark" onClick={this.toggle}>
+                <NavLink
+                    style={{ cursor: "pointer", color: "#ffed00" }}
+                    onClick={this.toggle}
+                >
                     Upload Data
-                </Button>
+                </NavLink>
+                {/* <Button
+                    color="dark"
+                    size="md"
+                    onClick={this.toggle}
+                    style={{ color: "#ffed00", padding: "7px 30px" }}
+                >
+                    Upload Data
+                </Button> */}
                 <Modal
                     scrollable={true}
                     className="modal-lg"

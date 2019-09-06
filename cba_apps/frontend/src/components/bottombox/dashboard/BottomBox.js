@@ -5,6 +5,7 @@ import UploadDataModal from "../upload-data/UploadDataModal";
 import RCAFormModal from "../rca/RCAFormModal";
 import UploadData from "../upload-data/UploadData";
 import SurveyContent from "./SurveyContent";
+import DatatablePage from "../upload-data/survey-data-table/DatatablePage";
 
 import {
     Card,
@@ -13,7 +14,9 @@ import {
     CardFooter,
     CardBody,
     Row,
-    Col
+    Col,
+    ButtonGroup,
+    Button
 } from "reactstrap";
 
 import {
@@ -37,18 +40,19 @@ class BottomBox extends Component {
     render() {
         return (
             <Fragment>
-                <Row>
-                    <Col md={2}></Col>
-                    <Col md={8}>
+                <Row className="mt-4">
+                    <Col md={5}>
+                        <h3 style={{ paddingLeft: "24px" }}>
+                            Bottombox Surveys
+                        </h3>
                         <SurveyContent
                             bottombox_not_completed={
                                 this.props.bottombox_not_completed
                             }
                         />
                     </Col>
-                    <Col md={2} className="bg-dark" style={{ height: "80%" }}>
-                        <UploadDataModal />
-                        <h5>test</h5>
+                    <Col md={7}>
+                        <DatatablePage />
                     </Col>
                 </Row>
             </Fragment>

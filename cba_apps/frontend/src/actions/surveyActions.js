@@ -10,8 +10,7 @@ import {
     GET_BB_DRIVER_CODE2,
     GET_BB_DRIVER_CODE3,
     GET_TEAMS,
-    ADD_RCA,
-    UPDATE_BOTTOMBOX_NOT_COMPLETED
+    ADD_RCA
 } from "./types";
 
 import axios from "axios";
@@ -117,21 +116,11 @@ export const getTeams = () => dispatch => {
     );
 };
 
-export const addRCA = (rcaData, surveyData) => dispatch => {
-    Promise.all([
-        axios.post("/api/rca/", rcaData).then(res =>
-            dispatch({
-                type: ADD_RCA,
-                payload: res.data
-            })
-        ),
-        axios
-            .put(`/api/surveys/${rcaData.surveyed_ticket}/`, surveyData)
-            .then(res =>
-                dispatch({
-                    type: UPDATE_BOTTOMBOX_NOT_COMPLETED,
-                    payload: rcaData.surveyed_ticket
-                })
-            )
-    ]);
+export const addRCA = rcaData => dispatch => {
+    axios.post("/api/rca/", rcaData).then(res =>
+        dispatch({
+            type: ADD_RCA,
+            payload: res.data
+        })
+    );
 };

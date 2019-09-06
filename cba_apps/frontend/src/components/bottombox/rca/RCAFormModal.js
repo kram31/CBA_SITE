@@ -98,22 +98,10 @@ class RCAFormModal extends Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        const surveyData = {
-            completed: true,
-            owner_name: this.props.survey.owner_name,
-            operator_lan_id: this.props.survey.operator_lan_id
-        };
         const rcaData = this.state;
-        rcaData.agent = this.props.survey.operator_lan_id;
         rcaData.surveyed_ticket = this.props.survey.reference_number;
 
-        console.log(
-            `${JSON.stringify(rcaData, null, 2)} === ${
-                rcaData.surveyed_ticket
-            } === ${JSON.stringify(surveyData, null, 2)}`
-        );
-
-        this.props.addRCA(rcaData, surveyData);
+        this.props.addRCA(rcaData);
 
         this.handleToggle();
     };

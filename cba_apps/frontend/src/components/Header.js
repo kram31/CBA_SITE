@@ -27,29 +27,31 @@ export default class Example extends React.Component {
             isOpen: !this.state.isOpen
         });
     }
+
     render() {
         return (
-            <Navbar color="light" light expand="md" sticky={"top"}>
-                <div className="container">
-                    <NavbarBrand href="/">CBA</NavbarBrand>
+            <Navbar
+                style={{ backgroundColor: "black", padding: "20px" }}
+                expand="md"
+                sticky={"top"}
+            >
+                <div className="container-fluid">
+                    <NavbarBrand style={{ color: "#ffed00" }} href="/">
+                        CBA
+                    </NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink href="#">#</NavLink>
+                                <NavLink style={{ color: "#ffed00" }} href="#">
+                                    #
+                                </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="#">#</NavLink>
+                                <NavLink style={{ color: "#ffed00" }} href="#">
+                                    #
+                                </NavLink>
                             </NavItem>
-                            <UncontrolledDropdown nav inNavbar>
-                                <DropdownToggle nav caret></DropdownToggle>
-                                <DropdownMenu right>
-                                    <DropdownItem>Option 1</DropdownItem>
-                                    <DropdownItem>Option 2</DropdownItem>
-                                    <DropdownItem divider />
-                                    <DropdownItem>Reset</DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledDropdown>
                         </Nav>
                     </Collapse>
                 </div>

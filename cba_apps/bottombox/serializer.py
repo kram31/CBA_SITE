@@ -4,8 +4,24 @@ from django.core.exceptions import FieldDoesNotExist
 
 
 class SurveySerializer(serializers.ModelSerializer):
-    rcas = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name='rca-detail')
+
+    owner_name = serializers.SerializerMethodField()
+
+    def get_owner_name(self, obj):
+
+        return obj.agent.name
+
+    operator_lan_id = serializers.SerializerMethodField()
+
+    def get_operator_lan_id(self, obj):
+
+        return obj.agent.operator_lan_id
+
+    rca = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='rca-detail'
+    )
 
     class Meta:
         model = Survey

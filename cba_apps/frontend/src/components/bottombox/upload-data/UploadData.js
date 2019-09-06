@@ -65,36 +65,6 @@ class UploadData extends Component {
     render() {
         return (
             <Fragment>
-                <form>
-                    <fieldset>
-                        <div className="form-group">
-                            <h5>File Input</h5>
-                            <input
-                                type="file"
-                                name="selectedFile"
-                                className="form-control-file"
-                                id="file"
-                                accept={SheetJSFT}
-                                aria-describedby="fileHelp"
-                                onChange={this.handleChange}
-                            />
-                            <small
-                                id="fileHelp"
-                                className="form-text text-muted"
-                            >
-                                Choose file to upload
-                            </small>
-                        </div>
-
-                        <button
-                            onClick={this.handleFile}
-                            type="submit"
-                            className="btn btn-primary"
-                        >
-                            Submit
-                        </button>
-                    </fieldset>
-                </form>
                 <DatatablePage />
             </Fragment>
         );

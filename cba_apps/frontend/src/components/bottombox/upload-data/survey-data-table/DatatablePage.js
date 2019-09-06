@@ -51,7 +51,10 @@ class DatatablePage extends Component {
         const columns = [buttons, ...headers];
         return (
             <Fragment>
+                <h3>Survey Table</h3>
                 <ReactTable
+                    className="-striped -highlight"
+                    style={{ backgroundColor: "white" }}
                     data={this.props.data}
                     columns={columns}
                     minRows={10}

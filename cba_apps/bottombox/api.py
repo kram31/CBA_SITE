@@ -28,6 +28,8 @@ class SurveyViewset(viewsets.ModelViewSet):
             Agent.objects.create(name=request.data.get(
                 'owner_name'), operator_lan_id=lan_id)
 
+        request.data['agent'] = lan_id
+
         serializer = self.get_serializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
