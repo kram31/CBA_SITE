@@ -6,8 +6,10 @@ import BottomBox from "./bottombox/dashboard/BottomBox";
 import { Provider } from "react-redux";
 import store from "../store";
 import SideBar from "./SideBar";
+import "../font/stylesheet.css"
+import "../App.css"
 
-import { Row, Col } from "reactstrap";
+
 
 class App extends Component {
     render() {
@@ -27,4 +29,5 @@ class App extends Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById("app"));
+
+export default App

@@ -17,13 +17,11 @@ class SideBar extends Component {
                     overflowX: "hidden",
                     paddingTop: "50px",
                     marginTop: "50px",
-                    backgroundColor: "rgb(0,0,0)",
-                    opacity: ".9"
+                    backgroundColor: "white",
+                    textAlign: "center"
+                    
                 }}
             >
-                <NavItem style={{ paddingLeft: "15px", color: "white" }}>
-                    <h5>Dashboard</h5>
-                </NavItem>
                 <NavItem>
                     <UploadDataModal />
                 </NavItem>

@@ -7,6 +7,7 @@ import { addSurveysBulk } from "../../../actions/surveyActions";
 import { connect } from "react-redux";
 
 import ReactTable from "react-table";
+import add_data from "../../../adddata.png"
 
 import {
     Button,
@@ -100,10 +101,13 @@ class UploadDataModal extends Component {
         return (
             <Fragment>
                 <NavLink
-                    style={{ cursor: "pointer", color: "#ffed00" }}
+                className="mt-3"
+                    style={{ cursor: "pointer", color: "black", textAlign: "center" }}
                     onClick={this.toggle}
                 >
-                    Upload Data
+                        <img src={add_data} width="85" height="45"></img>
+                        <br/>
+                        Upload Data
                 </NavLink>
                 {/* <Button
                     color="dark"

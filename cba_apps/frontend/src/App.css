@@ -1,0 +1,17 @@
+.navlink {
+    color: white;
+}
+
+.ReactTable {
+    color: white;
+ 
+}
+
+.ReactTable .rt-thead .rt-tr {
+    text-align: center;
+    background-color: black;
+  }
+
+.ReactTable .rt-thead .rt-th {
+    border: 1px solid white;
+  }
