@@ -6,10 +6,8 @@ import BottomBox from "./bottombox/dashboard/BottomBox";
 import { Provider } from "react-redux";
 import store from "../store";
 import SideBar from "./SideBar";
-import "../font/stylesheet.css"
-import "../App.css"
-
-
+import "../font/stylesheet.css";
+import "../css/main.css";
 
 class App extends Component {
     render() {
@@ -29,5 +27,4 @@ class App extends Component {
     }
 }
 
-
-export default App
+export default App;

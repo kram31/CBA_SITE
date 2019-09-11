@@ -6,10 +6,10 @@ import {
     NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
+    NavLink
 } from "reactstrap";
 
-import dxc from "../dxc.png"
+import dxc from "../images/dxc.png";
 
 export default class Example extends React.Component {
     constructor(props) {
@@ -29,13 +29,16 @@ export default class Example extends React.Component {
     render() {
         return (
             <Navbar
-                style={{ backgroundColor: "black", padding: "20px" }}
+                style={{
+                    backgroundColor: "black",
+                    padding: "20px"
+                }}
                 expand="md"
                 sticky={"top"}
             >
                 <div className="container-fluid">
                     <NavbarBrand href="/">
-                    <img src={dxc} width="250" height="45" alt="Logo" />
+                        <img src={dxc} width="250" height="45" alt="Logo" />
                     </NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>

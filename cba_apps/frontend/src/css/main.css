@@ -1,0 +1,30 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+}
+
+#navbar-main {
+  background-color: "black";
+  padding: "20px";
+}
+
+.navlink {
+  color: white;
+}
+
+.ReactTable {
+  text-align: center;
+  color: black;
+  border: 1px solid black;
+}
+
+.ReactTable .rt-thead {
+  background-color: black;
+  color: white;
+}
+
+.ReactTable .rt-th {
+  border: 1px solid white;
+}
+/*# sourceMappingURL=main.css.map */

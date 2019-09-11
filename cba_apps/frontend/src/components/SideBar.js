@@ -19,9 +19,10 @@ class SideBar extends Component {
                     marginTop: "50px",
                     backgroundColor: "white",
                     textAlign: "center"
-                    
                 }}
+                sticky={"left"}
             >
+                <h3>Bottombox</h3>
                 <NavItem>
                     <UploadDataModal />
                 </NavItem>

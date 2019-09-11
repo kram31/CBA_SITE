@@ -40,18 +40,13 @@ class BottomBox extends Component {
     render() {
         return (
             <Fragment>
-                <Row className="mt-4">
-                    <Col md={5}>
-                        <h3 style={{ paddingLeft: "24px" }}>
-                            Bottombox Surveys
-                        </h3>
-                        <SurveyContent
-                            bottombox_not_completed={
-                                this.props.bottombox_not_completed
-                            }
-                        />
+                <Row className="my-4 mr-3">
+                    <Col>
+                        <DatatablePage />
                     </Col>
-                    <Col md={7}>
+                </Row>
+                <Row className="my-4 mr-3">
+                    <Col>
                         <DatatablePage />
                     </Col>
                 </Row>

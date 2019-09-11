@@ -15,6 +15,8 @@ import {
 
 import axios from "axios";
 
+axios.defaults.baseURL = "http://localhost:8000";
+
 export const getSurveys = () => dispatch => {
     axios.get("/api/surveys/").then(res =>
         dispatch({
