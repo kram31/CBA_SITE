@@ -4,6 +4,37 @@ html {
   margin: 0;
 }
 
+.sidebar-main {
+  min-height: 400px;
+  min-width: 100px;
+  position: fixed;
+  z-index: 1;
+  top: 30;
+  left: 0;
+  overflow-x: hidden;
+  margin-left: 10px;
+  background-color: white;
+  text-align: left;
+}
+
+.sidebar-main .sidebar-navitem {
+  height: 60px;
+  background-color: #ffed00;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.sidebar-main .sidebar-navitem:hover {
+  background-color: black;
+  color: #ffed00;
+}
+
+.main {
+  margin-left: 200px;
+  margin-top: 25px;
+  margin-right: 20px;
+}
+
 #navbar-main {
   background-color: "black";
   padding: "20px";
@@ -26,5 +57,25 @@ html {
 
 .ReactTable .rt-th {
   border: 1px solid white;
+}
+
+.modal-main .modal-header {
+  background-color: black;
+  color: white;
+}
+
+.modal-main #file {
+  margin-bottom: 20px;
+}
+
+.modal-main .btn-submit {
+  color: black;
+  background-color: #ffed00;
+  border: none;
+}
+
+.modal-main .btn-submit:hover {
+  color: #ffed00;
+  background-color: black;
 }
 /*# sourceMappingURL=main.css.map */

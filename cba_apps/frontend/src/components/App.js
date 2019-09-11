@@ -16,8 +16,10 @@ class App extends Component {
                 <Fragment>
                     <Header />
                     <div className="container-fluid">
-                        <SideBar />
-                        <div className="main" style={{ marginLeft: "250px" }}>
+                        <div className="sidebar-main">
+                            <SideBar />
+                        </div>
+                        <div className="main">
                             <BottomBox />
                         </div>
                     </div>

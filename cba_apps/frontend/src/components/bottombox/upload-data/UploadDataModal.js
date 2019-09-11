@@ -7,7 +7,6 @@ import { addSurveysBulk } from "../../../actions/surveyActions";
 import { connect } from "react-redux";
 
 import ReactTable from "react-table";
-import add_data from "../../../images/adddata.png";
 
 import {
     Button,
@@ -84,7 +83,13 @@ class UploadDataModal extends Component {
 
         this.props.addSurveysBulk(this.state.data);
         this.toggle();
+       
     };
+
+    handleCancel = () => {
+        this.setState((state, props) => ({isStaged: !state.isStaged}))
+        this.toggle()
+    }
 
     toggle = () => {
         this.setState((state, props) => ({ modal: !state.modal }));
@@ -101,17 +106,16 @@ class UploadDataModal extends Component {
         return (
             <Fragment>
                 <NavLink
-                    className="mt-3"
+                
                     style={{
                         cursor: "pointer",
-                        color: "black",
-                        textAlign: "center"
+                        
                     }}
                     onClick={this.toggle}
                 >
-                    <img src={add_data} width="85" height="45"></img>
-                    <br />
-                    Upload Data
+                    <p>
+                        <span><i className="fa fa-upload"></i></span> Upload Data
+                    </p>
                 </NavLink>
                 {/* <Button
                     color="dark"
@@ -123,14 +127,14 @@ class UploadDataModal extends Component {
                 </Button> */}
                 <Modal
                     scrollable={true}
-                    className="modal-lg"
+                    className="modal-lg modal-main"
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                 >
                     <Form className="modal-content">
                         <ModalHeader
                             toggle={this.toggle}
-                            className="bg-dark text-warning"
+                            className="modal-header"
                         >
                             Upload Surveys
                         </ModalHeader>
@@ -155,10 +159,10 @@ class UploadDataModal extends Component {
                             )}
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" onClick={this.handleFile}>
+                            <Button className="btn-submit" onClick={this.handleFile}>
                                 Send
                             </Button>{" "}
-                            <Button color="secondary" onClick={this.toggle}>
+                            <Button className="btn-submit" onClick={this.handleCancel}>
                                 Cancel
                             </Button>
                         </ModalFooter>
