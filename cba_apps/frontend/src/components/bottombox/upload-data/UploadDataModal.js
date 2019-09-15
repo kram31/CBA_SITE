@@ -16,8 +16,6 @@ import {
     ModalFooter,
     Form,
     Input,
-    Label,
-    ListGroupItem,
     NavLink
 } from "reactstrap";
 
@@ -87,7 +85,8 @@ class UploadDataModal extends Component {
     };
 
     handleCancel = () => {
-        this.setState((state, props) => ({isStaged: !state.isStaged}))
+
+        this.setState((state, props) => (state.isStaged && {isStaged: !state.isStaged}))
         this.toggle()
     }
 

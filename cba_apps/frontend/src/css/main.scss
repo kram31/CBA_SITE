@@ -1,82 +1,131 @@
 body,
 html {
-    padding: 0;
-    margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .sidebar-main {
-    min-height: 400px;
-    min-width: 100px;
-    position: fixed;
-    z-index: 1;
-    top: 30;
-    left: 0;
-    overflow-x: hidden;
-    margin-left: 10px;
-    background-color: white;
-    text-align: left;
+	min-height: 150px;
+	min-width: 100px;
+	margin-top: 10px;
+	top: 30;
+	left: 0;
 
-    .sidebar-navitem {
-        height: 60px;
-        background-color: #ffed00;
-        text-align: center;
-        padding-top: 10px
+	background-color: white;
+	text-align: center;
 
-
-    }
-    .sidebar-navitem:hover {
-        background-color: black;
-        color: #ffed00
-    }
-
+	.sidebar-navitem {
+		height: 60px;
+		background-color: #ffed00;
+		text-align: left;
+		padding-top: 10px;
+	}
+	.sidebar-navitem:hover {
+		background-color: black;
+		color: #ffed00;
+	}
 }
 
+a {
+	color: black;
+}
 
+a:hover {
+	color: white;
+	opacity: 1;
+}
+
+#bg-image {
+	background-image: url(../images/access-adult-black-and-white-1449052.jpg);
+	background-size: cover;
+	background-color: black;
+}
 
 .main {
-    margin-left: 200px;
-    margin-top: 25px;
-    margin-right: 20px
+	.section {
+		margin-bottom: 20px;
+	}
+}
+
+.card {
+	border: 1px solid black;
+	.card-header {
+		background-color: black;
+		color: white;
+	}
+}
+
+.survey-detail {
+	font-size: 14px;
+	text-align: left;
+	letter-spacing: -.75px;
 }
 
 #navbar-main {
-    background-color: "black";
-    padding: "20px";
+	background-color: "black";
+	padding: "20px";
 }
 
 .navlink {
-    color: white;
+	color: white;
+	opacity: .5;
+}
+.navlink:hover {
+	color: white;
+	opacity: 1;
 }
 
 .ReactTable {
-    text-align: center;
-    color: black;
-    border: 1px solid black;
-    .rt-thead {
-        background-color: black;
-        color: white;
-    }
-    .rt-th {
-        border: 1px solid white;
-    }
+	text-align: center;
+	color: black;
+	border: 1px solid black;
+	.rt-thead {
+		background-color: black;
+		color: white;
+	}
+	.rt-th {
+		border: 1px solid white;
+	}
+}
+
+.modal-backdrop {
+	opacity: 0.3 !important;
 }
 
 .modal-main {
-    
-    .modal-header {
-        background-color: black;
-        color: white;
-    }
-    #file {
-        margin-bottom: 20px;
-    }
-    .btn-submit {
-        color: black;
-        background-color: #ffed00;
-        border: none
-    }
-    .btn-submit:hover {
-        color: #ffed00;
-        background-color: black
-    }
+	.modal-header {
+		background-color: black;
+		color: white;
+	}
+	#file {
+		margin-bottom: 20px;
+	}
+	.btn-submit {
+		color: black;
+		background-color: #ffed00;
+		border: none;
+	}
+	.btn-submit:hover {
+		color: #ffed00;
+		background-color: black;
+	}
+}
+
+@media (min-width: 770px) {
+	.sidebar-main {
+		position: fixed;
+		z-index: 1;
+		margin-left: 10px;
+		overflow-x: hidden;
+		text-align: left;
+	}
+	.sidebar-navitem:hover {
+		background-color: black;
+		color: #ffed00;
+	}
+	.main {
+		margin-left: 200px;
+		margin-top: 20px;
+		margin-right: 20px;
+	}
 }

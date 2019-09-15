@@ -52,37 +52,9 @@ class RCAFormModal extends Component {
         corrective_actions: ""
     };
 
-    handleRCAButton = data => {
-        const {
-            toggle,
-            getSurvey,
-            getAgentDetails,
-            getSkills,
-            getDsatCode1,
-            getBBDriverCode2,
-            getBBDriverCode3,
-            removeSurvey,
-            getTeams
-        } = this.props;
-
-        const getDetails = data => {
-            getSurvey(data);
-            getAgentDetails(data.operator_lan_id);
-            getSkills();
-            getDsatCode1();
-            getBBDriverCode2();
-            getBBDriverCode3();
-            getTeams();
-        };
-
-        toggle();
-
-        !this.props.isOpen ? getDetails(data) : removeSurvey();
-    };
-
     handleToggle = () => {
+        this.props.removeSurvey();
         this.props.toggle();
-        !this.props.isOpen ? this.props.getSkills() : this.props.removeSurvey();
     };
 
     handleChange = e => {
@@ -101,13 +73,15 @@ class RCAFormModal extends Component {
         const rcaData = this.state;
         rcaData.surveyed_ticket = this.props.survey.reference_number;
 
+        console.log(rcaData)
+
         this.props.addRCA(rcaData);
 
-        this.handleToggle();
+        this.props.toggle()
     };
 
     render() {
-        let { reference_number, owner_name } = this.props.survey;
+        let { reference_number, owner_name, agent } = this.props.survey;
 
         const checkValue = elem => {
             let value;
@@ -118,20 +92,9 @@ class RCAFormModal extends Component {
 
         return (
             <div>
-                <Button
-                    outline
-                    size="sm"
-                    className="ml-1"
-                    onClick={() => {
-                        this.handleRCAButton(this.props.cellprops);
-                    }}
-                >
-                    RCA
-                </Button>
-
                 <Modal
                     scrollable={true}
-                    className="modal-lg"
+                    className="modal-lg modal-main"
                     isOpen={this.props.isOpen}
                     toggle={this.handleToggle}
                 >
@@ -139,7 +102,7 @@ class RCAFormModal extends Component {
                         className="modal-content"
                         onSubmit={this.handleSubmit}
                     >
-                        <ModalHeader toggle={this.handleToggle}>
+                        <ModalHeader className="modal-header" toggle={this.handleToggle}>
                             Root Cause Analysis
                         </ModalHeader>
                         <ModalBody>
@@ -174,7 +137,7 @@ class RCAFormModal extends Component {
                                         attr="skill"
                                         label_name="Agent's Primary Skill"
                                         value={checkValue(
-                                            this.props.agent.skill
+                                            agent && agent.skill
                                         )}
                                         controlFunc={this.handleChange}
                                         readOnly={true}
@@ -447,15 +410,16 @@ class RCAFormModal extends Component {
                         <ModalFooter>
                             <Button
                                 type="submit"
-                                color="primary"
+                             
                                 onSubmit={this.handleSubmit}
+                                className="btn-submit"
                                 // onClick={this.handleToggle}
                             >
                                 Submit
                             </Button>{" "}
                             <Button
                                 type="submit"
-                                color="secondary"
+                                className="btn-submit"
                                 onClick={this.handleToggle}
                             >
                                 Cancel

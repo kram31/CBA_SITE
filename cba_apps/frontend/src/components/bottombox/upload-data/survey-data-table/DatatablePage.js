@@ -3,19 +3,25 @@ import ReactTable from "react-table";
 
 import { connect } from "react-redux";
 
-import { getSurveys, deleteSurvey } from "../../../../actions/surveyActions";
+import { deleteSurvey } from "../../../../actions/surveyActions";
+import { toggle } from "../../../../actions/modalToggleActions";
 
 import RCAFormModal from "../../rca/RCAFormModal";
+
+import { getSurvey, getAgentDetails } from "../../../../actions/surveyActions"
 
 import { Button } from "reactstrap";
 
 class DatatablePage extends Component {
     state = { cellprops: null };
-    componentDidMount() {
-        this.props.getSurveys();
-    }
 
     handleDelete = e => this.props.deleteSurvey(e);
+
+    handleToggle = data => {
+        this.props.getSurvey(data)
+        this.props.toggle();
+
+    };
 
     render() {
         // Creating Headers for table
@@ -41,7 +47,17 @@ class DatatablePage extends Component {
                             Delete
                         </Button>
                         {cellprops.original.bottombox == 1 && (
-                            <RCAFormModal cellprops={cellprops.original} />
+                                            <div>
+                                                <Button
+                                                     outline
+                                                     size="sm"
+                                                     className="ml-1"
+                                                     onClick={() => this.handleToggle(cellprops.original)}
+                                                >
+                                                     RCA
+                                                </Button>
+                                                <RCAFormModal />
+                                            </div>
                         )}
                     </div>
                 </Fragment>
@@ -74,7 +90,9 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     {
-        getSurveys,
-        deleteSurvey
+        deleteSurvey,
+        toggle,
+        getSurvey,
+        getAgentDetails
     }
 )(DatatablePage);

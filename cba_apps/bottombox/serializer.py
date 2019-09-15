@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, Team
 from django.core.exceptions import FieldDoesNotExist
+from agents.serializer import AgentSerializer
 
 
 class SurveySerializer(serializers.ModelSerializer):
@@ -22,6 +23,8 @@ class SurveySerializer(serializers.ModelSerializer):
         read_only=True,
         view_name='rca-detail'
     )
+
+    agent = AgentSerializer()
 
     class Meta:
         model = Survey

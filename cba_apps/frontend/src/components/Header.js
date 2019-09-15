@@ -40,7 +40,7 @@ export default class Example extends React.Component {
                     <NavbarBrand href="/">
                         <img src={dxc} width="250" height="45" alt="Logo" />
                     </NavbarBrand>
-                    <NavbarToggler onClick={this.toggle} />
+                    <NavbarToggler onClick={this.toggle}><span><i style={{color:"white"}} className="fa fa-navicon"></i></span></NavbarToggler>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>

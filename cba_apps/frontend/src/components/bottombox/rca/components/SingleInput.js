@@ -13,7 +13,7 @@ function SingleInput(props) {
                 bsSize={props.size}
                 type={props.type}
                 name={props.attr}
-                id={props.attr}
+                id={props.id}
                 onChange={props.controlFunc}
                 value={props.value}
                 readOnly={props.readOnly}

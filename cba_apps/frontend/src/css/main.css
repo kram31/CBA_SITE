@@ -5,22 +5,19 @@ html {
 }
 
 .sidebar-main {
-  min-height: 400px;
+  min-height: 150px;
   min-width: 100px;
-  position: fixed;
-  z-index: 1;
+  margin-top: 10px;
   top: 30;
   left: 0;
-  overflow-x: hidden;
-  margin-left: 10px;
   background-color: white;
-  text-align: left;
+  text-align: center;
 }
 
 .sidebar-main .sidebar-navitem {
   height: 60px;
   background-color: #ffed00;
-  text-align: center;
+  text-align: left;
   padding-top: 10px;
 }
 
@@ -29,10 +26,38 @@ html {
   color: #ffed00;
 }
 
-.main {
-  margin-left: 200px;
-  margin-top: 25px;
-  margin-right: 20px;
+a {
+  color: black;
+}
+
+a:hover {
+  color: white;
+  opacity: 1;
+}
+
+#bg-image {
+  background-image: url(../images/access-adult-black-and-white-1449052.jpg);
+  background-size: cover;
+  background-color: black;
+}
+
+.main .section {
+  margin-bottom: 20px;
+}
+
+.card {
+  border: 1px solid black;
+}
+
+.card .card-header {
+  background-color: black;
+  color: white;
+}
+
+.survey-detail {
+  font-size: 14px;
+  text-align: left;
+  letter-spacing: -.75px;
 }
 
 #navbar-main {
@@ -42,6 +67,12 @@ html {
 
 .navlink {
   color: white;
+  opacity: .5;
+}
+
+.navlink:hover {
+  color: white;
+  opacity: 1;
 }
 
 .ReactTable {
@@ -57,6 +88,10 @@ html {
 
 .ReactTable .rt-th {
   border: 1px solid white;
+}
+
+.modal-backdrop {
+  opacity: 0.3 !important;
 }
 
 .modal-main .modal-header {
@@ -77,5 +112,24 @@ html {
 .modal-main .btn-submit:hover {
   color: #ffed00;
   background-color: black;
+}
+
+@media (min-width: 770px) {
+  .sidebar-main {
+    position: fixed;
+    z-index: 1;
+    margin-left: 10px;
+    overflow-x: hidden;
+    text-align: left;
+  }
+  .sidebar-navitem:hover {
+    background-color: black;
+    color: #ffed00;
+  }
+  .main {
+    margin-left: 200px;
+    margin-top: 20px;
+    margin-right: 20px;
+  }
 }
 /*# sourceMappingURL=main.css.map */
