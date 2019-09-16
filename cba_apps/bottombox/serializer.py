@@ -24,8 +24,6 @@ class SurveySerializer(serializers.ModelSerializer):
         view_name='rca-detail'
     )
 
-    agent = AgentSerializer()
-
     class Meta:
         model = Survey
         fields = '__all__'

@@ -47,18 +47,25 @@ a:hover {
 	}
 }
 
+.survey-detail {
+	font-size: 14px;
+}
+
 .card {
 	border: 1px solid black;
 	.card-header {
 		background-color: black;
 		color: white;
 	}
-}
-
-.survey-detail {
-	font-size: 14px;
-	text-align: left;
-	letter-spacing: -.75px;
+	.btn-submit {
+		color: black;
+		background-color: #ffed00;
+		border: none;
+	}
+	.btn-submit:hover {
+		color: #ffed00;
+		background-color: black;
+	}
 }
 
 #navbar-main {

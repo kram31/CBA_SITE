@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 import { Button, Table, Container, Fade, Card, CardHeader, CardFooter, CardBody, Row, Col } from 'reactstrap';
 
 class SurveyDetails extends Component {
+	sendData = () => {
+		this.props.parentCallback('x');
+	};
+
 	render() {
 		let {
 			reference_number,
@@ -24,111 +28,270 @@ class SurveyDetails extends Component {
 			service_component,
 			average_score,
 			fulfillment,
-			assignment_group
+			assignment_group,
+			originating_ticket_description,
+			follow_up_commnets,
+			q1,
+			q2,
+			q2a,
+			q3,
+			q3a,
+			q4,
+			q5,
+			q6,
+			budi_bu,
+			budi_lv7,
+			bu_catg,
+			date_issued
 		} = this.props.survey;
 		return (
 			<Fragment>
 				<Card>
 					<CardHeader>
-						<h5>Survey Details</h5>
+						<Row className="mt-2">
+							<Col>
+								<h5>Survey Details - {reference_number}</h5>
+							</Col>
+							<Col className="mr-auto" style={{ textAlign: 'right' }}>
+								<a href="#" onClick={this.sendData}>
+									<span>close</span>
+								</a>
+							</Col>
+						</Row>
 					</CardHeader>
 					<CardBody className="survey-detail">
-						<Row className="survey-row">
-							<Col md={4}>
-								<p>Reference Number: {reference_number}</p>
-							</Col>
-							<Col md={4}>
+						{/* <Col md={4}>
 								<p>Agent Name: {owner_name}</p>
 							</Col>
 							<Col md={4}>
 								<p>Source: {origination_source}</p>
-							</Col>
-						</Row>
+							</Col> */}
 						<Row className="survey-row">
-							<Col md={4}>
+							<Col md={6}>
 								<p>
-									<span>Customer Name:</span> {first_name} {last_name}
+									<span>Customer Name: </span>
+									<strong>
+										{first_name} {last_name}
+									</strong>
 								</p>
 							</Col>
-							<Col md={4}>
-								<p>Email Address: {customer_email_address}</p>
-							</Col>
-						</Row>
-						<Row className="survey-row">
-							<Col md={4}>
+							<Col md={6}>
 								<p>
-									<span>Callback Reference Number:</span> {callback_reference_number}
-								</p>
-							</Col>
-							<Col md={4}>
-								<p>
-									<span>Related Incident Record:</span> {related_incident_record}
-								</p>
-							</Col>
-							<Col md={4}>
-								<p>
-									<span>Phone number:</span> {phone_number}
+									<span>Email Address: </span>
+									<strong>{customer_email_address}</strong>
 								</p>
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col md={3}>
+							<Col md={6}>
 								<p>
-									<span>Site Location:</span> {site_location}
+									<span>Phone number: </span>
+									<strong>{phone_number}</strong>
 								</p>
 							</Col>
-							<Col md={3}>
+							<Col md={6}>
 								<p>
-									<span>City:</span> {city}
-								</p>
-							</Col>
-							<Col md={3}>
-								<p>
-									<span>State:</span> {state}
-								</p>
-							</Col>
-							<Col md={3}>
-								<p>
-									<span>User Location:</span> {user_location}
+									<span>User Location: </span>
+									<strong>{user_location}</strong>
 								</p>
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col md={3}>
+							<Col md={6}>
 								<p>
-									<span>Call Type:</span> {call_type}
+									<span>Callback Reference Number: </span>
+									<strong>{callback_reference_number}</strong>
 								</p>
 							</Col>
-							<Col md={3}>
+							<Col md={6}>
 								<p>
-									<span>Service Type:</span> {service_type}
-								</p>
-							</Col>
-							<Col md={3}>
-								<p>
-									<span>Service:</span> {service}
-								</p>
-							</Col>
-							<Col md={3}>
-								<p>
-									<span>Service Component:</span> {service_component}
+									<span>Related Incident Record: </span>
+									<strong>{related_incident_record}</strong>
 								</p>
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col md={4}>
+							<Col md={6}>
 								<p>
-									<span>Average Score:</span> {average_score}
+									<span>Site Location: </span>
+									<strong>{site_location}</strong>
 								</p>
 							</Col>
-							<Col md={4}>
+							<Col md={3}>
 								<p>
-									<span>Fulfillment:</span> {fulfillment}
+									<span>City: </span>
+									<strong>{city}</strong>
 								</p>
 							</Col>
-							<Col md={4}>
+							<Col md={3}>
 								<p>
-									<span>Assignment Group:</span> {assignment_group}
+									<span>State: </span>
+									<strong>{state}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col md={6}>
+								<p>
+									<span>Call Type: </span>
+									<strong>{call_type}</strong>
+								</p>
+							</Col>
+							<Col md={6}>
+								<p>
+									<span>Service Type: </span>
+									<strong>{service_type}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col md={6}>
+								<p>
+									<span>Service: </span>
+									<strong>{service}</strong>
+								</p>
+							</Col>
+							<Col md={6}>
+								<p>
+									<span>Service Component: </span>
+									<strong>{service_component}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col md={6}>
+								<p>
+									<span>Assignment Group: </span>
+									<strong>{assignment_group}</strong>
+								</p>
+							</Col>
+
+							<Col md={6}>
+								<p>
+									<span>Source: </span>
+									<strong>{origination_source}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Originating Ticket Description: </span>
+									<strong>{originating_ticket_description}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Follow up comments: </span>
+									<strong>{follow_up_commnets}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col md={6}>
+								<p>
+									<span>Average Score: </span>
+									<strong>{average_score}</strong>
+								</p>
+							</Col>
+							<Col md={6}>
+								<p>
+									<span>Fulfillment: </span>
+									<strong>{fulfillment}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q1: </span>
+									<strong>{q1}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q2: </span>
+									<strong>{q2}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q2a: </span>
+									<strong>{q2a}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q3: </span>
+									<strong>{q3}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q3a: </span>
+									<strong>{q3a}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q4: </span>
+									<strong>{q4}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q4: </span>
+									<strong>{q5}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col>
+								<p>
+									<span>Q6: </span>
+									<strong>{q6}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col md={6}>
+								<p>
+									<span>BUDI_BU: </span>
+									<strong>{budi_bu}</strong>
+								</p>
+							</Col>
+							<Col md={6}>
+								<p>
+									<span>BUDI_LV7: </span>
+									<strong>{budi_lv7}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col md={6}>
+								<p>
+									<span>BU_CATG: </span>
+									<strong>{bu_catg}</strong>
+								</p>
+							</Col>
+							<Col md={6}>
+								<p>
+									<span>Date Issued: </span>
+									<strong>{date_issued}</strong>
 								</p>
 							</Col>
 						</Row>

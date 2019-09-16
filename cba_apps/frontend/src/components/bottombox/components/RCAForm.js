@@ -1,34 +1,21 @@
 import React, { Component } from "react";
 import {
     Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
     Col,
     Row,
     Form
 } from "reactstrap";
 import { connect } from "react-redux";
-import { toggle } from "../../../actions/modalToggleActions";
-import {
-    getSurveys,
-    deleteSurvey,
-    getSurvey,
-    getAgentDetails,
-    getSkills,
-    getDsatCode1,
-    getBBDriverCode2,
-    getBBDriverCode3,
-    removeSurvey,
-    getTeams,
-    addRCA
-} from "../../../actions/surveyActions";
+import {addRCA} from "../../../actions/surveyActions"
 
-import SingleInput from "./components/SingleInput";
-import SelectInput from "./components/SelectInput";
+import SingleInput from "../rca/components/SingleInput";
+import SelectInput from "../rca/components/SelectInput";
 
-class RCAFormModal extends Component {
+class RCAForm extends Component {
     state = {
         surveyed_ticket: "",
         agent: "",
@@ -53,8 +40,7 @@ class RCAFormModal extends Component {
     };
 
     handleToggle = () => {
-        this.props.removeSurvey();
-        this.props.toggle();
+        this.props.parentCallback('x');
     };
 
     handleChange = e => {
@@ -77,8 +63,8 @@ class RCAFormModal extends Component {
 
         this.props.addRCA(rcaData);
 
-        this.props.toggle()
     };
+
 
     render() {
         let { reference_number, owner_name } = this.props.survey;
@@ -92,20 +78,20 @@ class RCAFormModal extends Component {
 
         return (
             <div>
-                <Modal
-                    scrollable={true}
-                    className="modal-lg modal-main"
-                    isOpen={this.props.isOpen}
-                    toggle={this.handleToggle}
-                >
+                <Card>
                     <Form
-                        className="modal-content"
+                        className="card-content"
                         onSubmit={this.handleSubmit}
                     >
-                        <ModalHeader className="modal-header" toggle={this.handleToggle}>
-                            Root Cause Analysis
-                        </ModalHeader>
-                        <ModalBody>
+                        <CardHeader className="card-header">
+                            <Row className="mt-2">
+                                <Col>
+                                <h5>Root Cause Analysis</h5>
+                                
+                                </Col>
+                            </Row>
+                        </CardHeader>
+                        <CardBody className="survey-detail">
                             <h5>Ticket Details</h5>
                             <Row form>
                                 <Col md={4}>
@@ -406,8 +392,8 @@ class RCAFormModal extends Component {
                                     />
                                 </Col>
                             </Row>
-                        </ModalBody>
-                        <ModalFooter>
+                        </CardBody>
+                        <CardFooter>
                             <Button
                                 type="submit"
                              
@@ -416,26 +402,19 @@ class RCAFormModal extends Component {
                                 // onClick={this.handleToggle}
                             >
                                 Submit
-                            </Button>{" "}
-                            <Button
-                                type="submit"
-                                className="btn-submit"
-                                onClick={this.handleToggle}
-                            >
-                                Cancel
                             </Button>
-                        </ModalFooter>
+           
+                        </CardFooter>
                     </Form>
-                </Modal>
+                </Card>
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    isOpen: state.modal.isOpen,
-    survey: state.surveys.survey,
     agent: state.surveys.agent,
+    survey: state.surveys.survey,
     skills: state.surveys.skills,
     dsat_code1: state.surveys.dsat_code1,
     bb_driver_code2: state.surveys.bb_driver_code2,
@@ -443,20 +422,4 @@ const mapStateToProps = state => ({
     accountable_team: state.surveys.teams
 });
 
-export default connect(
-    mapStateToProps,
-    {
-        getSurveys,
-        deleteSurvey,
-        toggle,
-        getSurvey,
-        getAgentDetails,
-        getSkills,
-        getDsatCode1,
-        getBBDriverCode2,
-        getBBDriverCode3,
-        removeSurvey,
-        getTeams,
-        addRCA
-    }
-)(RCAFormModal);
+export default connect(mapStateToProps,{addRCA})(RCAForm);

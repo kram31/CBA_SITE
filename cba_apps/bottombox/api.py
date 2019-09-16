@@ -21,7 +21,6 @@ class SurveyViewset(viewsets.ModelViewSet):
         # agent_fields = [f.name for f in Agent._meta.get_fields()]
         # Check if operator_lan_id exists, if not create using Agent model...
         # Get Agent Model fields
-
         lan_id = request.data.get('operator_lan_id')
         if not Agent.objects.filter(operator_lan_id=lan_id):
             # name, land_id, email, skill, team,lead, location, wave

@@ -45,6 +45,10 @@ a:hover {
   margin-bottom: 20px;
 }
 
+.survey-detail {
+  font-size: 14px;
+}
+
 .card {
   border: 1px solid black;
 }
@@ -54,10 +58,15 @@ a:hover {
   color: white;
 }
 
-.survey-detail {
-  font-size: 14px;
-  text-align: left;
-  letter-spacing: -.75px;
+.card .btn-submit {
+  color: black;
+  background-color: #ffed00;
+  border: none;
+}
+
+.card .btn-submit:hover {
+  color: #ffed00;
+  background-color: black;
 }
 
 #navbar-main {

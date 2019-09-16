@@ -1,5 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import SurveyDetails from '../components/SurveyDetails';
+import RCAForm from '../components/RCAForm';
 import RCAFormModal from '../rca/RCAFormModal';
 import { connect } from 'react-redux';
 import { toggle } from '../../../actions/modalToggleActions';
@@ -14,16 +15,24 @@ class SurveyContent extends Component {
 
 	handleToggle = (data) => {
 		this.props.getSurvey(data);
+		this.props.getAgentDetails(data.operator_lan_id);
 		this.props.toggle();
 	};
 
 	handleClick = (item) => {
 		this.props.getSurvey(item);
+		this.props.getAgentDetails(item.operator_lan_id);
 		this.setState((state, props) => ({
 			activeItem: item,
-			isOpen: !state.isOpen
+			agent: this.props.agent,
+			isOpen: true
 		}));
-		console.log('Clicking');
+	};
+
+	closeCallback = (x) => {
+		this.setState((state, props) => ({
+			isOpen: false
+		}));
 	};
 
 	render() {
@@ -32,10 +41,9 @@ class SurveyContent extends Component {
 				<Card>
 					<CardHeader>Bottombox Surveys</CardHeader>
 					<CardBody>
-						<Table size="sm">
+						<Table size="sm" hover>
 							<thead>
 								<tr>
-									<th>Action</th>
 									<th>Reference Number</th>
 									<th>Agent Name</th>
 									<th>Customer Name</th>
@@ -44,18 +52,9 @@ class SurveyContent extends Component {
 							<tbody>
 								{this.props.bottombox.map((item) => (
 									<tr key={item.reference_number}>
-										<td>
-											<Button
-												outline
-												size="sm"
-												className="ml-1"
-												onClick={() => this.handleToggle(item)}
-											>
-												RCA
-											</Button>
-											<RCAFormModal />
+										<td style={{ cursor: 'pointer' }} onClick={() => this.handleClick(item)}>
+											{item.reference_number}
 										</td>
-										<td onClick={() => this.handleClick(item)}>{item.reference_number}</td>
 										<td>{item.owner_name}</td>
 										<td>
 											{item.first_name} {item.last_name}
@@ -67,10 +66,10 @@ class SurveyContent extends Component {
 						<Collapse isOpen={this.state.isOpen}>
 							<Row>
 								<Col>
-									<SurveyDetails survey={this.state.activeItem} />
+									<SurveyDetails survey={this.state.activeItem} parentCallback={this.closeCallback} />
 								</Col>
 								<Col>
-									<h4>RCA FORM</h4>
+									<RCAForm survey={this.state.activeItem} parentCallback={this.closeCallback} />
 								</Col>
 							</Row>
 						</Collapse>
@@ -83,7 +82,7 @@ class SurveyContent extends Component {
 
 const mapStateToProps = (state) => ({
 	isOpen: state.modal.isOpen,
-	bottombox: state.surveys.surveys.filter((item) => item.bottombox == 1)
+	bottombox: state.surveys.surveys.filter((item) => item.bottombox == 1 && !item.rca)
 });
 
 export default connect(mapStateToProps, { toggle, getSurvey, getAgentDetails })(SurveyContent);

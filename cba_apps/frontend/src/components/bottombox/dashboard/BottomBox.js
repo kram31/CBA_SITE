@@ -8,23 +8,24 @@ import SurveyContent from './SurveyContent';
 import DatatablePage from '../upload-data/survey-data-table/DatatablePage';
 import SideBar from '../../SideBar';
 
+import ExtractData from '../extract/ExtractData';
+
 import { Spinner, Card, Fade, CardHeader, CardFooter, CardBody, Row, Col, ButtonGroup, Button } from 'reactstrap';
 
 import {
 	getSurveys,
-	deleteSurvey,
-	getSurvey,
-	getAgentDetails,
 	getSkills,
 	getDsatCode1,
 	getBBDriverCode2,
 	getBBDriverCode3,
 	removeSurvey,
-	getTeams
+	getTeams,
+	getRcas
 } from '../../../actions/surveyActions';
 
 class BottomBox extends Component {
 	componentDidMount() {
+		this.props.getRcas();
 		this.props.getSurveys();
 		this.props.getSkills();
 		this.props.getDsatCode1();
@@ -44,11 +45,13 @@ class BottomBox extends Component {
 							<SideBar />
 						</div>
 						<div className="main">
-							<div className="section section-a">
-								<SurveyContent />
-							</div>
+							{this.props.bottombox.length !== 0 && (
+								<div className="section section-a">
+									<SurveyContent />
+								</div>
+							)}
 							<div className="section section-b">
-								<h1>Markup for survey details + RCA form</h1>
+								<ExtractData />
 							</div>
 							<div className="section section-c">
 								<DatatablePage />
@@ -62,7 +65,8 @@ class BottomBox extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	isFetching: state.surveys.isFetching
+	isFetching: state.surveys.isFetching,
+	bottombox: state.surveys.surveys.filter((item) => item.bottombox == 1 && !item.rca)
 });
 
 export default connect(mapStateToProps, {
@@ -72,5 +76,6 @@ export default connect(mapStateToProps, {
 	getBBDriverCode2,
 	getBBDriverCode3,
 	removeSurvey,
-	getTeams
+	getTeams,
+	getRcas
 })(BottomBox);
