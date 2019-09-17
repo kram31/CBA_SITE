@@ -19,7 +19,8 @@ import {
 	ADD_BB_DRIVER_CODE2,
 	ADD_BB_DRIVER_CODE3,
 	ADD_TEAM,
-	GET_RCAS
+	GET_RCAS,
+	GET_BOTTOMBOX
 } from './types';
 
 import axios from 'axios';
@@ -79,12 +80,16 @@ export const addSurveysBulk = (list_data) => (dispatch) => {
 	const post_reqs = list_data.map((data) => {
 		axios
 			.post('/api/surveys/', data)
-			.then((res) =>
+			.then((res) => {
 				dispatch({
 					type: ADD_SURVEY,
 					payload: res.data
-				})
-			)
+				});
+				dispatch({
+					type: GET_BOTTOMBOX,
+					payload: res.data
+				});
+			})
 			.catch((err) => console.log(err));
 	});
 	Promise.all(post_reqs);

@@ -49,19 +49,27 @@ var dataSet2 = [
 class ExtractData extends React.Component {
 	render() {
 		let rca_headers;
-		this.props.rcas[0] && (rca_headers = Object.keys(this.props.first_rca));
+		this.props.rcas.length != 0 && (rca_headers = Object.keys(this.props.rcas[0]));
 
 		return (
-			<ExcelFile filename="Bottombox" element={<button>Download Data</button>}>
-				<ExcelSheet data={this.props.surveys} name="Surveys">
-					{this.props.headers.map((item) => <ExcelColumn key={item} label={item} value={item} />)}
-				</ExcelSheet>
-				{this.props.rcas[0] && (
-					<ExcelSheet data={this.props.rcas} name="RCAs">
-						{rca_headers.map((item) => <ExcelColumn key={item} label={item} value={item} />)}
-					</ExcelSheet>
+			<Fragment>
+				{this.props.rcas.length === 0 ? (
+					<ExcelFile filename="Bottombox" element={<button>Download Data</button>}>
+						<ExcelSheet data={this.props.surveys} name="Surveys">
+							{this.props.headers.map((item) => <ExcelColumn key={item} label={item} value={item} />)}
+						</ExcelSheet>
+					</ExcelFile>
+				) : (
+					<ExcelFile filename="Bottombox" element={<button>Download Data</button>}>
+						<ExcelSheet data={this.props.surveys} name="Surveys">
+							{this.props.headers.map((item) => <ExcelColumn key={item} label={item} value={item} />)}
+						</ExcelSheet>
+						<ExcelSheet data={this.props.rcas} name="RCAS">
+							{rca_headers.map((item) => <ExcelColumn key={item} label={item} value={item} />)}
+						</ExcelSheet>
+					</ExcelFile>
 				)}
-			</ExcelFile>
+			</Fragment>
 		);
 	}
 }

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import XLSX from 'xlsx';
 import { SheetJSFT } from './helpers/types';
 import { keys } from './helpers/obj-keys';
-import { addSurveysBulk } from '../../../actions/surveyActions';
+import { addSurveysBulk, getSurveys } from '../../../actions/surveyActions';
 
 import { connect } from 'react-redux';
 
@@ -68,6 +68,7 @@ class UploadDataModal extends Component {
 		e.preventDefault();
 
 		this.props.addSurveysBulk(this.state.data);
+
 		this.toggle();
 	};
 
@@ -155,4 +156,4 @@ const mapStateToProps = (state) => ({
 	headers: state.surveys.headers
 });
 
-export default connect(mapStateToProps, { addSurveysBulk, toggle })(UploadDataModal);
+export default connect(mapStateToProps, { addSurveysBulk, toggle, getSurveys })(UploadDataModal);

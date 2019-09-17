@@ -19,7 +19,8 @@ import {
 	ADD_BB_DRIVER_CODE2,
 	ADD_BB_DRIVER_CODE3,
 	ADD_TEAM,
-	GET_RCAS
+	GET_RCAS,
+	GET_BOTTOMBOX
 } from '../actions/types';
 import { keys } from '../components/bottombox/upload-data/helpers/obj-keys';
 
@@ -35,6 +36,7 @@ const initialState = {
 	teams: [],
 	rcas: [],
 	teamleads: [],
+	bottombox: [],
 	isFetching: false
 };
 
@@ -49,6 +51,7 @@ const surveyReducer = (state = initialState, action) => {
 			return {
 				...state,
 				surveys: action.payload,
+				bottombox: action.payload.filter((item) => item.bottombox == 1 && !item.rca),
 				isFetching: false
 			};
 		case GET_RCAS:
@@ -61,12 +64,19 @@ const surveyReducer = (state = initialState, action) => {
 			return {
 				...state,
 				surveys: state.surveys.filter((item) => action.payload != item.reference_number),
+				bottombox: state.bottombox.filter((item) => action.payload != item.reference_number),
 				isFetching: false
 			};
 		case ADD_SURVEY:
 			return {
 				...state,
 				surveys: [ action.payload, ...state.surveys ],
+				isFetching: false
+			};
+		case GET_BOTTOMBOX:
+			return {
+				...state,
+				bottombox: [ ...(action.payload.bottombox == 1 && [ action.payload ]), ...state.bottombox ],
 				isFetching: false
 			};
 		case GET_SURVEY:
@@ -125,6 +135,7 @@ const surveyReducer = (state = initialState, action) => {
 			return {
 				...state,
 				rcas: [ action.payload, ...state.rcas ],
+				bottombox: state.bottombox.filter((item) => action.payload.surveyed_ticket != item.reference_number),
 				isFetching: false
 			};
 		case ADD_SKILL:

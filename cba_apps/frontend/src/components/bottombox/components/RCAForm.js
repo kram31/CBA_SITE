@@ -63,6 +63,8 @@ class RCAForm extends Component {
 
         this.props.addRCA(rcaData);
 
+        this.handleToggle()
+
     };
 
 
@@ -78,7 +80,7 @@ class RCAForm extends Component {
 
         return (
             <div>
-                <Card>
+                <Card id="rca_form">
                     <Form
                         className="card-content"
                         onSubmit={this.handleSubmit}
@@ -87,8 +89,12 @@ class RCAForm extends Component {
                             <Row className="mt-2">
                                 <Col>
                                 <h5>Root Cause Analysis</h5>
-                                
                                 </Col>
+                                <Col className="mr-auto" style={{ textAlign: 'right' }}>
+								<span id="bottombox-close" onClick={this.handleToggle}>
+									<i className="fa fa-times" />
+								</span>
+							</Col>
                             </Row>
                         </CardHeader>
                         <CardBody className="survey-detail">

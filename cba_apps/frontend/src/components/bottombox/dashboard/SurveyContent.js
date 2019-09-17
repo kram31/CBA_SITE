@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import SurveyDetails from '../components/SurveyDetails';
 import RCAForm from '../components/RCAForm';
-import RCAFormModal from '../rca/RCAFormModal';
 import { connect } from 'react-redux';
 import { toggle } from '../../../actions/modalToggleActions';
 import { getSurvey, getAgentDetails } from '../../../actions/surveyActions';
@@ -50,25 +49,34 @@ class SurveyContent extends Component {
 								</tr>
 							</thead>
 							<tbody>
-								{this.props.bottombox.map((item) => (
-									<tr key={item.reference_number}>
-										<td style={{ cursor: 'pointer' }} onClick={() => this.handleClick(item)}>
-											{item.reference_number}
-										</td>
-										<td>{item.owner_name}</td>
-										<td>
-											{item.first_name} {item.last_name}
-										</td>
-									</tr>
-								))}
+								{this.props.bottombox.length != 0 ? (
+									<Fragment>
+										{this.props.bottombox.map((item) => (
+											<tr key={item.reference_number}>
+												<td
+													style={{ cursor: 'pointer' }}
+													onClick={() => this.handleClick(item)}
+												>
+													{item.reference_number}
+												</td>
+												<td>{item.owner_name}</td>
+												<td>
+													{item.first_name} {item.last_name}
+												</td>
+											</tr>
+										))}
+									</Fragment>
+								) : (
+									console.log('Do Nothing')
+								)}
 							</tbody>
 						</Table>
 						<Collapse isOpen={this.state.isOpen}>
 							<Row>
-								<Col>
+								<Col md={6} className="survey_detail d-flex align-center-stretch">
 									<SurveyDetails survey={this.state.activeItem} parentCallback={this.closeCallback} />
 								</Col>
-								<Col>
+								<Col md={6}>
 									<RCAForm survey={this.state.activeItem} parentCallback={this.closeCallback} />
 								</Col>
 							</Row>
@@ -82,7 +90,7 @@ class SurveyContent extends Component {
 
 const mapStateToProps = (state) => ({
 	isOpen: state.modal.isOpen,
-	bottombox: state.surveys.surveys.filter((item) => item.bottombox == 1 && !item.rca)
+	bottombox: state.surveys.bottombox
 });
 
 export default connect(mapStateToProps, { toggle, getSurvey, getAgentDetails })(SurveyContent);

@@ -46,16 +46,16 @@ class SurveyDetails extends Component {
 		} = this.props.survey;
 		return (
 			<Fragment>
-				<Card>
+				<Card id="survey-details" style={{ flexGrow: '1' }}>
 					<CardHeader>
 						<Row className="mt-2">
-							<Col>
+							<Col md={6}>
 								<h5>Survey Details - {reference_number}</h5>
 							</Col>
-							<Col className="mr-auto" style={{ textAlign: 'right' }}>
-								<a href="#" onClick={this.sendData}>
-									<span>close</span>
-								</a>
+							<Col md={6} className="mr-auto" style={{ textAlign: 'right' }}>
+								<span id="bottombox-close" onClick={this.sendData}>
+									<i className="fa fa-times" />
+								</span>
 							</Col>
 						</Row>
 					</CardHeader>
@@ -174,7 +174,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Originating Ticket Description: </span>
 									<strong>{originating_ticket_description}</strong>
@@ -182,7 +182,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Follow up comments: </span>
 									<strong>{follow_up_commnets}</strong>
@@ -204,7 +204,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q1: </span>
 									<strong>{q1}</strong>
@@ -212,7 +212,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q2: </span>
 									<strong>{q2}</strong>
@@ -220,7 +220,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q2a: </span>
 									<strong>{q2a}</strong>
@@ -228,7 +228,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q3: </span>
 									<strong>{q3}</strong>
@@ -236,7 +236,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q3a: </span>
 									<strong>{q3a}</strong>
@@ -244,7 +244,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q4: </span>
 									<strong>{q4}</strong>
@@ -252,7 +252,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q4: </span>
 									<strong>{q5}</strong>
@@ -260,7 +260,7 @@ class SurveyDetails extends Component {
 							</Col>
 						</Row>
 						<Row className="survey-row">
-							<Col>
+							<Col md={12}>
 								<p>
 									<span>Q6: </span>
 									<strong>{q6}</strong>

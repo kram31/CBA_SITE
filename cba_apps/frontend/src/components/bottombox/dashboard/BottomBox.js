@@ -41,21 +41,29 @@ class BottomBox extends Component {
 					<Spinner style={{ width: '3rem', height: '3rem', top: '50%', left: '50%', position: 'fixed' }} />
 				) : (
 					<div>
-						<div className="sidebar-main">
-							<SideBar />
-						</div>
+						<Fade>
+							<div className="sidebar-main">
+								<SideBar />
+							</div>
+						</Fade>
 						<div className="main">
-							{this.props.bottombox.length !== 0 && (
-								<div className="section section-a">
-									<SurveyContent />
+							<Fade>
+								{this.props.bottombox.length !== 0 && (
+									<div className="section section-a">
+										<SurveyContent />
+									</div>
+								)}
+							</Fade>
+							<Fade>
+								<div className="section section-b">
+									<ExtractData />
 								</div>
-							)}
-							<div className="section section-b">
-								<ExtractData />
-							</div>
-							<div className="section section-c">
-								<DatatablePage />
-							</div>
+							</Fade>
+							<Fade>
+								<div className="section section-c">
+									<DatatablePage />
+								</div>
+							</Fade>
 						</div>
 					</div>
 				)}
@@ -66,7 +74,7 @@ class BottomBox extends Component {
 
 const mapStateToProps = (state) => ({
 	isFetching: state.surveys.isFetching,
-	bottombox: state.surveys.surveys.filter((item) => item.bottombox == 1 && !item.rca)
+	bottombox: state.surveys.bottombox
 });
 
 export default connect(mapStateToProps, {

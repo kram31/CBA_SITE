@@ -45,8 +45,25 @@ a:hover {
   margin-bottom: 20px;
 }
 
-.survey-detail {
-  font-size: 14px;
+.survey_detail {
+  width: 100%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+#bottombox-close:hover {
+  cursor: pointer;
+}
+
+#survey-details:hover {
+  -webkit-box-shadow: 5px 10px 18px gray;
+          box-shadow: 5px 10px 18px gray;
+}
+
+#rca_form:hover {
+  -webkit-box-shadow: 5px 10px 18px gray;
+          box-shadow: 5px 10px 18px gray;
 }
 
 .card {

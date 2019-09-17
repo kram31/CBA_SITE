@@ -33,7 +33,6 @@ class DatatablePage extends Component {
 				<Fragment>
 					<div className="btn-group">
 						<Button
-							outline
 							color="danger"
 							size="sm"
 							onClick={() => this.handleDelete(cellprops.original.reference_number)}
@@ -43,7 +42,7 @@ class DatatablePage extends Component {
 						{cellprops.original.bottombox == 1 && (
 							<div>
 								<Button
-									outline
+									color="primary"
 									size="sm"
 									className="ml-1"
 									onClick={() => this.handleToggle(cellprops.original)}
