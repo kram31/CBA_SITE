@@ -10,10 +10,10 @@ import RCAFormModal from '../../rca/RCAFormModal';
 
 import { getSurvey, getAgentDetails } from '../../../../actions/surveyActions';
 
-import { Button } from 'reactstrap';
+import { Button, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Col } from 'reactstrap';
 
 class DatatablePage extends Component {
-	state = { cellprops: null };
+	state = { cellprops: null, filtered: [] };
 
 	handleDelete = (e) => this.props.deleteSurvey(e);
 
@@ -23,9 +23,27 @@ class DatatablePage extends Component {
 		this.props.toggle();
 	};
 
+	handleClick = () => {
+		let sortedData = this.reactTable.getResolvedState().sortedData;
+		console.log(sortedData);
+	};
+
+	handleSubmit = (e) => {
+		console.log('Submit');
+	};
+
+	handleChange = (e) => {
+		console.log('change');
+	};
+
 	render() {
 		// Creating Headers for table
-		const headers = this.props.headers.map((val) => Object.assign({ ['Header']: val, ['accessor']: val }));
+		const headers = this.props.headers.map(
+			(val) =>
+				val !== 'date_issued'
+					? Object.assign({ ['Header']: val, ['accessor']: val })
+					: Object.assign({ ['Header']: val, ['accessor']: val, ['filterable']: true })
+		);
 		// Creating buttons for table
 		const buttons = {
 			Header: 'Actions',
@@ -61,9 +79,33 @@ class DatatablePage extends Component {
 		return (
 			<Fragment>
 				<h3>Survey Table</h3>
+				<Button onClick={this.handleClick}>get data</Button>
+				<Form onSubmit={this.handleSubmit}>
+					<Row>
+						<Col md={4}>
+							<InputGroup size="sm">
+								<InputGroupAddon addonType="prepend">
+									<InputGroupText>From</InputGroupText>
+								</InputGroupAddon>
+								<Input type="date" name="from_date" onChange={this.handleChange} />
+								<InputGroupAddon addonType="prepend">
+									<InputGroupText>To</InputGroupText>
+								</InputGroupAddon>
+								<Input type="date" name="to_date" onChange={this.handleChange} />
+							</InputGroup>
+						</Col>
+					</Row>
+				</Form>
 				<ReactTable
 					className="-striped -highlight"
+					ref={(r) => (this.reactTable = r)}
+					// filtered={this.state.filtered}
+					// onFilteredChange={(filtered) => {
+					// 	this.setState({ filtered });
+					// 	console.log(filtered);
+					// }}
 					style={{ backgroundColor: 'white' }}
+					// DATA that will be displayed should be the same data to be extracted
 					data={this.props.data}
 					columns={columns}
 					minRows={10}
