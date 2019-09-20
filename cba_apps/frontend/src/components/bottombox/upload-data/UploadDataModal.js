@@ -50,11 +50,11 @@ class UploadDataModal extends Component {
 
 			/* Update state */
 
-			// this.setState({ data: data, isStaged: !this.state.isStaged }, () => {
-			// 	console.log(JSON.stringify(this.state.data, null, 2));
-			// });
+			this.setState({ data: data, isStaged: !this.state.isStaged }, () => {
+				console.log(JSON.stringify(this.state.data, null, 2));
+			});
 
-			this.setState({ data: data, isStaged: !this.state.isStaged });
+			// this.setState({ data: data, isStaged: !this.state.isStaged });
 		};
 
 		if (rABS) {
