@@ -5,6 +5,8 @@ from agents.models import Agent
 from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, Team
 from .serializer import SurveySerializer, RCASerializer, DSAT_Code1Serializer, BB_Driver_Code2Serializer, BB_Driver_Code3Serializer, TeamSerializer
 
+import datetime
+
 
 class SurveyViewset(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
@@ -12,6 +14,8 @@ class SurveyViewset(viewsets.ModelViewSet):
     permission_classes = [
         permissions.AllowAny
     ]
+
+    # 25/07/2019 03:39:26 PM
 
     def create(self, request, *args, **kwargs):
         # if "Q4. How was your overall experience in relation to this issue or request? Where 1 = Didn't meet any of my needs and 5 = Met all of my needs" in request.data:
@@ -28,6 +32,12 @@ class SurveyViewset(viewsets.ModelViewSet):
                 'owner_name'), operator_lan_id=lan_id)
 
         request.data['agent'] = lan_id
+
+        date_format = request.data['date_issued']
+
+        date_format = datetime.datetime.strptime(request.data['date_issued'], "%d/%m/%Y %I:%M:%S %p").strftime('%Y-%m-%d')
+
+        request.data['date_issued'] = date_format
 
         serializer = self.get_serializer(data=request.data)
 

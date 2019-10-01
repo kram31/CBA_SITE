@@ -1,130 +1,357 @@
-import React, { Component, Fragment } from 'react';
-import ReactTable from 'react-table';
+import React, { Component, Fragment } from "react";
+import ReactTable from "react-table";
+import moment from "moment";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import { deleteSurvey } from '../../../../actions/surveyActions';
-import { toggle } from '../../../../actions/modalToggleActions';
+import { deleteSurvey } from "../../../../actions/surveyActions";
+import { toggle } from "../../../../actions/modalToggleActions";
 
-import RCAFormModal from '../../rca/RCAFormModal';
+import RCAFormModal from "../../rca/RCAFormModal";
 
-import { getSurvey, getAgentDetails } from '../../../../actions/surveyActions';
+import { getSurvey, getAgentDetails } from "../../../../actions/surveyActions";
 
-import { Button, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Col } from 'reactstrap';
+import ReactExport from "react-data-export";
+
+import {
+    Button,
+    Form,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
+    Row,
+    Col
+} from "reactstrap";
+
+import DateRangePicker from "react-bootstrap-daterangepicker";
+import "bootstrap-daterangepicker/daterangepicker.css";
+
+let agent_headers = [
+    "operator_lan_id",
+    "surveys",
+    "name",
+    "email",
+    "location",
+    "wave",
+    "skill",
+    "team_lead"
+];
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 class DatatablePage extends Component {
-	state = { cellprops: null, filtered: [] };
+    state = {
+        cellprops: null,
+        filtered: [],
+        start_date: "",
+        end_date: "",
+        data: [],
+        filter: false,
+        sortedData: []
+    };
 
-	handleDelete = (e) => this.props.deleteSurvey(e);
+    handleDelete = e => this.props.deleteSurvey(e);
 
-	handleToggle = (data) => {
-		this.props.getSurvey(data);
-		this.props.getAgentDetails(data.operator_lan_id);
-		this.props.toggle();
-	};
+    handleToggle = data => {
+        this.props.getSurvey(data);
+        this.props.getAgentDetails(data.operator_lan_id);
+        this.props.toggle();
+    };
 
-	handleClick = () => {
-		let sortedData = this.reactTable.getResolvedState().sortedData;
-		console.log(sortedData);
-	};
+    handleClick = () => {
+        let sortedData = this.reactTable.getResolvedState().sortedData;
+        this.setState({ sortedData });
+    };
 
-	handleSubmit = (e) => {
-		console.log('Submit');
-	};
+    handleChange = e => {
+        this.setState({
+            [e.target.name]: moment(e.target.value).format("DD/MM/YYYY")
+        });
+    };
 
-	handleChange = (e) => {
-		console.log('change');
-	};
+    handleEvent = (e, picker) => {
+        console.log(moment(picker.startDate).format("DD/MM/YYYY"));
+    };
 
-	render() {
-		// Creating Headers for table
-		const headers = this.props.headers.map(
-			(val) =>
-				val !== 'date_issued'
-					? Object.assign({ ['Header']: val, ['accessor']: val })
-					: Object.assign({ ['Header']: val, ['accessor']: val, ['filterable']: true })
-		);
-		// Creating buttons for table
-		const buttons = {
-			Header: 'Actions',
-			Cell: (cellprops) => (
-				<Fragment>
-					<div className="btn-group">
-						<Button
-							color="danger"
-							size="sm"
-							onClick={() => this.handleDelete(cellprops.original.reference_number)}
-						>
-							Delete
-						</Button>
-						{cellprops.original.bottombox == 1 && (
-							<div>
-								<Button
-									color="primary"
-									size="sm"
-									className="ml-1"
-									onClick={() => this.handleToggle(cellprops.original)}
-								>
-									RCA
-								</Button>
-								<RCAFormModal />
-							</div>
-						)}
-					</div>
-				</Fragment>
-			),
-			width: 200
-		};
-		const columns = [ buttons, ...headers ];
-		return (
-			<Fragment>
-				<h3>Survey Table</h3>
-				<Button onClick={this.handleClick}>get data</Button>
-				<Form onSubmit={this.handleSubmit}>
-					<Row>
-						<Col md={4}>
-							<InputGroup size="sm">
-								<InputGroupAddon addonType="prepend">
-									<InputGroupText>From</InputGroupText>
-								</InputGroupAddon>
-								<Input type="date" name="from_date" onChange={this.handleChange} />
-								<InputGroupAddon addonType="prepend">
-									<InputGroupText>To</InputGroupText>
-								</InputGroupAddon>
-								<Input type="date" name="to_date" onChange={this.handleChange} />
-							</InputGroup>
-						</Col>
-					</Row>
-				</Form>
-				<ReactTable
-					className="-striped -highlight"
-					ref={(r) => (this.reactTable = r)}
-					// filtered={this.state.filtered}
-					// onFilteredChange={(filtered) => {
-					// 	this.setState({ filtered });
-					// 	console.log(filtered);
-					// }}
-					style={{ backgroundColor: 'white' }}
-					// DATA that will be displayed should be the same data to be extracted
-					data={this.props.data}
-					columns={columns}
-					minRows={10}
-					defaultPageSize={10}
-				/>
-			</Fragment>
-		);
-	}
+    filterToggle = () => {
+        this.setState((state, props) => ({
+            filter: !state.filter
+        }));
+    };
+
+    resetFields = () => {
+        this.setState({ filtered: [] });
+    };
+
+    render() {
+        let agent_headers;
+        this.props.agents.length != 0 &&
+            (agent_headers = Object.keys(this.props.agents[0]));
+        let rca_headers;
+        this.props.rcas.length != 0 &&
+            (rca_headers = Object.keys(this.props.rcas[0]));
+        // customfilter not used yet
+        // const customFilter = ({ fieldName, filter, onChange }) => {
+        //   return (
+        //     <select
+        //       onChange={event => onChange(event.target.value)}
+        //       style={{ width: "100%" }}
+        //       value={filter ? filter.value : "all"}
+        //     >
+        //       <option value="all">Show All</option>
+        //       {testData
+        //         .map(item => item[fieldName])
+
+        //         .filter((item, i, s) => s.lastIndexOf(item) == i)
+        //         .map(function(value) {
+        //           log.debug("renderItem: ", value);
+        //           return (
+        //             <option key={value} value={value}>
+        //               {value}
+        //             </option>
+        //           );
+        //         })}
+        //     </select>
+        //   );
+        // };
+
+        // Creating Headers for table
+        const headers = this.props.headers.map(val =>
+            val !== "date_issued"
+                ? Object.assign({ ["Header"]: val, ["accessor"]: val })
+                : Object.assign({
+                      ["Header"]: val,
+                      ["accessor"]: val,
+
+                      ["Filter"]: ({ filter, onChange }) => (
+                          <DateRangePicker
+                              onApply={(event, picker) => onChange(picker)}
+                          >
+                              <Button className="btn-filter" size="sm">
+                                  Filter Date
+                              </Button>
+                          </DateRangePicker>
+                      ),
+                      ["filterMethod"]: (filter, row) => {
+                          //   let date_q = moment(row["date_issued"]).format("YYYY-MM-DD");
+
+                          filter
+                              ? console.log(filter)
+                              : console.log("no filter");
+
+                          let format = "YYYY-MM-DD";
+                          let date_q = row["date_issued"];
+                          let startD = moment(filter.value.startDate).format(
+                              format
+                          );
+                          let endD = moment(filter.value.endDate).format(
+                              format
+                          );
+
+                          if (
+                              moment(date_q).isBetween(startD, endD, null, [])
+                          ) {
+                              return true;
+                          }
+                      }
+                  })
+        );
+        // Creating buttons for table
+        const buttons = {
+            Header: "Actions",
+            filterable: false,
+            Cell: cellprops => (
+                <Fragment>
+                    <div className="btn-group">
+                        <Button
+                            color="danger"
+                            size="sm"
+                            onClick={() =>
+                                this.handleDelete(
+                                    cellprops.original.reference_number
+                                )
+                            }
+                        >
+                            Delete
+                        </Button>
+                        {cellprops.original.bottombox == 1 && (
+                            <div>
+                                <Button
+                                    color="primary"
+                                    size="sm"
+                                    className="ml-1"
+                                    onClick={() =>
+                                        this.handleToggle(cellprops.original)
+                                    }
+                                >
+                                    RCA
+                                </Button>
+                                <RCAFormModal />
+                            </div>
+                        )}
+                    </div>
+                </Fragment>
+            ),
+            width: 200
+        };
+        const columns = [buttons, ...headers];
+        return (
+            <Fragment>
+                <h3>Survey Table</h3>
+                <Row className="mb-2">
+                    <Col md={6} style={{ display: "inline" }}>
+                        <Fragment>
+                            {this.props.rcas.length === 0 ||
+                            this.props.agents.length === 0 ? (
+                                <ExcelFile
+                                    filename="Bottombox"
+                                    element={
+                                        <Button
+                                            className="mr-2 btn-bb"
+                                            onClick={this.handleClick}
+                                        >
+                                            Download
+                                        </Button>
+                                    }
+                                >
+                                    <ExcelSheet
+                                        data={
+                                            this.state.sortedData[0]
+                                                ? this.state.sortedData
+                                                : this.props.surveys
+                                        }
+                                        name="Surveys"
+                                    >
+                                        {this.props.headers.map(item => (
+                                            <ExcelColumn
+                                                key={item}
+                                                label={item}
+                                                value={item}
+                                            />
+                                        ))}
+                                    </ExcelSheet>
+                                </ExcelFile>
+                            ) : (
+                                <ExcelFile
+                                    filename="Bottombox"
+                                    element={
+                                        <Button
+                                            className="mr-2 btn-bb"
+                                            onClick={this.handleClick}
+                                        >
+                                            Download
+                                        </Button>
+                                    }
+                                >
+                                    <ExcelSheet
+                                        data={this.props.surveys}
+                                        name="Surveys"
+                                    >
+                                        {this.props.headers.map(item => (
+                                            <ExcelColumn
+                                                key={item}
+                                                label={item}
+                                                value={item}
+                                            />
+                                        ))}
+                                    </ExcelSheet>
+                                    <ExcelSheet
+                                        data={this.props.rcas}
+                                        name="RCAS"
+                                    >
+                                        {rca_headers.map(item => (
+                                            <ExcelColumn
+                                                key={item}
+                                                label={item}
+                                                value={item}
+                                            />
+                                        ))}
+                                    </ExcelSheet>
+
+                                    {/* THIS IS FOR AGENTS TAB DOWNLOAD */}
+
+                                    <ExcelSheet
+                                        data={this.props.agents}
+                                        name="Agents"
+                                    >
+                                        {this.props.agent_headers.map(item =>
+                                            item != "surveys" ? (
+                                                <ExcelColumn
+                                                    key={item}
+                                                    label={item}
+                                                    value={item}
+                                                />
+                                            ) : (
+                                                <ExcelColumn
+                                                    key={item}
+                                                    label={item}
+                                                    value="test"
+                                                />
+                                            )
+                                        )}
+                                    </ExcelSheet>
+                                </ExcelFile>
+                            )}
+                        </Fragment>
+
+                        <Button
+                            className="mr-2 btn-bb"
+                            onClick={this.filterToggle}
+                        >
+                            Filter
+                        </Button>
+                        <Button
+                            className="mr-2 btn-bb"
+                            onClick={this.resetFields}
+                        >
+                            Reset
+                        </Button>
+                    </Col>
+                </Row>
+
+                <ReactTable
+                    className="-striped -highlight"
+                    ref={r => (this.reactTable = r)}
+                    filtered={this.state.filtered}
+                    onFilteredChange={filtered => {
+                        this.setState({
+                            filtered,
+                            sortedData: this.reactTable.getResolvedState()
+                                .sortedData
+                        });
+                    }}
+                    style={{ backgroundColor: "white" }}
+                    // DATA that will be displayed should be the same data to be extracted
+                    data={this.props.data}
+                    columns={columns}
+                    minRows={10}
+                    defaultPageSize={10}
+                    filterable={this.state.filter}
+                />
+            </Fragment>
+        );
+    }
 }
 
-const mapStateToProps = (state) => ({
-	headers: state.surveys.headers,
-	data: state.surveys.surveys,
-	isOpen: state.modal.isOpen
+const mapStateToProps = state => ({
+    headers: state.surveys.headers,
+    data: state.surveys.surveys,
+    isOpen: state.modal.isOpen,
+    surveys: state.surveys.surveys,
+    agents: state.surveys.agents,
+    agent_headers: state.surveys.agent_headers,
+    rcas: state.surveys.rcas
 });
 
-export default connect(mapStateToProps, {
-	deleteSurvey,
-	toggle,
-	getSurvey,
-	getAgentDetails
-})(DatatablePage);
+export default connect(
+    mapStateToProps,
+    {
+        deleteSurvey,
+        toggle,
+        getSurvey,
+        getAgentDetails
+    }
+)(DatatablePage);

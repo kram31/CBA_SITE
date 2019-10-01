@@ -52,6 +52,28 @@ a:hover {
           flex-grow: 1;
 }
 
+.btn-bb {
+  color: #ffed00;
+  background-color: black;
+  border: none;
+}
+
+.btn-bb:hover {
+  color: black;
+  background-color: #ffed00;
+}
+
+.btn-filter {
+  color: black;
+  background-color: #ffed00;
+  border: none;
+}
+
+.btn-filter:hover {
+  color: #ffed00;
+  background-color: black;
+}
+
 #bottombox-close:hover {
   cursor: pointer;
 }
@@ -93,7 +115,7 @@ a:hover {
 
 .navlink {
   color: white;
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .navlink:hover {

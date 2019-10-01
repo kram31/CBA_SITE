@@ -1,151 +1,171 @@
 body,
 html {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 .sidebar-main {
-	min-height: 150px;
-	min-width: 100px;
-	margin-top: 10px;
-	top: 30;
-	left: 0;
+    min-height: 150px;
+    min-width: 100px;
+    margin-top: 10px;
+    top: 30;
+    left: 0;
 
-	background-color: white;
-	text-align: center;
+    background-color: white;
+    text-align: center;
 
-	.sidebar-navitem {
-		height: 60px;
-		background-color: #ffed00;
-		text-align: left;
-		padding-top: 10px;
-	}
-	.sidebar-navitem:hover {
-		background-color: black;
-		color: #ffed00;
-	}
+    .sidebar-navitem {
+        height: 60px;
+        background-color: #ffed00;
+        text-align: left;
+        padding-top: 10px;
+    }
+    .sidebar-navitem:hover {
+        background-color: black;
+        color: #ffed00;
+    }
 }
 
 a {
-	color: black;
+    color: black;
 }
 
 a:hover {
-	color: white;
-	opacity: 1;
+    color: white;
+    opacity: 1;
 }
 
 #bg-image {
-	background-image: url(../images/access-adult-black-and-white-1449052.jpg);
-	background-size: cover;
-	background-color: black;
+    background-image: url(../images/access-adult-black-and-white-1449052.jpg);
+    background-size: cover;
+    background-color: black;
 }
 
 .main {
-	.section {
-		margin-bottom: 20px;
-	}
+    .section {
+        margin-bottom: 20px;
+    }
 }
 
 .survey_detail {
-	width: 100%;
-	flex-grow: 1;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.btn-bb {
+    color: #ffed00;
+    background-color: black;
+    border: none;
+}
+.btn-bb:hover {
+    color: black;
+    background-color: #ffed00;
+}
+
+.btn-filter {
+    color: black;
+    background-color: #ffed00;
+    border: none;
+}
+.btn-filter:hover {
+    color: #ffed00;
+    background-color: black;
 }
 
 #bottombox-close:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #survey-details:hover {
-	box-shadow: 5px 10px 18px gray;
+    box-shadow: 5px 10px 18px gray;
 }
 
 #rca_form:hover {
-	box-shadow: 5px 10px 18px gray;
+    box-shadow: 5px 10px 18px gray;
 }
 
 .card {
-	border: 1px solid black;
-	.card-header {
-		background-color: black;
-		color: white;
-	}
-	.btn-submit {
-		color: black;
-		background-color: #ffed00;
-		border: none;
-	}
-	.btn-submit:hover {
-		color: #ffed00;
-		background-color: black;
-	}
+    border: 1px solid black;
+    .card-header {
+        background-color: black;
+        color: white;
+    }
+    .btn-submit {
+        color: black;
+        background-color: #ffed00;
+        border: none;
+    }
+    .btn-submit:hover {
+        color: #ffed00;
+        background-color: black;
+    }
 }
 
 #navbar-main {
-	background-color: "black";
-	padding: "20px";
+    background-color: "black";
+    padding: "20px";
 }
 
 .navlink {
-	color: white;
-	opacity: .5;
+    color: white;
+    opacity: 0.5;
 }
 .navlink:hover {
-	color: white;
-	opacity: 1;
+    color: white;
+    opacity: 1;
 }
 
 .ReactTable {
-	text-align: center;
-	color: black;
-	border: 1px solid black;
-	.rt-thead {
-		background-color: black;
-		color: white;
-	}
-	.rt-th {
-		border: 1px solid white;
-	}
+    text-align: center;
+    color: black;
+    border: 1px solid black;
+    .rt-thead {
+        background-color: black;
+        color: white;
+    }
+    .rt-th {
+        border: 1px solid white;
+    }
 }
 
 .modal-backdrop {
-	opacity: 0.3 !important;
+    opacity: 0.3 !important;
 }
 
 .modal-main {
-	.modal-header {
-		background-color: black;
-		color: white;
-	}
-	#file {
-		margin-bottom: 20px;
-	}
-	.btn-submit {
-		color: black;
-		background-color: #ffed00;
-		border: none;
-	}
-	.btn-submit:hover {
-		color: #ffed00;
-		background-color: black;
-	}
+    .modal-header {
+        background-color: black;
+        color: white;
+    }
+    #file {
+        margin-bottom: 20px;
+    }
+    .btn-submit {
+        color: black;
+        background-color: #ffed00;
+        border: none;
+    }
+    .btn-submit:hover {
+        color: #ffed00;
+        background-color: black;
+    }
 }
 
 @media (min-width: 770px) {
-	.sidebar-main {
-		position: fixed;
-		z-index: 1;
-		margin-left: 10px;
-		overflow-x: hidden;
-		text-align: left;
-	}
-	.sidebar-navitem:hover {
-		background-color: black;
-		color: #ffed00;
-	}
-	.main {
-		margin-left: 200px;
-		margin-top: 20px;
-		margin-right: 20px;
-	}
+    .sidebar-main {
+        position: fixed;
+        z-index: 1;
+        margin-left: 10px;
+        overflow-x: hidden;
+        text-align: left;
+    }
+    .sidebar-navitem:hover {
+        background-color: black;
+        color: #ffed00;
+    }
+    .main {
+        margin-left: 200px;
+        margin-top: 20px;
+        margin-right: 20px;
+    }
 }

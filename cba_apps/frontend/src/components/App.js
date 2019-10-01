@@ -1,28 +1,76 @@
-import React, { Component, Fragment } from 'react';
-import ReactDOM from 'react-dom';
-import Header from './Header';
-import UploadData from './bottombox/upload-data/UploadData';
-import BottomBox from './bottombox/dashboard/BottomBox';
-import { Provider } from 'react-redux';
-import store from '../store';
-import SideBar from './SideBar';
-import '../font/stylesheet.css';
-import '../css/main.css';
+import React, { Component, Fragment } from "react";
+import ReactDOM from "react-dom";
+
+import {
+    HashRouter as Router,
+    Route,
+    Switch,
+    Redirect
+} from "react-router-dom";
+
+import Header from "./Header";
+import BottomBox from "./bottombox/dashboard/BottomBox";
+import Alerts from "./bottombox/components/Alerts";
+import Login from "./accounts/Login";
+import Register from "./accounts/Register";
+import PrivateRoute from "./common/PrivateRoute";
+
+import { Provider } from "react-redux";
+import { Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
+import { loadUser } from "../actions/auth";
+
+import store from "../store";
+
+import "../font/stylesheet.css";
+import "../css/main.css";
+
+// Alert options
+const alertOptions = {
+    timeout: 6000,
+    position: "bottom center"
+};
 
 class App extends Component {
-	render() {
-		return (
-			<Provider store={store}>
-				<Fragment>
-					<Header />
+    componentDidMount() {
+        store.dispatch(loadUser());
+    }
 
-					<div className="container-fluid">
-						<BottomBox />
-					</div>
-				</Fragment>
-			</Provider>
-		);
-	}
+    render() {
+        return (
+            <Provider store={store}>
+                <AlertProvider template={AlertTemplate} {...alertOptions}>
+                    <Router>
+                        <Fragment>
+                            <Header />
+                            <Alerts />
+
+                            <div className="container-fluid">
+                                <Switch>
+                                    <PrivateRoute
+                                        exact
+                                        path="/"
+                                        component={BottomBox}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/register"
+                                        component={Register}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/login"
+                                        component={Login}
+                                    />
+                                </Switch>
+                            </div>
+                        </Fragment>
+                    </Router>
+                </AlertProvider>
+            </Provider>
+        );
+    }
 }
 
 export default App;

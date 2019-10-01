@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
     Collapse,
     Navbar,
@@ -6,12 +6,18 @@ import {
     NavbarBrand,
     Nav,
     NavItem,
-    NavLink
+    NavLink,
+    Button
 } from "reactstrap";
+
+import { connect } from "react-redux";
+
+import { Link } from "react-router-dom";
+import { logout } from "../actions/auth";
 
 import dxc from "../images/dxc.png";
 
-export default class Example extends React.Component {
+class Header extends React.Component {
     constructor(props) {
         super(props);
 
@@ -27,6 +33,36 @@ export default class Example extends React.Component {
     }
 
     render() {
+        const { isAuthenticated, user } = this.props.auth;
+
+        const authLinks = (
+            <Fragment>
+                <span className="navbar-text mr-3" style={{ color: "white" }}>
+                    <strong>{user ? `Welcome ${user.username}` : ""}</strong>
+                </span>
+                <NavItem>
+                    <Button onClick={this.props.logout} color="danger">
+                        Logout
+                    </Button>
+                </NavItem>
+            </Fragment>
+        );
+
+        const guestLinks = (
+            <Fragment>
+                <NavItem className="mr-2">
+                    <Link to="/register" className="navlink">
+                        Register
+                    </Link>
+                </NavItem>
+                <NavItem className="mr-2">
+                    <Link to="/login" className="navlink">
+                        Login
+                    </Link>
+                </NavItem>
+            </Fragment>
+        );
+
         return (
             <Navbar
                 style={{
@@ -40,24 +76,17 @@ export default class Example extends React.Component {
                     <NavbarBrand href="/">
                         <img src={dxc} width="250" height="45" alt="Logo" />
                     </NavbarBrand>
-                    <NavbarToggler onClick={this.toggle}><span><i style={{color:"white"}} className="fa fa-navicon"></i></span></NavbarToggler>
+                    <NavbarToggler onClick={this.toggle}>
+                        <span>
+                            <i
+                                style={{ color: "white" }}
+                                className="fa fa-navicon"
+                            ></i>
+                        </span>
+                    </NavbarToggler>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
-                            <NavItem>
-                                <NavLink href="#" className="navlink">
-                                    Bottombox
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="#" className="navlink">
-                                    CCMS
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="#" className="navlink">
-                                    QA Eval
-                                </NavLink>
-                            </NavItem>
+                            {isAuthenticated ? authLinks : guestLinks}
                         </Nav>
                     </Collapse>
                 </div>
@@ -65,3 +94,12 @@ export default class Example extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(
+    mapStateToProps,
+    { logout }
+)(Header);
