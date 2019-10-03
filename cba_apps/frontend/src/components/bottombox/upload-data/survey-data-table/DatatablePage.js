@@ -247,7 +247,11 @@ class DatatablePage extends Component {
                                     }
                                 >
                                     <ExcelSheet
-                                        data={this.props.surveys}
+                                        data={
+                                            this.state.sortedData[0]
+                                                ? this.state.sortedData
+                                                : this.props.surveys
+                                        }
                                         name="Surveys"
                                     >
                                         {this.props.headers.map(item => (

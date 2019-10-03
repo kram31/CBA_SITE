@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Nav, NavItem, NavLink } from "reactstrap";
+import React, { Component, Fragment } from "react";
+import { Nav, NavItem, NavLink, Button } from "reactstrap";
 import UploadDataModal from "./bottombox/upload-data/UploadDataModal";
 import SimpleDataInput from "./bottombox/components/SimpleDataInput";
 
@@ -49,26 +49,39 @@ class SideBar extends Component {
 
         return (
             <Nav vertical>
+                <NavItem
+                    style={{
+                        backgroundColor: "black",
+                        color: "white",
+                        paddingTop: "10px",
+                        paddingLeft: "14px"
+                    }}
+                >
+                    <h5>
+                        <i className="fa fa-gears" /> BottomBox
+                    </h5>
+                </NavItem>
                 <NavItem className="sidebar-navitem">
                     <UploadDataModal />
+                    {tables.map(table => (
+                        <Fragment key={table.data_name}>
+                            <NavLink
+                                className="sidebar-navlink"
+                                onClick={() => this.handleClick(table)}
+                            >
+                                <i className="fa fa-plus-circle" />{" "}
+                                {table.label_name}
+                            </NavLink>
+                            <SimpleDataInput
+                                data_name={this.state.table.data_name}
+                                label_name={this.state.table.label_name}
+                                modal={this.state.modal}
+                                onModalChange={this.handleModalState}
+                            />
+                            {/* add data_name="addSkill" and label_name="Agent Skill" */}
+                        </Fragment>
+                    ))}
                 </NavItem>
-                {tables.map(table => (
-                    <NavItem className="sidebar-navitem" key={table.data_name}>
-                        <NavLink
-                            href="#"
-                            onClick={() => this.handleClick(table)}
-                        >
-                            {table.label_name}
-                        </NavLink>
-                        <SimpleDataInput
-                            data_name={this.state.table.data_name}
-                            label_name={this.state.table.label_name}
-                            modal={this.state.modal}
-                            onModalChange={this.handleModalState}
-                        />
-                        {/* add data_name="addSkill" and label_name="Agent Skill" */}
-                    </NavItem>
-                ))}
             </Nav>
         );
     }

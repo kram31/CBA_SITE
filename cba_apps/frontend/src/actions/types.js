@@ -14,6 +14,7 @@ export const GET_TEAMS = "GET_TEAMS";
 export const ADD_RCA = "ADD_RCA";
 export const UPDATE_BOTTOMBOX_NOT_COMPLETED = "UPDATE_BOTTOMBOX_NOT_COMPLETED";
 export const FETCHING = "FETCHING";
+export const STOP_FETCHING = "STOP_FETCHING";
 export const ADD_SKILL = "ADD_SKILL";
 export const ADD_TEAMLEAD = "ADD_TEAMLEAD";
 export const GET_TEAMLEADS = "GET_TEAMLEADS";
@@ -35,3 +36,8 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_FAIL = "LOGOUT_FAIL";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
+
+// messages
+
+export const CREATE_MESSAGE = "CREATE_MESSAGE";
+export const GET_MESSAGES = "GET_MESSAGES";

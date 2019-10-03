@@ -78,6 +78,8 @@ class Survey(models.Model):
         'Date Issued', max_length=100, blank=True)
     bottombox = models.IntegerField(blank=True)
     completed = models.BooleanField(default=False)
+    uploaded_by = models.CharField(max_length=100, blank=True)
+    date_uploaded = models.DateField(auto_now_add=True)
 
     # if owner does not exist do agent instance
 
@@ -144,6 +146,8 @@ class RCA(models.Model):
     coaching = models.BooleanField(default=False)
     corrective_actions = models.CharField(
         "Corrective actions", max_length=3000, blank=True)
+    completed_by = models.CharField(max_length=100, blank=True)
+    date_completed = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return str(self.surveyed_ticket)

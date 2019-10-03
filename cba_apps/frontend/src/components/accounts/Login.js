@@ -34,6 +34,7 @@ class Login extends Component {
                                 name="username"
                                 onChange={this.onChange}
                                 value={username}
+                                required
                             />
                         </div>
 
@@ -45,6 +46,7 @@ class Login extends Component {
                                 name="password"
                                 onChange={this.onChange}
                                 value={password}
+                                required
                             />
                         </div>
 

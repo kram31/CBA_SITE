@@ -12,7 +12,8 @@ class SurveyViewset(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
     permission_classes = [
-        permissions.AllowAny
+        # permissions.AllowAny
+        permissions.IsAuthenticated
     ]
 
     # 25/07/2019 03:39:26 PM
@@ -25,6 +26,7 @@ class SurveyViewset(viewsets.ModelViewSet):
         # agent_fields = [f.name for f in Agent._meta.get_fields()]
         # Check if operator_lan_id exists, if not create using Agent model...
         # Get Agent Model fields
+
         lan_id = request.data.get('operator_lan_id')
         if not Agent.objects.filter(operator_lan_id=lan_id):
             # name, land_id, email, skill, team,lead, location, wave
@@ -35,9 +37,11 @@ class SurveyViewset(viewsets.ModelViewSet):
 
         date_format = request.data['date_issued']
 
-        date_format = datetime.datetime.strptime(request.data['date_issued'], "%d/%m/%Y %I:%M:%S %p").strftime('%Y-%m-%d')
+        date_format = datetime.datetime.strptime(
+            request.data['date_issued'], "%d/%m/%Y %I:%M:%S %p").strftime('%Y-%m-%d')
 
         request.data['date_issued'] = date_format
+        request.data['uploaded_by'] = self.request.user
 
         serializer = self.get_serializer(data=request.data)
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { register } from "../../actions/auth";
+import { createMessage } from "../../actions/messages";
 
 class Register extends Component {
     state = {
@@ -15,9 +16,10 @@ class Register extends Component {
         e.preventDefault();
         const { username, email, password, password2 } = this.state;
         if (password !== password2) {
-            console.log("passwords does not match");
+            this.props.createMessage({
+                passwordsNotMatch: "passwords does not match"
+            });
         } else {
-            console.log("submit");
             const newUser = {
                 username,
                 password,
@@ -47,6 +49,7 @@ class Register extends Component {
                                 name="username"
                                 onChange={this.onChange}
                                 value={username}
+                                required
                             />
                         </div>
                         <div className="form-group">
@@ -57,6 +60,7 @@ class Register extends Component {
                                 name="email"
                                 onChange={this.onChange}
                                 value={email}
+                                required
                             />
                         </div>
                         <div className="form-group">
@@ -67,6 +71,7 @@ class Register extends Component {
                                 name="password"
                                 onChange={this.onChange}
                                 value={password}
+                                required
                             />
                         </div>
                         <div className="form-group">
@@ -77,6 +82,7 @@ class Register extends Component {
                                 name="password2"
                                 onChange={this.onChange}
                                 value={password2}
+                                required
                             />
                         </div>
                         <div className="form-group">
@@ -101,5 +107,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { register }
+    { register, createMessage }
 )(Register);

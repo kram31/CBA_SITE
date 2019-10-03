@@ -21,7 +21,8 @@ import {
     ADD_TEAM,
     GET_RCAS,
     GET_BOTTOMBOX,
-    GET_AGENTS
+    GET_AGENTS,
+    STOP_FETCHING
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -60,6 +61,11 @@ const surveyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: true
+            };
+        case STOP_FETCHING:
+            return {
+                ...state,
+                isFetching: false
             };
         case GET_SURVEYS:
             return {

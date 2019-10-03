@@ -6,9 +6,9 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
-    LOGOUT_FAIL,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    GET_ERRORS
 } from "./types";
 
 // check token and load user
@@ -26,7 +26,6 @@ export const loadUser = () => (dispatch, getState) => {
             });
         })
         .catch(err => {
-            console.log(err.response);
             dispatch({
                 type: AUTH_ERROR
             });
@@ -55,7 +54,14 @@ export const login = (username, password) => dispatch => {
             });
         })
         .catch(err => {
-            console.log(err.response);
+            const errors = {
+                msg: err.response.data.non_field_errors[0],
+                status: err.response.status
+            };
+            dispatch({
+                type: GET_ERRORS,
+                payload: errors
+            });
             dispatch({
                 type: LOGIN_FAIL
             });
@@ -120,6 +126,14 @@ export const register = ({ username, password, email }) => dispatch => {
         })
         .catch(err => {
             console.log(err.response);
+            const errors = {
+                msg: err.response.data.email[0],
+                status: err.response.status
+            };
+            dispatch({
+                type: GET_ERRORS,
+                payload: errors
+            });
             dispatch({
                 type: REGISTER_FAIL
             });

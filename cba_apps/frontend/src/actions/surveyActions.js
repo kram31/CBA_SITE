@@ -21,8 +21,14 @@ import {
     ADD_TEAM,
     GET_RCAS,
     GET_BOTTOMBOX,
-    GET_AGENTS
+    GET_AGENTS,
+    GET_ERRORS,
+    STOP_FETCHING
 } from "./types";
+
+import { tokenConfig } from "./auth";
+
+import { createMessage } from "./messages";
 
 import axios from "axios";
 
@@ -34,13 +40,13 @@ export const isFetching = () => dispatch => {
     });
 };
 
-export const getSurveys = () => dispatch => {
+export const getSurveys = () => (dispatch, getState) => {
     dispatch({
         type: FETCHING
     });
 
     axios
-        .get("/api/surveys/")
+        .get("/api/surveys/", tokenConfig(getState))
         .then(res =>
             dispatch({
                 type: GET_SURVEYS,
@@ -82,30 +88,33 @@ export const getRcas = () => dispatch => {
         .catch(err => console.log(err.response.data));
 };
 
-export const deleteSurvey = id => dispatch => {
+export const deleteSurvey = id => (dispatch, getState) => {
     dispatch({
         type: FETCHING
     });
 
     axios
-        .delete(`/api/surveys/${id}`)
-        .then(res =>
+        .delete(`/api/surveys/${id}`, tokenConfig(getState))
+        .then(res => {
+            dispatch(
+                createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
+            );
             dispatch({
                 type: DELETE_SURVEY,
                 payload: id
-            })
-        )
+            });
+        })
         .catch(err => console.log(err.response.data));
 };
 
-export const addSurveysBulk = list_data => dispatch => {
+export const addSurveysBulk = list_data => (dispatch, getState) => {
     dispatch({
         type: FETCHING
     });
 
     const post_reqs = list_data.map(data => {
         axios
-            .post("/api/surveys/", data)
+            .post("/api/surveys/", data, tokenConfig(getState))
             .then(res => {
                 dispatch({
                     type: ADD_SURVEY,
@@ -116,7 +125,24 @@ export const addSurveysBulk = list_data => dispatch => {
                     payload: res.data
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                // console.log(err.response);
+                let errors;
+
+                if (err.response.data.reference_number[0]) {
+                    errors = {
+                        msg: err.response.data.reference_number[0],
+                        status: err.response.status
+                    };
+                    dispatch({
+                        type: GET_ERRORS,
+                        payload: errors
+                    });
+                    dispatch({
+                        type: STOP_FETCHING
+                    });
+                }
+            });
     });
     Promise.all(post_reqs);
 };

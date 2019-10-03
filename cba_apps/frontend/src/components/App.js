@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
 
 import {
-    HashRouter as Router,
+    BrowserRouter as Router,
     Route,
     Switch,
     Redirect
@@ -38,6 +38,7 @@ class App extends Component {
     }
 
     render() {
+        store.dispatch(loadUser());
         return (
             <Provider store={store}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
