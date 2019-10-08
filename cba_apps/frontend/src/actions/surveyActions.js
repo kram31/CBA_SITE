@@ -23,7 +23,9 @@ import {
     GET_BOTTOMBOX,
     GET_AGENTS,
     GET_ERRORS,
-    STOP_FETCHING
+    STOP_FETCHING,
+    GET_ALL_DATA,
+    UPDATE_SURVEY
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -33,6 +35,170 @@ import { createMessage } from "./messages";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+// surveys: this.props.getSurveys(),
+// rcas: this.props.getRcas(),
+// skills: this.props.getSkills(),
+// dsatCode1: this.props.getDsatCode1(),
+// bbDriverCode2: this.props.getBBDriverCode2(),
+// bbDriverCode3: this.props.getBBDriverCode3(),
+// teams: this.props.getTeams(),
+// agents: this.props.getAgents()
+
+export const updateSurvey = survey_data => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .put(
+            `/api/surveys/${survey_data.reference_number}/`,
+            survey_data,
+            tokenConfig(getState)
+        )
+        .then(res => {
+            console.log(res.data);
+            dispatch({
+                type: UPDATE_SURVEY,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const getAllData2 = () => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+    axios
+        .all([
+            axios.get("/api/surveys/", tokenConfig(getState)),
+            axios.get("/api/rca/", tokenConfig(getState)),
+            axios.get("/api/skills/"),
+            axios.get("/api/dsat_code1/"),
+            axios.get("/api/bb_driver_code2/"),
+            axios.get("/api/bb_driver_code3/"),
+            axios.get("/api/team/"),
+            axios.get("/api/agents/")
+        ])
+        .then(
+            axios.spread(
+                (
+                    surveys,
+                    rcas,
+                    skills,
+                    dsat_code1,
+                    bb_driver_code2,
+                    bb_driver_code3,
+                    teams,
+                    agents
+                ) => {
+                    dispatch({
+                        type: GET_ALL_DATA,
+                        payload: {
+                            surveys: surveys.data,
+                            rcas: rcas.data,
+                            skills: skills.data,
+                            dsat_code1: dsat_code1.data,
+                            bb_driver_code2: bb_driver_code2.data,
+                            bb_driver_code3: bb_driver_code3.data,
+                            teams: teams.data,
+                            agents: agents.data
+                        }
+                    });
+                    dispatch({
+                        type: STOP_FETCHING
+                    });
+                }
+            )
+        )
+        .catch(error => {
+            dispatch({
+                type: STOP_FETCHING
+            });
+            console.log(error.response);
+        });
+};
+
+export const getAllData = () => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+    Promise.all([
+        axios
+            .get("/api/surveys/", tokenConfig(getState))
+            .then(res =>
+                dispatch({
+                    type: GET_SURVEYS,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data)),
+        axios
+            .get("/api/rca/")
+            .then(res =>
+                dispatch({
+                    type: GET_RCAS,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data)),
+        axios
+            .get("/api/skills/")
+            .then(res =>
+                dispatch({
+                    type: GET_SKILLS,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data)),
+        axios
+            .get("/api/dsat_code1/")
+            .then(res =>
+                dispatch({
+                    type: GET_DSAT_CODE1,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data)),
+        axios
+            .get("/api/bb_driver_code2/")
+            .then(res =>
+                dispatch({
+                    type: GET_BB_DRIVER_CODE2,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data)),
+        axios
+            .get("/api/bb_driver_code3/")
+            .then(res =>
+                dispatch({
+                    type: GET_BB_DRIVER_CODE3,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data)),
+        axios
+            .get("/api/team/")
+            .then(res =>
+                dispatch({
+                    type: GET_TEAMS,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data)),
+        axios
+            .get("/api/agents/")
+            .then(res =>
+                dispatch({
+                    type: GET_AGENTS,
+                    payload: res.data
+                })
+            )
+            .catch(err => console.log(err.response.data))
+    ]);
+};
 
 export const isFetching = () => dispatch => {
     dispatch({
@@ -126,12 +292,12 @@ export const addSurveysBulk = list_data => (dispatch, getState) => {
                 });
             })
             .catch(err => {
-                // console.log(err.response);
+                console.log(err);
                 let errors;
 
-                if (err.response.data.reference_number[0]) {
+                if (err.response) {
                     errors = {
-                        msg: err.response.data.reference_number[0],
+                        msg: err.response.data,
                         status: err.response.status
                     };
                     dispatch({
@@ -285,13 +451,13 @@ export const getTeams = () => dispatch => {
         .catch(err => console.log(err.response.data));
 };
 
-export const addRCA = rcaData => dispatch => {
+export const addRCA = rcaData => (dispatch, getState) => {
     dispatch({
         type: FETCHING
     });
 
     axios
-        .post("/api/rca/", rcaData)
+        .post("/api/rca/", rcaData, tokenConfig(getState))
         .then(res =>
             dispatch({
                 type: ADD_RCA,

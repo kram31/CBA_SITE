@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { register } from "../../actions/auth";
 import { createMessage } from "../../actions/messages";
+import { getAllData2 } from "../../actions/surveyActions";
 
 class Register extends Component {
     state = {
@@ -33,6 +34,7 @@ class Register extends Component {
 
     render() {
         if (this.props.isAuthenticated) {
+            this.props.getAllData2();
             return <Redirect to="/" />;
         }
         const { username, email, password, password2 } = this.state;
@@ -107,5 +109,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { register, createMessage }
+    { register, createMessage, getAllData2 }
 )(Register);

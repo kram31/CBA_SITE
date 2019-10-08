@@ -26,7 +26,9 @@ class UploadDataModal extends Component {
         file: {},
         data: [],
         isStaged: false,
-        keys: keys,
+        keys: keys.filter(
+            item => item != "uploaded_by" && item != "date_uploaded"
+        ),
         modal: false
     };
 
@@ -53,7 +55,7 @@ class UploadDataModal extends Component {
             /* Convert array of arrays */
             const data = XLSX.utils.sheet_to_json(ws, {
                 defval: "",
-                header: keys,
+                header: this.state.keys,
                 range: 1
             });
 

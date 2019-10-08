@@ -30,7 +30,7 @@ class SurveyDetails extends Component {
 			fulfillment,
 			assignment_group,
 			originating_ticket_description,
-			follow_up_commnets,
+			follow_up_comments,
 			q1,
 			q2,
 			q2a,
@@ -42,7 +42,10 @@ class SurveyDetails extends Component {
 			budi_bu,
 			budi_lv7,
 			bu_catg,
-			date_issued
+			date_issued,
+			uploaded_by,
+			date_uploaded
+
 		} = this.props.survey;
 		return (
 			<Fragment>
@@ -60,12 +63,7 @@ class SurveyDetails extends Component {
 						</Row>
 					</CardHeader>
 					<CardBody className="survey-detail">
-						{/* <Col md={4}>
-								<p>Agent Name: {owner_name}</p>
-							</Col>
-							<Col md={4}>
-								<p>Source: {origination_source}</p>
-							</Col> */}
+		
 						<Row className="survey-row">
 							<Col md={6}>
 								<p>
@@ -185,7 +183,7 @@ class SurveyDetails extends Component {
 							<Col md={12}>
 								<p>
 									<span>Follow up comments: </span>
-									<strong>{follow_up_commnets}</strong>
+									<strong>{follow_up_comments}</strong>
 								</p>
 							</Col>
 						</Row>
@@ -292,6 +290,20 @@ class SurveyDetails extends Component {
 								<p>
 									<span>Date Issued: </span>
 									<strong>{date_issued}</strong>
+								</p>
+							</Col>
+						</Row>
+						<Row className="survey-row">
+							<Col md={6}>
+								<p>
+									<span>Uploaded by: </span>
+									<strong>{uploaded_by}</strong>
+								</p>
+							</Col>
+							<Col md={6}>
+								<p>
+									<span>Date uploaded: </span>
+									<strong>{date_uploaded}</strong>
 								</p>
 							</Col>
 						</Row>

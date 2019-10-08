@@ -54,17 +54,24 @@ export const login = (username, password) => dispatch => {
             });
         })
         .catch(err => {
-            const errors = {
-                msg: err.response.data.non_field_errors[0],
-                status: err.response.status
-            };
-            dispatch({
-                type: GET_ERRORS,
-                payload: errors
-            });
-            dispatch({
-                type: LOGIN_FAIL
-            });
+            console.log(err);
+            let errors;
+
+            if (err) {
+                if (err.response.data.non_field_errors[0]) {
+                    errors = {
+                        msg: err.response.data.non_field_errors[0],
+                        status: err.response.status
+                    };
+                    dispatch({
+                        type: GET_ERRORS,
+                        payload: errors
+                    });
+                    dispatch({
+                        type: LOGIN_FAIL
+                    });
+                }
+            }
         });
 };
 
@@ -127,7 +134,7 @@ export const register = ({ username, password, email }) => dispatch => {
         .catch(err => {
             console.log(err.response);
             const errors = {
-                msg: err.response.data.email[0],
+                msg: err.response.data,
                 status: err.response.status
             };
             dispatch({

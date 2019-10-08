@@ -6,6 +6,7 @@ import RCAFormModal from "../rca/RCAFormModal";
 import UploadData from "../upload-data/UploadData";
 import SurveyContent from "./SurveyContent";
 import DatatablePage from "../upload-data/survey-data-table/DatatablePage";
+import RCATable from "./RCATable";
 import SideBar from "../../SideBar";
 
 import {
@@ -30,21 +31,11 @@ import {
     getBBDriverCode3,
     removeSurvey,
     getTeams,
-    getRcas
+    getRcas,
+    getAllData2
 } from "../../../actions/surveyActions";
 
 class BottomBox extends Component {
-    componentDidMount() {
-        this.props.getRcas();
-        this.props.getSurveys();
-        this.props.getSkills();
-        this.props.getDsatCode1();
-        this.props.getBBDriverCode2();
-        this.props.getBBDriverCode3();
-        this.props.getTeams();
-        this.props.getAgents();
-    }
-
     render() {
         return (
             <Fragment>
@@ -79,6 +70,11 @@ class BottomBox extends Component {
                                     <DatatablePage />
                                 </div>
                             </Fade>
+                            <Fade>
+                                <div className="section">
+                                    <RCATable />
+                                </div>
+                            </Fade>
                         </div>
                     </div>
                 )}
@@ -88,6 +84,7 @@ class BottomBox extends Component {
 }
 
 const mapStateToProps = state => ({
+    surveys: state.surveys.surveys,
     isFetching: state.surveys.isFetching,
     bottombox: state.surveys.bottombox,
     agents: state.surveys.agents
@@ -104,6 +101,7 @@ export default connect(
         removeSurvey,
         getTeams,
         getRcas,
-        getAgents
+        getAgents,
+        getAllData2
     }
 )(BottomBox);

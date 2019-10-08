@@ -41,7 +41,8 @@ class SurveyViewset(viewsets.ModelViewSet):
             request.data['date_issued'], "%d/%m/%Y %I:%M:%S %p").strftime('%Y-%m-%d')
 
         request.data['date_issued'] = date_format
-        request.data['uploaded_by'] = self.request.user
+
+        request.data['uploaded_by'] = str(self.request.user)
 
         serializer = self.get_serializer(data=request.data)
 
@@ -57,7 +58,17 @@ class RCAViewset(viewsets.ModelViewSet):
     serializer_class = RCASerializer
     permission_classes = [
         permissions.AllowAny
+        # permissions.IsAuthenticated
     ]
+
+    def create(self, request, *args, **kwargs):
+        request.data['completed_by'] = str(self.request.user)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class DSAT_Code1Viewset(viewsets.ModelViewSet):

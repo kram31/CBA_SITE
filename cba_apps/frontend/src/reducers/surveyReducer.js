@@ -22,7 +22,9 @@ import {
     GET_RCAS,
     GET_BOTTOMBOX,
     GET_AGENTS,
-    STOP_FETCHING
+    STOP_FETCHING,
+    GET_ALL_DATA,
+    UPDATE_SURVEY
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -48,7 +50,7 @@ const initialState = {
     bb_driver_code2: [],
     bb_driver_code3: [],
     teams: [],
-    rcas: [],
+    rcas: null,
     teamleads: [],
     bottombox: [],
     isFetching: false,
@@ -57,6 +59,32 @@ const initialState = {
 
 const surveyReducer = (state = initialState, action) => {
     switch (action.type) {
+        case GET_ALL_DATA:
+            const {
+                surveys,
+                rcas,
+                skills,
+                dsat_code1,
+                bb_driver_code2,
+                bb_driver_code3,
+                teams,
+                agents
+            } = action.payload;
+            return {
+                ...state,
+                surveys: surveys,
+                bottombox: surveys.filter(
+                    item => item.bottombox == 1 && !item.rca
+                ),
+                rcas,
+                skills,
+                dsat_code1,
+                bb_driver_code2,
+                bb_driver_code3,
+                teams,
+                agents
+            };
+            break;
         case FETCHING:
             return {
                 ...state,
@@ -210,6 +238,21 @@ const surveyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 bb_driver_code3: [action.payload, ...state.bb_driver_code3],
+                isFetching: false
+            };
+        case UPDATE_SURVEY:
+            return {
+                ...state,
+                surveys: state.surveys.map(survey => {
+                    if (
+                        survey.reference_number ==
+                        action.payload.reference_number
+                    ) {
+                        return action.payload;
+                    } else {
+                        return survey;
+                    }
+                }),
                 isFetching: false
             };
         default:

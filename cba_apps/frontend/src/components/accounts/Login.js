@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../../actions/auth";
+import { getAllData2 } from "../../actions/surveyActions";
 
 class Login extends Component {
     state = {
@@ -18,6 +19,7 @@ class Login extends Component {
 
     render() {
         if (this.props.isAuthenticated) {
+            this.props.getAllData2();
             return <Redirect to="/" />;
         }
         const { username, password } = this.state;
@@ -72,5 +74,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { login }
+    { login, getAllData2 }
 )(Login);

@@ -24,6 +24,7 @@ export const ADD_BB_DRIVER_CODE3 = "ADD_BB_DRIVER_CODE3";
 export const ADD_TEAM = "ADD_TEAM";
 export const GET_RCAS = "GET_RCAS";
 export const GET_BOTTOMBOX = "GET_BOTTOMBOX";
+export const UPDATE_SURVEY = "UPDATE_SURVEY";
 
 export const GET_ERRORS = "GET_ERRORS";
 // Authentication
@@ -41,3 +42,5 @@ export const REGISTER_FAIL = "REGISTER_FAIL";
 
 export const CREATE_MESSAGE = "CREATE_MESSAGE";
 export const GET_MESSAGES = "GET_MESSAGES";
+
+export const GET_ALL_DATA = "GET_ALL_DATA";

@@ -64,7 +64,7 @@ class Survey(models.Model):
 
     fulfillment = models.CharField(
         'Fulfillment', max_length=100, blank=True)
-    follow_up_commnets = models.CharField('Follow up Comments',
+    follow_up_comments = models.CharField('Follow up Comments',
                                           max_length=3000, blank=True)
     originating_ticket_description = models.CharField('Originating Ticket Brief Description',
                                                       max_length=500, blank=True)

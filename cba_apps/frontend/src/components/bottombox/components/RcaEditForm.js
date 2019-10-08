@@ -1,47 +1,63 @@
 import React, { Component } from "react";
+
 import {
     Button,
-    Card,
-    CardHeader,
-    CardBody,
-    CardFooter,
-    Col,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Form,
     Row,
-    Form
+    Col
 } from "reactstrap";
+
+import SingleInput from "../../../components/bottombox/rca/components/SingleInput";
+import SelectInput from "../../../components/bottombox/rca/components/SelectInput";
+
 import { connect } from "react-redux";
-import { addRCA } from "../../../actions/surveyActions";
 
-import SingleInput from "../rca/components/SingleInput";
-import SelectInput from "../rca/components/SelectInput";
-
-class RCAForm extends Component {
+class RcaEditForm extends Component {
     state = {
-        surveyed_ticket: "",
-        agent: "",
-        support_silo_issue_based: "",
-        service: "",
-        service_component: "",
-        brief_description: "",
-        user_verbatim: "",
-        dsat_cause: "",
-        bb_driver_code2: "",
-        bb_driver_code3: "",
-        actual_issue: "",
-        controllability: "",
-        accountable_team: "",
-        q1_answer: "",
-        contacted_customer: "",
-        summary: "",
-        obs_in_call: "",
-        accountable_entity: "",
-        overall_reason_dsat: "",
-        coaching: "",
-        corrective_actions: ""
+        modal: false,
+        surveyed_ticket: this.props.rca.surveyed_ticket,
+        agent: this.props.rca.agent,
+        support_silo_issue_based: this.props.rca.support_silo_issue_based,
+        service: this.props.rca.service,
+        service_component: this.props.rca.service_component,
+        brief_description: this.props.rca.brief_description,
+        user_verbatim: this.props.rca.user_verbatim,
+        dsat_cause: this.props.rca.dsat_cause,
+        bb_driver_code2: this.props.rca.bb_driver_code2,
+        bb_driver_code3: this.props.rca.bb_driver_code3,
+        actual_issue: this.props.rca.actual_issue,
+        controllability: this.props.rca.controllability,
+        accountable_team: this.props.rca.accountable_team,
+        q1_answer: this.props.rca.q1_answer,
+        contacted_customer: this.props.rca.contacted_customer,
+        summary: this.props.rca.summary,
+        obs_in_call: this.props.rca.obs_in_call,
+        accountable_entity: this.props.rca.accountable_entity,
+        overall_reason_dsat: this.props.rca.overall_reason_dsat,
+        coaching: this.props.rca.coaching,
+        corrective_actions: this.props.rca.corrective_actions
     };
 
-    handleToggle = () => {
-        this.props.parentCallback("x");
+    handleSubmit = e => {
+        e.preventDefault();
+
+        let rca_data = this.state;
+        rca_data.id = this.props.rca.id;
+        delete rca_data.modal;
+
+        console.log(rca_data);
+
+        this.toggle();
+    };
+
+    toggle = () => {
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }));
     };
 
     handleChange = e => {
@@ -50,95 +66,31 @@ class RCAForm extends Component {
         });
     };
 
-    // Handle RCA Submit
-    // >>> Send Post to http://localhost:8000/api/rca/ contents newSurvey
-    // >>> Send Put request to http://localhost:8000/api/surveys/${reference_number}/ contents {"completed": true,"owner_name": "Jona Dorado","operator_lan_id": "doradojm"}
-
-    handleSubmit = e => {
-        e.preventDefault();
-
-        const rcaData = this.state;
-        rcaData.surveyed_ticket = this.props.survey.reference_number;
-
-        console.log(rcaData);
-
-        this.props.addRCA(rcaData);
-
-        this.handleToggle();
+    handleCancel = () => {
+        this.toggle();
     };
 
     render() {
-        let { reference_number, owner_name } = this.props.survey;
-
-        const checkValue = elem => {
-            let value;
-            elem == null && !elem ? (value = "") : (value = elem);
-
-            return value;
-        };
-
         return (
             <div>
-                <Card id="rca_form">
-                    <Form className="card-content" onSubmit={this.handleSubmit}>
-                        <CardHeader className="card-header">
-                            <Row className="mt-2">
-                                <Col>
-                                    <h5>Root Cause Analysis</h5>
-                                </Col>
-                                <Col
-                                    className="mr-auto"
-                                    style={{ textAlign: "right" }}
-                                >
-                                    <span
-                                        id="bottombox-close"
-                                        onClick={this.handleToggle}
-                                    >
-                                        <i className="fa fa-times" />
-                                    </span>
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                        <CardBody className="survey-detail">
-                            <h5>Ticket Details</h5>
-                            <Row form>
-                                <Col md={4}>
-                                    <SingleInput
-                                        type="text"
-                                        size="sm"
-                                        attr="surveyed_ticket"
-                                        label_name="Surveyed Ticket Number"
-                                        value={checkValue(reference_number)}
-                                        controlFunc={this.handleChange}
-                                        readOnly={true}
-                                    />
-                                </Col>
-                                <Col md={4}>
-                                    <SingleInput
-                                        type="text"
-                                        size="sm"
-                                        attr="agent"
-                                        label_name="Agent's Name"
-                                        value={checkValue(owner_name)}
-                                        controlFunc={this.handleChange}
-                                        readOnly={true}
-                                    />
-                                </Col>
-                                <Col md={4}>
-                                    <SingleInput
-                                        type="text"
-                                        size="sm"
-                                        attr="skill"
-                                        label_name="Agent's Primary Skill"
-                                        value={checkValue(
-                                            this.props.agent.skill
-                                        )}
-                                        controlFunc={this.handleChange}
-                                        readOnly={true}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row form>
+                <Button color="danger" onClick={this.toggle}>
+                    View
+                </Button>
+                <Modal
+                    scrollable={true}
+                    className="modal-xl modal-main"
+                    isOpen={this.state.modal}
+                    toggle={this.toggle}
+                >
+                    <Form className="modal-content">
+                        <ModalHeader
+                            className="modal-header"
+                            toggle={this.handleCancel}
+                        >
+                            {this.state.surveyed_ticket}
+                        </ModalHeader>
+                        <ModalBody>
+                            <Row>
                                 <Col md={4}>
                                     <SelectInput
                                         type="select"
@@ -175,7 +127,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col>
                                     <SingleInput
                                         type="text"
@@ -188,7 +140,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col>
                                     <SingleInput
                                         type="text"
@@ -201,7 +153,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col md={4}>
                                     <SelectInput
                                         type="select"
@@ -236,7 +188,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col>
                                     <SingleInput
                                         type="text"
@@ -249,7 +201,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col md={3}>
                                     <SelectInput
                                         type="select"
@@ -316,7 +268,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col>
                                     <SingleInput
                                         type="text"
@@ -329,7 +281,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col>
                                     <SingleInput
                                         type="text"
@@ -343,7 +295,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col>
                                     <SingleInput
                                         type="text"
@@ -356,7 +308,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col>
                                     <SingleInput
                                         type="text"
@@ -369,7 +321,7 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                            <Row form>
+                            <Row>
                                 <Col md={2}>
                                     <SelectInput
                                         type="select"
@@ -400,19 +352,20 @@ class RCAForm extends Component {
                                     />
                                 </Col>
                             </Row>
-                        </CardBody>
-                        <CardFooter>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.handleSubmit}>
+                                Update
+                            </Button>{" "}
                             <Button
-                                type="submit"
-                                onSubmit={this.handleSubmit}
-                                className="btn-submit"
-                                // onClick={this.handleToggle}
+                                color="secondary"
+                                onClick={this.handleCancel}
                             >
-                                Submit
+                                Cancel
                             </Button>
-                        </CardFooter>
+                        </ModalFooter>
                     </Form>
-                </Card>
+                </Modal>
             </div>
         );
     }
@@ -428,7 +381,4 @@ const mapStateToProps = state => ({
     accountable_team: state.surveys.teams
 });
 
-export default connect(
-    mapStateToProps,
-    { addRCA }
-)(RCAForm);
+export default connect(mapStateToProps)(RcaEditForm);

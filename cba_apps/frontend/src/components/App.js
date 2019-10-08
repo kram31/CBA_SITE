@@ -20,6 +20,7 @@ import { Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
 import { loadUser } from "../actions/auth";
+import { getAllData2 } from "../actions/surveyActions";
 
 import store from "../store";
 
@@ -34,11 +35,15 @@ const alertOptions = {
 
 class App extends Component {
     componentDidMount() {
-        store.dispatch(loadUser());
+        store.dispatch(getAllData2());
     }
-
     render() {
         store.dispatch(loadUser());
+        if (store.getState().auth.isAuthenticated != null) {
+            store.dispatch(getAllData2());
+        }
+        // store.dispatch(getAllData2());
+
         return (
             <Provider store={store}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>

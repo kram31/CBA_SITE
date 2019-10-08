@@ -8,6 +8,7 @@ import { deleteSurvey } from "../../../../actions/surveyActions";
 import { toggle } from "../../../../actions/modalToggleActions";
 
 import RCAFormModal from "../../rca/RCAFormModal";
+import SurveyDetailsModal from "../../components/SurveyDetailsModal";
 
 import { getSurvey, getAgentDetails } from "../../../../actions/surveyActions";
 
@@ -50,8 +51,26 @@ class DatatablePage extends Component {
         end_date: "",
         data: [],
         filter: false,
-        sortedData: []
+        sortedData: [],
+        rca_headers: [],
+
+        agent: []
     };
+
+    componentDidUpdate(prevProps) {
+        const { agents, rcas } = this.props;
+        if (rcas != prevProps.rcas) {
+            this.setState({
+                rca_headers: rcas[0] && Object.keys(rcas[0]),
+                rcas
+            });
+        }
+        if (agents != prevProps.agents) {
+            this.setState({
+                agents
+            });
+        }
+    }
 
     handleDelete = e => this.props.deleteSurvey(e);
 
@@ -83,16 +102,10 @@ class DatatablePage extends Component {
     };
 
     resetFields = () => {
-        this.setState({ filtered: [] });
+        this.setState({ filtered: [], sortedData: [] });
     };
 
     render() {
-        let agent_headers;
-        this.props.agents.length != 0 &&
-            (agent_headers = Object.keys(this.props.agents[0]));
-        let rca_headers;
-        this.props.rcas.length != 0 &&
-            (rca_headers = Object.keys(this.props.rcas[0]));
         // customfilter not used yet
         // const customFilter = ({ fieldName, filter, onChange }) => {
         //   return (
@@ -166,7 +179,9 @@ class DatatablePage extends Component {
             Cell: cellprops => (
                 <Fragment>
                     <div className="btn-group">
+                        <SurveyDetailsModal survey={cellprops.original} />
                         <Button
+                            className="ml-1"
                             color="danger"
                             size="sm"
                             onClick={() =>
@@ -198,85 +213,63 @@ class DatatablePage extends Component {
             width: 200
         };
         const columns = [buttons, ...headers];
+
+        const surveysTableExcelSheet = (
+            <ExcelSheet
+                data={
+                    this.state.sortedData[0]
+                        ? this.state.sortedData
+                        : this.props.surveys
+                }
+                name="Surveys"
+            >
+                {this.props.headers.map(item => (
+                    <ExcelColumn key={item} label={item} value={item} />
+                ))}
+            </ExcelSheet>
+        );
+
+        let rca_headers;
+        let rcaTableExcelSheet;
+
+        if (this.props.rcas[0]) {
+            rca_headers = Object.keys(this.props.rcas[0]);
+            rcaTableExcelSheet = (
+                <ExcelSheet data={this.props.rcas} name="RCAS">
+                    {rca_headers.map(item => (
+                        <ExcelColumn key={item} label={item} value={item} />
+                    ))}
+                </ExcelSheet>
+            );
+        } else {
+            rcaTableExcelSheet = (
+                <ExcelSheet data={[{ data: "no_data" }]} name="RCAS">
+                    <ExcelColumn label="data" value="data" />
+                </ExcelSheet>
+            );
+        }
+
         return (
             <Fragment>
                 <h3>Survey Table</h3>
                 <Row className="mb-2">
                     <Col md={6} style={{ display: "inline" }}>
                         <Fragment>
-                            {this.props.rcas.length === 0 ||
-                            this.props.agents.length === 0 ? (
-                                <ExcelFile
-                                    filename="Bottombox"
-                                    element={
-                                        <Button
-                                            className="mr-2 btn-bb"
-                                            onClick={this.handleClick}
-                                        >
-                                            Download
-                                        </Button>
-                                    }
-                                >
-                                    <ExcelSheet
-                                        data={
-                                            this.state.sortedData[0]
-                                                ? this.state.sortedData
-                                                : this.props.surveys
-                                        }
-                                        name="Surveys"
+                            <ExcelFile
+                                filename="Bottombox"
+                                element={
+                                    <Button
+                                        className="mr-2 btn-bb"
+                                        onClick={this.handleClick}
                                     >
-                                        {this.props.headers.map(item => (
-                                            <ExcelColumn
-                                                key={item}
-                                                label={item}
-                                                value={item}
-                                            />
-                                        ))}
-                                    </ExcelSheet>
-                                </ExcelFile>
-                            ) : (
-                                <ExcelFile
-                                    filename="Bottombox"
-                                    element={
-                                        <Button
-                                            className="mr-2 btn-bb"
-                                            onClick={this.handleClick}
-                                        >
-                                            Download
-                                        </Button>
-                                    }
-                                >
-                                    <ExcelSheet
-                                        data={
-                                            this.state.sortedData[0]
-                                                ? this.state.sortedData
-                                                : this.props.surveys
-                                        }
-                                        name="Surveys"
-                                    >
-                                        {this.props.headers.map(item => (
-                                            <ExcelColumn
-                                                key={item}
-                                                label={item}
-                                                value={item}
-                                            />
-                                        ))}
-                                    </ExcelSheet>
-                                    <ExcelSheet
-                                        data={this.props.rcas}
-                                        name="RCAS"
-                                    >
-                                        {rca_headers.map(item => (
-                                            <ExcelColumn
-                                                key={item}
-                                                label={item}
-                                                value={item}
-                                            />
-                                        ))}
-                                    </ExcelSheet>
+                                        Download
+                                    </Button>
+                                }
+                            >
+                                {surveysTableExcelSheet}
+                                {rcaTableExcelSheet}
 
-                                    {/* THIS IS FOR AGENTS TAB DOWNLOAD */}
-
+                                {this.props.agents.length != 0 ? (
                                     <ExcelSheet
                                         data={this.props.agents}
                                         name="Agents"
@@ -297,8 +290,10 @@ class DatatablePage extends Component {
                                             )
                                         )}
                                     </ExcelSheet>
-                                </ExcelFile>
-                            )}
+                                ) : (
+                                    console.log("Do Nothing Agent")
+                                )}
+                            </ExcelFile>
                         </Fragment>
 
                         <Button

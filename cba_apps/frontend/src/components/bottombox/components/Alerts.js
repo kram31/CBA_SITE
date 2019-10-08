@@ -6,7 +6,14 @@ class Alerts extends Component {
     componentDidUpdate(prevProps) {
         const { error, alert, message } = this.props;
 
-        error !== prevProps.error && alert.error(error.msg);
+        if (error !== prevProps.error) {
+            if (error.msg.username) {
+                alert.error(error.msg.username[0]);
+            }
+            if (error.msg.email) {
+                alert.error(error.msg.email[0]);
+            }
+        }
 
         message !== prevProps.message &&
             ((message.surveyDeleted && alert.success(message.surveyDeleted)) ||
