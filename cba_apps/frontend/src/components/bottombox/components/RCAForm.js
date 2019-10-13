@@ -59,10 +59,16 @@ class RCAForm extends Component {
 
         const rcaData = this.state;
         rcaData.surveyed_ticket = this.props.survey.reference_number;
+        rcaData.agent = this.props.agent.operator_lan_id;
 
         console.log(rcaData);
 
-        this.props.addRCA(rcaData);
+        let agentData = {
+            agent: this.props.agent.operator_lan_id,
+            completed: true
+        };
+
+        this.props.addRCA(rcaData, agentData);
 
         this.handleToggle();
     };

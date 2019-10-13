@@ -12,8 +12,8 @@ class SurveyViewset(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
     permission_classes = [
-        # permissions.AllowAny
-        permissions.IsAuthenticated
+        permissions.AllowAny
+        # permissions.IsAuthenticated
     ]
 
     # 25/07/2019 03:39:26 PM

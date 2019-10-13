@@ -1,15 +1,41 @@
 import React, { Component, Fragment } from "react";
 import ReactTable from "react-table";
 import { connect } from "react-redux";
+import { Button } from "reactstrap";
 import RcaEditForm from "../components/RcaEditForm";
+import {
+    getSurvey,
+    deleteRca,
+    getAgentDetails
+} from "../../../actions/surveyActions";
 
 class RCATable extends Component {
     state = {
+        filter: false,
         filtered: [],
         sortedData: []
     };
+
+    filterToggle = () => {
+        this.setState((state, props) => ({
+            filter: !state.filter
+        }));
+    };
+
+    handleDelete = data => {
+        this.props.deleteRca(data);
+    };
+
+    handleClick = data => {
+        this.props.getSurvey(data);
+    };
+
+    resetFields = () => {
+        this.setState({ filtered: [], sortedData: [] });
+    };
+
     render() {
-        if (this.props.rcas) {
+        if (this.props.rcas[0]) {
             const rca_headers = Object.keys(this.props.rcas[0]);
 
             let headers = rca_headers.map(val =>
@@ -23,6 +49,16 @@ class RCATable extends Component {
                         <div className="btn-group">
                             <RcaEditForm rca={cellprops.original} />
                         </div>
+                        <Button
+                            className="ml-1"
+                            color="danger"
+                            size="sm"
+                            onClick={() =>
+                                this.handleDelete(cellprops.original)
+                            }
+                        >
+                            Delete
+                        </Button>
                     </Fragment>
                 ),
                 width: 200
@@ -31,12 +67,25 @@ class RCATable extends Component {
             return (
                 <Fragment>
                     <h3>RCA Table</h3>
+                    <Button
+                        className="mr-2 mb-2 btn-bb"
+                        onClick={this.filterToggle}
+                    >
+                        Filter
+                    </Button>
+                    <Button
+                        className="mr-2 mb-2 btn-bb"
+                        onClick={this.resetFields}
+                    >
+                        Reset
+                    </Button>
                     <ReactTable
                         // className="-striped -highlight"
                         data={this.props.rcas}
                         columns={columns}
                         minRows={5}
                         defaultPageSize={5}
+                        filterable={this.state.filter}
                     />
                 </Fragment>
             );
@@ -49,4 +98,7 @@ const mapStateToProps = state => ({
     rcas: state.surveys.rcas
 });
 
-export default connect(mapStateToProps)(RCATable);
+export default connect(
+    mapStateToProps,
+    { getSurvey, deleteRca, getAgentDetails }
+)(RCATable);

@@ -23,8 +23,12 @@ export const ADD_BB_DRIVER_CODE2 = "ADD_BB_DRIVER_CODE2";
 export const ADD_BB_DRIVER_CODE3 = "ADD_BB_DRIVER_CODE3";
 export const ADD_TEAM = "ADD_TEAM";
 export const GET_RCAS = "GET_RCAS";
+export const GET_RCA = "GET_RCA";
+export const REMOVE_RCA = "REMOVE_RCA";
 export const GET_BOTTOMBOX = "GET_BOTTOMBOX";
 export const UPDATE_SURVEY = "UPDATE_SURVEY";
+export const UPDATE_RCA = "UPDATE_RCA";
+export const DELETE_RCA = "DELETE_RCA";
 
 export const GET_ERRORS = "GET_ERRORS";
 // Authentication
@@ -44,3 +48,8 @@ export const CREATE_MESSAGE = "CREATE_MESSAGE";
 export const GET_MESSAGES = "GET_MESSAGES";
 
 export const GET_ALL_DATA = "GET_ALL_DATA";
+
+// Agent requests
+
+export const UPDATE_AGENT = "UPDATE_AGENT";
+export const ADD_AGENT = "ADD_AGENT";

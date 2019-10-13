@@ -16,6 +16,8 @@ import SelectInput from "../../../components/bottombox/rca/components/SelectInpu
 
 import { connect } from "react-redux";
 
+import { updateRca } from "../../../actions/surveyActions";
+
 class RcaEditForm extends Component {
     state = {
         modal: false,
@@ -51,6 +53,8 @@ class RcaEditForm extends Component {
 
         console.log(rca_data);
 
+        this.props.updateRca(rca_data);
+
         this.toggle();
     };
 
@@ -73,7 +77,7 @@ class RcaEditForm extends Component {
     render() {
         return (
             <div>
-                <Button color="danger" onClick={this.toggle}>
+                <Button color="primary" size="sm" onClick={this.toggle}>
                     View
                 </Button>
                 <Modal
@@ -87,11 +91,22 @@ class RcaEditForm extends Component {
                             className="modal-header"
                             toggle={this.handleCancel}
                         >
-                            {this.state.surveyed_ticket}
+                            {this.state.surveyed_ticket} - Root Cause Analysis
                         </ModalHeader>
                         <ModalBody>
                             <Row>
-                                <Col md={4}>
+                                <Col>
+                                    <SingleInput
+                                        type="text"
+                                        size="sm"
+                                        attr="agent"
+                                        label_name="Agent"
+                                        value={this.state.agent}
+                                        controlFunc={this.handleChange}
+                                        readOnly={true}
+                                    />
+                                </Col>
+                                <Col>
                                     <SelectInput
                                         type="select"
                                         size="sm"
@@ -104,7 +119,7 @@ class RcaEditForm extends Component {
                                         options={this.props.skills}
                                     />
                                 </Col>
-                                <Col md={4}>
+                                <Col>
                                     <SingleInput
                                         type="text"
                                         size="sm"
@@ -115,7 +130,7 @@ class RcaEditForm extends Component {
                                         readOnly={false}
                                     />
                                 </Col>
-                                <Col md={4}>
+                                <Col>
                                     <SingleInput
                                         type="text"
                                         size="sm"
@@ -381,4 +396,7 @@ const mapStateToProps = state => ({
     accountable_team: state.surveys.teams
 });
 
-export default connect(mapStateToProps)(RcaEditForm);
+export default connect(
+    mapStateToProps,
+    { updateRca }
+)(RcaEditForm);

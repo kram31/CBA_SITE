@@ -107,6 +107,7 @@ class RCA(models.Model):
 
     surveyed_ticket = models.OneToOneField(
         Survey, on_delete=models.CASCADE, related_name="rca")
+    agent = models.CharField(max_length=100, blank=True)
     support_silo_issue_based = models.CharField(
         "Support Silo Skill based on issue", max_length=100, blank=True)
     service = models.CharField("Service", max_length=100, blank=True)

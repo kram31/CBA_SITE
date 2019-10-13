@@ -128,7 +128,7 @@ class SurveyDetailsModal extends React.Component {
         const { reference_number } = this.props.survey;
         return (
             <div>
-                <Button color="danger" onClick={this.toggle}>
+                <Button color="primary" size="sm" onClick={this.toggle}>
                     View
                 </Button>
                 <Modal

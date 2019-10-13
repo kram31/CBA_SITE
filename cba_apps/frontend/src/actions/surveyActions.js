@@ -25,7 +25,13 @@ import {
     GET_ERRORS,
     STOP_FETCHING,
     GET_ALL_DATA,
-    UPDATE_SURVEY
+    UPDATE_SURVEY,
+    UPDATE_RCA,
+    DELETE_RCA,
+    UPDATE_AGENT,
+    ADD_AGENT,
+    GET_RCA,
+    REMOVE_RCA
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -44,6 +50,105 @@ axios.defaults.baseURL = "http://localhost:8000";
 // bbDriverCode3: this.props.getBBDriverCode3(),
 // teams: this.props.getTeams(),
 // agents: this.props.getAgents()
+
+export const removeRca = () => dispatch => {
+    dispatch({
+        type: REMOVE_RCA
+    });
+};
+
+export const getRca = surveyData => dispatch => {
+    dispatch({
+        type: GET_RCA,
+        payload: surveyData.reference_number
+    });
+};
+
+export const addAgent = newAgent => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .post("/api/agents/", newAgent, tokenConfig(getState))
+        .then(res =>
+            dispatch({
+                type: ADD_AGENT,
+                payload: res.data
+            })
+        )
+        .catch(err => console.log(err));
+};
+
+export const updateAgent = agentData => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .put(
+            `/api/agents/${agentData.operator_lan_id}/`,
+            agentData,
+            tokenConfig(getState)
+        )
+        .then(res => {
+            console.log(res.data);
+            dispatch({
+                type: UPDATE_AGENT,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const deleteRca = data => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .delete(`/api/rca/${data.id}`, tokenConfig(getState))
+        .then(res => {
+            // dispatch(
+            //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
+            // );
+            dispatch({
+                type: DELETE_RCA,
+                payload: data
+            });
+            axios
+                .put(
+                    `/api/surveys/${data.surveyed_ticket}/`,
+                    { agent: data.agent, completed: false },
+                    tokenConfig(getState)
+                )
+                .then(res =>
+                    dispatch({
+                        type: DELETE_RCA,
+                        payload: res.data
+                    })
+                )
+                .catch(err => console.log(err.response));
+        })
+        .catch(err => console.log(err.response.data));
+};
+
+export const updateRca = rca_data => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .put(`/api/rca/${rca_data.id}/`, rca_data, tokenConfig(getState))
+        .then(res => {
+            console.log(res.data);
+            dispatch({
+                type: UPDATE_RCA,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
 
 export const updateSurvey = survey_data => (dispatch, getState) => {
     dispatch({
@@ -79,7 +184,8 @@ export const getAllData2 = () => (dispatch, getState) => {
             axios.get("/api/bb_driver_code2/"),
             axios.get("/api/bb_driver_code3/"),
             axios.get("/api/team/"),
-            axios.get("/api/agents/")
+            axios.get("/api/agents/"),
+            axios.get("/api/teamleads/")
         ])
         .then(
             axios.spread(
@@ -91,7 +197,8 @@ export const getAllData2 = () => (dispatch, getState) => {
                     bb_driver_code2,
                     bb_driver_code3,
                     teams,
-                    agents
+                    agents,
+                    teamleads
                 ) => {
                     dispatch({
                         type: GET_ALL_DATA,
@@ -103,7 +210,8 @@ export const getAllData2 = () => (dispatch, getState) => {
                             bb_driver_code2: bb_driver_code2.data,
                             bb_driver_code3: bb_driver_code3.data,
                             teams: teams.data,
-                            agents: agents.data
+                            agents: agents.data,
+                            teamleads: teamleads.data
                         }
                     });
                     dispatch({
@@ -451,19 +559,27 @@ export const getTeams = () => dispatch => {
         .catch(err => console.log(err.response.data));
 };
 
-export const addRCA = rcaData => (dispatch, getState) => {
+export const addRCA = (rcaData, agentData) => (dispatch, getState) => {
     dispatch({
         type: FETCHING
     });
 
     axios
         .post("/api/rca/", rcaData, tokenConfig(getState))
-        .then(res =>
+        .then(res => {
             dispatch({
                 type: ADD_RCA,
                 payload: res.data
-            })
-        )
+            });
+            axios
+                .put(
+                    `/api/surveys/${rcaData.surveyed_ticket}/`,
+                    agentData,
+                    tokenConfig(getState)
+                )
+                .then(res => console.log(res))
+                .catch(err => console.log(err.response));
+        })
         .catch(err => console.log(err.response.data));
 };
 

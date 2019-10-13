@@ -22,7 +22,8 @@ import {
     getBBDriverCode3,
     removeSurvey,
     getTeams,
-    addRCA
+    addRCA,
+    updateRca
 } from "../../../actions/surveyActions";
 
 import SingleInput from "./components/SingleInput";
@@ -32,24 +33,25 @@ class RCAFormModal extends Component {
     state = {
         surveyed_ticket: "",
         agent: "",
-        support_silo_issue_based: "",
-        service: "",
-        service_component: "",
-        brief_description: "",
-        user_verbatim: "",
-        bb_driver_code2: "",
-        bb_driver_code3: "",
-        actual_issue: "",
-        controllability: "",
-        accountable_team: "",
-        q1_answer: "",
-        contacted_customer: "",
-        summary: "",
-        obs_in_call: "",
-        accountable_entity: "",
-        overall_reason_dsat: "",
-        coaching: "",
-        corrective_actions: ""
+        support_silo_issue_based: this.props.rca.support_silo_issue_based,
+        service: this.props.rca.service,
+        service_component: this.props.rca.service_component,
+        brief_description: this.props.rca.brief_description,
+        user_verbatim: this.props.rca.user_verbatim,
+        bb_driver_code2: this.props.rca.bb_driver_code2,
+        dsat_cause: this.props.rca.dsat_cause,
+        bb_driver_code3: this.props.rca.bb_driver_code3,
+        actual_issue: this.props.rca.actual_issue,
+        controllability: this.props.rca.controllability,
+        accountable_team: this.props.rca.accountable_team,
+        q1_answer: this.props.rca.q1_answer,
+        contacted_customer: this.props.rca.contacted_customer,
+        summary: this.props.rca.summary,
+        obs_in_call: this.props.rca.obs_in_call,
+        accountable_entity: this.props.rca.accountable_entity,
+        overall_reason_dsat: this.props.rca.overall_reason_dsat,
+        coaching: this.props.rca.coaching,
+        corrective_actions: this.props.rca.corrective_actions
     };
 
     handleToggle = () => {
@@ -72,12 +74,24 @@ class RCAFormModal extends Component {
 
         const rcaData = this.state;
         rcaData.surveyed_ticket = this.props.survey.reference_number;
-
-        console.log(rcaData)
+        rcaData.agent = this.props.agent.operator_lan_id;
 
         this.props.addRCA(rcaData);
 
-        this.props.toggle()
+        this.props.toggle();
+    };
+
+    handleUpdate = e => {
+        e.preventDefault();
+
+        const rcaData = this.state;
+        rcaData.surveyed_ticket = this.props.rca.surveyed_ticket;
+        rcaData.agent = this.props.rca.agent;
+        rcaData.id = this.props.rca.id;
+
+        this.props.updateRca(rcaData);
+
+        this.props.toggle();
     };
 
     render() {
@@ -100,9 +114,16 @@ class RCAFormModal extends Component {
                 >
                     <Form
                         className="modal-content"
-                        onSubmit={this.handleSubmit}
+                        onSubmit={
+                            this.props.rca.surveyed_ticket
+                                ? this.handleUpdate
+                                : this.handleSubmit
+                        }
                     >
-                        <ModalHeader className="modal-header" toggle={this.handleToggle}>
+                        <ModalHeader
+                            className="modal-header"
+                            toggle={this.handleToggle}
+                        >
                             Root Cause Analysis
                         </ModalHeader>
                         <ModalBody>
@@ -408,15 +429,25 @@ class RCAFormModal extends Component {
                             </Row>
                         </ModalBody>
                         <ModalFooter>
-                            <Button
-                                type="submit"
-                             
-                                onSubmit={this.handleSubmit}
-                                className="btn-submit"
-                                // onClick={this.handleToggle}
-                            >
-                                Submit
-                            </Button>{" "}
+                            {this.props.rca.surveyed_ticket ? (
+                                <Button
+                                    type="submit"
+                                    onSubmit={this.handleUpdate}
+                                    className="btn-submit"
+                                    // onClick={this.handleToggle}
+                                >
+                                    Update
+                                </Button>
+                            ) : (
+                                <Button
+                                    type="submit"
+                                    onSubmit={this.handleSubmit}
+                                    className="btn-submit"
+                                    // onClick={this.handleToggle}
+                                >
+                                    Submit
+                                </Button>
+                            )}
                             <Button
                                 type="submit"
                                 className="btn-submit"
@@ -440,7 +471,8 @@ const mapStateToProps = state => ({
     dsat_code1: state.surveys.dsat_code1,
     bb_driver_code2: state.surveys.bb_driver_code2,
     bb_driver_code3: state.surveys.bb_driver_code3,
-    accountable_team: state.surveys.teams
+    accountable_team: state.surveys.teams,
+    rca: state.surveys.rca
 });
 
 export default connect(
@@ -457,6 +489,7 @@ export default connect(
         getBBDriverCode3,
         removeSurvey,
         getTeams,
-        addRCA
+        addRCA,
+        updateRca
     }
 )(RCAFormModal);

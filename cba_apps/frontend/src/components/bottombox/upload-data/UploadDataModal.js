@@ -27,7 +27,10 @@ class UploadDataModal extends Component {
         data: [],
         isStaged: false,
         keys: keys.filter(
-            item => item != "uploaded_by" && item != "date_uploaded"
+            item =>
+                item != "uploaded_by" &&
+                item != "date_uploaded" &&
+                item != "completed"
         ),
         modal: false
     };

@@ -24,7 +24,13 @@ import {
     GET_AGENTS,
     STOP_FETCHING,
     GET_ALL_DATA,
-    UPDATE_SURVEY
+    UPDATE_SURVEY,
+    UPDATE_RCA,
+    DELETE_RCA,
+    UPDATE_AGENT,
+    ADD_AGENT,
+    GET_RCA,
+    REMOVE_RCA
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -54,7 +60,8 @@ const initialState = {
     teamleads: [],
     bottombox: [],
     isFetching: false,
-    agent_headers
+    agent_headers,
+    rca: {}
 };
 
 const surveyReducer = (state = initialState, action) => {
@@ -68,7 +75,8 @@ const surveyReducer = (state = initialState, action) => {
                 bb_driver_code2,
                 bb_driver_code3,
                 teams,
-                agents
+                agents,
+                teamleads
             } = action.payload;
             return {
                 ...state,
@@ -82,7 +90,8 @@ const surveyReducer = (state = initialState, action) => {
                 bb_driver_code2,
                 bb_driver_code3,
                 teams,
-                agents
+                agents,
+                teamleads
             };
             break;
         case FETCHING:
@@ -124,6 +133,9 @@ const surveyReducer = (state = initialState, action) => {
                 ),
                 bottombox: state.bottombox.filter(
                     item => action.payload != item.reference_number
+                ),
+                rcas: state.rcas.filter(
+                    item => action.payload != item.surveyed_ticket
                 ),
                 isFetching: false
             };
@@ -254,6 +266,57 @@ const surveyReducer = (state = initialState, action) => {
                     }
                 }),
                 isFetching: false
+            };
+        case UPDATE_RCA:
+            return {
+                ...state,
+                rcas: state.rcas.map(rca => {
+                    if (rca.id == action.payload.id) {
+                        return action.payload;
+                    } else {
+                        return rca;
+                    }
+                }),
+                isFetching: false
+            };
+        case DELETE_RCA:
+            return {
+                ...state,
+                rcas: state.rcas.filter(item => action.payload.id != item.id),
+                bottombox: [action.payload, ...state.bottombox],
+                isFetching: false
+            };
+        case UPDATE_AGENT:
+            return {
+                ...state,
+                agents: state.agents.map(agent => {
+                    if (
+                        agent.operator_lan_id == action.payload.operator_lan_id
+                    ) {
+                        return action.payload;
+                    } else {
+                        return agent;
+                    }
+                }),
+                isFetching: false
+            };
+        case ADD_AGENT:
+            return {
+                ...state,
+                agents: [action.payload, ...state.agents],
+                isFetching: false
+            };
+        case GET_RCA:
+            return {
+                ...state,
+                rca: state.rcas.find(rca => {
+                    return action.payload == rca.surveyed_ticket;
+                })
+            };
+        case REMOVE_RCA:
+            return {
+                ...state,
+                rca: {}
             };
         default:
             return state;

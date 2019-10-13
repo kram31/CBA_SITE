@@ -7,6 +7,7 @@ import UploadData from "../upload-data/UploadData";
 import SurveyContent from "./SurveyContent";
 import DatatablePage from "../upload-data/survey-data-table/DatatablePage";
 import RCATable from "./RCATable";
+import AgentsTable from "./AgentsTable";
 import SideBar from "../../SideBar";
 
 import {
@@ -70,11 +71,22 @@ class BottomBox extends Component {
                                     <DatatablePage />
                                 </div>
                             </Fade>
-                            <Fade>
-                                <div className="section">
-                                    <RCATable />
-                                </div>
-                            </Fade>
+                            <Row>
+                                <Col md={6}>
+                                    <Fade>
+                                        <div className="section">
+                                            <AgentsTable />
+                                        </div>
+                                    </Fade>
+                                </Col>
+                                <Col md={6}>
+                                    <Fade>
+                                        <div className="section">
+                                            <RCATable />
+                                        </div>
+                                    </Fade>
+                                </Col>
+                            </Row>
                         </div>
                     </div>
                 )}
@@ -87,7 +99,8 @@ const mapStateToProps = state => ({
     surveys: state.surveys.surveys,
     isFetching: state.surveys.isFetching,
     bottombox: state.surveys.bottombox,
-    agents: state.surveys.agents
+    agents: state.surveys.agents,
+    rcas: state.surveys.rcas
 });
 
 export default connect(

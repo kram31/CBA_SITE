@@ -38,6 +38,7 @@ export const keys = [
     "bu_catg",
     "date_issued",
     "bottombox",
+    "completed",
     "uploaded_by",
     "date_uploaded"
 ];

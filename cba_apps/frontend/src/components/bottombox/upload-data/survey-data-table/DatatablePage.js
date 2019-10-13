@@ -8,9 +8,15 @@ import { deleteSurvey } from "../../../../actions/surveyActions";
 import { toggle } from "../../../../actions/modalToggleActions";
 
 import RCAFormModal from "../../rca/RCAFormModal";
+import RcaEditForm from "../../components/RcaEditForm";
 import SurveyDetailsModal from "../../components/SurveyDetailsModal";
 
-import { getSurvey, getAgentDetails } from "../../../../actions/surveyActions";
+import {
+    getSurvey,
+    getAgentDetails,
+    getRca,
+    removeRca
+} from "../../../../actions/surveyActions";
 
 import ReactExport from "react-data-export";
 
@@ -75,6 +81,9 @@ class DatatablePage extends Component {
     handleDelete = e => this.props.deleteSurvey(e);
 
     handleToggle = data => {
+        data.completed == true
+            ? this.props.getRca(data)
+            : this.props.removeRca();
         this.props.getSurvey(data);
         this.props.getAgentDetails(data.operator_lan_id);
         this.props.toggle();
@@ -132,46 +141,61 @@ class DatatablePage extends Component {
         // };
 
         // Creating Headers for table
-        const headers = this.props.headers.map(val =>
-            val !== "date_issued"
-                ? Object.assign({ ["Header"]: val, ["accessor"]: val })
-                : Object.assign({
-                      ["Header"]: val,
-                      ["accessor"]: val,
+        const headers = this.props.headers.map(val => {
+            switch (val) {
+                case "date_issued":
+                    return Object.assign({
+                        ["Header"]: val,
+                        ["accessor"]: val,
 
-                      ["Filter"]: ({ filter, onChange }) => (
-                          <DateRangePicker
-                              onApply={(event, picker) => onChange(picker)}
-                          >
-                              <Button className="btn-filter" size="sm">
-                                  Filter Date
-                              </Button>
-                          </DateRangePicker>
-                      ),
-                      ["filterMethod"]: (filter, row) => {
-                          //   let date_q = moment(row["date_issued"]).format("YYYY-MM-DD");
+                        ["Filter"]: ({ filter, onChange }) => (
+                            <DateRangePicker
+                                onApply={(event, picker) => onChange(picker)}
+                            >
+                                <Button className="btn-filter" size="sm">
+                                    Filter Date
+                                </Button>
+                            </DateRangePicker>
+                        ),
+                        ["filterMethod"]: (filter, row) => {
+                            //   let date_q = moment(row["date_issued"]).format("YYYY-MM-DD");
 
-                          filter
-                              ? console.log(filter)
-                              : console.log("no filter");
+                            filter
+                                ? console.log(filter)
+                                : console.log("no filter");
 
-                          let format = "YYYY-MM-DD";
-                          let date_q = row["date_issued"];
-                          let startD = moment(filter.value.startDate).format(
-                              format
-                          );
-                          let endD = moment(filter.value.endDate).format(
-                              format
-                          );
+                            let format = "YYYY-MM-DD";
+                            let date_q = row["date_issued"];
+                            let startD = moment(filter.value.startDate).format(
+                                format
+                            );
+                            let endD = moment(filter.value.endDate).format(
+                                format
+                            );
 
-                          if (
-                              moment(date_q).isBetween(startD, endD, null, [])
-                          ) {
-                              return true;
-                          }
-                      }
-                  })
-        );
+                            if (
+                                moment(date_q).isBetween(startD, endD, null, [])
+                            ) {
+                                return true;
+                            }
+                        }
+                    });
+
+                case "completed":
+                    return Object.assign({
+                        ["Header"]: val,
+                        ["id"]: val,
+                        ["accessor"]: val => val.completed.toString()
+                    });
+
+                default:
+                    return Object.assign({
+                        ["Header"]: val,
+                        ["accessor"]: val
+                    });
+            }
+        });
+
         // Creating buttons for table
         const buttons = {
             Header: "Actions",
@@ -180,6 +204,25 @@ class DatatablePage extends Component {
                 <Fragment>
                     <div className="btn-group">
                         <SurveyDetailsModal survey={cellprops.original} />
+
+                        <Button
+                            color={
+                                cellprops.original.completed == true
+                                    ? "success"
+                                    : cellprops.original.bottombox == 1
+                                    ? "danger"
+                                    : "warning"
+                            }
+                            size="sm"
+                            className="ml-1"
+                            onClick={() =>
+                                this.handleToggle(cellprops.original)
+                            }
+                        >
+                            RCA
+                        </Button>
+                        <RCAFormModal />
+
                         <Button
                             className="ml-1"
                             color="danger"
@@ -192,21 +235,6 @@ class DatatablePage extends Component {
                         >
                             Delete
                         </Button>
-                        {cellprops.original.bottombox == 1 && (
-                            <div>
-                                <Button
-                                    color="primary"
-                                    size="sm"
-                                    className="ml-1"
-                                    onClick={() =>
-                                        this.handleToggle(cellprops.original)
-                                    }
-                                >
-                                    RCA
-                                </Button>
-                                <RCAFormModal />
-                            </div>
-                        )}
                     </div>
                 </Fragment>
             ),
@@ -326,8 +354,8 @@ class DatatablePage extends Component {
                     // DATA that will be displayed should be the same data to be extracted
                     data={this.props.data}
                     columns={columns}
-                    minRows={10}
-                    defaultPageSize={10}
+                    minRows={5}
+                    defaultPageSize={5}
                     filterable={this.state.filter}
                 />
             </Fragment>
@@ -342,7 +370,8 @@ const mapStateToProps = state => ({
     surveys: state.surveys.surveys,
     agents: state.surveys.agents,
     agent_headers: state.surveys.agent_headers,
-    rcas: state.surveys.rcas
+    rcas: state.surveys.rcas,
+    rca: state.surveys.rca
 });
 
 export default connect(
@@ -351,6 +380,8 @@ export default connect(
         deleteSurvey,
         toggle,
         getSurvey,
-        getAgentDetails
+        getAgentDetails,
+        getRca,
+        removeRca
     }
 )(DatatablePage);

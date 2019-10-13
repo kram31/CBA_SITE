@@ -4,6 +4,11 @@ html {
   margin: 0;
 }
 
+body.modal-open {
+  overflow: inherit;
+  padding-right: inherit !important;
+}
+
 .sidebar-main {
   min-height: 360px;
   min-width: 100px;
