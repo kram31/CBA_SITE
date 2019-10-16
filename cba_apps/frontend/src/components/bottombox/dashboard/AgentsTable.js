@@ -21,61 +21,67 @@ class AgentsTable extends Component {
         this.setState({ filtered: [], sortedData: [] });
     };
     render() {
-        const agents_headers = Object.keys(this.props.agents[0]);
-
-        let headers = agents_headers.map(val =>
-            Object.assign({ ["Header"]: val, ["accessor"]: val })
-        );
-        const buttons = {
-            Header: "Actions",
-            filterable: false,
-            Cell: cellprops => (
+        let agents_headers;
+        if (this.props.agents[0]) {
+            agents_headers = Object.keys(this.props.agents[0]);
+            let headers = agents_headers.map(val =>
+                Object.assign({ ["Header"]: val, ["accessor"]: val })
+            );
+            const buttons = {
+                Header: "Actions",
+                filterable: false,
+                Cell: cellprops => (
+                    <Fragment>
+                        <div className="btn-group">
+                            <AgentDetailModal
+                                agentDetail={cellprops.original}
+                            />
+                        </div>
+                        {/* <Button
+                            className="ml-1"
+                            color="danger"
+                            size="sm"
+                            onClick={() => this.handleDelete(cellprops.original)}
+                        >
+                            Delete
+                        </Button> */}
+                    </Fragment>
+                ),
+                width: 200
+            };
+            let columns = [buttons, ...headers];
+            return (
                 <Fragment>
-                    <div className="btn-group">
-                        <AgentDetailModal agentDetail={cellprops.original} />
-                    </div>
-                    {/* <Button
-                        className="ml-1"
-                        color="danger"
-                        size="sm"
-                        onClick={() => this.handleDelete(cellprops.original)}
-                    >
-                        Delete
-                    </Button> */}
-                </Fragment>
-            ),
-            width: 200
-        };
-        let columns = [buttons, ...headers];
-        return (
-            <Fragment>
-                <h3>Agents Table</h3>
-                <ButtonGroup>
-                    <Button
-                        className="mr-2 mb-2 btn-bb"
-                        onClick={this.filterToggle}
-                    >
-                        Filter
-                    </Button>
-                    <Button
-                        className="mr-2 mb-2 btn-bb"
-                        onClick={this.resetFields}
-                    >
-                        Reset
-                    </Button>
-                    <AddAgentModal />
-                </ButtonGroup>
+                    <h3>Agents Table</h3>
+                    <ButtonGroup>
+                        <Button
+                            className="mr-2 mb-2 btn-bb"
+                            onClick={this.filterToggle}
+                        >
+                            Filter
+                        </Button>
+                        <Button
+                            className="mr-2 mb-2 btn-bb"
+                            onClick={this.resetFields}
+                        >
+                            Reset
+                        </Button>
+                        <AddAgentModal />
+                    </ButtonGroup>
 
-                <ReactTable
-                    // className="-striped -highlight"
-                    data={this.props.agents}
-                    columns={columns}
-                    minRows={5}
-                    defaultPageSize={5}
-                    filterable={this.state.filter}
-                />
-            </Fragment>
-        );
+                    <ReactTable
+                        // className="-striped -highlight"
+                        data={this.props.agents}
+                        columns={columns}
+                        minRows={5}
+                        defaultPageSize={5}
+                        filterable={this.state.filter}
+                    />
+                </Fragment>
+            );
+        } else {
+            return <Fragment></Fragment>;
+        }
     }
 }
 
