@@ -1,27 +1,16 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import UploadDataModal from "../upload-data/UploadDataModal";
-import RCAFormModal from "../rca/RCAFormModal";
-import UploadData from "../upload-data/UploadData";
 import SurveyContent from "./SurveyContent";
 import DatatablePage from "../upload-data/survey-data-table/DatatablePage";
 import RCATable from "./RCATable";
 import AgentsTable from "./AgentsTable";
 import SideBar from "../../SideBar";
+import DougnutChartBottomboxSurveys from "./Charts/DougnutChartBottomboxSurveys";
+import PieChartCompletedSurveysCount from "./Charts/PieChartCompletedSurveysCount";
+import BarChartSurveyTopDrivers from "./Charts/BarChartSurveyTopDrivers";
 
-import {
-    Spinner,
-    Card,
-    Fade,
-    CardHeader,
-    CardFooter,
-    CardBody,
-    Row,
-    Col,
-    ButtonGroup,
-    Button
-} from "reactstrap";
+import { Spinner, Fade, Row, Col } from "reactstrap";
 
 import {
     getAgents,
@@ -58,6 +47,31 @@ class BottomBox extends Component {
                             </div>
                         </Fade>
                         <div className="main">
+                            <Row>
+                                <Col md={4}>
+                                    <Fade>
+                                        <div className="section chart">
+                                            <DougnutChartBottomboxSurveys />
+                                        </div>
+                                    </Fade>
+                                </Col>
+                                <Col md={4}>
+                                    <Fade>
+                                        <div className="section chart">
+                                            <PieChartCompletedSurveysCount />
+                                        </div>
+                                    </Fade>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Fade>
+                                        <div className="section chart">
+                                            <BarChartSurveyTopDrivers />
+                                        </div>
+                                    </Fade>
+                                </Col>
+                            </Row>
                             <Fade>
                                 {this.props.bottombox.length !== 0 && (
                                     <div className="section section-a">

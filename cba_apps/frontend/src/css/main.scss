@@ -9,6 +9,12 @@ body.modal-open {
     padding-right: inherit !important;
 }
 
+.chart {
+    border: 2px solid black;
+    padding-bottom: 15px;
+    box-shadow: 5px 10px 18px gray;
+}
+
 .sidebar-main {
     min-height: 360px;
     min-width: 100px;

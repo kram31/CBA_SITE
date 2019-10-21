@@ -45,6 +45,11 @@ let agent_headers = [
     "team_lead"
 ];
 
+var now = new Date();
+var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+var lastSunday = new Date(today.setDate(today.getDate() - today.getDay()));
+console.log(lastSunday);
+
 const initialState = {
     surveys: [],
     agents: [],
@@ -61,7 +66,10 @@ const initialState = {
     bottombox: [],
     isFetching: false,
     agent_headers,
-    rca: {}
+    rca: {},
+    doughnutChartSurveyData: [],
+    pieChartCompletedSurveysCount: [],
+    rcaTopDrivers: {}
 };
 
 const surveyReducer = (state = initialState, action) => {
@@ -84,6 +92,14 @@ const surveyReducer = (state = initialState, action) => {
                 bottombox: surveys.filter(
                     item => item.bottombox == 1 && !item.rca
                 ),
+                doughnutChartSurveyData: [
+                    surveys.length,
+                    surveys.filter(item => item.bottombox == 1).length
+                ],
+                pieChartCompletedSurveysCount: [
+                    surveys.filter(item => item.completed == true).length,
+                    surveys.length
+                ],
                 rcas,
                 skills,
                 dsat_code1,
@@ -214,6 +230,9 @@ const surveyReducer = (state = initialState, action) => {
                     item =>
                         action.payload.surveyed_ticket != item.reference_number
                 ),
+                pieChartCompletedSurveysCount: state.pieChartCompletedSurveysCount.map(
+                    (val, index, arr) => (index == 0 ? val + 1 : val)
+                ),
                 isFetching: false
             };
         case ADD_SKILL:
@@ -284,6 +303,10 @@ const surveyReducer = (state = initialState, action) => {
                 ...state,
                 rcas: state.rcas.filter(item => action.payload.id != item.id),
                 bottombox: [action.payload, ...state.bottombox],
+                pieChartCompletedSurveysCount: state.pieChartCompletedSurveysCount.map(
+                    (val, index, arr) => (index == 0 ? val - 1 : val)
+                ),
+
                 isFetching: false
             };
         case UPDATE_AGENT:
