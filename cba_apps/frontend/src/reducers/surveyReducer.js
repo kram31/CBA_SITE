@@ -45,10 +45,21 @@ let agent_headers = [
     "team_lead"
 ];
 
-var now = new Date();
-var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-var lastSunday = new Date(today.setDate(today.getDate() - today.getDay()));
-console.log(lastSunday);
+// var now = new Date();
+// var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+// var lastSunday = new Date(today.setDate(today.getDate() - today.getDay()));
+// console.log(lastSunday);
+
+const getMonth = givenDate => {
+    let date = new Date(givenDate);
+
+    let monthName = new Intl.DateTimeFormat("en-US", { month: "long" }).format;
+    let longName = monthName(date); // "July"
+
+    return longName;
+};
+
+console.log(getMonth("2012-07-01"));
 
 const initialState = {
     surveys: [],
@@ -69,7 +80,8 @@ const initialState = {
     rca: {},
     doughnutChartSurveyData: [],
     pieChartCompletedSurveysCount: [],
-    rcaTopDrivers: {}
+    rcaTopDriversLabels: {}
+    // drivername: number of rcas with the drivername
 };
 
 const surveyReducer = (state = initialState, action) => {
@@ -107,7 +119,9 @@ const surveyReducer = (state = initialState, action) => {
                 bb_driver_code3,
                 teams,
                 agents,
-                teamleads
+                teamleads,
+                // loop rcas > check if rca.dsat_cause exists in an obj key array ? add rca.dsat_cause
+                rcaTopDriversLabels: 1
             };
             break;
         case FETCHING:
@@ -138,6 +152,7 @@ const surveyReducer = (state = initialState, action) => {
         case GET_RCAS:
             return {
                 ...state,
+
                 rcas: action.payload,
                 isFetching: false
             };

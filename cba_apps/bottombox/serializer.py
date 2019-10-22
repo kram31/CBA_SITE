@@ -31,6 +31,10 @@ class SurveySerializer(serializers.ModelSerializer):
 
 class RCASerializer(serializers.ModelSerializer):
 
+    dsat_cause = serializers.StringRelatedField()
+    bb_driver_code2 = serializers.StringRelatedField()
+    bb_driver_code3 = serializers.StringRelatedField()
+
     class Meta:
         model = RCA
         fields = '__all__'

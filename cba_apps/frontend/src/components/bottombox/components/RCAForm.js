@@ -37,7 +37,16 @@ class RCAForm extends Component {
         accountable_entity: "",
         overall_reason_dsat: "",
         coaching: "",
-        corrective_actions: ""
+        corrective_actions: "",
+
+        selectDefault: [
+            {
+                type: "select",
+                size: "sm",
+                id: "no_data",
+                value: "No Data"
+            }
+        ]
     };
 
     handleToggle = () => {
@@ -58,6 +67,7 @@ class RCAForm extends Component {
         e.preventDefault();
 
         const rcaData = this.state;
+        delete rcaData.selectDefault;
         rcaData.surveyed_ticket = this.props.survey.reference_number;
         rcaData.agent = this.props.agent.operator_lan_id;
 
@@ -227,7 +237,16 @@ class RCAForm extends Component {
                                         label_name="BB Driver Code 2"
                                         value={this.state.bb_driver_code2}
                                         controlFunc={this.handleChange}
-                                        options={this.props.bb_driver_code2}
+                                        options={
+                                            this.state.dsat_cause
+                                                ? this.props.bb_driver_code2.filter(
+                                                      item =>
+                                                          this.state
+                                                              .dsat_cause ==
+                                                          item.dsat_Code1
+                                                  )
+                                                : this.state.selectDefault
+                                        }
                                     />
                                 </Col>
                                 <Col md={4}>
@@ -238,7 +257,16 @@ class RCAForm extends Component {
                                         label_name="BB Driver Code 3"
                                         value={this.state.bb_driver_code3}
                                         controlFunc={this.handleChange}
-                                        options={this.props.bb_driver_code3}
+                                        options={
+                                            this.state.bb_driver_code2
+                                                ? this.props.bb_driver_code3.filter(
+                                                      item =>
+                                                          this.state
+                                                              .bb_driver_code2 ==
+                                                          item.bb_Driver_Code2
+                                                  )
+                                                : this.state.selectDefault
+                                        }
                                     />
                                 </Col>
                             </Row>
