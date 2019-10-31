@@ -36,6 +36,8 @@ class RCATable extends Component {
 
     render() {
         if (this.props.rcas[0]) {
+            let rcas = this.props.rcas.map(item => {return {...item, "dsat_cause": item.dsat_cause.name, "bb_driver_code2": item.bb_driver_code2.name, "bb_driver_code3": item.bb_driver_code3.name}})
+            
             const rca_headers = Object.keys(this.props.rcas[0]);
 
             let headers = rca_headers.map(val =>
@@ -81,7 +83,7 @@ class RCATable extends Component {
                     </Button>
                     <ReactTable
                         // className="-striped -highlight"
-                        data={this.props.rcas}
+                        data={rcas}
                         columns={columns}
                         minRows={5}
                         defaultPageSize={5}

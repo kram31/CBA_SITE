@@ -5,18 +5,26 @@ import { connect } from "react-redux";
 
 class BarChartSurveyTopDrivers extends Component {
     state = {
-        chartData: {
-            labels: ["Code 1", "Code 2", "Code 3"],
-            datasets: [
-                {
-                    label: "Top Drivers",
-                    data: [8, 5, 10],
-                    backgroundColor: ["blue", "black", "yellow"]
-                }
-            ]
-        },
+        chartData: {},
         chartReference: {}
     };
+
+    componentDidMount() {
+        console.log(this.props.rcaTopDriversLabels)
+        this.setState({
+            chartData: {
+                labels: Object.keys(this.props.rcaTopDriversLabels),
+                datasets: [
+                    {
+                        label: "Top Drivers",
+                        data: Object.values(this.props.rcaTopDriversLabels),
+                        backgroundColor: ["blue", "black", "yellow"]
+                    }
+                ]
+            },
+        })
+    }
+
     render() {
         return (
             <div>
@@ -72,7 +80,8 @@ class BarChartSurveyTopDrivers extends Component {
 }
 
 const mapStateToProps = state => ({
-    pieChartCompletedSurveysCount: state.surveys.pieChartCompletedSurveysCount
+    testDrivers: state.surveys.testDrivers,
+    rcaTopDriversLabels: state.surveys.rcaTopDriversLabels
 });
 
-export default connect()(BarChartSurveyTopDrivers);
+export default connect(mapStateToProps, {})(BarChartSurveyTopDrivers);

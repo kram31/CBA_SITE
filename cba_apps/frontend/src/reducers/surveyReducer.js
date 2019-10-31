@@ -121,7 +121,8 @@ const surveyReducer = (state = initialState, action) => {
                 agents,
                 teamleads,
                 // loop rcas > check if rca.dsat_cause exists in an obj key array ? add rca.dsat_cause
-                rcaTopDriversLabels: 1
+                rcaTopDriversLabels: rcas.map(item => item.dsat_cause.name).reduce((r,k)=>{r[k]=1+r[k]||1;return r},{}),
+                testDrivers: ["Code 1", "Code 2", "Code 3"]
             };
             break;
         case FETCHING:
