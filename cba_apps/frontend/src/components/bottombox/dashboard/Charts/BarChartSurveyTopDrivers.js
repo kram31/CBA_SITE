@@ -5,25 +5,33 @@ import { connect } from "react-redux";
 
 class BarChartSurveyTopDrivers extends Component {
     state = {
-        chartData: {},
+        chartData: {
+            labels: Object.keys(
+                this.props.rcas
+                    .map(item => item.dsat_cause.name)
+                    .reduce((r, k) => {
+                        r[k] = 1 + r[k] || 1;
+                        return r;
+                    }, {})
+            ),
+            datasets: [
+                {
+                    label: "Top Drivers",
+
+                    data: Object.values(
+                        this.props.rcas
+                            .map(item => item.dsat_cause.name)
+                            .reduce((acc, currValue) => {
+                                acc[currValue] = 1 + acc[currValue] || 1;
+                                return acc;
+                            }, {})
+                    ),
+                    backgroundColor: ["blue", "black", "yellow"]
+                }
+            ]
+        },
         chartReference: {}
     };
-
-    componentDidMount() {
-        console.log(this.props.rcaTopDriversLabels)
-        this.setState({
-            chartData: {
-                labels: Object.keys(this.props.rcaTopDriversLabels),
-                datasets: [
-                    {
-                        label: "Top Drivers",
-                        data: Object.values(this.props.rcaTopDriversLabels),
-                        backgroundColor: ["blue", "black", "yellow"]
-                    }
-                ]
-            },
-        })
-    }
 
     render() {
         return (
@@ -35,6 +43,15 @@ class BarChartSurveyTopDrivers extends Component {
                     // width={100}
                     height={250}
                     options={{
+                        legend: { display: false },
+                        layout: {
+                            padding: {
+                                left: 50,
+                                right: 50,
+                                top: 0,
+                                bottom: 0
+                            }
+                        },
                         scales: {
                             yAxes: [
                                 {
@@ -80,8 +97,10 @@ class BarChartSurveyTopDrivers extends Component {
 }
 
 const mapStateToProps = state => ({
-    testDrivers: state.surveys.testDrivers,
-    rcaTopDriversLabels: state.surveys.rcaTopDriversLabels
+    rcas: state.surveys.rcas
 });
 
-export default connect(mapStateToProps, {})(BarChartSurveyTopDrivers);
+export default connect(
+    mapStateToProps,
+    {}
+)(BarChartSurveyTopDrivers);

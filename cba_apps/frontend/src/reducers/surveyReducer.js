@@ -53,7 +53,7 @@ let agent_headers = [
 const getMonth = givenDate => {
     let date = new Date(givenDate);
 
-    let monthName = new Intl.DateTimeFormat("en-US", { month: "long" }).format;
+    let monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
     let longName = monthName(date); // "July"
 
     return longName;
@@ -104,10 +104,6 @@ const surveyReducer = (state = initialState, action) => {
                 bottombox: surveys.filter(
                     item => item.bottombox == 1 && !item.rca
                 ),
-                doughnutChartSurveyData: [
-                    surveys.length,
-                    surveys.filter(item => item.bottombox == 1).length
-                ],
                 pieChartCompletedSurveysCount: [
                     surveys.filter(item => item.completed == true).length,
                     surveys.length
@@ -119,10 +115,7 @@ const surveyReducer = (state = initialState, action) => {
                 bb_driver_code3,
                 teams,
                 agents,
-                teamleads,
-                // loop rcas > check if rca.dsat_cause exists in an obj key array ? add rca.dsat_cause
-                rcaTopDriversLabels: rcas.map(item => item.dsat_cause.name).reduce((r,k)=>{r[k]=1+r[k]||1;return r},{}),
-                testDrivers: ["Code 1", "Code 2", "Code 3"]
+                teamleads
             };
             break;
         case FETCHING:

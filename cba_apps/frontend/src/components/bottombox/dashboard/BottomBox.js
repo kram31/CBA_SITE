@@ -6,9 +6,7 @@ import DatatablePage from "../upload-data/survey-data-table/DatatablePage";
 import RCATable from "./RCATable";
 import AgentsTable from "./AgentsTable";
 import SideBar from "../../SideBar";
-import DougnutChartBottomboxSurveys from "./Charts/DougnutChartBottomboxSurveys";
-import PieChartCompletedSurveysCount from "./Charts/PieChartCompletedSurveysCount";
-import BarChartSurveyTopDrivers from "./Charts/BarChartSurveyTopDrivers";
+import Dashboard from "./Dashboard";
 
 import { Spinner, Fade, Row, Col } from "reactstrap";
 
@@ -47,31 +45,11 @@ class BottomBox extends Component {
                             </div>
                         </Fade>
                         <div className="main">
-                            <Row>
-                                <Col md={4}>
-                                    <Fade>
-                                        <div className="section chart">
-                                            <DougnutChartBottomboxSurveys />
-                                        </div>
-                                    </Fade>
-                                </Col>
-                                <Col md={4}>
-                                    <Fade>
-                                        <div className="section chart">
-                                            <PieChartCompletedSurveysCount />
-                                        </div>
-                                    </Fade>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <Fade>
-                                        <div className="section chart">
-                                            <BarChartSurveyTopDrivers />
-                                        </div>
-                                    </Fade>
-                                </Col>
-                            </Row>
+                            <div className="section">
+                                <Fade>
+                                    <Dashboard />
+                                </Fade>
+                            </div>
                             <Fade>
                                 {this.props.bottombox.length !== 0 && (
                                     <div className="section section-a">

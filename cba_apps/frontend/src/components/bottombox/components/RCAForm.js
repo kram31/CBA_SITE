@@ -70,10 +70,15 @@ class RCAForm extends Component {
         delete rcaData.selectDefault;
         rcaData.surveyed_ticket = this.props.survey.reference_number;
         rcaData.agent = this.props.agent.operator_lan_id;
-        rcaData.dsat_cause = this.props.dsat_code1.filter(item => item.id == this.state.dsat_cause)[0]
-        rcaData.bb_driver_code2 = this.props.bb_driver_code2.filter(item => item.id == this.state.bb_driver_code2)[0]
-        rcaData.bb_driver_code3 = this.props.bb_driver_code3.filter(item => item.id == this.state.bb_driver_code3)[0]
-        
+        rcaData.dsat_cause = this.props.dsat_code1.filter(
+            item => item.id == this.state.dsat_cause
+        )[0];
+        rcaData.bb_driver_code2 = this.props.bb_driver_code2.filter(
+            item => item.id == this.state.bb_driver_code2
+        )[0];
+        rcaData.bb_driver_code3 = this.props.bb_driver_code3.filter(
+            item => item.id == this.state.bb_driver_code3
+        )[0];
 
         console.log(rcaData);
 
@@ -83,8 +88,6 @@ class RCAForm extends Component {
         };
 
         this.props.addRCA(rcaData, agentData);
-
-        this.props.getAllData2()
 
         this.handleToggle();
     };
