@@ -5,16 +5,7 @@ import { connect } from "react-redux";
 
 class PieChartCompletedSurveysCount extends Component {
     state = {
-        chartData: {
-            labels: ["Completed Surveys", "Total number of Surveys"],
-            datasets: [
-                {
-                    label: "Completed number of Surveys",
-                    data: this.props.pieChartCompletedSurveysCount,
-                    backgroundColor: ["green", "black"]
-                }
-            ]
-        },
+        chartData: {},
         chartReference: {}
     };
     render() {
@@ -23,7 +14,24 @@ class PieChartCompletedSurveysCount extends Component {
                 <Pie
                     onElementsClick={elems => console.log(elems[0])}
                     ref={reference => (this.state.chartReference = reference)}
-                    data={this.state.chartData}
+                    data={{
+                        labels: [
+                            "Completed Surveys",
+                            "Total number of Surveys"
+                        ],
+                        datasets: [
+                            {
+                                label: "Completed number of Surveys",
+                                data: [
+                                    this.props.dateFilteredSurveys.filter(
+                                        item => item.completed == true
+                                    ).length,
+                                    this.props.dateFilteredSurveys.length
+                                ],
+                                backgroundColor: ["green", "black"]
+                            }
+                        ]
+                    }}
                     // width={100}
                     height={250}
                     options={{

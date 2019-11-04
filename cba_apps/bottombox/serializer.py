@@ -28,6 +28,7 @@ class SurveySerializer(serializers.ModelSerializer):
         model = Survey
         fields = '__all__'
 
+
 class DSAT_Code1Serializer(serializers.ModelSerializer):
 
     class Meta:
@@ -42,8 +43,6 @@ class DSAT_Code1Serializer(serializers.ModelSerializer):
                 'validators': []
             }
         }
-
-
 
 
 class BB_Driver_Code2Serializer(serializers.ModelSerializer):
@@ -62,7 +61,7 @@ class BB_Driver_Code2Serializer(serializers.ModelSerializer):
             'dsat_Code1': {
                 'validators': []
             }
-   
+
         }
 
 
@@ -82,8 +81,9 @@ class BB_Driver_Code3Serializer(serializers.ModelSerializer):
             'bb_Driver_Code2': {
                 'validators': []
             }
-   
+
         }
+
 
 class RCASerializer(serializers.ModelSerializer):
 
@@ -96,43 +96,40 @@ class RCASerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def update_or_create_dsat_cause(self, validated_data):
-        
+
         data = validated_data.pop('dsat_cause', None)
-        
+
         if not data:
             return None
 
-        dsat_cause, created = DSAT_Code1.objects.update_or_create(name=data.pop('name'), defaults=data)
+        dsat_cause, created = DSAT_Code1.objects.update_or_create(
+            name=data.pop('name'), defaults=data)
 
         validated_data['dsat_cause'] = dsat_cause
-        
-    
+
     def update_or_create_bb_driver_code2(self, validated_data):
-        
+
         data = validated_data.pop('bb_driver_code2', None)
-        
+
         if not data:
             return None
 
-        bb_driver_code2, created = BB_Driver_Code2.objects.update_or_create(name=data.pop('name'), dsat_Code1=data.pop('dsat_Code1'), defaults=data)
-
-        
+        bb_driver_code2, created = BB_Driver_Code2.objects.update_or_create(
+            name=data.pop('name'), dsat_Code1=data.pop('dsat_Code1'), defaults=data)
 
         validated_data['bb_driver_code2'] = bb_driver_code2
 
     def update_or_create_bb_driver_code3(self, validated_data):
-        
+
         data = validated_data.pop('bb_driver_code3', None)
-        
+
         if not data:
             return None
 
-        bb_driver_code3, created = BB_Driver_Code3.objects.update_or_create(name=data.pop('name'), bb_Driver_Code2=data.pop('bb_Driver_Code2'), defaults=data)
-
-       
+        bb_driver_code3, created = BB_Driver_Code3.objects.update_or_create(
+            name=data.pop('name'), bb_Driver_Code2=data.pop('bb_Driver_Code2'), defaults=data)
 
         validated_data['bb_driver_code3'] = bb_driver_code3
- 
 
     def create(self, validated_data):
         self.update_or_create_dsat_cause(validated_data)
@@ -145,8 +142,6 @@ class RCASerializer(serializers.ModelSerializer):
         self.update_or_create_bb_driver_code2(validated_data)
         self.update_or_create_bb_driver_code3(validated_data)
         return super(RCASerializer, self).update(instance, validated_data)
-
-
 
 
 class TeamSerializer(serializers.ModelSerializer):

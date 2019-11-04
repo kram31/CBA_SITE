@@ -11,8 +11,6 @@ class DougnutChartBottomboxSurveys extends Component {
     };
 
     render() {
-        console.log(this.props.selectedMonth);
-        console.log(this.props.curr_year);
         return (
             <div>
                 <Col>
@@ -27,40 +25,11 @@ class DougnutChartBottomboxSurveys extends Component {
                                 {
                                     label: "Number of Surveys",
                                     data: [
-                                        !this.props.selectedMonth
-                                            ? this.props.surveys.filter(
-                                                  survey =>
-                                                      new Date(
-                                                          survey.date_issued
-                                                      ).getMonth() +
-                                                          1 ==
-                                                      this.props.curr_month
-                                              ).length
-                                            : this.props.surveys.filter(
-                                                  survey =>
-                                                      new Date(
-                                                          survey.date_issued
-                                                      ).getMonth() +
-                                                          1 ==
-                                                      this.props.selectedMonth
-                                              ).length,
-                                        !this.props.selectedMonth
-                                            ? this.props.bottombox.filter(
-                                                  survey =>
-                                                      new Date(
-                                                          survey.date_issued
-                                                      ).getMonth() +
-                                                          1 ==
-                                                      this.props.curr_month
-                                              ).length
-                                            : this.props.bottombox.filter(
-                                                  survey =>
-                                                      new Date(
-                                                          survey.date_issued
-                                                      ).getMonth() +
-                                                          1 ==
-                                                      this.props.selectedMonth
-                                              ).length
+                                        this.props.dateFilteredSurveys.length,
+
+                                        this.props.dateFilteredSurveys.filter(
+                                            item => item.bottombox == 1
+                                        ).length
                                     ],
                                     backgroundColor: ["green", "black"]
                                 }

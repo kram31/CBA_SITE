@@ -16,13 +16,22 @@ import PieChartCompletedSurveysCount from "./Charts/PieChartCompletedSurveysCoun
 import NumberOfBottomboxSurveys from "./Charts/NumberOfBottomboxSurveys";
 import LineChartCountofBottombox from "./Charts/LineChartCountofBottombox";
 import LineChartAverageScorePerMonth from "./Charts/LineChartAverageScorePerMonth";
+import { connect } from "react-redux";
 
 class Dashboard extends Component {
     state = {
         monthSelection: [],
         selectedMonth: "",
         curr_year: "",
-        curr_month: ""
+        curr_month: "",
+        curr_month_string: "",
+        dateFilteredSurveys: [],
+        dateFilteredRcas: [],
+        noDataStyle: {
+            lineHeight: "100px",
+            textAlign: "center",
+            margin: "auto"
+        }
     };
     componentDidMount() {
         let curr = new Date();
@@ -39,16 +48,50 @@ class Dashboard extends Component {
             return { string: name, int: item };
         });
 
+        // let x = this.props.rcas.map(rca => {
+        //     let m = {};
+        //     this.props.surveys.forEach(survey =>
+        //         survey.reference_number == rca.surveyed_ticket
+        //             ? (m = { ...rca, survey_date_issued: survey.date_issued })
+        //             : console.log("none")
+        //     );
+
+        //     return m;
+        // });
+
+        console.log(monthSelection[10].string);
+        console.log(typeof curr_month);
+
         this.setState({
             monthSelection,
             curr_year,
-            curr_month
+            curr_month,
+            curr_month_string: monthSelection[10].string,
+            dateFilteredSurveys: this.props.surveys.filter(
+                survey =>
+                    new Date(survey.date_issued).getMonth() + 1 == curr_month
+            ),
+            dateFilteredRcas: this.props.rcas.filter(
+                rca =>
+                    new Date(rca.survey_date_issued).getMonth() + 1 ==
+                    curr_month
+            )
         });
     }
 
     handleChange = e => {
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
+            dateFilteredSurveys: this.props.surveys.filter(
+                survey =>
+                    new Date(survey.date_issued).getMonth() + 1 ==
+                    e.target.value
+            ),
+            dateFilteredRcas: this.props.rcas.filter(
+                rca =>
+                    new Date(rca.survey_date_issued).getMonth() + 1 ==
+                    e.target.value
+            )
         });
     };
 
@@ -70,7 +113,11 @@ class Dashboard extends Component {
                                 value={this.state.selectedMonth}
                                 onChange={this.handleChange}
                             >
-                                <option value="">Select Month</option>
+                                <option value="">
+                                    Current Month -{" "}
+                                    {this.state.curr_month_string}
+                                </option>
+
                                 {this.state.monthSelection.map(item => (
                                     <option key={item.int} value={item.int}>
                                         {item.string}
@@ -79,25 +126,68 @@ class Dashboard extends Component {
                             </Input>
                         </FormGroup>
                         <Row className="mb-5">
-                            <Col md={4}>
-                                <Fade>
-                                    <DougnutChartBottomboxSurveys
-                                        selectedMonth={this.state.selectedMonth}
-                                        curr_year={this.state.curr_year}
-                                        curr_month={this.state.curr_month}
-                                    />
-                                </Fade>
-                            </Col>
-                            <Col md={4}>
-                                <Fade>
-                                    <PieChartCompletedSurveysCount />
-                                </Fade>
-                            </Col>
-                            <Col md={4}>
-                                <Fade>
-                                    <BarChartSurveyTopDrivers />
-                                </Fade>
-                            </Col>
+                            {this.state.dateFilteredSurveys.length != 0 ? (
+                                <Fragment>
+                                    <Col md={4}>
+                                        <Fade>
+                                            <DougnutChartBottomboxSurveys
+                                                dateFilteredSurveys={
+                                                    this.state
+                                                        .dateFilteredSurveys
+                                                }
+                                            />
+                                        </Fade>
+                                    </Col>
+                                    <Col md={4}>
+                                        <Fade>
+                                            <PieChartCompletedSurveysCount
+                                                dateFilteredSurveys={
+                                                    this.state
+                                                        .dateFilteredSurveys
+                                                }
+                                            />
+                                        </Fade>
+                                    </Col>
+                                </Fragment>
+                            ) : (
+                                <Fragment>
+                                    <Col md={4}>
+                                        <Fade>
+                                            <h4 style={this.state.noDataStyle}>
+                                                No Data
+                                            </h4>
+                                        </Fade>
+                                    </Col>
+                                    <Col md={4}>
+                                        <Fade>
+                                            <h4 style={this.state.noDataStyle}>
+                                                No Data
+                                            </h4>
+                                        </Fade>
+                                    </Col>
+                                </Fragment>
+                            )}
+                        </Row>
+                        <Row>
+                            {this.state.dateFilteredRcas.length != 0 ? (
+                                <Col>
+                                    <Fade>
+                                        <BarChartSurveyTopDrivers
+                                            dateFilteredRcas={
+                                                this.state.dateFilteredRcas
+                                            }
+                                        />
+                                    </Fade>
+                                </Col>
+                            ) : (
+                                <Col>
+                                    <Fade>
+                                        <h4 style={this.state.noDataStyle}>
+                                            No Data
+                                        </h4>
+                                    </Fade>
+                                </Col>
+                            )}
                         </Row>
                         <Row className="mb-5">
                             <Col>
@@ -118,4 +208,21 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+const mapStateToProps = state => ({
+    rcas: state.surveys.rcas.map(rca => {
+        let m = {};
+        state.surveys.surveys.forEach(
+            survey =>
+                survey.reference_number == rca.surveyed_ticket &&
+                (m = { ...rca, survey_date_issued: survey.date_issued })
+        );
+
+        return m;
+    }),
+    surveys: state.surveys.surveys
+});
+
+export default connect(
+    mapStateToProps,
+    {}
+)(Dashboard);
