@@ -104,7 +104,7 @@ class BarChartSurveyTopDrivers extends Component {
         return (
             <div>
                 <Row>
-                    <Col>
+                    <Col md={6}>
                         <HorizontalBar
                             onElementsClick={elems => console.log(elems[0])}
                             ref={reference =>
@@ -146,88 +146,88 @@ class BarChartSurveyTopDrivers extends Component {
                             }}
                         />
                     </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <h3>Bottombox Code 2 Top drivers per DSAT Code</h3>
-                    </Col>
-                </Row>
-                <Row>
-                    {this.state.code2_top_drivers
-                        .map(item => Object.keys(item)[0])
-                        .map(item => (
-                            <Col key={item}>
-                                <Bar
-                                    onElementsClick={elems =>
-                                        console.log(elems[0])
-                                    }
-                                    ref={reference =>
-                                        (this.state.chartReference = reference)
-                                    }
-                                    data={{
-                                        labels: Object.keys(
-                                            this.props.dateFilteredRcas
-                                                .filter(
-                                                    a =>
-                                                        a.dsat_cause.name ===
-                                                        item
-                                                )
-                                                .map(
-                                                    b => b.bb_driver_code2.name
-                                                )
-                                                .reduce((r, k) => {
-                                                    r[k] = 1 + r[k] || 1;
-                                                    return r;
-                                                }, {})
-                                        ),
-                                        datasets: [
-                                            {
-                                                label: "BB Code 2 Top Drivers",
 
-                                                data: Object.values(
-                                                    this.props.dateFilteredRcas
-                                                        .filter(
-                                                            a =>
-                                                                a.dsat_cause
-                                                                    .name ===
-                                                                item
-                                                        )
-                                                        .map(
-                                                            b =>
-                                                                b
-                                                                    .bb_driver_code2
-                                                                    .name
-                                                        )
-                                                        .reduce((r, k) => {
-                                                            r[k] =
-                                                                1 + r[k] || 1;
-                                                            return r;
-                                                        }, {})
-                                                ),
-                                                backgroundColor: [
-                                                    "blue",
-                                                    "black",
-                                                    "yellow"
-                                                ]
-                                            }
-                                        ]
-                                    }}
-                                    // width={100}
-                                    height={250}
-                                    options={{
-                                        ...this.state.option,
-                                        title: {
-                                            display: true,
-                                            text: item,
-                                            fontSize: "20"
+                    <Row>
+                        {this.state.code2_top_drivers
+                            .map(item => Object.keys(item)[0])
+                            .map(item => (
+                                <Col key={item}>
+                                    <Bar
+                                        onElementsClick={elems =>
+                                            console.log(elems[0])
                                         }
-                                    }}
-                                />
-                            </Col>
-                        ))}
+                                        ref={reference =>
+                                            (this.state.chartReference = reference)
+                                        }
+                                        data={{
+                                            labels: Object.keys(
+                                                this.props.dateFilteredRcas
+                                                    .filter(
+                                                        a =>
+                                                            a.dsat_cause
+                                                                .name === item
+                                                    )
+                                                    .map(
+                                                        b =>
+                                                            b.bb_driver_code2
+                                                                .name
+                                                    )
+                                                    .reduce((r, k) => {
+                                                        r[k] = 1 + r[k] || 1;
+                                                        return r;
+                                                    }, {})
+                                            ),
+                                            datasets: [
+                                                {
+                                                    label:
+                                                        "BB Code 2 Top Drivers",
+
+                                                    data: Object.values(
+                                                        this.props.dateFilteredRcas
+                                                            .filter(
+                                                                a =>
+                                                                    a.dsat_cause
+                                                                        .name ===
+                                                                    item
+                                                            )
+                                                            .map(
+                                                                b =>
+                                                                    b
+                                                                        .bb_driver_code2
+                                                                        .name
+                                                            )
+                                                            .reduce((r, k) => {
+                                                                r[k] =
+                                                                    1 + r[k] ||
+                                                                    1;
+                                                                return r;
+                                                            }, {})
+                                                    ),
+                                                    backgroundColor: [
+                                                        "blue",
+                                                        "black",
+                                                        "yellow"
+                                                    ]
+                                                }
+                                            ]
+                                        }}
+                                        // width={100}
+                                        height={250}
+                                        options={{
+                                            ...this.state.option,
+                                            title: {
+                                                display: true,
+                                                text: item,
+                                                fontSize: "20"
+                                            }
+                                        }}
+                                    />
+                                </Col>
+                            ))}
+                    </Row>
                 </Row>
                 <Row>
-                    <Col>
+                    <Col md={6}>
                         <Bar
                             onElementsClick={elems => console.log(elems[0])}
                             ref={reference =>

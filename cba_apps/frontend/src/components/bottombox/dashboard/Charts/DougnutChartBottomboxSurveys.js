@@ -49,7 +49,7 @@ class DougnutChartBottomboxSurveys extends Component {
                                 // Change options for ALL labels of THIS CHART
                                 datalabels: {
                                     color: "#36A2EB",
-                                    anchor: "end",
+                                    anchor: "start",
                                     align: "end",
                                     offset: 8
                                 }

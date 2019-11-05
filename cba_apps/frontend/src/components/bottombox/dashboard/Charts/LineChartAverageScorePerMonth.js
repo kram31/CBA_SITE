@@ -7,6 +7,7 @@ import { Row, Col } from "reactstrap";
 class LineChartAverageScorePerMonth extends Component {
     state = {
         chartDataAveScorePerMonth: {},
+        chartDataSurveyCountPerMonth: {},
         chartReference: {},
         yearSelection: [],
         curr_year: ""
@@ -19,8 +20,6 @@ class LineChartAverageScorePerMonth extends Component {
         );
 
         let yearSelection = [...new Set(yearSelectionList)];
-
-        // console.log(yearSelection);
 
         // Current Month and Year Range
 
@@ -61,7 +60,21 @@ class LineChartAverageScorePerMonth extends Component {
             };
         });
 
-        // console.log(averageScorePerMonth);
+        let surveyCountPerMonth = monthRangeInt.map(month => {
+            let filteredSurveyPerMonth = this.props.surveys.filter(
+                survey =>
+                    new Date(survey.date_issued).getMonth() + 1 == month &&
+                    new Date(survey.date_issued).getFullYear() == curr_year
+            );
+
+            let monthName = new Intl.DateTimeFormat("en-US", { month: "short" })
+                .format;
+            let name = monthName(new Date(`${curr_year}-${month}-01`));
+
+            return {
+                [name]: filteredSurveyPerMonth
+            };
+        });
 
         this.setState({
             chartDataAveScorePerMonth: {
@@ -79,6 +92,32 @@ class LineChartAverageScorePerMonth extends Component {
                     }
                 ]
             },
+            chartDataSurveyCountPerMonth: {
+                labels: surveyCountPerMonth.map(item => Object.keys(item)[0]),
+                datasets: [
+                    {
+                        label: "Survey Count",
+                        borderColor: "blue",
+                        backgroundColor: "rgba(0, 0, 255, 0.3)",
+
+                        data: surveyCountPerMonth.map(
+                            item => Object.values(item)[0].length
+                        )
+                    },
+                    {
+                        label: "Bottombox Count",
+                        borderColor: "red",
+                        backgroundColor: "rgba(0, 0, 255, 0.3)",
+
+                        data: surveyCountPerMonth.map(
+                            item =>
+                                Object.values(item)[0].filter(
+                                    survey => survey.bottombox === 1
+                                ).length
+                        )
+                    }
+                ]
+            },
             yearSelection,
             curr_year
         });
@@ -87,49 +126,102 @@ class LineChartAverageScorePerMonth extends Component {
     render() {
         return (
             <Fragment>
-                <Line
-                    onElementsClick={elems => console.log(elems[0])}
-                    ref={reference => (this.state.chartReference = reference)}
-                    data={this.state.chartDataAveScorePerMonth}
-                    // width={100}
-                    height={250}
-                    options={{
-                        legend: { display: false },
-                        layout: {
-                            padding: {
-                                left: 50,
-                                right: 50,
-                                top: 0,
-                                bottom: 0
+                <Row>
+                    <Col>
+                        <Line
+                            onElementsClick={elems => console.log(elems[0])}
+                            ref={reference =>
+                                (this.state.chartReference = reference)
                             }
-                        },
-                        scales: {
-                            yAxes: [
-                                {
-                                    ticks: {
-                                        beginAtZero: true
+                            data={this.state.chartDataAveScorePerMonth}
+                            // width={100}
+                            height={250}
+                            options={{
+                                legend: { display: false },
+                                layout: {
+                                    padding: {
+                                        left: 50,
+                                        right: 50,
+                                        top: 0,
+                                        bottom: 0
+                                    }
+                                },
+                                scales: {
+                                    yAxes: [
+                                        {
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    ]
+                                },
+                                title: {
+                                    display: true,
+                                    text: `Average Score per Month / ${this.state.curr_year}`,
+                                    fontSize: "20"
+                                },
+                                maintainAspectRatio: false,
+                                responsive: true,
+                                plugins: {
+                                    // Change options for ALL labels of THIS CHART
+                                    datalabels: {
+                                        color: "#36A2EB",
+                                        anchor: "end",
+                                        align: "start",
+                                        offset: 4
                                     }
                                 }
-                            ]
-                        },
-                        title: {
-                            display: true,
-                            text: `Average Score per Month / ${this.state.curr_year}`,
-                            fontSize: "20"
-                        },
-                        maintainAspectRatio: false,
-                        responsive: true,
-                        plugins: {
-                            // Change options for ALL labels of THIS CHART
-                            datalabels: {
-                                color: "#36A2EB",
-                                anchor: "end",
-                                align: "start",
-                                offset: 4
+                            }}
+                        />
+                    </Col>
+                    <Col>
+                        <Line
+                            onElementsClick={elems => console.log(elems[0])}
+                            ref={reference =>
+                                (this.state.chartReference = reference)
                             }
-                        }
-                    }}
-                />
+                            data={this.state.chartDataSurveyCountPerMonth}
+                            // width={100}
+                            height={250}
+                            options={{
+                                legend: { display: false },
+                                layout: {
+                                    padding: {
+                                        left: 50,
+                                        right: 50,
+                                        top: 0,
+                                        bottom: 0
+                                    }
+                                },
+                                scales: {
+                                    yAxes: [
+                                        {
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    ]
+                                },
+                                title: {
+                                    display: true,
+                                    text: `Survey Count per Month / ${this.state.curr_year}`,
+                                    fontSize: "20"
+                                },
+                                maintainAspectRatio: false,
+                                responsive: true,
+                                plugins: {
+                                    // Change options for ALL labels of THIS CHART
+                                    datalabels: {
+                                        color: "#36A2EB",
+                                        anchor: "end",
+                                        align: "start",
+                                        offset: 4
+                                    }
+                                }
+                            }}
+                        />
+                    </Col>
+                </Row>
             </Fragment>
         );
     }
