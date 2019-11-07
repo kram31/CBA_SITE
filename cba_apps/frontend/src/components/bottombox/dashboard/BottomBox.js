@@ -7,6 +7,7 @@ import RCATable from "./RCATable";
 import AgentsTable from "./AgentsTable";
 import SideBar from "../../SideBar";
 import Dashboard from "./Dashboard";
+import BottomboxDrivers from "../components/BottomboxDrivers";
 
 import { Spinner, Fade, Row, Col } from "reactstrap";
 
@@ -45,6 +46,11 @@ class BottomBox extends Component {
                             </div>
                         </Fade>
                         <div className="main">
+                            <div className="section">
+                                <Fade>
+                                    <BottomboxDrivers />
+                                </Fade>
+                            </div>
                             <div className="section">
                                 <Fade>
                                     <Dashboard />

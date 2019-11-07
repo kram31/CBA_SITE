@@ -7,9 +7,7 @@ export const REMOVE_SURVEY = "REMOVE_SURVEY";
 export const GET_AGENT = "GET_AGENT";
 export const GET_AGENTS = "GET_AGENTS";
 export const GET_SKILLS = "GET_SKILLS";
-export const GET_DSAT_CODE1 = "GET_DSAT_CODE1";
-export const GET_BB_DRIVER_CODE2 = "GET_BB_DRIVER_CODE2";
-export const GET_BB_DRIVER_CODE3 = "GET_BB_DRIVER_CODE3";
+
 export const GET_TEAMS = "GET_TEAMS";
 export const ADD_RCA = "ADD_RCA";
 export const UPDATE_BOTTOMBOX_NOT_COMPLETED = "UPDATE_BOTTOMBOX_NOT_COMPLETED";
@@ -18,9 +16,7 @@ export const STOP_FETCHING = "STOP_FETCHING";
 export const ADD_SKILL = "ADD_SKILL";
 export const ADD_TEAMLEAD = "ADD_TEAMLEAD";
 export const GET_TEAMLEADS = "GET_TEAMLEADS";
-export const ADD_DSAT_CODE1 = "ADD_DSAT_CODE1";
-export const ADD_BB_DRIVER_CODE2 = "ADD_BB_DRIVER_CODE2";
-export const ADD_BB_DRIVER_CODE3 = "ADD_BB_DRIVER_CODE3";
+
 export const ADD_TEAM = "ADD_TEAM";
 export const GET_RCAS = "GET_RCAS";
 export const GET_RCA = "GET_RCA";
@@ -31,6 +27,18 @@ export const UPDATE_RCA = "UPDATE_RCA";
 export const DELETE_RCA = "DELETE_RCA";
 
 export const GET_ERRORS = "GET_ERRORS";
+
+// Bottombox Drivers
+export const GET_DSAT_CODE1 = "GET_DSAT_CODE1";
+export const DELETE_DSAT_CODE1 = "DELETE_DSAT_CODE1";
+export const UPDATE_DSAT_CODE1 = "UPDATE_DSAT_CODE1";
+export const UPDATE_BB_DRIVER_CODE2 = "UPDATE_BB_DRIVER_CODE2";
+export const GET_BB_DRIVER_CODE2 = "GET_BB_DRIVER_CODE2";
+export const GET_BB_DRIVER_CODE3 = "GET_BB_DRIVER_CODE3";
+export const ADD_DSAT_CODE1 = "ADD_DSAT_CODE1";
+export const ADD_BB_DRIVER_CODE2 = "ADD_BB_DRIVER_CODE2";
+export const ADD_BB_DRIVER_CODE3 = "ADD_BB_DRIVER_CODE3";
+
 // Authentication
 export const USER_LOADING = "USER_LOADING";
 export const USER_LOADED = "USER_LOADED";

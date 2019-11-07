@@ -30,7 +30,10 @@ import {
     UPDATE_AGENT,
     ADD_AGENT,
     GET_RCA,
-    REMOVE_RCA
+    REMOVE_RCA,
+    DELETE_DSAT_CODE1,
+    UPDATE_DSAT_CODE1,
+    UPDATE_BB_DRIVER_CODE2
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -205,6 +208,38 @@ const surveyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 dsat_code1: action.payload,
+                isFetching: false
+            };
+        case DELETE_DSAT_CODE1:
+            return {
+                ...state,
+                dsat_code1: state.dsat_code1.filter(
+                    item => action.payload != item.id
+                ),
+                isFetching: false
+            };
+        case UPDATE_DSAT_CODE1:
+            return {
+                ...state,
+                dsat_code1: state.dsat_code1.map(item => {
+                    if (item.id == action.payload.id) {
+                        return action.payload;
+                    } else {
+                        return item;
+                    }
+                }),
+                isFetching: false
+            };
+        case UPDATE_BB_DRIVER_CODE2:
+            return {
+                ...state,
+                bb_driver_code2: state.bb_driver_code2.map(item => {
+                    if (item.id == action.payload.id) {
+                        return action.payload;
+                    } else {
+                        return item;
+                    }
+                }),
                 isFetching: false
             };
         case GET_BB_DRIVER_CODE2:

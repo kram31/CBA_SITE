@@ -31,7 +31,10 @@ import {
     UPDATE_AGENT,
     ADD_AGENT,
     GET_RCA,
-    REMOVE_RCA
+    REMOVE_RCA,
+    DELETE_DSAT_CODE1,
+    UPDATE_DSAT_CODE1,
+    UPDATE_BB_DRIVER_CODE2
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -628,7 +631,43 @@ export const addDsatCode1 = data => dispatch => {
                 payload: res.data
             })
         )
-        .catch(err => console.log(err));
+        .catch(err => console.log(err.response));
+};
+
+export const deleteDsatCode1 = id => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .delete(`/api/dsat_code1/${id}`, tokenConfig(getState))
+        .then(res => {
+            // dispatch(
+            //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
+            // );
+            dispatch({
+                type: DELETE_DSAT_CODE1,
+                payload: id
+            });
+        })
+        .catch(err => console.log(err.response.data));
+};
+
+export const updateDsatCode1 = data => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .put(`/api/dsat_code1/${data.id}/`, data, tokenConfig(getState))
+        .then(res => {
+            console.log(res.data);
+            dispatch({
+                type: UPDATE_DSAT_CODE1,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
 };
 
 export const addBbDriverCode2 = data => dispatch => {
@@ -644,7 +683,23 @@ export const addBbDriverCode2 = data => dispatch => {
                 payload: res.data
             })
         )
-        .catch(err => console.log(err));
+        .catch(err => console.log(err.response));
+};
+
+export const updateBbDriverCode2 = data => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .put(`/api/bb_driver_code2/${data.id}/`, data, tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type: UPDATE_BB_DRIVER_CODE2,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
 };
 
 export const addBbDriverCode3 = data => dispatch => {

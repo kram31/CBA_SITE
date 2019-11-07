@@ -147,6 +147,10 @@ a:hover {
   background-color: black;
 }
 
+.icon:hover {
+  font-size: 2em;
+}
+
 #navbar-main {
   background-color: "black";
   padding: "20px";

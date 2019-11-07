@@ -164,7 +164,7 @@ class DSAT_Code1(models.Model):
 class BB_Driver_Code2(models.Model):
     name = models.CharField(max_length=100)
     dsat_Code1 = models.ForeignKey(
-        "DSAT_Code1", on_delete=models.CASCADE, related_name="bb_Driver_Code2s", blank=True, null=True)
+        "DSAT_Code1", on_delete=models.CASCADE, related_name="bb_Driver_Code2s")
 
     def __str__(self):
         return f'{self.dsat_Code1} - {self.name}'
@@ -173,7 +173,7 @@ class BB_Driver_Code2(models.Model):
 class BB_Driver_Code3(models.Model):
     name = models.CharField(max_length=100)
     bb_Driver_Code2 = models.ForeignKey(
-        "BB_Driver_Code2", on_delete=models.CASCADE, related_name="bb_Driver_Code3s", blank=True, null=True)
+        "BB_Driver_Code2", on_delete=models.CASCADE, related_name="bb_Driver_Code3s")
 
     def __str__(self):
         return self.name
