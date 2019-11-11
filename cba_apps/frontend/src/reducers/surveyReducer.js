@@ -33,7 +33,12 @@ import {
     REMOVE_RCA,
     DELETE_DSAT_CODE1,
     UPDATE_DSAT_CODE1,
-    UPDATE_BB_DRIVER_CODE2
+    UPDATE_BB_DRIVER_CODE2,
+    UPDATE_BOTTOMBOX_DRIVER_STATE,
+    DELETE_BB_DRIVER_CODE2,
+    DELETE_BB_DRIVER_CODE3,
+    UPDATE_BB_DRIVER_CODE3,
+    UPDATE_AGENTS_COMPONENT_STATE
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -83,7 +88,19 @@ const initialState = {
     rca: {},
     doughnutChartSurveyData: [],
     pieChartCompletedSurveysCount: [],
-    rcaTopDriversLabels: {}
+    rcaTopDriversLabels: {},
+    bbState: {
+        name: "",
+        edit: false,
+        toggle: false,
+        code1_name: "",
+        code2_name: "",
+        code1: "",
+        code2: "",
+        code2_list: [],
+        code3_list: []
+    },
+    agentCompState: {}
     // drivername: number of rcas with the drivername
 };
 
@@ -121,6 +138,16 @@ const surveyReducer = (state = initialState, action) => {
                 teamleads
             };
             break;
+        case UPDATE_BOTTOMBOX_DRIVER_STATE:
+            return {
+                ...state,
+                bbState: { ...state.bbState, ...action.payload }
+            };
+        case UPDATE_AGENTS_COMPONENT_STATE:
+            return {
+                ...state,
+                agentCompState: { ...state.agentCompState, ...action.payload }
+            };
         case FETCHING:
             return {
                 ...state,
@@ -218,6 +245,7 @@ const surveyReducer = (state = initialState, action) => {
                 ),
                 isFetching: false
             };
+
         case UPDATE_DSAT_CODE1:
             return {
                 ...state,
@@ -230,10 +258,38 @@ const surveyReducer = (state = initialState, action) => {
                 }),
                 isFetching: false
             };
+        case DELETE_BB_DRIVER_CODE2:
+            return {
+                ...state,
+                bb_driver_code2: state.bb_driver_code2.filter(
+                    item => action.payload != item.id
+                ),
+                isFetching: false
+            };
+        case DELETE_BB_DRIVER_CODE3:
+            return {
+                ...state,
+                bb_driver_code3: state.bb_driver_code3.filter(
+                    item => action.payload != item.id
+                ),
+                isFetching: false
+            };
         case UPDATE_BB_DRIVER_CODE2:
             return {
                 ...state,
                 bb_driver_code2: state.bb_driver_code2.map(item => {
+                    if (item.id == action.payload.id) {
+                        return action.payload;
+                    } else {
+                        return item;
+                    }
+                }),
+                isFetching: false
+            };
+        case UPDATE_BB_DRIVER_CODE3:
+            return {
+                ...state,
+                bb_driver_code3: state.bb_driver_code3.map(item => {
                     if (item.id == action.payload.id) {
                         return action.payload;
                     } else {
@@ -365,6 +421,7 @@ const surveyReducer = (state = initialState, action) => {
                         return agent;
                     }
                 }),
+                agent: { ...action.payload },
                 isFetching: false
             };
         case ADD_AGENT:

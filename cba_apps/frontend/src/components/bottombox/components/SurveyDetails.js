@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Button, Table, Container, Fade, Card, CardHeader, CardFooter, CardBody, Row, Col } from 'reactstrap';
+import { Card, CardHeader, CardBody, Row, Col } from 'reactstrap';
 
 class SurveyDetails extends Component {
 	sendData = () => {

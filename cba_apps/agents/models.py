@@ -8,11 +8,11 @@ class Agent(models.Model):
         'Operator Lan ID', max_length=100, primary_key=True)
     email = models.EmailField(blank=True)
     skill = models.ForeignKey(
-        'Skill', on_delete=models.CASCADE, blank=True, null=True)
+        'Skill', on_delete=models.CASCADE, blank=True)
     location = models.CharField(max_length=100, blank=True)
     wave = models.CharField(max_length=100, blank=True)
     team_lead = models.ForeignKey(
-        "TeamLead", on_delete=models.CASCADE, blank=True, null=True)
+        "TeamLead", on_delete=models.CASCADE, blank=True)
 
     def __str__(self):
         return self.operator_lan_id

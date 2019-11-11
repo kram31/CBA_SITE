@@ -98,6 +98,8 @@ class Dashboard extends Component {
     render() {
         return (
             <Fragment>
+                {console.log(this.props.rcas)}
+                {console.log(this.state.dateFilteredSurveys)}
                 <Card>
                     <CardHeader>Dashboard</CardHeader>
                     <CardBody>

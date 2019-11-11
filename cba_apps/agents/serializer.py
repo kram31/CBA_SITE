@@ -4,10 +4,10 @@ from .models import Agent, Skill, TeamLead
 
 class AgentSerializer(serializers.ModelSerializer):
 
-    surveys = serializers.HyperlinkedRelatedField(
+    surveys = serializers.PrimaryKeyRelatedField(
         many=True,
-        read_only=True,
-        view_name='survey-detail'
+        read_only=True
+
     )
 
     class Meta:

@@ -34,7 +34,12 @@ import {
     REMOVE_RCA,
     DELETE_DSAT_CODE1,
     UPDATE_DSAT_CODE1,
-    UPDATE_BB_DRIVER_CODE2
+    UPDATE_BB_DRIVER_CODE2,
+    UPDATE_BOTTOMBOX_DRIVER_STATE,
+    DELETE_BB_DRIVER_CODE2,
+    DELETE_BB_DRIVER_CODE3,
+    UPDATE_BB_DRIVER_CODE3,
+    UPDATE_AGENTS_COMPONENT_STATE
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -53,6 +58,20 @@ axios.defaults.baseURL = "http://localhost:8000";
 // bbDriverCode3: this.props.getBBDriverCode3(),
 // teams: this.props.getTeams(),
 // agents: this.props.getAgents()
+
+export const updateBBDriverState = data => dispatch => {
+    dispatch({
+        type: UPDATE_BOTTOMBOX_DRIVER_STATE,
+        payload: data
+    });
+};
+
+export const updateAgentComponentState = data => dispatch => {
+    dispatch({
+        type: UPDATE_AGENTS_COMPONENT_STATE,
+        payload: data
+    });
+};
 
 export const removeRca = () => dispatch => {
     dispatch({
@@ -450,6 +469,13 @@ export const getAgentDetails = lan_id => dispatch => {
         .catch(err => console.log(err.response.data));
 };
 
+export const getAgent = data => dispatch => {
+    dispatch({
+        type: GET_AGENT,
+        payload: data
+    });
+};
+
 export const addSkill = data => dispatch => {
     dispatch({
         type: FETCHING
@@ -686,6 +712,44 @@ export const addBbDriverCode2 = data => dispatch => {
         .catch(err => console.log(err.response));
 };
 
+export const deleteBbDriverCode2 = id => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .delete(`/api/bb_driver_code2/${id}`, tokenConfig(getState))
+        .then(res => {
+            // dispatch(
+            //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
+            // );
+            dispatch({
+                type: DELETE_BB_DRIVER_CODE2,
+                payload: id
+            });
+        })
+        .catch(err => console.log(err.response.data));
+};
+
+export const deleteBbDriverCode3 = id => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .delete(`/api/bb_driver_code3/${id}`, tokenConfig(getState))
+        .then(res => {
+            // dispatch(
+            //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
+            // );
+            dispatch({
+                type: DELETE_BB_DRIVER_CODE3,
+                payload: id
+            });
+        })
+        .catch(err => console.log(err.response.data));
+};
+
 export const updateBbDriverCode2 = data => (dispatch, getState) => {
     dispatch({
         type: FETCHING
@@ -696,6 +760,22 @@ export const updateBbDriverCode2 = data => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: UPDATE_BB_DRIVER_CODE2,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const updateBbDriverCode3 = data => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .put(`/api/bb_driver_code3/${data.id}/`, data, tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type: UPDATE_BB_DRIVER_CODE3,
                 payload: res.data
             });
         })
@@ -715,5 +795,5 @@ export const addBbDriverCode3 = data => dispatch => {
                 payload: res.data
             })
         )
-        .catch(err => console.log(err));
+        .catch(err => console.log(err.reponse));
 };

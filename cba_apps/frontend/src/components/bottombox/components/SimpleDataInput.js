@@ -1,9 +1,25 @@
-import React, { Component } from 'react'
-import {Modal, Form, ModalHeader, ModalBody, Row, Col, ModalFooter, Button} from "reactstrap"
+import React, { Component } from "react";
+import {
+    Modal,
+    Form,
+    ModalHeader,
+    ModalBody,
+    Row,
+    Col,
+    ModalFooter,
+    Button
+} from "reactstrap";
 
 import { connect } from "react-redux";
-import { addTeam, addSkill, addTeamLead, addDsatCode1, addBbDriverCode2, addBbDriverCode3 } from "../../../actions/surveyActions"
-import SingleInput from "../rca/components/SingleInput"
+import {
+    addTeam,
+    addSkill,
+    addTeamLead,
+    addDsatCode1,
+    addBbDriverCode2,
+    addBbDriverCode3
+} from "../../../actions/surveyActions";
+import SingleInput from "../rca/components/SingleInput";
 
 class SimpleDataInput extends Component {
     state = {
@@ -12,15 +28,14 @@ class SimpleDataInput extends Component {
     };
 
     componentWillReceiveProps(newProps) {
-        this.setState((state,props) => ({
+        this.setState((state, props) => ({
             modal: newProps.modal
-        }))
-        
+        }));
     }
 
     toggle = () => {
         this.setState((state, props) => ({ modal: false, name: "" }));
-        this.props.onModalChange(false)
+        this.props.onModalChange(false);
     };
 
     handleChange = e => {
@@ -30,60 +45,59 @@ class SimpleDataInput extends Component {
     };
 
     // identifier = e.target.name.id
-    
+
     handleSubmit = e => {
         e.preventDefault();
 
-        const data = {'name': this.state.name}
-     
-        
-        
+        const data = { name: this.state.name };
+
+        console.log(e.target.name.id);
+
         switch (e.target.name.id) {
             case "addSkill":
                 this.props.addSkill(data);
                 // console.log(e.target.name.id)
                 break;
             case "addTeamLead":
-                this.props.addTeamLead(data)
+                this.props.addTeamLead(data);
                 // console.log(e.target.name.id)
-                break;            
+                break;
             case "addDsatCode1":
-                this.props.addDsatCode1(data)
+                this.props.addDsatCode1(data);
                 // console.log(e.target.name.id)
-                break;            
+                break;
             case "addBbDriverCode2":
-                this.props.addBbDriverCode2(data)
+                this.props.addBbDriverCode2(data);
                 // console.log(e.target.name.id)
-                break;            
+                break;
             case "addBbDriverCode3":
-                this.props.addBbDriverCode3(data)
+                this.props.addBbDriverCode3(data);
                 // console.log(e.target.name.id)
-                break;            
+                break;
             case "addTeam":
-                this.props.addTeam(data)
+                this.props.addTeam(data);
                 // console.log(e.target.name.id)
-                break;            
+                break;
             default:
-                return console.log("not added")
+                return console.log("not added");
         }
 
         this.toggle();
-
     };
 
     render() {
- 
         return (
             <div>
-            
-              <Modal
-                    
+                <Modal
                     scrollable={true}
                     className="modal-md modal-main"
                     isOpen={this.state.modal}
                     toggle={this.toggle}
                 >
-                    <Form className="modal-content" onSubmit={this.handleSubmit}>
+                    <Form
+                        className="modal-content"
+                        onSubmit={this.handleSubmit}
+                    >
                         <ModalHeader
                             toggle={this.toggle}
                             className="modal-header"
@@ -94,8 +108,7 @@ class SimpleDataInput extends Component {
                         <ModalBody>
                             <Row>
                                 <Col className="mx-auto">
-                                
-                                    <SingleInput                        
+                                    <SingleInput
                                         type="text"
                                         size="md"
                                         attr="name"
@@ -106,17 +119,14 @@ class SimpleDataInput extends Component {
                                         controlFunc={this.handleChange}
                                         readOnly={false}
                                     />
-                                
                                 </Col>
                             </Row>
                         </ModalBody>
                         <ModalFooter>
                             <Button
                                 type="submit"
-                             
                                 onSubmit={this.handleSubmit}
                                 className="btn-submit"
-    
                             >
                                 Submit
                             </Button>{" "}
@@ -127,13 +137,22 @@ class SimpleDataInput extends Component {
                             >
                                 Cancel
                             </Button>
-            
                         </ModalFooter>
                     </Form>
-                </Modal>                
+                </Modal>
             </div>
-        )
+        );
     }
 }
 
-export default connect(null, {addTeam, addSkill, addTeamLead, addDsatCode1, addBbDriverCode2, addBbDriverCode3})(SimpleDataInput)
+export default connect(
+    null,
+    {
+        addTeam,
+        addSkill,
+        addTeamLead,
+        addDsatCode1,
+        addBbDriverCode2,
+        addBbDriverCode3
+    }
+)(SimpleDataInput);

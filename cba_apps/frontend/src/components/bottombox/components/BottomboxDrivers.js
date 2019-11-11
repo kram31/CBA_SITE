@@ -6,7 +6,11 @@ import {
     addBbDriverCode3,
     deleteDsatCode1,
     updateDsatCode1,
-    updateBbDriverCode2
+    updateBbDriverCode2,
+    updateBBDriverState,
+    deleteBbDriverCode2,
+    deleteBbDriverCode3,
+    updateBbDriverCode3
 } from "../../../actions/surveyActions";
 import {
     Card,
@@ -29,8 +33,10 @@ class BottomboxDrivers extends Component {
         toggle: false,
         code1_name: "",
         code2_name: "",
+        code3_name: "",
         code1: "",
         code2: "",
+        code3: "",
         code2_list: [],
         code3_list: []
     };
@@ -42,7 +48,7 @@ class BottomboxDrivers extends Component {
     };
 
     handleClick = data => {
-        console.log(data);
+        // console.log(data);
         if (data.type === "code1") {
             this.setState({
                 toggle: false,
@@ -53,16 +59,47 @@ class BottomboxDrivers extends Component {
                 ),
                 code3: []
             });
+            this.props.updateBBDriverState({
+                toggle: false,
+                code1: data,
+                code2: "",
+                code2_list: this.props.bb_driver_code2.filter(
+                    item => item.dsat_Code1 === data.id
+                ),
+                code3: []
+            });
         }
 
-        data.type === "code2" &&
+        if (data.type === "code2") {
             this.setState({
                 toggle: false,
                 code2: data,
-                code3: this.props.bb_driver_code3.filter(
+                code3: "",
+                code3_list: this.props.bb_driver_code3.filter(
                     item => item.bb_Driver_Code2 === data.id
                 )
             });
+            this.props.updateBBDriverState({
+                toggle: false,
+                code2: data,
+                code3: "",
+                code3_list: this.props.bb_driver_code3.filter(
+                    item => item.bb_Driver_Code2 === data.id
+                )
+            });
+        }
+
+        if (data.type === "code3") {
+            this.setState({
+                toggle: false,
+                code3: data
+            });
+            this.props.updateBBDriverState({
+                toggle: false,
+                code3: data
+            });
+        }
+
         this.editOff(data);
     };
 
@@ -85,14 +122,30 @@ class BottomboxDrivers extends Component {
     };
 
     editOn = data => {
-        this.setState({
-            code1: data,
-            edit: true
-        });
+        if (data.type === "code1") {
+            this.setState({
+                code1: data,
+                edit: true
+            });
+        } else if (data.type === "code2") {
+            this.setState({
+                code1: "",
+                code2: data,
+                edit: true
+            });
+        } else if (data.type === "code3") {
+            this.setState({
+                code1: "",
+                code2: "",
+                code3: data,
+                edit: true
+            });
+        }
     };
 
     editOff = data => {
-        if (data.type === "code2") {
+        // console.log(data);
+        if (data.type === "code2" || data.type === "code3") {
             this.setState({
                 edit: false
             });
@@ -106,6 +159,26 @@ class BottomboxDrivers extends Component {
 
     // REQUESTS
 
+    handleAddDriverCode3Submit = e => {
+        e.preventDefault();
+
+        let data = {
+            name: this.state.code3_name,
+            bb_Driver_Code2: this.props.bbState.code2.id
+        };
+
+        // console.log(data);
+
+        this.props.addBbDriverCode3(data);
+
+        this.setState({
+            code3_name: ""
+        });
+        this.props.updateBBDriverState({
+            code3_name: ""
+        });
+    };
+
     handleAddDriverCode2Submit = e => {
         e.preventDefault();
 
@@ -113,11 +186,13 @@ class BottomboxDrivers extends Component {
             name: this.state.code2_name,
             dsat_Code1: this.state.code1.id
         };
-        console.log(data);
 
         this.props.addBbDriverCode2(data);
 
         this.setState({
+            code2_name: ""
+        });
+        this.props.updateBBDriverState({
             code2_name: ""
         });
     };
@@ -125,7 +200,6 @@ class BottomboxDrivers extends Component {
     handleAddDsatCode1Submit = e => {
         e.preventDefault();
 
-        console.log(this.state);
         let data = { name: this.state.code1_name };
 
         this.props.addDsatCode1(data);
@@ -133,11 +207,19 @@ class BottomboxDrivers extends Component {
         this.setState({
             code1_name: ""
         });
+        this.props.updateBBDriverState({
+            code2_name: ""
+        });
     };
 
     handleDelete = data => {
-        console.log(data.id);
-        // this.props.deleteDsatCode1(data.id);
+        if (data.type === "code1") {
+            this.props.deleteDsatCode1(data.id);
+        } else if (data.type === "code2") {
+            this.props.deleteBbDriverCode2(data.id);
+        } else if (data.type === "code3") {
+            this.props.deleteBbDriverCode3(data.id);
+        }
     };
 
     handleEdit = data => {
@@ -156,8 +238,18 @@ class BottomboxDrivers extends Component {
                 dsat_Code1: data.dsat_Code1,
                 name: this.state.name
             };
-            console.log(newData);
+
             this.props.updateBbDriverCode2(newData);
+        }
+
+        if (data.type === "code3") {
+            let newData = {
+                id: data.id,
+                bb_Driver_Code2: data.bb_Driver_Code2,
+                name: this.state.name
+            };
+
+            this.props.updateBbDriverCode3(newData);
         }
     };
 
@@ -248,8 +340,9 @@ class BottomboxDrivers extends Component {
                                                 <tr key={item.id}>
                                                     <td
                                                         style={
-                                                            this.state.code1
-                                                                .id === item.id
+                                                            this.props.bbState
+                                                                .code1.id ===
+                                                            item.id
                                                                 ? {
                                                                       backgroundColor:
                                                                           "gray"
@@ -534,8 +627,8 @@ class BottomboxDrivers extends Component {
                                         </tbody>
                                     </Table>
                                 </Col>
-                                {this.state.code1 && (
-                                    <Col md={4}>
+                                {this.props.bbState.code1 && (
+                                    <Col>
                                         <Table hover bordered>
                                             <thead>
                                                 <tr>
@@ -612,15 +705,22 @@ class BottomboxDrivers extends Component {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {this.state.code2_list.map(
-                                                    item => (
-                                                        <tr key={item.id}>
+                                                {this.props.bb_driver_code2
+                                                    .filter(
+                                                        filter_item =>
+                                                            filter_item.dsat_Code1 ===
+                                                            this.props.bbState
+                                                                .code1.id
+                                                    )
+                                                    .map(code2_item => (
+                                                        <tr key={code2_item.id}>
                                                             <td
                                                                 style={
-                                                                    this.state
+                                                                    this.props
+                                                                        .bbState
                                                                         .code2
                                                                         .id ===
-                                                                    item.id
+                                                                    code2_item.id
                                                                         ? {
                                                                               backgroundColor:
                                                                                   "gray"
@@ -639,7 +739,7 @@ class BottomboxDrivers extends Component {
                                                                             .state
                                                                             .code2
                                                                             .id ===
-                                                                        item.id ? (
+                                                                        code2_item.id ? (
                                                                             <Col
                                                                                 md={
                                                                                     8
@@ -654,7 +754,7 @@ class BottomboxDrivers extends Component {
                                                                                                         {
                                                                                                             type:
                                                                                                                 "code2",
-                                                                                                            ...item
+                                                                                                            ...code2_item
                                                                                                         }
                                                                                                     )
                                                                                                 }
@@ -700,7 +800,7 @@ class BottomboxDrivers extends Component {
                                                                                             {
                                                                                                 type:
                                                                                                     "code2",
-                                                                                                ...item
+                                                                                                ...code2_item
                                                                                             }
                                                                                         )
                                                                                     }
@@ -710,7 +810,7 @@ class BottomboxDrivers extends Component {
                                                                                     }}
                                                                                 >
                                                                                     {
-                                                                                        item.name
+                                                                                        code2_item.name
                                                                                     }
                                                                                 </span>
                                                                             </Col>
@@ -727,7 +827,7 @@ class BottomboxDrivers extends Component {
                                                                                         {
                                                                                             type:
                                                                                                 "code2",
-                                                                                            ...item
+                                                                                            ...code2_item
                                                                                         }
                                                                                     )
                                                                                 }
@@ -737,7 +837,7 @@ class BottomboxDrivers extends Component {
                                                                                 }}
                                                                             >
                                                                                 {
-                                                                                    item.name
+                                                                                    code2_item.name
                                                                                 }
                                                                             </span>
                                                                         </Col>
@@ -754,7 +854,7 @@ class BottomboxDrivers extends Component {
                                                                                         {
                                                                                             type:
                                                                                                 "code2",
-                                                                                            ...item
+                                                                                            ...code2_item
                                                                                         }
                                                                                     )
                                                                                 }
@@ -771,7 +871,7 @@ class BottomboxDrivers extends Component {
                                                                                             {
                                                                                                 type:
                                                                                                     "code2",
-                                                                                                ...item
+                                                                                                ...code2_item
                                                                                             }
                                                                                         )
                                                                                     }
@@ -790,7 +890,10 @@ class BottomboxDrivers extends Component {
                                                                           .state
                                                                           .code2
                                                                           .id ===
-                                                                      item.id ? (
+                                                                          code2_item.id &&
+                                                                      !this
+                                                                          .state
+                                                                          .code3 ? (
                                                                         <Col className="my-auto">
                                                                             <Fragment>
                                                                                 <span
@@ -805,7 +908,7 @@ class BottomboxDrivers extends Component {
                                                                                                 {
                                                                                                     type:
                                                                                                         "code2",
-                                                                                                    ...item
+                                                                                                    ...code2_item
                                                                                                 }
                                                                                             )
                                                                                         }
@@ -831,7 +934,7 @@ class BottomboxDrivers extends Component {
                                                                                                 {
                                                                                                     type:
                                                                                                         "code2",
-                                                                                                    ...item
+                                                                                                    ...code2_item
                                                                                                 }
                                                                                             )
                                                                                         }
@@ -857,7 +960,7 @@ class BottomboxDrivers extends Component {
                                                                                                 {
                                                                                                     type:
                                                                                                         "code2",
-                                                                                                    ...item
+                                                                                                    ...code2_item
                                                                                                 }
                                                                                             )
                                                                                         }
@@ -881,7 +984,7 @@ class BottomboxDrivers extends Component {
                                                                                         {
                                                                                             type:
                                                                                                 "code2",
-                                                                                            ...item
+                                                                                            ...code2_item
                                                                                         }
                                                                                     )
                                                                                 }
@@ -898,7 +1001,7 @@ class BottomboxDrivers extends Component {
                                                                                             {
                                                                                                 type:
                                                                                                     "code2",
-                                                                                                ...item
+                                                                                                ...code2_item
                                                                                             }
                                                                                         )
                                                                                     }
@@ -917,46 +1020,408 @@ class BottomboxDrivers extends Component {
                                                                 </Row>
                                                             </td>
                                                         </tr>
-                                                    )
-                                                )}
+                                                    ))}
                                             </tbody>
                                         </Table>
                                     </Col>
                                 )}
-                                {this.state.code1 && (
+
+                                {/* CODE 3 */}
+
+                                {this.props.bbState.code2 && (
                                     <Col md={4}>
                                         <Table hover bordered>
                                             <thead>
                                                 <tr>
-                                                    <th>Code 3</th>
+                                                    <th>
+                                                        <Row className="mt-2">
+                                                            <Col md={4}>
+                                                                <h5>Code 3</h5>
+                                                            </Col>
+                                                            <Col
+                                                                md={8}
+                                                                className="mr-auto"
+                                                                style={{
+                                                                    textAlign:
+                                                                        "right"
+                                                                }}
+                                                            >
+                                                                <Form
+                                                                    onSubmit={
+                                                                        this
+                                                                            .handleAddDriverCode3Submit
+                                                                    }
+                                                                >
+                                                                    <Row>
+                                                                        <Col
+                                                                            md={
+                                                                                1
+                                                                            }
+                                                                        >
+                                                                            <button
+                                                                                className="mr-2"
+                                                                                style={{
+                                                                                    cursor:
+                                                                                        "pointer"
+                                                                                }}
+                                                                                onSubmit={
+                                                                                    this
+                                                                                        .handleAddDriverCode3Submit
+                                                                                }
+                                                                            >
+                                                                                <i
+                                                                                    className="fa fa-plus"
+                                                                                    onSubmit={
+                                                                                        this
+                                                                                            .handleAddDriverCode3Submit
+                                                                                    }
+                                                                                />
+                                                                            </button>
+                                                                        </Col>
+                                                                        <Col className="my-auto ml-2">
+                                                                            <Input
+                                                                                bsSize="sm"
+                                                                                name="code3_name"
+                                                                                onChange={
+                                                                                    this
+                                                                                        .handleChange
+                                                                                }
+                                                                                value={
+                                                                                    this
+                                                                                        .state
+                                                                                        .code3_name
+                                                                                }
+                                                                                readOnly={
+                                                                                    false
+                                                                                }
+                                                                                placeholder="Enter new Bottombox Code 3"
+                                                                                required
+                                                                            />
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Form>
+                                                            </Col>
+                                                        </Row>
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {this.state.code3_list.map(
-                                                    item => (
-                                                        <tr key={item.id}>
-                                                            <td>
-                                                                <span
-                                                                    onClick={() =>
-                                                                        this.handleClick(
-                                                                            {
-                                                                                type:
-                                                                                    "code3",
-                                                                                ...item
-                                                                            }
+                                                {this.props.bb_driver_code3
+                                                    .filter(
+                                                        code3_filter_item =>
+                                                            code3_filter_item.bb_Driver_Code2 ===
+                                                            this.props.bbState
+                                                                .code2.id
+                                                    )
+                                                    .map(code3_item => (
+                                                        <tr key={code3_item.id}>
+                                                            <td
+                                                                style={
+                                                                    this.props
+                                                                        .bbState
+                                                                        .code3
+                                                                        .id ===
+                                                                    code3_item.id
+                                                                        ? {
+                                                                              backgroundColor:
+                                                                                  "gray"
+                                                                          }
+                                                                        : {
+                                                                              backgroundColor:
+                                                                                  "white"
+                                                                          }
+                                                                }
+                                                            >
+                                                                {/* CODE 3 BODY */}
+                                                                <Row>
+                                                                    {this.state
+                                                                        .edit ? (
+                                                                        this
+                                                                            .state
+                                                                            .code3
+                                                                            .id ===
+                                                                        code3_item.id ? (
+                                                                            <Col
+                                                                                md={
+                                                                                    8
+                                                                                }
+                                                                            >
+                                                                                <Form>
+                                                                                    <InputGroup size="sm">
+                                                                                        <InputGroupAddon addonType="prepend">
+                                                                                            <i
+                                                                                                onClick={() =>
+                                                                                                    this.handleEdit(
+                                                                                                        {
+                                                                                                            type:
+                                                                                                                "code3",
+                                                                                                            ...code3_item
+                                                                                                        }
+                                                                                                    )
+                                                                                                }
+                                                                                                style={{
+                                                                                                    color:
+                                                                                                        "black",
+                                                                                                    cursor:
+                                                                                                        "pointer"
+                                                                                                }}
+                                                                                                className="fa fa-check-square fa-2x"
+                                                                                                aria-hidden="true"
+                                                                                            />
+                                                                                        </InputGroupAddon>
+                                                                                        <Input
+                                                                                            bsSize="sm"
+                                                                                            name="name"
+                                                                                            onChange={
+                                                                                                this
+                                                                                                    .handleChange
+                                                                                            }
+                                                                                            value={
+                                                                                                this
+                                                                                                    .state
+                                                                                                    .name
+                                                                                            }
+                                                                                            readOnly={
+                                                                                                false
+                                                                                            }
+                                                                                            required
+                                                                                        />
+                                                                                    </InputGroup>
+                                                                                </Form>
+                                                                            </Col>
+                                                                        ) : (
+                                                                            <Col
+                                                                                md={
+                                                                                    8
+                                                                                }
+                                                                            >
+                                                                                <span
+                                                                                    onClick={() =>
+                                                                                        this.handleClick(
+                                                                                            {
+                                                                                                type:
+                                                                                                    "code3",
+                                                                                                ...code3_item
+                                                                                            }
+                                                                                        )
+                                                                                    }
+                                                                                    style={{
+                                                                                        cursor:
+                                                                                            "pointer"
+                                                                                    }}
+                                                                                >
+                                                                                    {
+                                                                                        code3_item.name
+                                                                                    }
+                                                                                </span>
+                                                                            </Col>
                                                                         )
-                                                                    }
-                                                                    style={{
-                                                                        cursor:
-                                                                            "pointer"
-                                                                    }}
-                                                                >
-                                                                    {item.name}
-                                                                </span>
+                                                                    ) : (
+                                                                        <Col
+                                                                            md={
+                                                                                8
+                                                                            }
+                                                                        >
+                                                                            <span
+                                                                                onClick={() =>
+                                                                                    this.handleClick(
+                                                                                        {
+                                                                                            type:
+                                                                                                "code3",
+                                                                                            ...code3_item
+                                                                                        }
+                                                                                    )
+                                                                                }
+                                                                                style={{
+                                                                                    cursor:
+                                                                                        "pointer"
+                                                                                }}
+                                                                            >
+                                                                                {
+                                                                                    code3_item.name
+                                                                                }
+                                                                            </span>
+                                                                        </Col>
+                                                                    )}
+
+                                                                    {/*HIDDEN BUTTONS  */}
+
+                                                                    {!this.state
+                                                                        .toggle ? (
+                                                                        // HIDDEN - UNHIDE BUTTONS
+                                                                        <Col>
+                                                                            <span
+                                                                                onClick={() =>
+                                                                                    this.showButtons(
+                                                                                        {
+                                                                                            type:
+                                                                                                "code3",
+                                                                                            ...code3_item
+                                                                                        }
+                                                                                    )
+                                                                                }
+                                                                                style={{
+                                                                                    float:
+                                                                                        "right",
+                                                                                    cursor:
+                                                                                        "pointer"
+                                                                                }}
+                                                                            >
+                                                                                <i
+                                                                                    onClick={() =>
+                                                                                        this.showButtons(
+                                                                                            {
+                                                                                                type:
+                                                                                                    "code3",
+                                                                                                ...code3_item
+                                                                                            }
+                                                                                        )
+                                                                                    }
+                                                                                    style={{
+                                                                                        color:
+                                                                                            "black",
+                                                                                        cursor:
+                                                                                            "pointer"
+                                                                                    }}
+                                                                                    className="fa fa-chevron-circle-left fa-lg icon"
+                                                                                    aria-hidden="true"
+                                                                                />
+                                                                            </span>
+                                                                        </Col>
+                                                                    ) : this
+                                                                          .state
+                                                                          .code3
+                                                                          .id ===
+                                                                      code3_item.id ? (
+                                                                        //   VISIBLE BUTTONS - HIDE/ DELETE/ EDIT BUTTONS
+                                                                        <Col className="my-auto">
+                                                                            <Fragment>
+                                                                                <span
+                                                                                    style={{
+                                                                                        float:
+                                                                                            "right"
+                                                                                    }}
+                                                                                >
+                                                                                    <i
+                                                                                        onClick={() =>
+                                                                                            this.hideButtons(
+                                                                                                {
+                                                                                                    type:
+                                                                                                        "code3",
+                                                                                                    ...code3_item
+                                                                                                }
+                                                                                            )
+                                                                                        }
+                                                                                        style={{
+                                                                                            color:
+                                                                                                "black",
+                                                                                            cursor:
+                                                                                                "pointer"
+                                                                                        }}
+                                                                                        className="fa fa-chevron-circle-right fa-lg icon"
+                                                                                        aria-hidden="true"
+                                                                                    />
+                                                                                </span>
+                                                                                <span
+                                                                                    style={{
+                                                                                        float:
+                                                                                            "right"
+                                                                                    }}
+                                                                                >
+                                                                                    <i
+                                                                                        onClick={() =>
+                                                                                            this.editOn(
+                                                                                                {
+                                                                                                    type:
+                                                                                                        "code3",
+                                                                                                    ...code3_item
+                                                                                                }
+                                                                                            )
+                                                                                        }
+                                                                                        style={{
+                                                                                            color:
+                                                                                                "black",
+                                                                                            cursor:
+                                                                                                "pointer"
+                                                                                        }}
+                                                                                        className="fa fa-edit fa-lg icon"
+                                                                                        aria-hidden="true"
+                                                                                    />
+                                                                                </span>
+                                                                                <span
+                                                                                    style={{
+                                                                                        float:
+                                                                                            "right"
+                                                                                    }}
+                                                                                >
+                                                                                    <i
+                                                                                        onClick={() =>
+                                                                                            this.handleDelete(
+                                                                                                {
+                                                                                                    type:
+                                                                                                        "code3",
+                                                                                                    ...code3_item
+                                                                                                }
+                                                                                            )
+                                                                                        }
+                                                                                        style={{
+                                                                                            color:
+                                                                                                "black",
+                                                                                            cursor:
+                                                                                                "pointer"
+                                                                                        }}
+                                                                                        className="fa fa-minus-circle fa-lg mr-1 icon"
+                                                                                        aria-hidden="true"
+                                                                                    />
+                                                                                </span>
+                                                                            </Fragment>
+                                                                        </Col>
+                                                                    ) : (
+                                                                        // HIDDEN - UNHIDE BUTTONS
+                                                                        <Col>
+                                                                            <span
+                                                                                onClick={() =>
+                                                                                    this.showButtons(
+                                                                                        {
+                                                                                            type:
+                                                                                                "code3",
+                                                                                            ...code3_item
+                                                                                        }
+                                                                                    )
+                                                                                }
+                                                                                style={{
+                                                                                    float:
+                                                                                        "right",
+                                                                                    cursor:
+                                                                                        "pointer"
+                                                                                }}
+                                                                            >
+                                                                                <i
+                                                                                    onClick={() =>
+                                                                                        this.showButtons(
+                                                                                            {
+                                                                                                type:
+                                                                                                    "code3",
+                                                                                                ...code3_item
+                                                                                            }
+                                                                                        )
+                                                                                    }
+                                                                                    style={{
+                                                                                        color:
+                                                                                            "black",
+                                                                                        cursor:
+                                                                                            "pointer"
+                                                                                    }}
+                                                                                    className="fa fa-chevron-circle-left fa-lg"
+                                                                                    aria-hidden="true"
+                                                                                />
+                                                                            </span>
+                                                                        </Col>
+                                                                    )}
+                                                                </Row>
                                                             </td>
                                                         </tr>
-                                                    )
-                                                )}
+                                                    ))}
                                             </tbody>
                                         </Table>
                                     </Col>
@@ -973,7 +1438,8 @@ class BottomboxDrivers extends Component {
 const mapStateToProps = state => ({
     dsat_code1: state.surveys.dsat_code1,
     bb_driver_code2: state.surveys.bb_driver_code2,
-    bb_driver_code3: state.surveys.bb_driver_code3
+    bb_driver_code3: state.surveys.bb_driver_code3,
+    bbState: state.surveys.bbState
 });
 
 export default connect(
@@ -984,6 +1450,10 @@ export default connect(
         addBbDriverCode3,
         deleteDsatCode1,
         updateDsatCode1,
-        updateBbDriverCode2
+        updateBbDriverCode2,
+        updateBBDriverState,
+        deleteBbDriverCode2,
+        deleteBbDriverCode3,
+        updateBbDriverCode3
     }
 )(BottomboxDrivers);

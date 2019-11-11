@@ -8,6 +8,7 @@ import AgentsTable from "./AgentsTable";
 import SideBar from "../../SideBar";
 import Dashboard from "./Dashboard";
 import BottomboxDrivers from "../components/BottomboxDrivers";
+import AgentsComponent from "../components/AgentsComponent";
 
 import { Spinner, Fade, Row, Col } from "reactstrap";
 
@@ -46,6 +47,11 @@ class BottomBox extends Component {
                             </div>
                         </Fade>
                         <div className="main">
+                            <div className="section">
+                                <Fade>
+                                    <AgentsComponent />
+                                </Fade>
+                            </div>
                             <div className="section">
                                 <Fade>
                                     <BottomboxDrivers />
