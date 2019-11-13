@@ -16,7 +16,10 @@ import PieChartCompletedSurveysCount from "./Charts/PieChartCompletedSurveysCoun
 import NumberOfBottomboxSurveys from "./Charts/NumberOfBottomboxSurveys";
 import LineChartCountofBottombox from "./Charts/LineChartCountofBottombox";
 import LineChartAverageScorePerMonth from "./Charts/LineChartAverageScorePerMonth";
+import StackedBarChart from "./Charts/StackedBarChart";
 import { connect } from "react-redux";
+
+import { Bar } from "react-chartjs-2";
 
 class Dashboard extends Component {
     state = {
@@ -95,114 +98,319 @@ class Dashboard extends Component {
         });
     };
 
+    // FIX THIS!!!!
+
+    getTopDrivers = () => {
+        let data = [];
+        return this.props.chart_data
+            .map(item =>
+                Object.values(item)[0]
+                    .filter(survey => survey.completed === true)
+                    .map(item => item.dsat_cause.name)
+                    .reduce((r, k) => {
+                        r[k] = 1 + r[k] || 1;
+                        return r;
+                    }, {})
+            )
+            .filter((x, i) => {
+                let m = Object.keys(x).length != 0 && x.constructor === Object;
+                return { [i]: m };
+            });
+    };
+
     render() {
+        let combinedData = this.props.surveys.map(survey => {
+            let x = this.props.rcas.filter(
+                rca => rca.surveyed_ticket === survey.reference_number
+            )[0];
+            return { ...survey, ...x };
+        });
         return (
             <Fragment>
-                {console.log(this.props.rcas)}
-                {console.log(this.state.dateFilteredSurveys)}
                 <Card>
                     <CardHeader>Dashboard</CardHeader>
                     <CardBody>
-                        <FormGroup>
-                            <Label size="sm" for="selectMonth">
-                                Select Month
-                            </Label>
-                            <Input
-                                type="select"
-                                name="select"
-                                id="selectMonth"
-                                name="selectedMonth"
-                                value={this.state.selectedMonth}
-                                onChange={this.handleChange}
-                            >
-                                <option value="">
-                                    Current Month -{" "}
-                                    {this.state.curr_month_string}
-                                </option>
+                        <StackedBarChart
+                            filtered_list={combinedData}
+                            chart_parent={
+                                <Fragment>
+                                    <Row>
+                                        <Col>
+                                            <Bar
+                                                data={{
+                                                    datasets: [
+                                                        {
+                                                            label: "Topbox",
+                                                            data: this.props.chart_data.map(
+                                                                item =>
+                                                                    Object.values(
+                                                                        item
+                                                                    )[0].filter(
+                                                                        survey =>
+                                                                            survey.bottombox !=
+                                                                            1
+                                                                    ).length
+                                                            ),
+                                                            backgroundColor:
+                                                                "black"
+                                                        },
+                                                        {
+                                                            label: "Bottombox",
+                                                            data: this.props.chart_data.map(
+                                                                item =>
+                                                                    Object.values(
+                                                                        item
+                                                                    )[0].filter(
+                                                                        survey =>
+                                                                            survey.bottombox ===
+                                                                            1
+                                                                    ).length
+                                                            ),
+                                                            backgroundColor:
+                                                                "yellow"
+                                                        }
+                                                    ],
+                                                    labels: this.props.chart_data.map(
+                                                        item =>
+                                                            Object.keys(item)[0]
+                                                    )
+                                                }}
+                                                options={{
+                                                    responsive: true,
+                                                    maintainAspectRatio: false,
+                                                    scales: {
+                                                        xAxes: [
+                                                            {
+                                                                stacked: true
+                                                            }
+                                                        ],
+                                                        yAxes: [
+                                                            {
+                                                                stacked: true
+                                                            }
+                                                        ]
+                                                    }
+                                                }}
+                                                height={300}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <Bar
+                                                data={{
+                                                    datasets: [
+                                                        {
+                                                            label:
+                                                                "RCA Completed",
+                                                            data: this.props.chart_data.map(
+                                                                item =>
+                                                                    Object.values(
+                                                                        item
+                                                                    )[0].filter(
+                                                                        survey =>
+                                                                            survey.completed ===
+                                                                            true
+                                                                    ).length
+                                                            ),
+                                                            backgroundColor:
+                                                                "yellow"
+                                                        },
+                                                        {
+                                                            label:
+                                                                "Surveys needs RCA",
+                                                            data: this.props.chart_data.map(
+                                                                item =>
+                                                                    Object.values(
+                                                                        item
+                                                                    )[0].filter(
+                                                                        survey =>
+                                                                            survey.completed ===
+                                                                            false
+                                                                    ).length
+                                                            ),
+                                                            backgroundColor:
+                                                                "black"
+                                                        }
+                                                    ],
+                                                    labels: this.props.chart_data.map(
+                                                        item =>
+                                                            Object.keys(item)[0]
+                                                    )
+                                                }}
+                                                options={{
+                                                    responsive: true,
+                                                    maintainAspectRatio: false,
+                                                    scales: {
+                                                        xAxes: [
+                                                            {
+                                                                stacked: true
+                                                            }
+                                                        ],
+                                                        yAxes: [
+                                                            {
+                                                                stacked: true
+                                                            }
+                                                        ]
+                                                    }
+                                                }}
+                                                height={300}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            {/* {console.log(
+                        this.props.chart_data
+                          .filter(survey => survey.completed === true)
+                          .map(item => item.dsat_cause.name)
+                          .reduce((r, k) => {
+                            r[k] = 1 + r[k] || 1;
+                            return r;
+                          }, {})
+                      )} */}
+                                            {console.log(this.getTopDrivers())}
+                                            <Bar
+                                                //   {label: Analyst Behavior, data: 3}, backgroundColor: blue
+                                                data={{
+                                                    // datesets: this.props.chart_data.map(item =>
+                                                    //     Object.values(item)[0]
+                                                    //       .filter(survey => survey.completed === true)
+                                                    //       .map(item => item.dsat_cause.name)
+                                                    //       .reduce((r, k) => {
+                                                    //         r[k] = 1 + r[k] || 1;
+                                                    //         return r;
+                                                    //       }, {})
+                                                    //   ).map(dataset => {
+                                                    //       return {
+                                                    //           label: "test",
 
-                                {this.state.monthSelection.map(item => (
-                                    <option key={item.int} value={item.int}>
-                                        {item.string}
-                                    </option>
-                                ))}
-                            </Input>
-                        </FormGroup>
-                        <Row className="mb-5">
-                            {this.state.dateFilteredSurveys.length != 0 ? (
-                                <Fragment>
-                                    <Col md={4}>
-                                        <Fade>
-                                            <DougnutChartBottomboxSurveys
-                                                dateFilteredSurveys={
-                                                    this.state
-                                                        .dateFilteredSurveys
-                                                }
+                                                    //       }
+                                                    //   }
+                                                    datasets: [
+                                                        {
+                                                            label:
+                                                                "Agent not Knowledgeable",
+                                                            data: [2],
+                                                            backgroundColor:
+                                                                "yellow"
+                                                        },
+                                                        {
+                                                            label:
+                                                                "Analyst Behavior",
+                                                            data: [3],
+                                                            backgroundColor:
+                                                                "black"
+                                                        }
+                                                    ],
+                                                    labels: this.props.chart_data.map(
+                                                        item =>
+                                                            Object.keys(item)[0]
+                                                    )
+                                                }}
+                                                options={{
+                                                    responsive: true,
+                                                    maintainAspectRatio: false,
+                                                    scales: {
+                                                        yAxes: [
+                                                            {
+                                                                ticks: {
+                                                                    beginAtZero: true
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }}
+                                                height={300}
                                             />
-                                        </Fade>
-                                    </Col>
-                                    <Col md={4}>
-                                        <Fade>
-                                            <PieChartCompletedSurveysCount
-                                                dateFilteredSurveys={
-                                                    this.state
-                                                        .dateFilteredSurveys
-                                                }
-                                            />
-                                        </Fade>
-                                    </Col>
+                                        </Col>
+                                    </Row>
                                 </Fragment>
-                            ) : (
-                                <Fragment>
-                                    <Col md={4}>
-                                        <Fade>
-                                            <h4 style={this.state.noDataStyle}>
-                                                No Data
-                                            </h4>
-                                        </Fade>
-                                    </Col>
-                                    <Col md={4}>
-                                        <Fade>
-                                            <h4 style={this.state.noDataStyle}>
-                                                No Data
-                                            </h4>
-                                        </Fade>
-                                    </Col>
-                                </Fragment>
-                            )}
-                        </Row>
-                        <Row>
-                            {this.state.dateFilteredRcas.length != 0 ? (
-                                <Col>
-                                    <Fade>
-                                        <BarChartSurveyTopDrivers
-                                            dateFilteredRcas={
-                                                this.state.dateFilteredRcas
-                                            }
-                                        />
-                                    </Fade>
-                                </Col>
-                            ) : (
-                                <Col>
-                                    <Fade>
-                                        <h4 style={this.state.noDataStyle}>
-                                            No Data
-                                        </h4>
-                                    </Fade>
-                                </Col>
-                            )}
-                        </Row>
-                        <Row className="mb-5">
-                            <Col>
-                                <Fade>
-                                    <LineChartAverageScorePerMonth />
-                                </Fade>
-                            </Col>
-                            <Col>
-                                <Fade>
-                                    <LineChartCountofBottombox />
-                                </Fade>
-                            </Col>
-                        </Row>
+                            }
+                        />
+                        {/* <FormGroup>
+              <Label size="sm" for="selectMonth">
+                Select Month
+              </Label>
+              <Input
+                type="select"
+                name="select"
+                id="selectMonth"
+                name="selectedMonth"
+                value={this.state.selectedMonth}
+                onChange={this.handleChange}
+              >
+                <option value="">
+                  Current Month - {this.state.curr_month_string}
+                </option>
+
+                {this.state.monthSelection.map(item => (
+                  <option key={item.int} value={item.int}>
+                    {item.string}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+            <Row className="mb-5">
+              {this.state.dateFilteredSurveys.length != 0 ? (
+                <Fragment>
+                  <Col md={4}>
+                    <Fade>
+                      <DougnutChartBottomboxSurveys
+                        dateFilteredSurveys={this.state.dateFilteredSurveys}
+                      />
+                    </Fade>
+                  </Col>
+                  <Col md={4}>
+                    <Fade>
+                      <PieChartCompletedSurveysCount
+                        dateFilteredSurveys={this.state.dateFilteredSurveys}
+                      />
+                    </Fade>
+                  </Col>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <Col md={4}>
+                    <Fade>
+                      <h4 style={this.state.noDataStyle}>No Data</h4>
+                    </Fade>
+                  </Col>
+                  <Col md={4}>
+                    <Fade>
+                      <h4 style={this.state.noDataStyle}>No Data</h4>
+                    </Fade>
+                  </Col>
+                </Fragment>
+              )}
+            </Row>
+            <Row>
+              {this.state.dateFilteredRcas.length != 0 ? (
+                <Col>
+                  <Fade>
+                    <BarChartSurveyTopDrivers
+                      dateFilteredRcas={this.state.dateFilteredRcas}
+                    />
+                  </Fade>
+                </Col>
+              ) : (
+                <Col>
+                  <Fade>
+                    <h4 style={this.state.noDataStyle}>No Data</h4>
+                  </Fade>
+                </Col>
+              )}
+            </Row>
+            <Row className="mb-5">
+              <Col>
+                <Fade>
+                  <LineChartAverageScorePerMonth />
+                </Fade>
+              </Col>
+              <Col>
+                <Fade>
+                  <LineChartCountofBottombox />
+                </Fade>
+              </Col>
+            </Row> */}
                     </CardBody>
                 </Card>
             </Fragment>
@@ -221,10 +429,15 @@ const mapStateToProps = state => ({
 
         return m;
     }),
-    surveys: state.surveys.surveys
+    agents: state.surveys.agents,
+    agent: state.surveys.agent,
+    agentCompState: state.surveys.agentCompState,
+    teamleads: state.surveys.teamleads,
+    skills: state.surveys.skills,
+    surveys: state.surveys.surveys,
+    filtered_data: state.surveys.filtered_data,
+    chart_data: state.surveys.chart_data,
+    rcas: state.surveys.rcas
 });
 
-export default connect(
-    mapStateToProps,
-    {}
-)(Dashboard);
+export default connect(mapStateToProps, {})(Dashboard);
