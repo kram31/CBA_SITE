@@ -19,7 +19,7 @@ import LineChartAverageScorePerMonth from "./Charts/LineChartAverageScorePerMont
 import StackedBarChart from "./Charts/StackedBarChart";
 import { connect } from "react-redux";
 
-import { Bar } from "react-chartjs-2";
+import { Bar, HorizontalBar } from "react-chartjs-2";
 
 class Dashboard extends Component {
     state = {
@@ -101,8 +101,8 @@ class Dashboard extends Component {
     // FIX THIS!!!!
 
     getTopDrivers = () => {
-        let data = [];
-        return this.props.chart_data
+    
+        let dataset = this.props.chart_data
             .map(item =>
                 Object.values(item)[0]
                     .filter(survey => survey.completed === true)
@@ -112,10 +112,20 @@ class Dashboard extends Component {
                         return r;
                     }, {})
             )
-            .filter((x, i) => {
-                let m = Object.keys(x).length != 0 && x.constructor === Object;
-                return { [i]: m };
-            });
+        
+        return this.props.dsat_code1.map(code => {
+            let data = [];
+            dataset.forEach(x => {
+                return Object.keys(x).includes(code.name) ? data.push(x[code.name]) : data.push(0)
+            })
+
+            return {
+                label: code.name,
+                data: data,
+                backgroundColor: "yellow"
+            }
+        })
+      
     };
 
     render() {
@@ -258,49 +268,13 @@ class Dashboard extends Component {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            {/* {console.log(
-                        this.props.chart_data
-                          .filter(survey => survey.completed === true)
-                          .map(item => item.dsat_cause.name)
-                          .reduce((r, k) => {
-                            r[k] = 1 + r[k] || 1;
-                            return r;
-                          }, {})
-                      )} */}
-                                            {console.log(this.getTopDrivers())}
+         
+                     
                                             <Bar
-                                                //   {label: Analyst Behavior, data: 3}, backgroundColor: blue
+                                              
                                                 data={{
-                                                    // datesets: this.props.chart_data.map(item =>
-                                                    //     Object.values(item)[0]
-                                                    //       .filter(survey => survey.completed === true)
-                                                    //       .map(item => item.dsat_cause.name)
-                                                    //       .reduce((r, k) => {
-                                                    //         r[k] = 1 + r[k] || 1;
-                                                    //         return r;
-                                                    //       }, {})
-                                                    //   ).map(dataset => {
-                                                    //       return {
-                                                    //           label: "test",
-
-                                                    //       }
-                                                    //   }
-                                                    datasets: [
-                                                        {
-                                                            label:
-                                                                "Agent not Knowledgeable",
-                                                            data: [2],
-                                                            backgroundColor:
-                                                                "yellow"
-                                                        },
-                                                        {
-                                                            label:
-                                                                "Analyst Behavior",
-                                                            data: [3],
-                                                            backgroundColor:
-                                                                "black"
-                                                        }
-                                                    ],
+                                      
+                                                    datasets: this.getTopDrivers(),
                                                     labels: this.props.chart_data.map(
                                                         item =>
                                                             Object.keys(item)[0]
@@ -315,6 +289,67 @@ class Dashboard extends Component {
                                                                 ticks: {
                                                                     beginAtZero: true
                                                                 }
+                                                            }
+                                                        ]
+                                                    }
+                                                }}
+                                                height={300}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <HorizontalBar
+                                                data={{
+                                                    datasets: [
+                                                        {
+                                                            label:
+                                                                "ITSD Controllable",
+                                                            data: this.props.chart_data.map(
+                                                                item =>
+                                                                    Object.values(
+                                                                        item
+                                                                    )[0].filter(
+                                                                        survey =>
+                                                                            survey.controllability ===
+                                                                            "ITSD Controllable"
+                                                                    ).length
+                                                            ),
+                                                            backgroundColor:
+                                                                "green"
+                                                        },
+                                                        {
+                                                            label:
+                                                                "Non ITSD Controllable",
+                                                            data: this.props.chart_data.map(
+                                                                item =>
+                                                                    Object.values(
+                                                                        item
+                                                                    )[0].filter(
+                                                                        survey =>
+                                                                            survey.controllability ===
+                                                                            "Non ITSD Controllable"
+                                                                    ).length
+                                                            ),
+                                                            backgroundColor:
+                                                                "black"
+                                                        }
+                                                    ],
+                                                    labels: this.props.chart_data.map(
+                                                        item =>
+                                                            Object.keys(item)[0]
+                                                    )
+                                                }}
+                                                options={{
+                                                    responsive: true,
+                                                    maintainAspectRatio: false,
+                                                    scales: {
+                                                        xAxes: [
+                                                            {
+                                                                stacked: true
+                                                            }
+                                                        ],
+                                                        yAxes: [
+                                                            {
+                                                                stacked: true
                                                             }
                                                         ]
                                                     }
@@ -437,7 +472,8 @@ const mapStateToProps = state => ({
     surveys: state.surveys.surveys,
     filtered_data: state.surveys.filtered_data,
     chart_data: state.surveys.chart_data,
-    rcas: state.surveys.rcas
+    rcas: state.surveys.rcas,
+    dsat_code1: state.surveys.dsat_code1
 });
 
 export default connect(mapStateToProps, {})(Dashboard);

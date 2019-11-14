@@ -301,8 +301,18 @@ const surveyReducer = (state = initialState, action) => {
         filtered_agent_data: state.surveys.filter(
           survey => survey.operator_lan_id === action.payload.operator_lan_id
         ),
+
         chart_data: get_data(
           state.surveys
+            .map(survey => {
+              let x = state.rcas.filter(
+                rca => rca.surveyed_ticket === survey.reference_number
+              )[0];
+              return { ...survey, ...x };
+            })
+            .filter(
+              data => new Date(data.date_issued).getFullYear() === curr_year
+            )
             .filter(
               survey =>
                 survey.operator_lan_id === action.payload.operator_lan_id
