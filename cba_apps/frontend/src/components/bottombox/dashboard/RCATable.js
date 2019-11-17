@@ -36,8 +36,15 @@ class RCATable extends Component {
 
     render() {
         if (this.props.rcas[0]) {
-            let rcas = this.props.rcas.map(item => {return {...item, "dsat_cause": item.dsat_cause.name, "bb_driver_code2": item.bb_driver_code2.name, "bb_driver_code3": item.bb_driver_code3.name}})
-            
+            let rcas = this.props.rcas.map(item => {
+                return {
+                    ...item,
+                    dsat_cause: item.dsat_cause.name,
+                    bb_driver_code2: item.bb_driver_code2.name,
+                    bb_driver_code3: item.bb_driver_code3.name
+                };
+            });
+
             const rca_headers = Object.keys(this.props.rcas[0]);
 
             let headers = rca_headers.map(val =>
@@ -68,7 +75,7 @@ class RCATable extends Component {
             const columns = [buttons, ...headers];
             return (
                 <Fragment>
-                    <h3>RCA Table</h3>
+                    <h4>RCA Table</h4>
                     <Button
                         className="mr-2 mb-2 btn-bb"
                         onClick={this.filterToggle}
@@ -100,7 +107,8 @@ const mapStateToProps = state => ({
     rcas: state.surveys.rcas
 });
 
-export default connect(
-    mapStateToProps,
-    { getSurvey, deleteRca, getAgentDetails }
-)(RCATable);
+export default connect(mapStateToProps, {
+    getSurvey,
+    deleteRca,
+    getAgentDetails
+})(RCATable);

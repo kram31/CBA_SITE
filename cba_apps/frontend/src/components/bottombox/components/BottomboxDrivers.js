@@ -214,7 +214,10 @@ class BottomboxDrivers extends Component {
 
     handleDelete = data => {
         if (data.type === "code1") {
-            this.props.deleteDsatCode1(data.id);
+            let need_update = this.props.rcas.filter(
+                rca => rca.dsat_cause.id === data.id
+            );
+            this.props.deleteDsatCode1(data.id, need_update);
         } else if (data.type === "code2") {
             this.props.deleteBbDriverCode2(data.id);
         } else if (data.type === "code3") {
@@ -1439,21 +1442,19 @@ const mapStateToProps = state => ({
     dsat_code1: state.surveys.dsat_code1,
     bb_driver_code2: state.surveys.bb_driver_code2,
     bb_driver_code3: state.surveys.bb_driver_code3,
-    bbState: state.surveys.bbState
+    bbState: state.surveys.bbState,
+    rcas: state.surveys.rcas
 });
 
-export default connect(
-    mapStateToProps,
-    {
-        addDsatCode1,
-        addBbDriverCode2,
-        addBbDriverCode3,
-        deleteDsatCode1,
-        updateDsatCode1,
-        updateBbDriverCode2,
-        updateBBDriverState,
-        deleteBbDriverCode2,
-        deleteBbDriverCode3,
-        updateBbDriverCode3
-    }
-)(BottomboxDrivers);
+export default connect(mapStateToProps, {
+    addDsatCode1,
+    addBbDriverCode2,
+    addBbDriverCode3,
+    deleteDsatCode1,
+    updateDsatCode1,
+    updateBbDriverCode2,
+    updateBBDriverState,
+    deleteBbDriverCode2,
+    deleteBbDriverCode3,
+    updateBbDriverCode3
+})(BottomboxDrivers);
