@@ -793,7 +793,10 @@ export const addBbDriverCode2 = data => dispatch => {
         .catch(err => console.log(err.response));
 };
 
-export const deleteBbDriverCode2 = id => (dispatch, getState) => {
+export const deleteBbDriverCode2 = (id, survey_list) => (
+    dispatch,
+    getState
+) => {
     dispatch({
         type: FETCHING
     });
@@ -808,11 +811,29 @@ export const deleteBbDriverCode2 = id => (dispatch, getState) => {
                 type: DELETE_BB_DRIVER_CODE2,
                 payload: id
             });
+            survey_list.forEach(element => {
+                axios
+                    .put(
+                        `/api/surveys/${element.surveyed_ticket}/`,
+                        { agent: element.agent, completed: false },
+                        tokenConfig(getState)
+                    )
+                    .then(res => {
+                        dispatch({
+                            type: UPDATE_SURVEY,
+                            payload: res.data
+                        });
+                    })
+                    .catch(err => console.log(err.response));
+            });
         })
         .catch(err => console.log(err.response.data));
 };
 
-export const deleteBbDriverCode3 = id => (dispatch, getState) => {
+export const deleteBbDriverCode3 = (id, survey_list) => (
+    dispatch,
+    getState
+) => {
     dispatch({
         type: FETCHING
     });
@@ -826,6 +847,21 @@ export const deleteBbDriverCode3 = id => (dispatch, getState) => {
             dispatch({
                 type: DELETE_BB_DRIVER_CODE3,
                 payload: id
+            });
+            survey_list.forEach(element => {
+                axios
+                    .put(
+                        `/api/surveys/${element.surveyed_ticket}/`,
+                        { agent: element.agent, completed: false },
+                        tokenConfig(getState)
+                    )
+                    .then(res => {
+                        dispatch({
+                            type: UPDATE_SURVEY,
+                            payload: res.data
+                        });
+                    })
+                    .catch(err => console.log(err.response));
             });
         })
         .catch(err => console.log(err.response.data));

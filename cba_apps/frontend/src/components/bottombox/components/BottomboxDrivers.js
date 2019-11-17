@@ -184,7 +184,7 @@ class BottomboxDrivers extends Component {
 
         let data = {
             name: this.state.code2_name,
-            dsat_Code1: this.state.code1.id
+            dsat_Code1: this.props.bbState.code1.id
         };
 
         this.props.addBbDriverCode2(data);
@@ -219,9 +219,15 @@ class BottomboxDrivers extends Component {
             );
             this.props.deleteDsatCode1(data.id, need_update);
         } else if (data.type === "code2") {
-            this.props.deleteBbDriverCode2(data.id);
+            let need_update = this.props.rcas.filter(
+                rca => rca.bb_driver_code2.id === data.id
+            );
+            this.props.deleteBbDriverCode2(data.id, need_update);
         } else if (data.type === "code3") {
-            this.props.deleteBbDriverCode3(data.id);
+            let need_update = this.props.rcas.filter(
+                rca => rca.bb_driver_code3.id === data.id
+            );
+            this.props.deleteBbDriverCode3(data.id, need_update);
         }
     };
 
