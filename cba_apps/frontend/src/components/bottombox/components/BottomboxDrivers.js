@@ -263,12 +263,15 @@ class BottomboxDrivers extends Component {
     };
 
     render() {
+        let text_color = "white";
         return (
             <Fragment>
                 <Fade>
                     <Card>
                         <CardHeader>
-                            <h6>Bottombox Drivers</h6>
+                            <h4>
+                                <strong>Bottombox Drivers</strong>
+                            </h4>
                         </CardHeader>
                         <CardBody>
                             <Row>
@@ -279,7 +282,13 @@ class BottomboxDrivers extends Component {
                                                 <th>
                                                     <Row className="mt-2">
                                                         <Col md={4}>
-                                                            <h5>Code 1</h5>
+                                                            <h5
+                                                                style={{
+                                                                    color: text_color
+                                                                }}
+                                                            >
+                                                                Code 1
+                                                            </h5>
                                                         </Col>
                                                         <Col
                                                             md={8}
@@ -644,7 +653,13 @@ class BottomboxDrivers extends Component {
                                                     <th>
                                                         <Row className="mt-2">
                                                             <Col md={4}>
-                                                                <h5>Code 2</h5>
+                                                                <h5
+                                                                    style={{
+                                                                        color: text_color
+                                                                    }}
+                                                                >
+                                                                    Code 2
+                                                                </h5>
                                                             </Col>
                                                             <Col
                                                                 md={8}
@@ -1045,7 +1060,13 @@ class BottomboxDrivers extends Component {
                                                     <th>
                                                         <Row className="mt-2">
                                                             <Col md={4}>
-                                                                <h5>Code 3</h5>
+                                                                <h5
+                                                                    style={{
+                                                                        color: text_color
+                                                                    }}
+                                                                >
+                                                                    Code 3
+                                                                </h5>
                                                             </Col>
                                                             <Col
                                                                 md={8}

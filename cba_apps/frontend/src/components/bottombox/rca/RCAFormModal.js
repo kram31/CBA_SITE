@@ -96,6 +96,7 @@ class RCAFormModal extends Component {
     rcaData.bb_driver_code3 = this.props.bb_driver_code3.filter(
       item => item.id == this.state.bb_driver_code3
     )[0];
+    rcaData.completed_by = this.props.user.email;
 
     let agentData = {
       agent: this.props.agent.operator_lan_id,
@@ -512,7 +513,8 @@ const mapStateToProps = state => ({
   bb_driver_code2: state.surveys.bb_driver_code2,
   bb_driver_code3: state.surveys.bb_driver_code3,
   accountable_team: state.surveys.teams,
-  rca: state.surveys.rca
+  rca: state.surveys.rca,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps, {

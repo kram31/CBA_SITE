@@ -258,28 +258,28 @@ class DatatablePage extends Component {
         let rca_headers;
         let rcaTableExcelSheet;
 
-        if (this.props.rcas[0]) {
-            rca_headers = Object.keys(this.props.rcas[0]);
-            rcaTableExcelSheet = (
-                <ExcelSheet data={this.props.rcas} name="RCAS">
-                    {rca_headers.map(item => (
-                        <ExcelColumn key={item} label={item} value={item} />
-                    ))}
-                </ExcelSheet>
-            );
-        } else {
-            rcaTableExcelSheet = (
-                <ExcelSheet data={[{ data: "no_data" }]} name="RCAS">
-                    <ExcelColumn label="data" value="data" />
-                </ExcelSheet>
-            );
-        }
+        // if (this.props.rcas[0]) {
+        //     rca_headers = Object.keys(this.props.rcas[0]);
+        //     rcaTableExcelSheet = (
+        //         <ExcelSheet data={this.props.rcas} name="RCAS">
+        //             {rca_headers.map(item => (
+        //                 <ExcelColumn key={item} label={item} value={item} />
+        //             ))}
+        //         </ExcelSheet>
+        //     );
+        // } else {
+        //     rcaTableExcelSheet = (
+        //         <ExcelSheet data={[{ data: "no_data" }]} name="RCAS">
+        //             <ExcelColumn label="data" value="data" />
+        //         </ExcelSheet>
+        //     );
+        // }
 
         return (
             <Fragment>
-                <h4>Survey Table</h4>
+                <h5>Survey Table</h5>
 
-                <Row className="mb-3 mt-1">
+                <Row className="mb-3 mt-2">
                     <Col style={{ display: "inline" }}>
                         <Button
                             size="sm"
@@ -305,6 +305,7 @@ class DatatablePage extends Component {
                         >
                             Bottombox - RCA not done
                         </Button>
+                        <span>Legend for RCA button</span>
                     </Col>
                 </Row>
 

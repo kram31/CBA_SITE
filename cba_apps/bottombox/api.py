@@ -42,7 +42,7 @@ class SurveyViewset(viewsets.ModelViewSet):
 
         request.data['date_issued'] = date_format
 
-        request.data['uploaded_by'] = str(self.request.user)
+        # request.data['uploaded_by'] = str(self.request.user)
 
         serializer = self.get_serializer(data=request.data)
 
@@ -62,9 +62,9 @@ class RCAViewset(viewsets.ModelViewSet):
     ]
 
     def create(self, request, *args, **kwargs):
-        
-        request.data['completed_by'] = str(self.request.user)
-        
+
+        # request.data['completed_by'] = str(self.request.user)
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

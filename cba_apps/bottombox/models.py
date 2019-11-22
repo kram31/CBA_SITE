@@ -44,28 +44,28 @@ class Survey(models.Model):
     assignment_group = models.CharField(
         'Assignment_Group', max_length=100, blank=True)
     q1 = models.CharField('Q1. We understand that your request has been resolved, is this correct?',
-                          max_length=500, blank=True)
+                          max_length=10000, blank=True)
     q2 = models.CharField('Q2. How much effort did you personally have to put forth to handle your request? Where 1 = A great deal and 5 = Very little',
-                          max_length=500, blank=True)
+                          max_length=10000, blank=True)
     q2a = models.CharField(
-        'Q2a. Which aspect of the experience disappointed you?', max_length=500, blank=True)
+        'Q2a. Which aspect of the experience disappointed you?', max_length=10000, blank=True)
     q3 = models.CharField('Q3. Did you feel as though you were being supported by a trusted and capable colleague? Where 1 = Strongly disagree and 5 = Strongly agree',
                           max_length=500, blank=True)
     q3a = models.CharField(
-        'Q3a. Which aspect of the experience disappointed you?', max_length=500, blank=True)
+        'Q3a. Which aspect of the experience disappointed you?', max_length=10000, blank=True)
     q4 = models.CharField("Q4. How was your overall experience in relation to this issue or request? Where 1 = Didn't meet any of my needs and 5 = Met all of my needs",
-                          max_length=500, blank=True)
+                          max_length=10000, blank=True)
     q5 = models.CharField('Q5. Would you like to add any further comments about your recent experience?',
-                          max_length=500, blank=True)
+                          max_length=10000, blank=True)
     q6 = models.CharField('Q6. Lastly, would you like us to contact you again regarding this ticket?',
-                          max_length=500, blank=True)
+                          max_length=10000, blank=True)
     average_score = models.CharField(
         'Average Score', max_length=100, blank=True)
 
     fulfillment = models.CharField(
         'Fulfillment', max_length=100, blank=True)
     follow_up_comments = models.CharField('Follow up Comments',
-                                          max_length=3000, blank=True)
+                                          max_length=10000, blank=True)
     originating_ticket_description = models.CharField('Originating Ticket Brief Description',
                                                       max_length=500, blank=True)
     budi_bu = models.CharField(
@@ -164,7 +164,7 @@ class DSAT_Code1(models.Model):
 class BB_Driver_Code2(models.Model):
     name = models.CharField(max_length=100)
     dsat_Code1 = models.ForeignKey(
-        "DSAT_Code1", on_delete=models.CASCADE, related_name="bb_Driver_Code2s")
+        "DSAT_Code1", on_delete=models.CASCADE, related_name="bb_Driver_Code2s", null=True)
 
     def __str__(self):
         return f'{self.dsat_Code1} - {self.name}'
@@ -173,7 +173,7 @@ class BB_Driver_Code2(models.Model):
 class BB_Driver_Code3(models.Model):
     name = models.CharField(max_length=100)
     bb_Driver_Code2 = models.ForeignKey(
-        "BB_Driver_Code2", on_delete=models.CASCADE, related_name="bb_Driver_Code3s")
+        "BB_Driver_Code2", on_delete=models.CASCADE, related_name="bb_Driver_Code3s", null=True)
 
     def __str__(self):
         return self.name

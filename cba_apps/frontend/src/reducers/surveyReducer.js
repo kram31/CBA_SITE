@@ -46,7 +46,8 @@ import {
     UPDATE_SELECTED_YEAR,
     COLLAPSE_AGENT_VIEW,
     COLLAPSE_BOTTOMBOX_DRIVER_VIEW,
-    COLLAPSE_SURVEY_VIEW
+    COLLAPSE_SURVEY_VIEW,
+    ADD_FAILED_SURVEY
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -110,6 +111,8 @@ let get_data = filtered_list => {
 };
 
 const initialState = {
+    upload_failed_surveys: [],
+    colors: ["#ffed00", "#64ff00", "#00c9ff", "white", "#666666", "#d9d9d9"],
     agent_view_collapse: false,
     bottombox_view_collapse: false,
     survey_view_collapse: false,
@@ -310,8 +313,17 @@ const surveyReducer = (state = initialState, action) => {
         case ADD_SURVEY:
             return {
                 ...state,
-                surveys: [action.payload, ...state.surveys],
-                isFetching: false
+                surveys: [action.payload, ...state.surveys]
+                // isFetching: false
+            };
+        case ADD_FAILED_SURVEY:
+            return {
+                ...state,
+                upload_failed_surveys: [
+                    action.payload,
+                    ...state.upload_failed_surveys
+                ]
+                // isFetching: false
             };
         case GET_BOTTOMBOX:
             return {
@@ -319,8 +331,8 @@ const surveyReducer = (state = initialState, action) => {
                 bottombox: [
                     ...(action.payload.bottombox == 1 && [action.payload]),
                     ...state.bottombox
-                ],
-                isFetching: false
+                ]
+                // isFetching: false
             };
         case GET_SURVEY:
             return {

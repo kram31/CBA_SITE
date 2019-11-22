@@ -35,6 +35,10 @@ import {
 } from "../../../actions/surveyActions";
 
 class BottomBox extends Component {
+    componentDidMount() {
+        this.props.getAllData2();
+    }
+
     render() {
         return (
             <Fragment>
@@ -59,7 +63,11 @@ class BottomBox extends Component {
                             <Collapse isOpen={this.props.survey_view_collapse}>
                                 <div className="section">
                                     <Card>
-                                        <CardHeader>Survey View</CardHeader>
+                                        <CardHeader>
+                                            <h4>
+                                                <strong>Survey View</strong>
+                                            </h4>
+                                        </CardHeader>
                                         <CardBody>
                                             <Row>
                                                 <Col>

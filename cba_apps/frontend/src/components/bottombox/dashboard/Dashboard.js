@@ -1,20 +1,15 @@
 import React, { Component, Fragment } from "react";
-import {
-    Card,
-    CardHeader,
-    CardBody,
-    Row,
-    Col,
-    Fade,
-    FormGroup,
-    Label,
-    Input
-} from "reactstrap";
+import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
 
 import StackedBarChart from "./Charts/StackedBarChart";
 import { connect } from "react-redux";
 
 import { Bar, HorizontalBar, Line } from "react-chartjs-2";
+import { defaults } from "react-chartjs-2";
+
+defaults.global.defaultFontColor = "white";
+defaults.global.legend.display = true;
+defaults.global.title.position = "top";
 
 class Dashboard extends Component {
     state = {
@@ -31,37 +26,45 @@ class Dashboard extends Component {
             margin: "auto"
         }
     };
-    componentDidMount() {
-        let curr = new Date();
+    // componentDidMount() {
+    //     let curr = new Date();
 
-        let curr_year = curr.getFullYear();
-        let curr_month = curr.getMonth() + 1;
+    //     let curr_year = curr.getFullYear();
+    //     let curr_month = curr.getMonth() + 1;
 
-        let monthRangeInt = Array.from(new Array(curr_month), (x, i) => i + 1);
+    //     let monthRangeInt = Array.from(new Array(curr_month), (x, i) => i + 1);
 
-        let monthSelection = monthRangeInt.map(item => {
-            let monthName = new Intl.DateTimeFormat("en-US", { month: "short" })
-                .format;
-            let name = monthName(new Date(`${curr_year}-${item}-01`));
-            return { string: name, int: item };
-        });
+    //     let monthSelection = monthRangeInt.map(item => {
+    //         let monthName = new Intl.DateTimeFormat("en-US", { month: "short" })
+    //             .format;
+    //         let name = monthName(new Date(`${curr_year}-${item}-01`));
+    //         return { string: name, int: item };
+    //     });
 
-        this.setState({
-            monthSelection,
-            curr_year,
-            curr_month,
-            curr_month_string: monthSelection[10].string,
-            dateFilteredSurveys: this.props.surveys.filter(
-                survey =>
-                    new Date(survey.date_issued).getMonth() + 1 == curr_month
-            ),
-            dateFilteredRcas: this.props.rcas.filter(
-                rca =>
-                    new Date(rca.survey_date_issued).getMonth() + 1 ==
-                    curr_month
-            )
-        });
-    }
+    //     this.setState({
+    //         monthSelection,
+    //         curr_year,
+    //         curr_month,
+    //         curr_month_string: monthSelection[10].string,
+    //         dateFilteredSurveys: this.props.surveys.filter(
+    //             survey =>
+    //                 new Date(survey.date_issued).getMonth() + 1 == curr_month
+    //         ),
+    //         dateFilteredRcas: this.props.rcas.filter(
+    //             rca =>
+    //                 new Date(rca.survey_date_issued).getMonth() + 1 ==
+    //                 curr_month
+    //         )
+    //     });
+    // }
+
+    // console.log(nextState.selectedMonth)
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return this.state.selectedMonth === nextState.selectedMonth; // equals() is your implementation
+    // }
+
+    datasetKeyProvider = () => Math.random();
 
     handleChange = e => {
         this.setState({
@@ -93,7 +96,7 @@ class Dashboard extends Component {
         );
 
         return this.props.dsat_code1
-            .map(code => {
+            .map((code, i) => {
                 let data = [];
                 dataset.forEach(x => {
                     return Object.keys(x).includes(code.name)
@@ -104,7 +107,9 @@ class Dashboard extends Component {
                 return {
                     label: code.name,
                     data: data,
-                    backgroundColor: this.getRandomColor()
+                    backgroundColor: !this.props.colors[i]
+                        ? this.getRandomColor()
+                        : this.props.colors[i]
                 };
             })
             .filter(item => item.data.reduce((total, num) => total - num) != 0);
@@ -122,7 +127,7 @@ class Dashboard extends Component {
         );
 
         return this.props.teams
-            .map(team => {
+            .map((team, i) => {
                 let data = [];
                 dataset.forEach(x => {
                     return Object.keys(x).includes(team.name)
@@ -133,7 +138,9 @@ class Dashboard extends Component {
                 return {
                     label: team.name,
                     data: data,
-                    backgroundColor: this.getRandomColor()
+                    backgroundColor: !this.props.colors[i]
+                        ? this.getRandomColor()
+                        : this.props.colors[i]
                 };
             })
             .filter(item => item.data.reduce((total, num) => total - num) != 0);
@@ -151,7 +158,7 @@ class Dashboard extends Component {
         );
 
         return this.props.skills
-            .map(team => {
+            .map((team, i) => {
                 let data = [];
                 dataset.forEach(x => {
                     return Object.keys(x).includes(team.name)
@@ -162,7 +169,9 @@ class Dashboard extends Component {
                 return {
                     label: team.name,
                     data: data,
-                    backgroundColor: this.getRandomColor()
+                    backgroundColor: !this.props.colors[i]
+                        ? this.getRandomColor()
+                        : this.props.colors[i]
                 };
             })
             .filter(item => item.data.reduce((total, num) => total - num) != 0);
@@ -182,18 +191,20 @@ class Dashboard extends Component {
         );
 
         return budi_bu_list
-            .map(spg => {
+            .map((spg, i) => {
                 let data = [];
                 dataset.forEach(x => {
                     return Object.keys(x).includes(spg)
                         ? data.push(x[spg])
                         : data.push(0);
                 });
-
+                // let color_length = this.props.color.length;
                 return {
                     label: spg,
                     data: data,
-                    backgroundColor: this.getRandomColor()
+                    backgroundColor: !this.props.colors[i]
+                        ? this.getRandomColor()
+                        : this.props.colors[i]
                 };
             })
             .filter(item => item.data.reduce((total, num) => total - num) != 0);
@@ -208,25 +219,34 @@ class Dashboard extends Component {
         return color;
     };
 
+    chart_height = 350;
+
+    combinedData = this.props.surveys.map(survey => {
+        let x = this.props.rcas.filter(
+            rca => rca.surveyed_ticket === survey.reference_number
+        )[0];
+        return { ...survey, ...x };
+    });
     render() {
-        let combinedData = this.props.surveys.map(survey => {
-            let x = this.props.rcas.filter(
-                rca => rca.surveyed_ticket === survey.reference_number
-            )[0];
-            return { ...survey, ...x };
-        });
         return (
             <Fragment>
                 <Card>
-                    <CardHeader>Dashboard</CardHeader>
+                    <CardHeader>
+                        <h4>
+                            <strong>Dashboard</strong>
+                        </h4>
+                    </CardHeader>
                     <CardBody>
                         <StackedBarChart
-                            filtered_list={combinedData}
+                            filtered_list={this.combinedData}
                             chart_parent={
                                 <Fragment>
-                                    <Row className="mt-3">
-                                        <Col>
+                                    <Row className="mt-3 px-3">
+                                        <Col className="py-4 border border-white">
                                             <Line
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: [
                                                         {
@@ -257,12 +277,12 @@ class Dashboard extends Component {
                                                                 }
                                                             ),
                                                             backgroundColor:
-                                                                "black",
+                                                                "white",
                                                             fill: true,
                                                             backgroundColor:
-                                                                "rgba(240, 255, 0, .5)",
+                                                                "rgba(100, 255, 0, .8)",
 
-                                                            borderColor: "black"
+                                                            borderColor: "white"
                                                         }
                                                     ],
                                                     labels: this.props.chart_data.map(
@@ -321,11 +341,17 @@ class Dashboard extends Component {
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={this.chart_height}
                                             />
                                         </Col>
-                                        <Col>
+                                    </Row>
+
+                                    <Row className="mt-4 px-3">
+                                        <Col className="py-4 mr-2 border border-white">
                                             <Bar
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: [
                                                         {
@@ -341,7 +367,7 @@ class Dashboard extends Component {
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "black"
+                                                                "#ffed00"
                                                         },
                                                         {
                                                             label: "Bottombox",
@@ -356,7 +382,7 @@ class Dashboard extends Component {
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "yellow"
+                                                                "#64ff00"
                                                         }
                                                     ],
                                                     labels: this.props.chart_data.map(
@@ -396,20 +422,35 @@ class Dashboard extends Component {
                                                     },
                                                     plugins: {
                                                         datalabels: {
+                                                            anchor: "start",
+                                                            align: "top",
                                                             // formatter: Math.round,
                                                             font: {
                                                                 weight: "bold"
                                                             },
-
-                                                            color: "gray"
+                                                            display: function(
+                                                                context
+                                                            ) {
+                                                                return (
+                                                                    context
+                                                                        .dataset
+                                                                        .data[
+                                                                        context
+                                                                            .dataIndex
+                                                                    ] > 1
+                                                                );
+                                                            }
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={this.chart_height}
                                             />
                                         </Col>
-                                        <Col>
+                                        <Col className="py-4 ml-2 border border-white">
                                             <Bar
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: [
                                                         {
@@ -426,7 +467,7 @@ class Dashboard extends Component {
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "yellow"
+                                                                "#ffed00"
                                                         },
                                                         {
                                                             label: "",
@@ -441,7 +482,7 @@ class Dashboard extends Component {
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "black"
+                                                                "#64ff00"
                                                         }
                                                     ],
                                                     labels: this.props.chart_data.map(
@@ -484,19 +525,32 @@ class Dashboard extends Component {
                                                             font: {
                                                                 weight: "bold"
                                                             },
-
-                                                            color: "gray"
+                                                            display: function(
+                                                                context
+                                                            ) {
+                                                                return (
+                                                                    context
+                                                                        .dataset
+                                                                        .data[
+                                                                        context
+                                                                            .dataIndex
+                                                                    ] > 1
+                                                                );
+                                                            }
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={this.chart_height}
                                             />
                                         </Col>
                                     </Row>
 
-                                    <Row className="mt-3">
-                                        <Col>
+                                    <Row className="mt-4 px-3">
+                                        <Col className="py-4 mr-2 border border-white">
                                             <Bar
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: this.getTopDrivers(),
                                                     labels: this.props.chart_data.map(
@@ -525,9 +579,6 @@ class Dashboard extends Component {
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                ticks: {
-                                                                    beginAtZero: true
-                                                                },
                                                                 stacked: true
                                                             }
                                                         ],
@@ -543,17 +594,29 @@ class Dashboard extends Component {
                                                             // formatter: Math.round,
                                                             font: {
                                                                 weight: "bold"
-                                                            },
-
-                                                            color: "gray"
+                                                            }
+                                                        },
+                                                        display: function(
+                                                            context
+                                                        ) {
+                                                            return (
+                                                                context.dataset
+                                                                    .data[
+                                                                    context
+                                                                        .dataIndex
+                                                                ] > 1
+                                                            );
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={this.chart_height}
                                             />
                                         </Col>
-                                        <Col>
+                                        <Col className="py-4 ml-2 border border-white">
                                             <Bar
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: this.getAccountableTeams(),
                                                     labels: this.props.chart_data.map(
@@ -582,9 +645,6 @@ class Dashboard extends Component {
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                ticks: {
-                                                                    beginAtZero: true
-                                                                },
                                                                 stacked: true
                                                             }
                                                         ],
@@ -603,16 +663,30 @@ class Dashboard extends Component {
                                                             },
 
                                                             color: "gray"
+                                                        },
+                                                        display: function(
+                                                            context
+                                                        ) {
+                                                            return (
+                                                                context.dataset
+                                                                    .data[
+                                                                    context
+                                                                        .dataIndex
+                                                                ] > 1
+                                                            );
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={this.chart_height}
                                             />
                                         </Col>
                                     </Row>
-                                    <Row className="mt-3">
-                                        <Col>
+                                    <Row className="mt-4 px-3">
+                                        <Col className="py-4 mr-2 border border-white">
                                             <HorizontalBar
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: [
                                                         {
@@ -724,14 +798,28 @@ class Dashboard extends Component {
                                                             },
 
                                                             color: "yellow"
+                                                        },
+                                                        display: function(
+                                                            context
+                                                        ) {
+                                                            return (
+                                                                context.dataset
+                                                                    .data[
+                                                                    context
+                                                                        .dataIndex
+                                                                ] > 1
+                                                            );
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={this.chart_height}
                                             />
                                         </Col>
-                                        <Col>
+                                        <Col className="py-4 ml-2 border border-white">
                                             <Bar
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: this.getSurveyPerSilo(),
                                                     labels: this.props.chart_data.map(
@@ -759,9 +847,6 @@ class Dashboard extends Component {
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                ticks: {
-                                                                    beginAtZero: true
-                                                                },
                                                                 stacked: true
                                                             }
                                                         ],
@@ -780,16 +865,30 @@ class Dashboard extends Component {
                                                             },
 
                                                             color: "gray"
+                                                        },
+                                                        display: function(
+                                                            context
+                                                        ) {
+                                                            return (
+                                                                context.dataset
+                                                                    .data[
+                                                                    context
+                                                                        .dataIndex
+                                                                ] > 1
+                                                            );
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={this.chart_height}
                                             />
                                         </Col>
                                     </Row>
-                                    <Row className="mt-3">
-                                        <Col>
+                                    <Row className="mt-4 px-3">
+                                        <Col className="py-4 border border-white">
                                             <HorizontalBar
+                                                datasetKeyProvider={
+                                                    this.datasetKeyProvider
+                                                }
                                                 data={{
                                                     datasets: this.getSPGControllability(),
                                                     labels: this.props.chart_data.map(
@@ -823,9 +922,6 @@ class Dashboard extends Component {
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                ticks: {
-                                                                    beginAtZero: true
-                                                                },
                                                                 stacked: true
                                                             }
                                                         ],
@@ -841,13 +937,22 @@ class Dashboard extends Component {
                                                             // formatter: Math.round,
                                                             font: {
                                                                 weight: "bold"
-                                                            },
-
-                                                            color: "gray"
+                                                            }
+                                                        },
+                                                        display: function(
+                                                            context
+                                                        ) {
+                                                            return (
+                                                                context.dataset
+                                                                    .data[
+                                                                    context
+                                                                        .dataIndex
+                                                                ] > 1
+                                                            );
                                                         }
                                                     }
                                                 }}
-                                                height={300}
+                                                height={600}
                                             />
                                         </Col>
                                     </Row>
@@ -862,16 +967,16 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-    rcas: state.surveys.rcas.map(rca => {
-        let m = {};
-        state.surveys.surveys.forEach(
-            survey =>
-                survey.reference_number == rca.surveyed_ticket &&
-                (m = { ...rca, survey_date_issued: survey.date_issued })
-        );
+    // rcas: state.surveys.rcas.map(rca => {
+    //     let m = {};
+    //     state.surveys.surveys.forEach(
+    //         survey =>
+    //             survey.reference_number == rca.surveyed_ticket &&
+    //             (m = { ...rca, survey_date_issued: survey.date_issued })
+    //     );
 
-        return m;
-    }),
+    //     return m;
+    // }),
     agents: state.surveys.agents,
     agent: state.surveys.agent,
     teams: state.surveys.teams,
@@ -884,7 +989,8 @@ const mapStateToProps = state => ({
     rcas: state.surveys.rcas,
     dsat_code1: state.surveys.dsat_code1,
     agent_view_collapse: state.surveys.agent_view_collapse,
-    bottombox_view_collapse: state.surveys.bottombox_view_collapse
+    bottombox_view_collapse: state.surveys.bottombox_view_collapse,
+    colors: state.surveys.colors
 });
 
 export default connect(mapStateToProps, {})(Dashboard);

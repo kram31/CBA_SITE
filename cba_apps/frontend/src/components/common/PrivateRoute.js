@@ -1,28 +1,20 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { Spinner } from "reactstrap";
 
-const PrivateRoute = ({ component: Component, auth, ...rest }) => (
+const PrivateRoute = ({
+    component: Component,
+    isAuthenticated,
+    user,
+    ...rest
+}) => (
     <Route
         {...rest}
         render={props => {
-            if (auth.isLoading) {
-                return (
-                    <Spinner
-                        style={{
-                            width: "3rem",
-                            height: "3rem",
-                            top: "50%",
-                            left: "50%",
-                            position: "fixed"
-                        }}
-                    />
-                );
-            } else if (!auth.isAuthenticated) {
-                return <Redirect to="/login" />;
-            } else {
+            if (isAuthenticated) {
                 return <Component {...props} />;
+            } else if (!isAuthenticated) {
+                return <Redirect to="/" />;
             }
         }}
     />

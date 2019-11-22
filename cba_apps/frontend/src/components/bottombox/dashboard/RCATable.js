@@ -35,7 +35,9 @@ class RCATable extends Component {
     };
 
     render() {
-        if (this.props.rcas[0]) {
+        if (!Array.isArray(this.props.rcas) || !this.props.rcas.length) {
+            return <Fragment></Fragment>;
+        } else {
             let rcas = this.props.rcas.map(item => {
                 return {
                     ...item,
@@ -75,7 +77,7 @@ class RCATable extends Component {
             const columns = [buttons, ...headers];
             return (
                 <Fragment>
-                    <h4>RCA Table</h4>
+                    <h5>RCA Table</h5>
                     <Button
                         className="mr-2 mb-2 btn-bb"
                         onClick={this.filterToggle}
@@ -89,17 +91,16 @@ class RCATable extends Component {
                         Reset
                     </Button>
                     <ReactTable
-                        // className="-striped -highlight"
+                        className="-striped -highlight"
                         data={rcas}
                         columns={columns}
                         minRows={5}
                         defaultPageSize={5}
                         filterable={this.state.filter}
+                        style={{ backgroundColor: "white" }}
                     />
                 </Fragment>
             );
-        } else {
-            return <Fragment></Fragment>;
         }
     }
 }

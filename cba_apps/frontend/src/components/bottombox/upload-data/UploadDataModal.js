@@ -62,10 +62,23 @@ class UploadDataModal extends Component {
                 range: 1
             });
 
+            let filtered_data = data.filter(
+                item =>
+                    !this.props.surveys
+                        .map(survey => survey.reference_number)
+                        .includes(item.reference_number)
+            );
+
             /* Update state */
 
             this.setState(
-                { data: data, isStaged: !this.state.isStaged },
+                {
+                    data: filtered_data.map(item => ({
+                        ...item,
+                        uploaded_by: this.props.user.email
+                    })),
+                    isStaged: !this.state.isStaged
+                },
                 () => {
                     console.log(JSON.stringify(this.state.data, null, 2));
                 }
@@ -176,10 +189,11 @@ class UploadDataModal extends Component {
 }
 
 const mapStateToProps = state => ({
-    headers: state.surveys.headers
+    headers: state.surveys.headers,
+    user: state.auth.user,
+    surveys: state.surveys.surveys
 });
 
-export default connect(
-    mapStateToProps,
-    { addSurveysBulk, toggle, getSurveys }
-)(UploadDataModal);
+export default connect(mapStateToProps, { addSurveysBulk, toggle, getSurveys })(
+    UploadDataModal
+);

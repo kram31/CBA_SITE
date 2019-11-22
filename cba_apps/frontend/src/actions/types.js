@@ -7,6 +7,7 @@ export const REMOVE_SURVEY = "REMOVE_SURVEY";
 export const GET_AGENT = "GET_AGENT";
 export const GET_AGENTS = "GET_AGENTS";
 export const GET_SKILLS = "GET_SKILLS";
+export const ADD_FAILED_SURVEY = "ADD_FAILED_SURVEY";
 
 export const GET_TEAMS = "GET_TEAMS";
 export const ADD_RCA = "ADD_RCA";

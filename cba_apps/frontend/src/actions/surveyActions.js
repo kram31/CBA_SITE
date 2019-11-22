@@ -47,7 +47,8 @@ import {
     UPDATE_AGENT_CHART_DATA,
     COLLAPSE_AGENT_VIEW,
     COLLAPSE_BOTTOMBOX_DRIVER_VIEW,
-    COLLAPSE_SURVEY_VIEW
+    COLLAPSE_SURVEY_VIEW,
+    ADD_FAILED_SURVEY
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -483,7 +484,7 @@ export const addSurveysBulk = list_data => (dispatch, getState) => {
                 });
             })
             .catch(err => {
-                console.log(err);
+                console.log(err.response);
                 let errors;
 
                 if (err.response) {
@@ -496,12 +497,20 @@ export const addSurveysBulk = list_data => (dispatch, getState) => {
                         payload: errors
                     });
                     dispatch({
-                        type: STOP_FETCHING
+                        type: ADD_FAILED_SURVEY,
+                        payload: {
+                            data: err.config.data,
+                            msg: err.response.data,
+                            status: err.response.status
+                        }
                     });
                 }
             });
     });
     Promise.all(post_reqs);
+    dispatch({
+        type: STOP_FETCHING
+    });
 };
 
 export const getSurvey = data => dispatch => {

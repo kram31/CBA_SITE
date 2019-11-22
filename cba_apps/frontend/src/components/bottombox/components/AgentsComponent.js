@@ -160,7 +160,9 @@ class AgentsComponent extends Component {
             <Fragment>
                 <Card>
                     <CardHeader>
-                        <h6>Agents...</h6>
+                        <h4>
+                            <strong>Agents View</strong>
+                        </h4>
                     </CardHeader>
                     <CardBody>
                         <Row>
