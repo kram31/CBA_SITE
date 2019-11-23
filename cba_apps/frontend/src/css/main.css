@@ -16,6 +16,41 @@ body.modal-open {
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center center;
+  margin-bottom: 0;
+  height: 380px;
+}
+
+.section-main {
+  height: 300px;
+  padding: 25px 100px 25px;
+}
+
+.section-main .row {
+  height: 300px;
+  background-color: black;
+}
+
+.section-main .row .col {
+  text-align: center;
+  vertical-align: auto;
+  border: 1px solid black;
+  cursor: pointer;
+  margin: 10px 20px 10px;
+  background-color: black;
+  padding: 10px 20px 10px;
+}
+
+#image1 {
+  max-width: 90%;
+  height: auto;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  margin-top: 20px;
+}
+
+#image1:hover {
+  max-width: 100%;
+  height: auto;
 }
 
 .chart {

@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import SurveyContent from "./SurveyContent";
 import DatatablePage from "../upload-data/survey-data-table/DatatablePage";
 import RCATable from "./RCATable";
-import AgentsTable from "./AgentsTable";
+
 import SideBar from "../../SideBar";
 import Dashboard from "./Dashboard";
 import BottomboxDrivers from "../components/BottomboxDrivers";

@@ -47,7 +47,11 @@ import {
     COLLAPSE_AGENT_VIEW,
     COLLAPSE_BOTTOMBOX_DRIVER_VIEW,
     COLLAPSE_SURVEY_VIEW,
-    ADD_FAILED_SURVEY
+    ADD_FAILED_SURVEY,
+    GET_BOTTOMBOX_SURVEY_VIEW,
+    GET_TOPBOX_SURVEY_VIEW,
+    GET_COMPLETED_SURVEY_VIEW,
+    GET_ALL_SURVEY_VIEW
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -153,7 +157,8 @@ const initialState = {
     selectedWeek: "",
     selectedYear: curr_year,
     yearSelection: [],
-    agent_chart_data: []
+    agent_chart_data: [],
+    surveys_view: []
     // drivername: number of rcas with the drivername
 };
 
@@ -174,6 +179,7 @@ const surveyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 surveys: surveys,
+                surveys_view: surveys,
                 bottombox: surveys.filter(
                     item => item.bottombox == 1 && !item.rca
                 ),
@@ -214,6 +220,34 @@ const surveyReducer = (state = initialState, action) => {
                 )
             };
             break;
+        case GET_ALL_SURVEY_VIEW:
+            return {
+                ...state,
+                surveys_view: state.surveys
+            };
+        case GET_COMPLETED_SURVEY_VIEW:
+            return {
+                ...state,
+                surveys_view: state.surveys.filter(
+                    survey => survey.completed === true
+                )
+            };
+        case GET_BOTTOMBOX_SURVEY_VIEW:
+            return {
+                ...state,
+                surveys_view: state.surveys.filter(
+                    survey =>
+                        survey.bottombox === 1 && survey.completed === false
+                )
+            };
+        case GET_TOPBOX_SURVEY_VIEW:
+            return {
+                ...state,
+                surveys_view: state.surveys.filter(
+                    survey =>
+                        survey.bottombox === 0 && survey.completed === false
+                )
+            };
         case COLLAPSE_SURVEY_VIEW:
             return {
                 ...state,

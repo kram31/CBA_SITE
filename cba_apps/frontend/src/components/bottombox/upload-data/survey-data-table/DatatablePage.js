@@ -4,7 +4,13 @@ import moment from "moment";
 
 import { connect } from "react-redux";
 
-import { deleteSurvey } from "../../../../actions/surveyActions";
+import {
+    deleteSurvey,
+    getBottomboxSurveyView,
+    getTopboxSurveyView,
+    getCompletedSurveyView,
+    getAllSurveyView
+} from "../../../../actions/surveyActions";
 import { toggle } from "../../../../actions/modalToggleActions";
 
 import RCAFormModal from "../../rca/RCAFormModal";
@@ -20,7 +26,7 @@ import {
 
 import ReactExport from "react-data-export";
 
-import { Button, ListGroup, ListGroupItem, Row, Col } from "reactstrap";
+import { Button, Badge, Row, Col } from "reactstrap";
 
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
@@ -68,6 +74,18 @@ class DatatablePage extends Component {
             });
         }
     }
+
+    getData = data => {
+        if (data === "bottombox") {
+            this.props.getBottomboxSurveyView();
+        } else if (data === "topbox") {
+            this.props.getTopboxSurveyView();
+        } else if (data === "completed") {
+            this.props.getCompletedSurveyView();
+        } else if (data === "all") {
+            this.props.getAllSurveyView();
+        }
+    };
 
     handleDelete = e => this.props.deleteSurvey(e);
 
@@ -198,7 +216,7 @@ class DatatablePage extends Component {
 
                         <Button
                             color={
-                                this.props.data
+                                this.props.surveys_view
                                     .filter(
                                         survey =>
                                             cellprops.original
@@ -258,22 +276,22 @@ class DatatablePage extends Component {
         let rca_headers;
         let rcaTableExcelSheet;
 
-        // if (this.props.rcas[0]) {
-        //     rca_headers = Object.keys(this.props.rcas[0]);
-        //     rcaTableExcelSheet = (
-        //         <ExcelSheet data={this.props.rcas} name="RCAS">
-        //             {rca_headers.map(item => (
-        //                 <ExcelColumn key={item} label={item} value={item} />
-        //             ))}
-        //         </ExcelSheet>
-        //     );
-        // } else {
-        //     rcaTableExcelSheet = (
-        //         <ExcelSheet data={[{ data: "no_data" }]} name="RCAS">
-        //             <ExcelColumn label="data" value="data" />
-        //         </ExcelSheet>
-        //     );
-        // }
+        if (!Array.isArray(this.props.rcas) || !this.props.rcas.length) {
+            rcaTableExcelSheet = (
+                <ExcelSheet data={[{ data: "no_data" }]} name="RCAS">
+                    <ExcelColumn label="data" value="data" />
+                </ExcelSheet>
+            );
+        } else {
+            rca_headers = Object.keys(this.props.rcas[0]);
+            rcaTableExcelSheet = (
+                <ExcelSheet data={this.props.rcas} name="RCAS">
+                    {rca_headers.map(item => (
+                        <ExcelColumn key={item} label={item} value={item} />
+                    ))}
+                </ExcelSheet>
+            );
+        }
 
         return (
             <Fragment>
@@ -284,26 +302,46 @@ class DatatablePage extends Component {
                         <Button
                             size="sm"
                             color="success"
-                            style={{ cursor: "auto" }}
+                            onClick={() => this.getData("completed")}
                             className="mr-2"
                         >
-                            Completed RCA
+                            Completed RCA{" "}
+                            <Badge color="secondary">
+                                {this.props.completed_survey_count}
+                            </Badge>
                         </Button>
                         <Button
                             size="sm"
                             color="warning"
-                            style={{ cursor: "auto" }}
                             className="mr-2"
+                            onClick={() => this.getData("topbox")}
                         >
-                            Topbox - RCA not done
+                            Topbox - RCA not done{" "}
+                            <Badge color="secondary">
+                                {this.props.incomplete_topbox_count}
+                            </Badge>
                         </Button>
                         <Button
                             size="sm"
                             color="danger"
-                            style={{ cursor: "auto" }}
                             className="mr-2"
+                            onClick={() => this.getData("bottombox")}
                         >
-                            Bottombox - RCA not done
+                            Bottombox - RCA not done{" "}
+                            <Badge color="secondary">
+                                {this.props.incomplete_bottombox_count}
+                            </Badge>
+                        </Button>
+                        <Button
+                            size="sm"
+                            color="primary"
+                            className="mr-2"
+                            onClick={() => this.getData("all")}
+                        >
+                            All{" "}
+                            <Badge color="secondary">
+                                {this.props.data.length}
+                            </Badge>
                         </Button>
                         <span>Legend for RCA button</span>
                     </Col>
@@ -381,7 +419,7 @@ class DatatablePage extends Component {
                     }}
                     style={{ backgroundColor: "white" }}
                     // DATA that will be displayed should be the same data to be extracted
-                    data={this.props.data}
+                    data={this.props.surveys_view}
                     columns={columns}
                     minRows={5}
                     defaultPageSize={5}
@@ -395,12 +433,22 @@ class DatatablePage extends Component {
 const mapStateToProps = state => ({
     headers: state.surveys.headers,
     data: state.surveys.surveys,
+    surveys_view: state.surveys.surveys_view,
     isOpen: state.modal.isOpen,
     surveys: state.surveys.surveys,
     agents: state.surveys.agents,
     agent_headers: state.surveys.agent_headers,
     rcas: state.surveys.rcas,
-    rca: state.surveys.rca
+    rca: state.surveys.rca,
+    incomplete_bottombox_count: state.surveys.surveys.filter(
+        survey => survey.bottombox === 1 && survey.completed === false
+    ).length,
+    incomplete_topbox_count: state.surveys.surveys.filter(
+        survey => survey.bottombox === 0 && survey.completed === false
+    ).length,
+    completed_survey_count: state.surveys.surveys.filter(
+        survey => survey.completed === true
+    ).length
 });
 
 export default connect(mapStateToProps, {
@@ -409,5 +457,9 @@ export default connect(mapStateToProps, {
     getSurvey,
     getAgentDetails,
     getRca,
-    removeRca
+    removeRca,
+    getBottomboxSurveyView,
+    getTopboxSurveyView,
+    getCompletedSurveyView,
+    getAllSurveyView
 })(DatatablePage);

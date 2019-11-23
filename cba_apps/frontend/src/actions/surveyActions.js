@@ -48,7 +48,11 @@ import {
     COLLAPSE_AGENT_VIEW,
     COLLAPSE_BOTTOMBOX_DRIVER_VIEW,
     COLLAPSE_SURVEY_VIEW,
-    ADD_FAILED_SURVEY
+    ADD_FAILED_SURVEY,
+    GET_BOTTOMBOX_SURVEY_VIEW,
+    GET_TOPBOX_SURVEY_VIEW,
+    GET_COMPLETED_SURVEY_VIEW,
+    GET_ALL_SURVEY_VIEW
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -67,6 +71,30 @@ axios.defaults.baseURL = "http://localhost:8000";
 // bbDriverCode3: this.props.getBBDriverCode3(),
 // teams: this.props.getTeams(),
 // agents: this.props.getAgents()
+
+export const getAllSurveyView = () => dispatch => {
+    dispatch({
+        type: GET_ALL_SURVEY_VIEW
+    });
+};
+
+export const getCompletedSurveyView = () => dispatch => {
+    dispatch({
+        type: GET_COMPLETED_SURVEY_VIEW
+    });
+};
+
+export const getTopboxSurveyView = () => dispatch => {
+    dispatch({
+        type: GET_TOPBOX_SURVEY_VIEW
+    });
+};
+
+export const getBottomboxSurveyView = () => dispatch => {
+    dispatch({
+        type: GET_BOTTOMBOX_SURVEY_VIEW
+    });
+};
 
 export const agentViewCollapse = () => dispatch => {
     dispatch({
