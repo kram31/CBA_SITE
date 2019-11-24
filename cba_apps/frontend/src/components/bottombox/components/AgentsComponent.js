@@ -10,7 +10,7 @@ import {
     Input,
     Label,
     Button,
-    Fade
+    Badge
 } from "reactstrap";
 
 import {
@@ -143,6 +143,12 @@ class AgentsComponent extends Component {
         });
     };
 
+    getListIncompleteAgentForm = () => {
+        return this.props.agents.filter(agent =>
+            Object.values(agent).includes(null || undefined || "")
+        ).length;
+    };
+
     handleModal = table => {
         this.setState((state, props) => ({ modal: !state.modal, table }));
     };
@@ -161,7 +167,12 @@ class AgentsComponent extends Component {
                 <Card>
                     <CardHeader>
                         <h4>
-                            <strong>Agents View</strong>
+                            <strong>Agents View</strong>{" "}
+                            <span style={{ fontSize: "14px" }}>
+                                <Badge color="danger" pill>
+                                    {this.getListIncompleteAgentForm()}
+                                </Badge>
+                            </span>
                         </h4>
                     </CardHeader>
                     <CardBody>

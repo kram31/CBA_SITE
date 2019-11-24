@@ -60,6 +60,8 @@ class SideBar extends Component {
         }
     };
 
+    style = { textAlign: "center", color: "white" };
+
     render() {
         const tables = [
             {
@@ -86,75 +88,68 @@ class SideBar extends Component {
                         paddingTop: "10px",
                         paddingLeft: "14px"
                     }}
-                >
-                    <h5>
-                        <i className="fa fa-gears" /> BottomBox
-                    </h5>
-                </NavItem>
+                ></NavItem>
 
                 <NavItem className="sidebar-navitem">
                     <NavLink
                         className="sidebar-navlink"
                         onClick={() => this.handleCollapse("survey_view")}
-                        style={
-                            this.props.survey_view_collapse
-                                ? {
-                                      fontWeight: "bold",
-                                      fontSize: "18px"
-                                  }
-                                : {
-                                      fontWeight: "normal",
-                                      color: "black"
-                                  }
-                        }
+                        style={this.style}
                     >
-                        <i className="fa fa-th-list" /> Survey View
+                        <i
+                            style={{
+                                color: !this.props.survey_view_collapse
+                                    ? "white"
+                                    : "#ffed00"
+                            }}
+                            className="fa fa-table fa-2x"
+                        />{" "}
+                        <p style={{ fontSize: "12px" }}>Survey View</p>
                     </NavLink>
                     <NavLink
                         className="sidebar-navlink"
                         onClick={() => this.handleCollapse("agent_view")}
-                        style={
-                            this.props.agent_view_collapse
-                                ? {
-                                      fontWeight: "bold",
-                                      fontSize: "18px"
-                                  }
-                                : {
-                                      fontWeight: "normal",
-                                      color: "black"
-                                  }
-                        }
+                        style={this.style}
                     >
-                        <i className="fa fa-th-list" /> Agent View
+                        <i
+                            style={{
+                                color: !this.props.agent_view_collapse
+                                    ? "white"
+                                    : "#ffed00"
+                            }}
+                            className="fa fa-users fa-2x"
+                        />
+                        <p style={{ fontSize: "12px" }}>Agent View</p>
                     </NavLink>
                     <NavLink
                         className="sidebar-navlink"
                         onClick={() =>
                             this.handleCollapse("bottombox_driver_view")
                         }
-                        style={
-                            this.props.bottombox_view_collapse
-                                ? {
-                                      fontWeight: "bold",
-                                      fontSize: "18px"
-                                  }
-                                : {
-                                      fontWeight: "normal",
-                                      color: "black"
-                                  }
-                        }
+                        style={this.style}
                     >
-                        <i className="fa fa-th-list" /> Bottombox Driver View
+                        <i
+                            style={{
+                                color: !this.props.bottombox_view_collapse
+                                    ? "white"
+                                    : "#ffed00"
+                            }}
+                            className="fa fa-list-ol fa-2x"
+                        />
+                        <p style={{ fontSize: "12px" }}>Drivers View</p>
                     </NavLink>
                     <UploadDataModal />
                     {tables.map(table => (
                         <Fragment key={table.data_name}>
                             <NavLink
                                 className="sidebar-navlink"
+                                style={this.style}
                                 onClick={() => this.handleClick(table)}
                             >
-                                <i className="fa fa-plus-circle" />{" "}
-                                {table.label_name}
+                                <i className="fa fa-plus fa-2x" />
+                                <p style={{ fontSize: "12px" }}>
+                                    {table.label_name}
+                                </p>
                             </NavLink>
                             <SimpleDataInput
                                 data_name={this.state.table.data_name}

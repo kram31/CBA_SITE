@@ -298,7 +298,7 @@ class StackedBarChart extends Component {
     render() {
         return (
             <Fragment>
-                <Row>
+                <Row className="mx-1">
                     <Col>
                         <FormGroup>
                             <Label size="sm" for="selectedYear">

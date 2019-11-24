@@ -123,8 +123,13 @@ class UploadDataModal extends Component {
         const columns = [...headers];
         return (
             <Fragment>
-                <NavLink className="sidebar-navlink" onClick={this.toggle}>
-                    <i className="fa fa-upload" /> Upload Data
+                <NavLink
+                    style={{ textAlign: "center", color: "white" }}
+                    className="sidebar-navlink"
+                    onClick={this.toggle}
+                >
+                    <i className="fa fa-upload fa-2x" />
+                    <p style={{ fontSize: "12px" }}>Upload Data</p>
                 </NavLink>
                 {/* <Button
                     color="dark"

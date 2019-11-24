@@ -84,6 +84,18 @@ class Dashboard extends Component {
 
     // FIX THIS!!!!
 
+    getListTopDrivers = () => {
+        return this.props.chart_data.map(item =>
+            Object.values(item)[0]
+                .filter(survey => survey.completed === true)
+                .map(item => item.dsat_cause.name)
+                .reduce((r, k) => {
+                    r[k] = 1 + r[k] || 1;
+                    return r;
+                }, {})
+        );
+    };
+
     getTopDrivers = () => {
         let dataset = this.props.chart_data.map(item =>
             Object.values(item)[0]
@@ -242,7 +254,7 @@ class Dashboard extends Component {
                             chart_parent={
                                 <Fragment>
                                     <Row className="mt-3 px-3">
-                                        <Col className="py-4 border border-white">
+                                        <Col className="py-4 mx-2 border border-white">
                                             <Line
                                                 datasetKeyProvider={
                                                     this.datasetKeyProvider
@@ -347,7 +359,7 @@ class Dashboard extends Component {
                                     </Row>
 
                                     <Row className="mt-4 px-3">
-                                        <Col className="py-4 mr-2 border border-white">
+                                        <Col className="py-4 mx-2 border border-white">
                                             <Bar
                                                 datasetKeyProvider={
                                                     this.datasetKeyProvider
@@ -546,7 +558,7 @@ class Dashboard extends Component {
                                     </Row>
 
                                     <Row className="mt-4 px-3">
-                                        <Col className="py-4 mr-2 border border-white">
+                                        <Col className="py-4 mx-2 border border-white">
                                             <Bar
                                                 datasetKeyProvider={
                                                     this.datasetKeyProvider
@@ -682,7 +694,7 @@ class Dashboard extends Component {
                                         </Col>
                                     </Row>
                                     <Row className="mt-4 px-3">
-                                        <Col className="py-4 mr-2 border border-white">
+                                        <Col className="py-4 mx-2 border border-white">
                                             <HorizontalBar
                                                 datasetKeyProvider={
                                                     this.datasetKeyProvider
@@ -720,7 +732,7 @@ class Dashboard extends Component {
                                                                 }
                                                             ),
                                                             backgroundColor:
-                                                                "green"
+                                                                "#ffed00"
                                                         },
                                                         {
                                                             label:
@@ -753,7 +765,7 @@ class Dashboard extends Component {
                                                                 }
                                                             ),
                                                             backgroundColor:
-                                                                "black"
+                                                                "#64ff00"
                                                         }
                                                     ],
                                                     labels: this.props.chart_data.map(
@@ -797,7 +809,7 @@ class Dashboard extends Component {
                                                                 weight: "bold"
                                                             },
 
-                                                            color: "yellow"
+                                                            color: "white"
                                                         },
                                                         display: function(
                                                             context
@@ -884,7 +896,7 @@ class Dashboard extends Component {
                                         </Col>
                                     </Row>
                                     <Row className="mt-4 px-3">
-                                        <Col className="py-4 border border-white">
+                                        <Col className="py-4 mx-2 border border-white">
                                             <HorizontalBar
                                                 datasetKeyProvider={
                                                     this.datasetKeyProvider
@@ -967,16 +979,6 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-    // rcas: state.surveys.rcas.map(rca => {
-    //     let m = {};
-    //     state.surveys.surveys.forEach(
-    //         survey =>
-    //             survey.reference_number == rca.surveyed_ticket &&
-    //             (m = { ...rca, survey_date_issued: survey.date_issued })
-    //     );
-
-    //     return m;
-    // }),
     agents: state.surveys.agents,
     agent: state.surveys.agent,
     teams: state.surveys.teams,
