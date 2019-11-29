@@ -47,6 +47,7 @@ import {
     COLLAPSE_AGENT_VIEW,
     COLLAPSE_BOTTOMBOX_DRIVER_VIEW,
     COLLAPSE_SURVEY_VIEW,
+    COLLAPSE_DASHBOARD_VIEW,
     ADD_FAILED_SURVEY,
     GET_BOTTOMBOX_SURVEY_VIEW,
     GET_TOPBOX_SURVEY_VIEW,
@@ -119,7 +120,8 @@ const initialState = {
     colors: ["#ffed00", "#64ff00", "#00c9ff", "white", "#666666", "#d9d9d9"],
     agent_view_collapse: false,
     bottombox_view_collapse: false,
-    survey_view_collapse: false,
+    survey_view_collapse: true,
+    dashboard_view_collapse: true,
     surveys: [],
     agents: [],
     headers: keys,
@@ -248,6 +250,11 @@ const surveyReducer = (state = initialState, action) => {
                         survey.bottombox === 0 && survey.completed === false
                 )
             };
+        case COLLAPSE_DASHBOARD_VIEW:
+            return {
+                ...state,
+                dashboard_view_collapse: !state.dashboard_view_collapse
+            };
         case COLLAPSE_SURVEY_VIEW:
             return {
                 ...state,
@@ -336,6 +343,9 @@ const surveyReducer = (state = initialState, action) => {
                 surveys: state.surveys.filter(
                     item => action.payload != item.reference_number
                 ),
+                surveys_view: state.surveys_view.filter(
+                    item => action.payload != item.reference_number
+                ),
                 bottombox: state.bottombox.filter(
                     item => action.payload != item.reference_number
                 ),
@@ -347,7 +357,8 @@ const surveyReducer = (state = initialState, action) => {
         case ADD_SURVEY:
             return {
                 ...state,
-                surveys: [action.payload, ...state.surveys]
+                surveys: [action.payload, ...state.surveys],
+                surveys_view: [action.payload, ...state.surveys_view]
                 // isFetching: false
             };
         case ADD_FAILED_SURVEY:
@@ -566,16 +577,23 @@ const surveyReducer = (state = initialState, action) => {
         case UPDATE_SURVEY:
             return {
                 ...state,
-                surveys: state.surveys.map(survey => {
-                    if (
-                        survey.reference_number ==
-                        action.payload.reference_number
-                    ) {
-                        return action.payload;
-                    } else {
-                        return survey;
-                    }
-                }),
+                surveys_view: [
+                    action.payload,
+                    ...state.surveys_view.filter(
+                        survey =>
+                            survey.reference_number !==
+                            action.payload.reference_number
+                    )
+                ],
+                surveys: [
+                    action.payload,
+                    ...state.surveys.filter(
+                        survey =>
+                            survey.reference_number !==
+                            action.payload.reference_number
+                    )
+                ],
+
                 isFetching: false
             };
         case UPDATE_RCA:

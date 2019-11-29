@@ -58,7 +58,7 @@ class RCATable extends Component {
                 Cell: cellprops => (
                     <Fragment>
                         <div className="btn-group">
-                            <RcaEditForm rca={cellprops.original} />
+                            <RcaEditForm local_rca={cellprops.original} />
                         </div>
                         <Button
                             className="ml-1"

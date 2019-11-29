@@ -8,7 +8,10 @@ import {
     ModalFooter,
     Form,
     Row,
-    Col
+    Col,
+    FormGroup,
+    Label,
+    Input
 } from "reactstrap";
 
 import SingleInput from "../../../components/bottombox/rca/components/SingleInput";
@@ -21,34 +24,62 @@ import { updateRca } from "../../../actions/surveyActions";
 class RcaEditForm extends Component {
     state = {
         modal: false,
-        surveyed_ticket: this.props.rca.surveyed_ticket,
-        agent: this.props.rca.agent,
-        support_silo_issue_based: this.props.rca.support_silo_issue_based,
-        service: this.props.rca.service,
-        service_component: this.props.rca.service_component,
-        brief_description: this.props.rca.brief_description,
-        user_verbatim: this.props.rca.user_verbatim,
-        dsat_cause: this.props.rca.dsat_cause,
-        bb_driver_code2: this.props.rca.bb_driver_code2,
-        bb_driver_code3: this.props.rca.bb_driver_code3,
-        actual_issue: this.props.rca.actual_issue,
-        controllability: this.props.rca.controllability,
-        accountable_team: this.props.rca.accountable_team,
-        q1_answer: this.props.rca.q1_answer,
-        contacted_customer: this.props.rca.contacted_customer,
-        summary: this.props.rca.summary,
-        obs_in_call: this.props.rca.obs_in_call,
-        accountable_entity: this.props.rca.accountable_entity,
-        overall_reason_dsat: this.props.rca.overall_reason_dsat,
-        coaching: this.props.rca.coaching,
-        corrective_actions: this.props.rca.corrective_actions
+        // surveyed_ticket: this.props.rca.surveyed_ticket,
+        // agent: this.props.rca.agent,
+        // support_silo_issue_based: this.props.rca.support_silo_issue_based,
+        // service: this.props.rca.service,
+        // service_component: this.props.rca.service_component,
+        // brief_description: this.props.rca.brief_description,
+        // user_verbatim: this.props.rca.user_verbatim,
+        // dsat_cause: this.props.rca.dsat_cause,
+        // bb_driver_code2: this.props.rca.bb_driver_code2,
+        // bb_driver_code3: this.props.rca.bb_driver_code3,
+        // actual_issue: this.props.rca.actual_issue,
+        // controllability: this.props.rca.controllability,
+        // accountable_team: this.props.rca.accountable_team,
+        // q1_answer: this.props.rca.q1_answer,
+        // contacted_customer: this.props.rca.contacted_customer,
+        // summary: this.props.rca.summary,
+        // obs_in_call: this.props.rca.obs_in_call,
+        // accountable_entity: this.props.rca.accountable_entity,
+        // overall_reason_dsat: this.props.rca.overall_reason_dsat,
+        // coaching: this.props.rca.coaching,
+        // corrective_actions: this.props.rca.corrective_actions
+        surveyed_ticket: "",
+        agent: "",
+        support_silo_issue_based: "",
+        service: "",
+        service_component: "",
+        brief_description: "",
+        user_verbatim: "",
+        dsat_cause: "test",
+        bb_driver_code2: "",
+        bb_driver_code3: "",
+        actual_issue: "",
+        controllability: "",
+        accountable_team: "",
+        q1_answer: "",
+        contacted_customer: "",
+        summary: "",
+        obs_in_call: "",
+        accountable_entity: "",
+        overall_reason_dsat: "",
+        coaching: "",
+        corrective_actions: ""
     };
+
+    componentDidMount() {
+        this.setState({
+            ...this.props.local_rca
+        });
+        console.log(this.props.local_rca);
+    }
 
     handleSubmit = e => {
         e.preventDefault();
 
         let rca_data = this.state;
-        rca_data.id = this.props.rca.id;
+        rca_data.id = this.props.local_rca.id;
         delete rca_data.modal;
 
         console.log(rca_data);
@@ -170,37 +201,89 @@ class RcaEditForm extends Component {
                             </Row>
                             <Row>
                                 <Col md={4}>
-                                    <SelectInput
-                                        type="select"
-                                        size="sm"
-                                        attr="dsat_cause"
-                                        label_name="What caused the DSAT? Code 1"
-                                        value={this.state.dsat_cause}
-                                        controlFunc={this.handleChange}
-                                        options={this.props.dsat_code1}
-                                    />
+                                    <FormGroup>
+                                        <Label size="sm" for="dsat_cause">
+                                            What caused DSAT?
+                                        </Label>
+                                        <Input
+                                            key="dsat_cause"
+                                            bsSize="sm"
+                                            type="select"
+                                            name="dsat_cause"
+                                            id="dsat_cause"
+                                            onChange={this.handleChange}
+                                            value={this.state.dsat_cause}
+                                            required
+                                        >
+                                            <option value="">--select--</option>
+                                            {this.props.dsat_code1.map(item => (
+                                                <option
+                                                    key={item.name}
+                                                    value={item.name}
+                                                >
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        </Input>
+                                    </FormGroup>
                                 </Col>
                                 <Col md={4}>
-                                    <SelectInput
-                                        type="select"
-                                        size="sm"
-                                        attr="bb_driver_code2"
-                                        label_name="BB Driver Code 2"
-                                        value={this.state.bb_driver_code2}
-                                        controlFunc={this.handleChange}
-                                        options={this.props.bb_driver_code2}
-                                    />
+                                    <FormGroup>
+                                        <Label size="sm" for="bb_driver_code2">
+                                            "BB Driver Code 2"
+                                        </Label>
+                                        <Input
+                                            key="bb_driver_code2"
+                                            bsSize="sm"
+                                            type="select"
+                                            name="bb_driver_code2"
+                                            id="bb_driver_code2"
+                                            onChange={this.handleChange}
+                                            value={this.state.bb_driver_code2}
+                                            required
+                                        >
+                                            <option value="">--select--</option>
+                                            {this.props.bb_driver_code2.map(
+                                                item => (
+                                                    <option
+                                                        key={item.name}
+                                                        value={item.name}
+                                                    >
+                                                        {item.name}
+                                                    </option>
+                                                )
+                                            )}
+                                        </Input>
+                                    </FormGroup>
                                 </Col>
                                 <Col md={4}>
-                                    <SelectInput
-                                        type="select"
-                                        size="sm"
-                                        attr="bb_driver_code3"
-                                        label_name="BB Driver Code 3"
-                                        value={this.state.bb_driver_code3}
-                                        controlFunc={this.handleChange}
-                                        options={this.props.bb_driver_code3}
-                                    />
+                                    <FormGroup>
+                                        <Label size="sm" for="bb_driver_code3">
+                                            "BB Driver Code 3"
+                                        </Label>
+                                        <Input
+                                            key="bb_driver_code3"
+                                            bsSize="sm"
+                                            type="select"
+                                            name="bb_driver_code3"
+                                            id="bb_driver_code3"
+                                            onChange={this.handleChange}
+                                            value={this.state.bb_driver_code2}
+                                            required
+                                        >
+                                            <option value="">--select--</option>
+                                            {this.props.bb_driver_code3.map(
+                                                item => (
+                                                    <option
+                                                        key={item.name}
+                                                        value={item.name}
+                                                    >
+                                                        {item.name}
+                                                    </option>
+                                                )
+                                            )}
+                                        </Input>
+                                    </FormGroup>
                                 </Col>
                             </Row>
                             <Row>
@@ -396,7 +479,4 @@ const mapStateToProps = state => ({
     accountable_team: state.surveys.teams
 });
 
-export default connect(
-    mapStateToProps,
-    { updateRca }
-)(RcaEditForm);
+export default connect(mapStateToProps, { updateRca })(RcaEditForm);

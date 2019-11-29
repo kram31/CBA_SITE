@@ -32,6 +32,7 @@ import SelectInput from "./components/SelectInput";
 import SurveyDetails from "../components/SurveyDetails";
 
 class RCAFormModal extends Component {
+  
   state = {
     surveyed_ticket: "",
     agent: "",
@@ -64,6 +65,24 @@ class RCAFormModal extends Component {
       }
     ]
   };
+
+  componentDidMount() {
+    
+    let rca = this.props.rca
+    if(this.props.rca.dsat_cause !== undefined) {
+
+      const {dsat_cause, bb_driver_code2, bb_driver_code3} = this.props.rca
+      
+      console.log(dsat_cause)
+  
+      rca.dsat_cause = dsat_cause.name
+      rca.bb_driver_code2 = bb_driver_code2.name
+      rca.bb_driver_code3 = bb_driver_code3.name
+    }
+    this.setState({...rca})
+
+
+  }
 
   handleToggle = () => {
     this.props.removeSurvey();
@@ -102,6 +121,9 @@ class RCAFormModal extends Component {
       agent: this.props.agent.operator_lan_id,
       completed: true
     };
+
+    console.log(rcaData)
+    console.log(agentData)
 
     this.props.addRCA(rcaData, agentData);
 

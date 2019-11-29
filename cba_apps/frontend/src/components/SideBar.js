@@ -5,7 +5,8 @@ import SimpleDataInput from "./bottombox/components/SimpleDataInput";
 import {
     agentViewCollapse,
     bottomboxDriverViewCollapse,
-    surveyViewCollapse
+    surveyViewCollapse,
+    dashboardViewCollapse
 } from "../actions/surveyActions";
 import { connect } from "react-redux";
 
@@ -32,6 +33,8 @@ class SideBar extends Component {
             this.props.bottomboxDriverViewCollapse();
         } else if (data === "survey_view") {
             this.props.surveyViewCollapse();
+        } else if (data === "dashboard") {
+            this.props.dashboardViewCollapse();
         }
     };
 
@@ -91,6 +94,21 @@ class SideBar extends Component {
                 ></NavItem>
 
                 <NavItem className="sidebar-navitem">
+                    <NavLink
+                        className="sidebar-navlink"
+                        onClick={() => this.handleCollapse("dashboard")}
+                        style={this.style}
+                    >
+                        <i
+                            style={{
+                                color: !this.props.dashboard_view_collapse
+                                    ? "white"
+                                    : "#ffed00"
+                            }}
+                            className="fa fa-chart-area fa-2x"
+                        />{" "}
+                        <p style={{ fontSize: "12px" }}>Dashboard</p>
+                    </NavLink>
                     <NavLink
                         className="sidebar-navlink"
                         onClick={() => this.handleCollapse("survey_view")}
@@ -168,11 +186,13 @@ class SideBar extends Component {
 const mapStateToProps = state => ({
     agent_view_collapse: state.surveys.agent_view_collapse,
     bottombox_view_collapse: state.surveys.bottombox_view_collapse,
-    survey_view_collapse: state.surveys.survey_view_collapse
+    survey_view_collapse: state.surveys.survey_view_collapse,
+    dashboard_view_collapse: state.surveys.dashboard_view_collapse
 });
 
 export default connect(mapStateToProps, {
     agentViewCollapse,
     bottomboxDriverViewCollapse,
-    surveyViewCollapse
+    surveyViewCollapse,
+    dashboardViewCollapse
 })(SideBar);

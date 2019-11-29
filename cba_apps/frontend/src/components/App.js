@@ -194,7 +194,7 @@ class App extends Component {
 
                             <Route
                                 exact
-                                path="/"
+                                path="/cba"
                                 render={props => (
                                     <Welcome
                                         {...props}

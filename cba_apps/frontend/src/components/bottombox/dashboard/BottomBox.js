@@ -103,9 +103,13 @@ class BottomBox extends Component {
                                 </Collapse>
                             </div>
                             <div className="section">
-                                <Fade>
-                                    <Dashboard />
-                                </Fade>
+                                <Collapse
+                                    isOpen={this.props.dashboard_view_collapse}
+                                >
+                                    <Fade>
+                                        <Dashboard />
+                                    </Fade>
+                                </Collapse>
                             </div>
                         </div>
                     </div>
@@ -123,7 +127,8 @@ const mapStateToProps = state => ({
     rcas: state.surveys.rcas,
     agent_view_collapse: state.surveys.agent_view_collapse,
     bottombox_view_collapse: state.surveys.bottombox_view_collapse,
-    survey_view_collapse: state.surveys.survey_view_collapse
+    survey_view_collapse: state.surveys.survey_view_collapse,
+    dashboard_view_collapse: state.surveys.dashboard_view_collapse
 });
 
 export default connect(mapStateToProps, {

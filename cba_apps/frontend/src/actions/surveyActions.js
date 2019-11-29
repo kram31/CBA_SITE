@@ -52,7 +52,8 @@ import {
     GET_BOTTOMBOX_SURVEY_VIEW,
     GET_TOPBOX_SURVEY_VIEW,
     GET_COMPLETED_SURVEY_VIEW,
-    GET_ALL_SURVEY_VIEW
+    GET_ALL_SURVEY_VIEW,
+    COLLAPSE_DASHBOARD_VIEW
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -93,6 +94,12 @@ export const getTopboxSurveyView = () => dispatch => {
 export const getBottomboxSurveyView = () => dispatch => {
     dispatch({
         type: GET_BOTTOMBOX_SURVEY_VIEW
+    });
+};
+
+export const dashboardViewCollapse = () => dispatch => {
+    dispatch({
+        type: COLLAPSE_DASHBOARD_VIEW
     });
 };
 
@@ -705,6 +712,7 @@ export const addRCA = (rcaData, agentData) => (dispatch, getState) => {
                     tokenConfig(getState)
                 )
                 .then(res => {
+                    console.log(res.data);
                     dispatch({
                         type: UPDATE_SURVEY,
                         payload: res.data
@@ -712,7 +720,7 @@ export const addRCA = (rcaData, agentData) => (dispatch, getState) => {
                 })
                 .catch(err => console.log(err.response));
         })
-        .catch(err => console.log(err.response.data));
+        .catch(err => console.log(err.response));
 };
 
 export const getTeamLeads = () => dispatch => {

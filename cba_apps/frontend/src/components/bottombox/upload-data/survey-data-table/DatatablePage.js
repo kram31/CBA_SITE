@@ -216,7 +216,7 @@ class DatatablePage extends Component {
 
                         <Button
                             color={
-                                this.props.surveys_view
+                                this.props.surveys
                                     .filter(
                                         survey =>
                                             cellprops.original
