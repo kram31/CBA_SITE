@@ -72,7 +72,7 @@ class RcaEditForm extends Component {
         this.setState({
             ...this.props.local_rca
         });
-        console.log(this.props.local_rca);
+        // console.log(this.props.local_rca);
     }
 
     handleSubmit = e => {

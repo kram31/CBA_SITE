@@ -21,6 +21,8 @@ import {
 } from "../../../actions/surveyActions";
 import SingleInput from "../rca/components/SingleInput";
 
+import DataTable from "./DataTable";
+
 class SimpleDataInput extends Component {
     state = {
         modal: false,
@@ -121,6 +123,17 @@ class SimpleDataInput extends Component {
                                     />
                                 </Col>
                             </Row>
+                            <Row>
+                                <Col>
+                                    <DataTable
+                                        table={
+                                            this.props.data_name == "addSkill"
+                                                ? this.props.skills
+                                                : this.props.teamleads
+                                        }
+                                    />
+                                </Col>
+                            </Row>
                         </ModalBody>
                         <ModalFooter>
                             <Button
@@ -145,14 +158,16 @@ class SimpleDataInput extends Component {
     }
 }
 
-export default connect(
-    null,
-    {
-        addTeam,
-        addSkill,
-        addTeamLead,
-        addDsatCode1,
-        addBbDriverCode2,
-        addBbDriverCode3
-    }
-)(SimpleDataInput);
+const mapStateToProps = state => ({
+    teamleads: state.surveys.teamleads,
+    skills: state.surveys.skills
+});
+
+export default connect(mapStateToProps, {
+    addTeam,
+    addSkill,
+    addTeamLead,
+    addDsatCode1,
+    addBbDriverCode2,
+    addBbDriverCode3
+})(SimpleDataInput);

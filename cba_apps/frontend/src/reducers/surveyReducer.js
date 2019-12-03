@@ -120,7 +120,7 @@ const initialState = {
     colors: ["#ffed00", "#64ff00", "#00c9ff", "white", "#666666", "#d9d9d9"],
     agent_view_collapse: false,
     bottombox_view_collapse: false,
-    survey_view_collapse: true,
+    survey_view_collapse: false,
     dashboard_view_collapse: true,
     surveys: [],
     agents: [],
