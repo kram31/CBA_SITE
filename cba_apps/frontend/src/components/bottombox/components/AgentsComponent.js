@@ -381,7 +381,7 @@ class AgentsComponent extends Component {
                                                                                         .length
                                                                             ),
                                                                             backgroundColor:
-                                                                                "black"
+                                                                                "#ffed00"
                                                                         },
                                                                         {
                                                                             label:
@@ -398,7 +398,7 @@ class AgentsComponent extends Component {
                                                                                         .length
                                                                             ),
                                                                             backgroundColor:
-                                                                                "yellow"
+                                                                                "#64ff00"
                                                                         }
                                                                     ],
                                                                     labels: this.props.agent_chart_data.map(
@@ -436,9 +436,17 @@ class AgentsComponent extends Component {
                                     <Row className="mt-3">
                                         <Col>
                                             <SurveyList
-                                                survey_list={this.agent_survey_list(
-                                                    this.props.agent.surveys
-                                                )}
+                                                survey_list={this.props.agent_chart_data
+                                                    .map(
+                                                        item =>
+                                                            Object.values(
+                                                                item
+                                                            )[0]
+                                                    )
+                                                    .flat(Infinity)}
+                                                // survey_list={this.agent_survey_list(
+                                                //     this.props.agent.surveys
+                                                // )}
                                             />
                                         </Col>
                                     </Row>

@@ -111,7 +111,7 @@ export default class NavBar extends React.Component {
                         <Nav className="mr-auto" navbar>
                             <NavItem>
                                 <RouterNavLink
-                                    to="/"
+                                    to="/cba"
                                     className="nav-link"
                                     exact
                                     style={{ color: "white" }}

@@ -85,8 +85,6 @@ const getMonth = givenDate => {
     return longName;
 };
 
-console.log(getMonth("2012-07-01"));
-
 let get_data = filtered_list => {
     let curr = new Date();
 
@@ -293,7 +291,7 @@ const surveyReducer = (state = initialState, action) => {
         case UPDATE_AGENT_CHART_DATA:
             return {
                 ...state,
-                chart_data: action.payload
+                agent_chart_data: action.payload
             };
         case UPDATE_BOTTOMBOX_DRIVER_STATE:
             return {
