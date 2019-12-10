@@ -136,7 +136,7 @@ export default class Welcome extends React.Component {
                                 </Col>
                                 <Col>
                                     <RouterNavLink
-                                        to="/"
+                                        to="/ccms"
                                         className="section-navlink"
                                         exact
                                         style={{ textDecoration: "none" }}

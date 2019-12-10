@@ -36,6 +36,7 @@ import {
 class BottomBox extends Component {
     componentDidMount() {
         this.props.getAllData2();
+        // console.log(this.props.auth);
     }
 
     render() {
@@ -128,7 +129,8 @@ const mapStateToProps = state => ({
     agent_view_collapse: state.surveys.agent_view_collapse,
     bottombox_view_collapse: state.surveys.bottombox_view_collapse,
     survey_view_collapse: state.surveys.survey_view_collapse,
-    dashboard_view_collapse: state.surveys.dashboard_view_collapse
+    dashboard_view_collapse: state.surveys.dashboard_view_collapse,
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, {

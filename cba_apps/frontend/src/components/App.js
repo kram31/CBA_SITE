@@ -6,6 +6,8 @@ import { getUserDetails } from "./GraphService";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
+import Ccms from "./ccms/components/Ccms";
+
 import BottomBox from "./bottombox/dashboard/BottomBox";
 import Alerts from "./bottombox/components/Alerts";
 
@@ -119,14 +121,16 @@ class App extends Component {
                     isAuthenticated: true,
                     user: {
                         displayName: user.displayName,
-                        email: user.mail || user.userPrincipalName
+                        email: user.mail || user.userPrincipalName,
+                        accessToken: accessToken
                     },
                     error: null
                 });
                 store.dispatch(
                     loadUser({
                         displayName: user.displayName,
-                        email: user.mail || user.userPrincipalName
+                        email: user.mail || user.userPrincipalName,
+                        accessToken: accessToken
                     })
                 );
                 // store.dispatch(getAllData2());
@@ -218,6 +222,17 @@ class App extends Component {
                                         component={
                                             this.state.isAuthenticated &&
                                             BottomBox
+                                        }
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path="/ccms"
+                                        isAuthenticated={
+                                            this.state.isAuthenticated
+                                        }
+                                        user={this.state.user}
+                                        component={
+                                            this.state.isAuthenticated && Ccms
                                         }
                                     />
                                 </div>

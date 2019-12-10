@@ -84,3 +84,7 @@ export const GET_ALL_DATA = "GET_ALL_DATA";
 
 export const UPDATE_AGENT = "UPDATE_AGENT";
 export const ADD_AGENT = "ADD_AGENT";
+
+// CCMS
+
+export const GET_MAILS = "GET_MAILS";

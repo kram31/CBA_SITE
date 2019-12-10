@@ -14,7 +14,7 @@ const PrivateRoute = ({
             if (isAuthenticated) {
                 return <Component {...props} />;
             } else if (!isAuthenticated) {
-                return <Redirect to="/" />;
+                return <Redirect to="/cba" />;
             }
         }}
     />
