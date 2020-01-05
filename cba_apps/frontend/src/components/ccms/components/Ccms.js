@@ -5,38 +5,73 @@ import { Table } from "reactstrap";
 
 import { getMails, isFetching, getSurveys } from "../../../actions/ccmsActions";
 
-import config from "../../Config";
-import { getUserMails } from "../../GraphService";
+import { Spinner } from "reactstrap";
+
+const Mail_Content = props => {
+    if (props.mails) {
+        return props.mails.map(mail => {
+            console.log(mail);
+            return (
+                <tr key={mail.id}>
+                    <td>{mail.email_subject}</td>
+                    <td>{mail.sender_name}</td>
+                    <td>{mail.sender_email_address}</td>
+                </tr>
+            );
+        });
+    } else {
+        return <h1>No mails</h1>;
+    }
+};
 
 class Ccms extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            mails: []
-        };
+        // this.state = {
+        //     mails: props.mails
+        // };
+        props.getMails();
     }
 
-    async componentDidMount() {
-        try {
-            // Get the user's access token
-            var accessToken = await window.msal.acquireTokenSilent({
-                scopes: config.scopes
-            });
-            // Get the user's events
-            var mails = await getUserMails(accessToken);
-            // Update the array of events in state
-            this.setState({ mails: mails.value });
-            this.props.getMails(mails.value);
-            this.props.getSurveys();
+    // componentDidMount() {
+    //     // try {
+    //     //     // Get the user's access token
+    //     //     var accessToken = await window.msal.acquireTokenSilent({
+    //     //         scopes: config.scopes
+    //     //     });
+    //     //     // Get the user's events
+    //     //     var mails = await getUserMails(accessToken);
+    //     //     // Update the array of events in state
+    //     //     this.setState({ mails: mails.value });
+    //     //     this.props.getMails(mails.value);
+    //     //     this.props.getSurveys();
+    //     //     console.log("initialize state");
+    //     // } catch (err) {
+    //     //     console.log(err);
+    //     // }
+    //     // this.props.getMails();
+    //     console.log(this.props.mails);
+    // }
 
-            console.log("initialize state");
-        } catch (err) {
-            console.log(err);
-        }
-        console.log(this.props.mails);
-    }
     render() {
+        const { mails } = this.props;
+
+        console.log(mails.isFetching);
+
+        if (mails.isFetching)
+            return (
+                <Spinner
+                    style={{
+                        width: "3rem",
+                        height: "3rem",
+                        top: "50%",
+                        left: "50%",
+                        position: "fixed"
+                    }}
+                />
+            );
+
         return (
             <div>
                 <h1>Mails</h1>
@@ -50,15 +85,7 @@ class Ccms extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.mails.map(mail => {
-                            return (
-                                <tr key={mail.id}>
-                                    <td>{mail.subject}</td>
-                                    <td>{mail.sender.emailAddress.name}</td>
-                                    <td>{mail.sender.emailAddress.address}</td>
-                                </tr>
-                            );
-                        })}
+                        <Mail_Content mails={this.props.mails.mails} />
                     </tbody>
                 </Table>
             </div>
@@ -67,7 +94,7 @@ class Ccms extends Component {
 }
 
 const mapStateToProps = state => ({
-    mails: state.ccms.mails,
+    mails: state.ccms,
     auth: state.auth
 });
 

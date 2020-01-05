@@ -2,14 +2,25 @@ import { GET_MAILS, FETCHING, STOP_FETCHING, GET_SURVEYS } from "./types";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "http://localhost:8282";
 
-export const getMails = mails => dispatch => {
+export const getMails = () => dispatch => {
     dispatch({
-        type: GET_MAILS,
-        payload: mails
+        type: FETCHING
     });
-    // dispatch({});
+
+    axios
+        .get("http://localhost:8282/api/mails/")
+        .then(res => {
+            dispatch({
+                type: GET_MAILS,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 export const isFetching = () => dispatch => {
