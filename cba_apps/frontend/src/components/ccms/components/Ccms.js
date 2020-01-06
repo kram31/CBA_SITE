@@ -7,23 +7,6 @@ import { getMails, isFetching, getSurveys } from "../../../actions/ccmsActions";
 
 import { Spinner } from "reactstrap";
 
-const Mail_Content = props => {
-    if (props.mails) {
-        return props.mails.map(mail => {
-            console.log(mail);
-            return (
-                <tr key={mail.id}>
-                    <td>{mail.email_subject}</td>
-                    <td>{mail.sender_name}</td>
-                    <td>{mail.sender_email_address}</td>
-                </tr>
-            );
-        });
-    } else {
-        return <h1>No mails</h1>;
-    }
-};
-
 class Ccms extends Component {
     constructor(props) {
         super(props);
@@ -97,6 +80,23 @@ const mapStateToProps = state => ({
     mails: state.ccms,
     auth: state.auth
 });
+
+const Mail_Content = props => {
+    if (props.mails) {
+        return props.mails.map(mail => {
+            console.log(mail);
+            return (
+                <tr key={mail.id}>
+                    <td>{mail.email_subject}</td>
+                    <td>{mail.sender_name}</td>
+                    <td>{mail.sender_email_address}</td>
+                </tr>
+            );
+        });
+    } else {
+        return <h1>No mails</h1>;
+    }
+};
 
 export default connect(mapStateToProps, { getMails, isFetching, getSurveys })(
     Ccms

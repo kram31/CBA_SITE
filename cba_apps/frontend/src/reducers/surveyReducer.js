@@ -196,11 +196,14 @@ const surveyReducer = (state = initialState, action) => {
                 agents,
                 teamleads,
                 yearSelection: [
-                    ...new Set(
-                        surveys.map(survey =>
-                            new Date(survey.date_issued).getFullYear()
-                        )
-                    )
+                    2020,
+                    2019,
+                    2018
+                    // ...new Set(
+                    //     surveys.map(survey =>
+                    //         new Date(survey.date_issued).getFullYear()
+                    //     )
+                    // )
                 ],
                 chart_data: get_data(
                     surveys

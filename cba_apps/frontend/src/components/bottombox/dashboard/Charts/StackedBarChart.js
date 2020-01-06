@@ -50,8 +50,8 @@ class StackedBarChart extends Component {
         this.setState({
             monthSelection,
             curr_year,
-            curr_month,
-            curr_month_string: monthSelection[10].string
+            curr_month
+            // curr_month_string: monthSelection[10].string
         });
     }
 
@@ -61,7 +61,11 @@ class StackedBarChart extends Component {
         let curr_year = !year ? curr.getFullYear() : year;
         let curr_month = curr.getMonth() + 1;
 
-        let monthRangeInt = Array.from(new Array(curr_month), (x, i) => i + 1);
+        let monthRangeInt = !year
+            ? Array.from(new Array(curr_month), (x, i) => i + 1)
+            : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
+
+        console.log(monthRangeInt);
 
         // filter data per month
         let surveyCountPerMonth = monthRangeInt.map(month => {
@@ -175,6 +179,29 @@ class StackedBarChart extends Component {
                 this.props.filtered_list,
                 e.target.value
             );
+
+            let curr = new Date();
+
+            let curr_year = curr.getFullYear();
+            let curr_month = curr.getMonth() + 1;
+
+            let monthRangeInt =
+                e.target.value == new Date().getFullYear()
+                    ? Array.from(new Array(curr_month), (x, i) => i + 1)
+                    : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+            let monthSelection = monthRangeInt.map(item => {
+                let monthName = new Intl.DateTimeFormat("en-US", {
+                    month: "short"
+                }).format;
+                let name = monthName(new Date(`${curr_year}-${item}-01`));
+                return { string: name, int: item };
+            });
+
+            this.setState({
+                monthSelection
+            });
+
             if (this.props.agent_chart_data) {
                 this.props.updateAgentChartData(new_data);
             }
