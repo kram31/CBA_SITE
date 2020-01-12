@@ -240,6 +240,7 @@ class Dashboard extends Component {
         return { ...survey, ...x };
     });
     render() {
+  
         return (
             <Fragment>
                 <Card>

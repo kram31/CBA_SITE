@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
 import { Table } from "reactstrap";
 
 import { getMails, isFetching, getSurveys } from "../../../actions/ccmsActions";
 
-import { Spinner } from "reactstrap";
+import { Spinner, Card, CardBody, CardHeader, Container } from "reactstrap";
 
 class Ccms extends Component {
     constructor(props) {
@@ -57,8 +57,12 @@ class Ccms extends Component {
 
         return (
             <div>
-                <h1>Mails</h1>
-                <Table style={{ color: "white" }}>
+                <Container>
+
+                    <h1>CCMS List</h1>
+                    <CCMS_List mails={this.props.mails.mails}/>
+                </Container>
+                {/* <Table style={{ color: "white" }}>
                     <thead>
                         <tr>
                             <th scope="col">Subject</th>
@@ -70,7 +74,7 @@ class Ccms extends Component {
                     <tbody>
                         <Mail_Content mails={this.props.mails.mails} />
                     </tbody>
-                </Table>
+                </Table> */}
             </div>
         );
     }
@@ -97,6 +101,30 @@ const Mail_Content = props => {
         return <h1>No mails</h1>;
     }
 };
+
+const CCMS_List = props => {
+    if (props.mails) {
+        return props.mails.map(mail => {
+            
+            return (
+
+        
+                    <Card key={mail.id} className="mb-4">
+                        <CardHeader>
+                            <h3>{mail.email_subject}</h3>
+                        </CardHeader>
+                        <CardBody>
+                            <p>{mail.sender_name}</p>
+                            <p>{mail.sender_email_address}</p>
+                        </CardBody>
+                    </Card>
+
+            )
+        })
+    } else {
+        return <h1>No mails</h1>;
+    }
+}
 
 export default connect(mapStateToProps, { getMails, isFetching, getSurveys })(
     Ccms
