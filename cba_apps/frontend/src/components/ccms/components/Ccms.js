@@ -1,21 +1,49 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import { Table } from "reactstrap";
+import {
+    getMails,
+    isFetching,
+    getSurveys,
+    ack_entry,
+    getComments
+} from "../../../actions/ccmsActions";
 
-import { getMails, isFetching, getSurveys } from "../../../actions/ccmsActions";
+import {
+    Spinner,
+    Card,
+    CardBody,
+    CardHeader,
+    Container,
+    Row,
+    Col,
+    Form,
+    Input
+} from "reactstrap";
 
-import { Spinner, Card, CardBody, CardHeader, Container } from "reactstrap";
+import UpdateInput from "./UpdateInput";
 
 class Ccms extends Component {
     constructor(props) {
         super(props);
 
-        // this.state = {
-        //     mails: props.mails
-        // };
         props.getMails();
+        props.getComments();
     }
+
+    handleClick = childData => {
+        const { user } = this.props.auth;
+        // console.log(`working ${childData}`);
+        // console.log(this.getCurrentDate());
+        // console.log(user.displayName);
+        let data = {
+            is_acknowledged: true,
+            acknowledged_by: user.displayName,
+            date_acknowledged: this.getCurrentDate()
+        };
+        this.props.ack_entry(childData, data);
+        // console.log(this.props.auth);
+    };
 
     // componentDidMount() {
     //     // try {
@@ -37,10 +65,23 @@ class Ccms extends Component {
     //     console.log(this.props.mails);
     // }
 
+    getCurrentDate = () => {
+        let today = new Date();
+        let dd = today.getDate();
+        let mm = today.getMonth() + 1;
+
+        let yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = "0" + dd;
+        }
+        if (mm < 10) {
+            mm = "0" + mm;
+        }
+        return mm + "/" + dd + "/" + yyyy;
+    };
+
     render() {
         const { mails } = this.props;
-
-        console.log(mails.isFetching);
 
         if (mails.isFetching)
             return (
@@ -58,23 +99,14 @@ class Ccms extends Component {
         return (
             <div>
                 <Container>
-
-                    <h1>CCMS List</h1>
-                    <CCMS_List mails={this.props.mails.mails}/>
+                    <h1 style={{ color: "white" }}>CCMS List</h1>
+                    <CCMS_List
+                        mails={this.props.mails.mails}
+                        action={this.handleClick}
+                        curr_date={this.getCurrentDate()}
+                        comments={this.props.comments}
+                    />
                 </Container>
-                {/* <Table style={{ color: "white" }}>
-                    <thead>
-                        <tr>
-                            <th scope="col">Subject</th>
-
-                            <th scope="col">From</th>
-                            <th scope="col">Email address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <Mail_Content mails={this.props.mails.mails} />
-                    </tbody>
-                </Table> */}
             </div>
         );
     }
@@ -82,19 +114,88 @@ class Ccms extends Component {
 
 const mapStateToProps = state => ({
     mails: state.ccms,
-    auth: state.auth
+    auth: state.auth,
+    comments: state.ccms.comments
 });
 
-const Mail_Content = props => {
+const CCMS_List = props => {
     if (props.mails) {
         return props.mails.map(mail => {
-            console.log(mail);
             return (
-                <tr key={mail.id}>
-                    <td>{mail.email_subject}</td>
-                    <td>{mail.sender_name}</td>
-                    <td>{mail.sender_email_address}</td>
-                </tr>
+                <Card key={mail.id} className="mb-4">
+                    <CardHeader>
+                        <h3>{mail.email_subject}</h3>
+                    </CardHeader>
+                    <CardBody>
+                        <p>
+                            <span>Sender Name:</span> {mail.sender_name}
+                        </p>
+                        <p>
+                            <span>Sender Email Address:</span>{" "}
+                            {mail.sender_email_address}
+                        </p>
+                        <Row>
+                            <Col>
+                                {mail.is_acknowledged ? (
+                                    <p>
+                                        <span>
+                                            <i
+                                                className="fa fa-check-circle"
+                                                style={{ color: "green" }}
+                                            />
+                                        </span>{" "}
+                                        Acknowledged by {mail.acknowledged_by}{" "}
+                                        on {mail.date_acknowledged}
+                                    </p>
+                                ) : (
+                                    <p
+                                        onClick={() => props.action(mail.id)}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <span>
+                                            <i
+                                                className="fa fa-check-circle"
+                                                style={{ color: "red" }}
+                                            />
+                                        </span>{" "}
+                                        Acknowledge?
+                                    </p>
+                                )}
+                            </Col>
+                            <Col>
+                                <p>
+                                    <span>
+                                        <i
+                                            className="fa fa-check-circle"
+                                            style={{ color: "green" }}
+                                        />
+                                    </span>{" "}
+                                    Resolved
+                                </p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>Updates</Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Comment_List
+                                    comments={props.comments.filter(
+                                        item => mail.id == item.mail
+                                    )}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <UpdateInput
+                                    curr_date={props.curr_date}
+                                    mail={mail}
+                                />
+                            </Col>
+                        </Row>
+                    </CardBody>
+                </Card>
             );
         });
     } else {
@@ -102,30 +203,21 @@ const Mail_Content = props => {
     }
 };
 
-const CCMS_List = props => {
-    if (props.mails) {
-        return props.mails.map(mail => {
-            
-            return (
+const Comment_List = props => {
+    return props.comments.map(comment => (
+        <Fragment>
+            <p>
+                {comment.contributor_name}: {comment.entry}
+            </p>
+            <p>{comment.comment_entry_date}</p>
+        </Fragment>
+    ));
+};
 
-        
-                    <Card key={mail.id} className="mb-4">
-                        <CardHeader>
-                            <h3>{mail.email_subject}</h3>
-                        </CardHeader>
-                        <CardBody>
-                            <p>{mail.sender_name}</p>
-                            <p>{mail.sender_email_address}</p>
-                        </CardBody>
-                    </Card>
-
-            )
-        })
-    } else {
-        return <h1>No mails</h1>;
-    }
-}
-
-export default connect(mapStateToProps, { getMails, isFetching, getSurveys })(
-    Ccms
-);
+export default connect(mapStateToProps, {
+    getMails,
+    isFetching,
+    getSurveys,
+    ack_entry,
+    getComments
+})(Ccms);

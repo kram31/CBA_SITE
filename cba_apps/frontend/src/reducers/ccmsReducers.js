@@ -1,8 +1,16 @@
-import { GET_MAILS, FETCHING, STOP_FETCHING } from "../actions/types";
+import {
+    GET_MAILS,
+    FETCHING,
+    STOP_FETCHING,
+    ACK_ENTRY,
+    ADD_UPDATE,
+    GET_COMMENTS
+} from "../actions/types";
 
 const initialState = {
     mails: [],
-    isFetching: false
+    isFetching: false,
+    comments: []
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -13,7 +21,6 @@ const ccmsReducer = (state = initialState, action) => {
                 isFetching: true
             };
         case STOP_FETCHING:
-            console.log("working");
             return {
                 ...state,
                 isFetching: false
@@ -23,6 +30,36 @@ const ccmsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 mails: action.payload
+            };
+        case GET_COMMENTS:
+            // console.log(action.payload);
+            return {
+                ...state,
+                comments: action.payload
+            };
+        case ACK_ENTRY:
+            // console.log(action.payload);
+            return {
+                ...state,
+                mails: state.mails.map(item => {
+                    if (item.id == action.payload.id) {
+                        return action.payload;
+                    } else {
+                        return item;
+                    }
+                })
+            };
+        case ADD_UPDATE:
+            // console.log(action.payload);
+            return {
+                ...state,
+                mails: state.mails.map(item => {
+                    if (item.id == action.payload.id) {
+                        return action.payload;
+                    } else {
+                        return item;
+                    }
+                })
             };
         default:
             return state;

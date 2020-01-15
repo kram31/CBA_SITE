@@ -88,3 +88,6 @@ export const ADD_AGENT = "ADD_AGENT";
 // CCMS
 
 export const GET_MAILS = "GET_MAILS";
+export const ACK_ENTRY = "ACK_ENTRY";
+export const ADD_UPDATE = "ADD_UPDATE";
+export const GET_COMMENTS = "GET_COMMENTS";
