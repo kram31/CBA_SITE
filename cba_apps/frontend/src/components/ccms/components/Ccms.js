@@ -16,9 +16,7 @@ import {
     CardHeader,
     Container,
     Row,
-    Col,
-    Form,
-    Input
+    Col
 } from "reactstrap";
 
 import UpdateInput from "./UpdateInput";
@@ -123,8 +121,12 @@ const CCMS_List = props => {
         return props.mails.map(mail => {
             return (
                 <Card key={mail.id} className="mb-4">
-                    <CardHeader>
-                        <h3>{mail.email_subject}</h3>
+                    <CardHeader className="pt-3">
+                        <h3>
+                            <a href="" style={{ color: "blue" }}>
+                                {mail.email_subject}
+                            </a>
+                        </h3>
                     </CardHeader>
                     <CardBody>
                         <p>
@@ -134,9 +136,40 @@ const CCMS_List = props => {
                             <span>Sender Email Address:</span>{" "}
                             {mail.sender_email_address}
                         </p>
-                        <Row>
-                            <Col>
-                                {mail.is_acknowledged ? (
+                        <p>WILL DISPLAY THE EMAIL CONTENT HERE...</p>
+                        <Container>
+                            <Row className="border-top border-bottom text-center pt-3">
+                                <Col className="align-middle">
+                                    {mail.is_acknowledged ? (
+                                        <p>
+                                            <span>
+                                                <i
+                                                    className="fa fa-check-circle"
+                                                    style={{ color: "green" }}
+                                                />
+                                            </span>{" "}
+                                            Acknowledged by{" "}
+                                            {mail.acknowledged_by} on{" "}
+                                            {mail.date_acknowledged}
+                                        </p>
+                                    ) : (
+                                        <p
+                                            onClick={() =>
+                                                props.action(mail.id)
+                                            }
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <span>
+                                                <i
+                                                    className="fa fa-check-circle"
+                                                    style={{ color: "red" }}
+                                                />
+                                            </span>{" "}
+                                            Acknowledge?
+                                        </p>
+                                    )}
+                                </Col>
+                                <Col>
                                     <p>
                                         <span>
                                             <i
@@ -144,38 +177,13 @@ const CCMS_List = props => {
                                                 style={{ color: "green" }}
                                             />
                                         </span>{" "}
-                                        Acknowledged by {mail.acknowledged_by}{" "}
-                                        on {mail.date_acknowledged}
+                                        Resolved
                                     </p>
-                                ) : (
-                                    <p
-                                        onClick={() => props.action(mail.id)}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <span>
-                                            <i
-                                                className="fa fa-check-circle"
-                                                style={{ color: "red" }}
-                                            />
-                                        </span>{" "}
-                                        Acknowledge?
-                                    </p>
-                                )}
-                            </Col>
-                            <Col>
-                                <p>
-                                    <span>
-                                        <i
-                                            className="fa fa-check-circle"
-                                            style={{ color: "green" }}
-                                        />
-                                    </span>{" "}
-                                    Resolved
-                                </p>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>Updates</Col>
+                                </Col>
+                            </Row>
+                        </Container>
+                        <Row className="my-3">
+                            <Col>Updates: </Col>
                         </Row>
                         <Row>
                             <Col>
@@ -186,7 +194,7 @@ const CCMS_List = props => {
                                 />
                             </Col>
                         </Row>
-                        <Row>
+                        <Row className="pb-2">
                             <Col>
                                 <UpdateInput
                                     curr_date={props.curr_date}
@@ -204,13 +212,36 @@ const CCMS_List = props => {
 };
 
 const Comment_List = props => {
+    const commentBoxStyle = {
+        backgroundColor: "white",
+        color: "black",
+        display: "inline",
+        paddingLeft: "10px",
+        paddingRight: "10px",
+        borderRadius: "25px",
+        paddingTop: "3px",
+        paddingBottom: "3px",
+        fontSize: "15px"
+    };
+
+    const dateCommentStyle = {
+        fontSize: "12px",
+        marginTop: "6px",
+        marginLeft: "5px"
+    };
+
     return props.comments.map(comment => (
-        <Fragment>
-            <p>
-                {comment.contributor_name}: {comment.entry}
+        <div key={comment.id}>
+            <p style={commentBoxStyle}>
+                <a href="" style={{ color: "blue", fontWeight: "bold" }}>
+                    {comment.contributor_name}
+                </a>
+                : {comment.entry}
             </p>
-            <p>{comment.comment_entry_date}</p>
-        </Fragment>
+            <p style={dateCommentStyle}>
+                date posted: {comment.comment_entry_date}
+            </p>
+        </div>
     ));
 };
 

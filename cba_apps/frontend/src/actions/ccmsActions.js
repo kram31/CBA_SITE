@@ -73,12 +73,13 @@ export const getComments = () => dispatch => {
 };
 
 export const add_update = data => dispatch => {
+    console.log("add update");
     dispatch({
         type: FETCHING
     });
 
     axios
-        .post(`http://localhost:8282/api/comments/`, data)
+        .post("http://localhost:8282/api/comments/", data)
         .then(res => {
             dispatch({
                 type: ADD_UPDATE,

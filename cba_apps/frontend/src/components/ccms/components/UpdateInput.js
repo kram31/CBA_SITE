@@ -2,12 +2,7 @@ import React, { Component, Fragment } from "react";
 
 import { connect } from "react-redux";
 
-import {
-    getMails,
-    isFetching,
-    getSurveys,
-    ack_entry
-} from "../../../actions/ccmsActions";
+import { add_update } from "../../../actions/ccmsActions";
 
 import { Form, Input } from "reactstrap";
 
@@ -44,6 +39,8 @@ class UpdateInput extends Component {
             // entry send
             console.log(data);
 
+            this.props.add_update(data);
+
             this.setState({
                 entry: ""
             });
@@ -60,6 +57,8 @@ class UpdateInput extends Component {
                         onChange={this.handleChange}
                         onKeyDown={e => this.handleEnter(e)}
                         value={this.state.entry}
+                        placeholder="Enter update here..."
+                        autocomplete="off"
                     />
                 </Form>
             </Fragment>
@@ -72,4 +71,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {})(UpdateInput);
+export default connect(mapStateToProps, { add_update })(UpdateInput);

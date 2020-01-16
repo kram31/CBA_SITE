@@ -53,14 +53,9 @@ const ccmsReducer = (state = initialState, action) => {
             // console.log(action.payload);
             return {
                 ...state,
-                mails: state.mails.map(item => {
-                    if (item.id == action.payload.id) {
-                        return action.payload;
-                    } else {
-                        return item;
-                    }
-                })
+                comments: [...state.comments, action.payload]
             };
+
         default:
             return state;
     }
