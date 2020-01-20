@@ -118,7 +118,7 @@ const initialState = {
     colors: ["#ffed00", "#64ff00", "#00c9ff", "white", "#666666", "#d9d9d9"],
     agent_view_collapse: false,
     bottombox_view_collapse: false,
-    survey_view_collapse: false,
+    survey_view_collapse: true,
     dashboard_view_collapse: true,
     surveys: [],
     agents: [],
@@ -196,14 +196,13 @@ const surveyReducer = (state = initialState, action) => {
                 agents,
                 teamleads,
                 yearSelection: [
-                    2020,
-                    2019,
-                    2018
-                    // ...new Set(
-                    //     surveys.map(survey =>
-                    //         new Date(survey.date_issued).getFullYear()
-                    //     )
-                    // )
+                    new Date().getFullYear(),
+
+                    ...new Set(
+                        surveys.map(survey =>
+                            new Date(survey.date_issued).getFullYear()
+                        )
+                    )
                 ],
                 chart_data: get_data(
                     surveys
