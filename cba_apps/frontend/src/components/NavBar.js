@@ -16,6 +16,8 @@ import {
 import "@fortawesome/fontawesome-free/css/all.css";
 import dxc from "../images/dxc.png";
 
+import { connect } from "react-redux";
+
 function UserAvatar(props) {
     // If a user avatar is available, return an img tag with the pic
     if (props.user.avatar) {
@@ -49,14 +51,29 @@ function AuthNavItem(props) {
                 </DropdownToggle>
                 <DropdownMenu right>
                     <h5 className="dropdown-item-text mb-0">
-                        {props.user.displayName}
+                        {props.user.fullname}
                     </h5>
                     <p className="dropdown-item-text text-muted mb-0">
-                        {props.user.email}
+                        {props.user.username}
                     </p>
                     <DropdownItem divider />
-                    <DropdownItem onClick={props.authButtonMethod}>
-                        Sign Out
+                    <DropdownItem>
+                        {/* <RouterNavLink
+                            to="/signout"
+                            className="nav-link"
+                            exact
+                            style={{ color: "white" }}
+                        >
+                            Sign Out
+                        </RouterNavLink> */}
+                        <NavLink
+                            style={{ cursor: "pointer", color: "black" }}
+                            onClick={event =>
+                                (window.location.href = "/signout")
+                            }
+                        >
+                            Sign Out
+                        </NavLink>
                     </DropdownItem>
                 </DropdownMenu>
             </UncontrolledDropdown>
@@ -68,7 +85,7 @@ function AuthNavItem(props) {
         <NavItem>
             <NavLink
                 style={{ cursor: "pointer", color: "white" }}
-                onClick={props.authButtonMethod}
+                onClick={event => (window.location.href = "/signin")}
             >
                 Sign In
             </NavLink>
@@ -76,7 +93,7 @@ function AuthNavItem(props) {
     );
 }
 
-export default class NavBar extends React.Component {
+class NavBar extends React.Component {
     constructor(props) {
         super(props);
 
@@ -93,6 +110,7 @@ export default class NavBar extends React.Component {
     }
 
     render() {
+        const { user, isAuthenticated } = this.props.auth;
         return (
             <div className="navbar-main">
                 <Navbar
@@ -121,19 +139,11 @@ export default class NavBar extends React.Component {
                             </NavItem>
                         </Nav>
                         <Nav className="justify-content-end" navbar>
-                            <NavItem>
-                                {/* <NavLink
-                                        href="https://developer.microsoft.com/graph/docs/concepts/overview"
-                                        target="_blank"
-                                    >
-                                        <i className="fas fa-external-link-alt mr-1"></i>
-                                        Docs
-                                    </NavLink> */}
-                            </NavItem>
+                            <NavItem></NavItem>
                             <AuthNavItem
-                                isAuthenticated={this.props.isAuthenticated}
+                                isAuthenticated={isAuthenticated}
                                 authButtonMethod={this.props.authButtonMethod}
-                                user={this.props.user}
+                                user={user}
                             />
                         </Nav>
                     </Collapse>
@@ -142,3 +152,9 @@ export default class NavBar extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, {})(NavBar);

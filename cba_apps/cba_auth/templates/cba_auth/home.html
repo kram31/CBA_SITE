@@ -1,0 +1,21 @@
+{% extends "cba_auth/layout.html" %} {% block content %}
+<div class="jumbotron">
+    <h1>CBA Apps Login Page</h1>
+
+    {% if user.is_authenticated %}
+    <h4>Welcome {{ user.name }}!</h4>
+    <p>Use the button below to access the apps.</p>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a href="{% url 'index' %}" class="btn btn-dark btn-large"
+                >CBA Apps</a
+            >
+        </li>
+    </ul>
+    {% else %}
+    <a href="{% url 'signin' %}" class="btn btn-primary btn-large"
+        >Click here to sign in</a
+    >
+    {% endif %}
+</div>
+{% endblock %}

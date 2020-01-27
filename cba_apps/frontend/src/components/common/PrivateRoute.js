@@ -1,23 +1,9 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { connect } from "react-redux";
 
-const PrivateRoute = ({
-    component: Component,
-    isAuthenticated,
-    user,
-    ...rest
-}) => (
-    <Route
-        {...rest}
-        render={props => {
-            if (isAuthenticated) {
-                return <Component {...props} />;
-            } else if (!isAuthenticated) {
-                return <Redirect to="/cba" />;
-            }
-        }}
-    />
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={props => <Component {...props} />} />
 );
 
 const mapStateToProps = state => ({

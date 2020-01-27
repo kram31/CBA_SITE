@@ -1,17 +1,8 @@
 import React, { Fragment } from "react";
-import {
-    Button,
-    Jumbotron,
-    Row,
-    Col,
-    Card,
-    CardImg,
-    CardTitle,
-    Container,
-    Fade
-} from "reactstrap";
+import { Jumbotron, Row, Col, Container, Fade, Spinner } from "reactstrap";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import image1 from "../images/feedback.png";
+import { connect } from "react-redux";
 
 function WelcomeContent(props) {
     // If authenticated, greet the user
@@ -19,7 +10,7 @@ function WelcomeContent(props) {
         return (
             <div className="mt-2">
                 <h4 style={{ color: "white" }}>
-                    Welcome {props.user.displayName}!
+                    Welcome {props.user.fullname}!
                 </h4>
             </div>
         );
@@ -27,13 +18,19 @@ function WelcomeContent(props) {
 
     // Not authenticated, present a sign in button
     return (
-        <Button color="primary" onClick={props.authButtonMethod}>
-            Click here to sign in
-        </Button>
+        <Spinner
+            style={{
+                width: "3rem",
+                height: "3rem",
+                top: "50%",
+                left: "50%",
+                position: "fixed"
+            }}
+        />
     );
 }
 
-export default class Welcome extends React.Component {
+class Welcome extends React.Component {
     state = {
         isHovered: false,
         target_div: null
@@ -62,6 +59,7 @@ export default class Welcome extends React.Component {
     };
 
     render() {
+        const { user, isAuthenticated } = this.props.auth;
         return (
             <Fragment>
                 <Jumbotron style={{ backgroundColor: "black" }}>
@@ -70,9 +68,8 @@ export default class Welcome extends React.Component {
                             DXC - CBA App Site
                         </h1>
                         <WelcomeContent
-                            isAuthenticated={this.props.isAuthenticated}
-                            user={this.props.user}
-                            authButtonMethod={this.props.authButtonMethod}
+                            isAuthenticated={isAuthenticated}
+                            user={user}
                         />
                     </div>
                 </Jumbotron>
@@ -174,3 +171,9 @@ export default class Welcome extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, [])(Welcome);

@@ -1,0 +1,14 @@
+{% extends "cba_auth/layout.html" %} {% block content %} {% if error %}
+<div class="mt-2">
+    <p>{{ error.code }}: {{ error.message }}</p>
+</div>
+
+{% endif %}
+<h1>App Control View</h1>
+<form method="POST">
+    {% csrf_token %}
+    <input type="email" name="email_address" value="" />
+    <button>submit</button>
+</form>
+
+{% endblock %}

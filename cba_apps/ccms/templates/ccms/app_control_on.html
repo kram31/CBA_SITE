@@ -1,0 +1,12 @@
+{% extends "cba_auth/layout.html" %} {% block content %}
+
+<h1>App Control View</h1>
+<h3>Mailbox monitor is ON</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    <!-- <input type="button" name="turn_off" value="Off" /> -->
+    <button name="turn_off" value="Off">Off</button>
+</form>
+
+{% endblock %}

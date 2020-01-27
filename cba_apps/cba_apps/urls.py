@@ -16,11 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from core.views import index
+from cba_auth.views import home, sign_in, callback, sign_out
 
 urlpatterns = [
     path('', include('agents.urls')),
     path('', include('bottombox.urls')),
     path('', include('accounts.urls')),
-    path('admin/', admin.site.urls),
-    path('cba/', index, name="index")
+    path('', include('cba_auth.urls')),
+    path('', include('ccms.urls')),
+    path('admin', admin.site.urls),
+    path('cba', index, name="index"),  # REACT SPA
+
+    # cba_auth django app
+    path('home', home, name="home"),
+    path('signin', sign_in, name='signin'),
+    path('callback', callback, name='callback'),
+    path('signout', sign_out, name='signout'),
 ]

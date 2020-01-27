@@ -10,7 +10,7 @@ import {
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8282";
+axios.defaults.baseURL = "http://localhost:8000";
 
 export const getMails = () => dispatch => {
     dispatch({
@@ -18,7 +18,7 @@ export const getMails = () => dispatch => {
     });
 
     axios
-        .get("http://localhost:8282/api/mails/")
+        .get("/api/mails/")
         .then(res => {
             dispatch({
                 type: GET_MAILS,
@@ -37,7 +37,7 @@ export const ack_entry = (id, data) => dispatch => {
     });
 
     axios
-        .put(`http://localhost:8282/api/mails/${id}/`, data)
+        .put(`/api/mails/${id}/`, data)
         .then(res => {
             dispatch({
                 type: ACK_ENTRY,
@@ -59,7 +59,7 @@ export const getComments = () => dispatch => {
     });
 
     axios
-        .get("http://localhost:8282/api/comments/")
+        .get("/api/comments/")
         .then(res => {
             dispatch({
                 type: GET_COMMENTS,
@@ -79,7 +79,7 @@ export const add_update = data => dispatch => {
     });
 
     axios
-        .post("http://localhost:8282/api/comments/", data)
+        .post("/api/comments/", data)
         .then(res => {
             dispatch({
                 type: ADD_UPDATE,

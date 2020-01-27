@@ -13,13 +13,17 @@ import {
 
 // check token and load user
 
-export const loadUser = data => (dispatch, getState) => {
+axios.defaults.baseURL = "http://localhost:8000";
+
+export const loadUser = () => dispatch => {
     // user loading
     dispatch({ type: USER_LOADING });
 
-    dispatch({
-        type: USER_LOADED,
-        payload: data
+    axios.get("/api/cba_auth").then(res => {
+        dispatch({
+            type: USER_LOADED,
+            payload: res.data
+        });
     });
 };
 
