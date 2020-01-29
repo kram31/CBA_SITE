@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from ccms.models import Mail, Mailbox_Monitor
+from ccms.models import Mail, Mailbox_Monitor, Ccms
 import sys
 
 from cba_auth.auth_helper import (
@@ -184,8 +184,15 @@ def email_to_database(request, upn, folderid):
 
                 # save to database
                 mail_body = mail['body']
-                Mail.objects.create(mail_id=mail_id, email_subject=mail['subject'], sender_name=sender_emailaddress_details['name'],
-                                    sender_email_address=sender_emailaddress_details['address'], email_body=mail_body['content'])
+                mail_entry = Mail.objects.create(
+                    mail_id=mail_id,
+                    email_subject=mail['subject'],
+                    sender_name=sender_emailaddress_details['name'],
+                    sender_email_address=sender_emailaddress_details['address'],
+                    email_body=mail_body['content']
+                )
+                mail_entry.save()
+                # Ccms.objects.create()
                 uploaded_mails.append(mail)
 
                 # mark email unread
