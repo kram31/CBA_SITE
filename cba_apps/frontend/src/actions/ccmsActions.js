@@ -5,23 +5,24 @@ import {
     GET_SURVEYS,
     ACK_ENTRY,
     ADD_UPDATE,
-    GET_COMMENTS
+    GET_COMMENTS,
+    GET_CCMS
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
-export const getMails = () => dispatch => {
+export const get_ccms_list = () => dispatch => {
     dispatch({
         type: FETCHING
     });
 
     axios
-        .get("/api/mails/")
+        .get("/api/ccms/")
         .then(res => {
             dispatch({
-                type: GET_MAILS,
+                type: GET_CCMS,
                 payload: res.data
             });
             dispatch({
@@ -37,7 +38,7 @@ export const ack_entry = (id, data) => dispatch => {
     });
 
     axios
-        .put(`/api/mails/${id}/`, data)
+        .put(`/api/ccms/${id}/`, data)
         .then(res => {
             dispatch({
                 type: ACK_ENTRY,

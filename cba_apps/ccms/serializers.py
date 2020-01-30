@@ -1,18 +1,21 @@
 from rest_framework import serializers
-from .models import (Mail, 
-                    Mailbox_Monitor, 
-                    Comment, 
-                    Ccms, 
-                    BusinessUnit, 
-                    EscalationType, 
-                    CCMSStatus, 
-                    TicketStatus, 
-                    Silo, 
-                    SiteCode, 
-                    CCMSOwner, 
-                    AccountableTeam, 
-                    TicketType
-                    )
+
+from datetime import datetime
+
+from .models import (Mail,
+                     Mailbox_Monitor,
+                     Comment,
+                     Ccms,
+                     BusinessUnit,
+                     EscalationType,
+                     CCMSStatus,
+                     TicketStatus,
+                     Silo,
+                     SiteCode,
+                     CCMSOwner,
+                     AccountableTeam,
+                     TicketType
+                     )
 
 
 class MailSerializer(serializers.ModelSerializer):
@@ -34,16 +37,53 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class CcmsSerializer(serializers.ModelSerializer):
+
+    email_subject = serializers.SerializerMethodField()
+
+    def get_email_subject(self, obj):
+
+        return obj.mail.email_subject
+
+    mail_id = serializers.SerializerMethodField()
+
+    def get_mail_id(self, obj):
+
+        return obj.mail.mail_id
+
+    sender_name = serializers.SerializerMethodField()
+
+    def get_sender_name(self, obj):
+
+        return obj.mail.sender_name
+
+    sender_email_address = serializers.SerializerMethodField()
+
+    def get_sender_email_address(self, obj):
+
+        return obj.mail.sender_email_address
+
+    mail_age = serializers.SerializerMethodField()
+
+    def get_mail_age(self, obj):
+
+        record_date = datetime.strptime(
+            obj.mail.receivedDateTime, '%Y-%m-%dT%H:%M:%SZ')
+
+        dt = datetime.now() - record_date
+
+        return dt.days
+
     class Meta:
         model = Ccms
         fields = '__all__'
+
 
 class BusinessUnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = BusinessUnit
         fields = '__all__'
+
 
 class EscalationTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -75,7 +115,6 @@ class SiteCodeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class CCMSOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = CCMSOwner
@@ -92,4 +131,3 @@ class TicketTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TicketType
         fields = '__all__'
-

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
 import {
-    getMails,
+    get_ccms_list,
     isFetching,
     getSurveys,
     ack_entry,
@@ -16,17 +16,27 @@ import {
     CardHeader,
     Container,
     Row,
-    Col
+    Col,
+    Table,
+    Form,
+    Input,
+    Button
 } from "reactstrap";
 
 import UpdateInput from "./UpdateInput";
+import CcmsView from "./CcmsView";
 
 class Ccms extends Component {
     constructor(props) {
         super(props);
 
-        props.getMails();
+        props.get_ccms_list();
         props.getComments();
+
+        this.state = {
+            search: "",
+            search_results: []
+        };
     }
 
     handleClick = childData => {
@@ -53,13 +63,13 @@ class Ccms extends Component {
     //     //     var mails = await getUserMails(accessToken);
     //     //     // Update the array of events in state
     //     //     this.setState({ mails: mails.value });
-    //     //     this.props.getMails(mails.value);
+    //     //     this.props.get_ccms_list(mails.value);
     //     //     this.props.getSurveys();
     //     //     console.log("initialize state");
     //     // } catch (err) {
     //     //     console.log(err);
     //     // }
-    //     // this.props.getMails();
+    //     // this.props.get_ccms_list();
     //     console.log(this.props.mails);
     // }
 
@@ -78,10 +88,43 @@ class Ccms extends Component {
         return mm + "/" + dd + "/" + yyyy;
     };
 
-    render() {
-        const { mails } = this.props;
+    // 2 Search boxes : All CCMS Entry List and Assigned CCMS List
+    // add identifiers for each Search box then include as arguments
 
-        if (mails.isFetching)
+    handleSearch = e => {
+        const { ccms_list } = this.props.ccms;
+
+        // e.target.name: e.target.value
+        console.log(e.target.value);
+
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+
+        let kw = e.target.value;
+
+        // search for ccms.ccms_list.id, ccms.ccms_list.escalated_ticket, ccms.ccms_list.escalated_email_address, ccms.ccms_list.escalated_name
+        // all results will be stored in an array of objects
+
+        let items = ccms_list.filter(
+            item =>
+                kw == item.id ||
+                kw == item.escalated_ticket ||
+                kw == item.escalated_email_address ||
+                kw == item.escalated_name
+        );
+
+        console.log(items);
+
+        this.setState({
+            search_results: items
+        });
+    };
+
+    render() {
+        const { ccms } = this.props;
+
+        if (ccms.isFetching)
             return (
                 <Spinner
                     style={{
@@ -94,122 +137,22 @@ class Ccms extends Component {
                 />
             );
 
+        // New View CCMS_View
+        // args = title, data_list, input name, callback function (child to parent)
+
         return (
-            <div>
-                <Container>
-                    <h1 style={{ color: "white" }}>CCMS List</h1>
-                    <CCMS_List
-                        mails={this.props.mails.mails}
-                        action={this.handleClick}
-                        curr_date={this.getCurrentDate()}
-                        comments={this.props.comments}
-                    />
-                </Container>
-            </div>
+            <Container>
+                <CcmsView />
+            </Container>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    mails: state.ccms,
+    ccms: state.ccms,
     auth: state.auth,
     comments: state.ccms.comments
 });
-
-const CCMS_List = props => {
-    if (props.mails) {
-        return props.mails.map(mail => {
-            return (
-                <Card key={mail.id} className="mb-4">
-                    <CardHeader className="pt-3">
-                        <h3>
-                            <a href="" style={{ color: "blue" }}>
-                                {mail.email_subject}
-                            </a>
-                        </h3>
-                    </CardHeader>
-                    <CardBody>
-                        <p>
-                            <span>Sender Name:</span> {mail.sender_name}
-                        </p>
-                        <p>
-                            <span>Sender Email Address:</span>{" "}
-                            {mail.sender_email_address}
-                        </p>
-                        <p>WILL DISPLAY THE EMAIL CONTENT HERE...</p>
-                        <Container>
-                            <Row className="border-top border-bottom text-center pt-3">
-                                <Col className="align-middle">
-                                    {mail.is_acknowledged ? (
-                                        <p>
-                                            <span>
-                                                <i
-                                                    className="fa fa-check-circle"
-                                                    style={{ color: "green" }}
-                                                />
-                                            </span>{" "}
-                                            Acknowledged by{" "}
-                                            {mail.acknowledged_by} on{" "}
-                                            {mail.date_acknowledged}
-                                        </p>
-                                    ) : (
-                                        <p
-                                            onClick={() =>
-                                                props.action(mail.id)
-                                            }
-                                            style={{ cursor: "pointer" }}
-                                        >
-                                            <span>
-                                                <i
-                                                    className="fa fa-check-circle"
-                                                    style={{ color: "red" }}
-                                                />
-                                            </span>{" "}
-                                            Acknowledge?
-                                        </p>
-                                    )}
-                                </Col>
-                                <Col>
-                                    <p>
-                                        <span>
-                                            <i
-                                                className="fa fa-check-circle"
-                                                style={{ color: "green" }}
-                                            />
-                                        </span>{" "}
-                                        Resolved
-                                    </p>
-                                </Col>
-                            </Row>
-                        </Container>
-                        <Row className="my-3">
-                            <Col>Updates: </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Comment_List
-                                    comments={props.comments.filter(
-                                        item => mail.id == item.mail
-                                    )}
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="pb-2">
-                            <Col>
-                                <UpdateInput
-                                    curr_date={props.curr_date}
-                                    mail={mail}
-                                />
-                            </Col>
-                        </Row>
-                    </CardBody>
-                </Card>
-            );
-        });
-    } else {
-        return <h1>No mails</h1>;
-    }
-};
 
 const Comment_List = props => {
     const commentBoxStyle = {
@@ -246,7 +189,7 @@ const Comment_List = props => {
 };
 
 export default connect(mapStateToProps, {
-    getMails,
+    get_ccms_list,
     isFetching,
     getSurveys,
     ack_entry,

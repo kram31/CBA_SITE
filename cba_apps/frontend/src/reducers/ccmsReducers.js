@@ -4,11 +4,12 @@ import {
     STOP_FETCHING,
     ACK_ENTRY,
     ADD_UPDATE,
-    GET_COMMENTS
+    GET_COMMENTS,
+    GET_CCMS
 } from "../actions/types";
 
 const initialState = {
-    mails: [],
+    ccms_list: [],
     isFetching: false,
     comments: []
 };
@@ -25,11 +26,11 @@ const ccmsReducer = (state = initialState, action) => {
                 ...state,
                 isFetching: false
             };
-        case GET_MAILS:
+        case GET_CCMS:
             // console.log(action.payload);
             return {
                 ...state,
-                mails: action.payload
+                ccms_list: action.payload
             };
         case GET_COMMENTS:
             // console.log(action.payload);
@@ -41,7 +42,7 @@ const ccmsReducer = (state = initialState, action) => {
             // console.log(action.payload);
             return {
                 ...state,
-                mails: state.mails.map(item => {
+                ccms_list: state.ccms_list.map(item => {
                     if (item.id == action.payload.id) {
                         return action.payload;
                     } else {

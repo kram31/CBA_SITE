@@ -20,14 +20,7 @@ from cba_auth.auth_helper import (
 
 from cba_auth.graph_helper import (
     get_user,
-    get_calendar_events,
-    get_mails,
-    send_mail_graph,
-    check_mailbox_access,
-    check_designated_mailfolder,
-    create_mailfolder,
-    mark_email_read,
-    move_email
+
 )
 
 # Create your views here.

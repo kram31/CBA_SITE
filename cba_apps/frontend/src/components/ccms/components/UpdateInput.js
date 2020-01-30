@@ -12,7 +12,7 @@ class UpdateInput extends Component {
         this.state = {
             entry: "",
             curr_date: props.curr_date,
-            mail: props.mail
+            ccms: props.ccms
         };
     }
     handleChange = e => {
@@ -27,13 +27,13 @@ class UpdateInput extends Component {
             e.preventDefault();
             const { user } = this.props.auth;
 
-            const { mail, entry, curr_date } = this.state;
+            const { ccms, entry, curr_date } = this.state;
 
             let data = {
                 entry,
                 contributor_name: user.displayName,
                 comment_entry_date: curr_date,
-                mail: mail.id
+                ccms: ccms.id
             };
 
             // entry send
@@ -67,7 +67,7 @@ class UpdateInput extends Component {
 }
 
 const mapStateToProps = state => ({
-    mails: state.ccms,
+    ccms: state.ccms,
     auth: state.auth
 });
 

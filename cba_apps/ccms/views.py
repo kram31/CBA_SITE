@@ -13,16 +13,16 @@ from cba_auth.auth_helper import (
     get_token
 )
 
-from cba_auth.graph_helper import (
+from .graph_helper import (
     get_user,
-    get_calendar_events,
     get_mails,
     send_mail_graph,
     check_mailbox_access,
     check_designated_mailfolder,
     create_mailfolder,
     mark_email_read,
-    move_email
+    move_email,
+    change_email_subject
 )
 
 import json
@@ -180,6 +180,8 @@ def email_to_database(request, upn, folderid):
 
             # ADD LOGIC WHETHER EMAIL IS NEW OR A FOLLOW UP
 
+            # Check subject for any CCMS ID - Needs to have a format
+
             try:
 
                 # save to database
@@ -189,14 +191,20 @@ def email_to_database(request, upn, folderid):
                     email_subject=mail['subject'],
                     sender_name=sender_emailaddress_details['name'],
                     sender_email_address=sender_emailaddress_details['address'],
-                    email_body=mail_body['content']
+                    email_body=mail_body['content'],
+                    receivedDateTime=mail['receivedDateTime']
                 )
                 mail_entry.save()
-                # Ccms.objects.create()
+                ccms_entry = Ccms.objects.create(mail=mail_entry)
+                ccms_entry.save()
                 uploaded_mails.append(mail)
 
                 # mark email unread
                 mark_email_read(token, upn, mail_id)
+
+                # change_email_subject
+                change_email_subject(token, upn, mail_id,
+                                     mail['subject'], ccms_entry.id)
 
                 # email to "Processed" folder
                 move_email(token, upn, mail_id, folderid)

@@ -10,6 +10,8 @@ class Mail(models.Model):
     email_body = models.TextField(blank=True)
     sender_name = models.CharField(max_length=2000, blank=True)
     sender_email_address = models.CharField(max_length=2000, blank=True)
+    receivedDateTime = models.CharField(max_length=2000, blank=True)
+     
 
     def __str__(self):
         return self.email_subject
@@ -19,13 +21,15 @@ class Ccms(models.Model):
 
     mail = models.ForeignKey(
         "Mail", on_delete=models.CASCADE, related_name="mails", blank=True)
-    acknowledged_by = models.CharField(max_length=2000)
+    acknowledged_by = models.CharField(max_length=2000, blank=True)
     is_acknowledged = models.BooleanField(default=False)
     is_resolved = models.BooleanField(default=False, blank=True)
-    date_acknowledged = models.CharField(max_length=2000)
+    date_acknowledged = models.CharField(max_length=2000, blank=True)
 
     escalated_ticket = models.CharField(max_length=2000, blank=True)
     escalated_by = models.CharField(max_length=2000, blank=True)
+    escalated_name = models.CharField(max_length=2000, blank=True)
+    lan_id = models.CharField(max_length=2000, blank=True)
     escalated_email_address = models.EmailField(blank=True)
     specific_business_unit = models.CharField(max_length=2000, blank=True)
 
