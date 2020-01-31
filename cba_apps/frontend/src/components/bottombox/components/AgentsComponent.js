@@ -100,7 +100,7 @@ class AgentsComponent extends Component {
 
         // console.log(selectedIndex);
 
-        if (selectedIndex != 0) {
+        if (selectedIndex !== 0) {
             const { agents } = this.props;
 
             const agent = agents[selectedIndex - 1];

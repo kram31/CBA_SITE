@@ -21,19 +21,19 @@ function SelectInput(props) {
                 <option value="">--select--</option>
                 {props.options.map(item => {
                     if (
-                        props.attr == "support_silo_issue_based" ||
-                        props.attr == "controllability" ||
-                        props.attr == "accountable_team" ||
-                        props.attr == "q1_answer" ||
-                        props.attr == "contacted_customer" ||
-                        props.attr == "coaching"
+                        props.attr === "support_silo_issue_based" ||
+                        props.attr === "controllability" ||
+                        props.attr === "accountable_team" ||
+                        props.attr === "q1_answer" ||
+                        props.attr === "contacted_customer" ||
+                        props.attr === "coaching"
                     ) {
                         return (
                             <option key={item.name} value={item.name}>
                                 {item.name}
                             </option>
                         );
-                    } else if (props.attr == "dsat_cause") {
+                    } else if (props.attr === "dsat_cause") {
                         return (
                             <option key={item.name} value={item.id}>
                                 {item.name}

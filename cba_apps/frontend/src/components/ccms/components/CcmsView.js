@@ -3,35 +3,24 @@ import { connect } from "react-redux";
 
 import CcmsList from "./CcmsList";
 
-import {
-    Spinner,
-    Card,
-    CardBody,
-    CardHeader,
-    Container,
-    Row,
-    Col,
-    Table,
-    Form,
-    Input,
-    Button
-} from "reactstrap";
+import { Row, Col, Form, Input } from "reactstrap";
 
 class CcmsView extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            title: props.title,
             search: "",
-            search_results: []
+            search_results: [],
+            ccms: props.ccms_array
         };
     }
 
     handleSearch = e => {
-        const { ccms_list } = this.props.ccms;
+        const { ccms } = this.state;
 
         // e.target.name: e.target.value
-        console.log(e.target.value);
 
         this.setState({
             [e.target.name]: e.target.value
@@ -42,14 +31,13 @@ class CcmsView extends Component {
         // search for ccms.ccms_list.id, ccms.ccms_list.escalated_ticket, ccms.ccms_list.escalated_email_address, ccms.ccms_list.escalated_name
         // all results will be stored in an array of objects
 
-        let items = ccms_list.filter(
+        let items = ccms.filter(
             item =>
-                kw == item.id ||
-                kw == item.escalated_ticket ||
-                kw == item.escalated_email_address ||
-                kw == item.escalated_name
+                kw === item.id ||
+                kw === item.escalated_ticket ||
+                kw === item.escalated_email_address ||
+                kw === item.escalated_name
         );
-        // console.log(items);
 
         this.setState({
             search_results: items
@@ -57,12 +45,14 @@ class CcmsView extends Component {
     };
 
     render() {
-        const { ccms } = this.props;
-        const { search_results, search } = this.state;
+        const { title } = this.props;
+        const { search_results, search, ccms } = this.state;
 
         return (
             <Fragment>
-                <h1 style={{ color: "white" }}>CCMS List</h1>
+                <h1 style={{ color: "white" }}>
+                    {!title ? "CCMS List" : title}
+                </h1>
                 <Row>
                     <Col md={4} className="mb-3">
                         <Form autoComplete="off">
@@ -77,10 +67,9 @@ class CcmsView extends Component {
                 </Row>
                 <CcmsList
                     ccms={
-                        !search
-                            ? ccms.ccms_list
-                            : search_results.length && search_results
+                        !search ? ccms : search_results.length && search_results
                     }
+                    list_type={title}
                 />
             </Fragment>
         );

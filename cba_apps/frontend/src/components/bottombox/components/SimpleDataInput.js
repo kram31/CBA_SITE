@@ -127,13 +127,13 @@ class SimpleDataInput extends Component {
                                 <Col>
                                     <DataTable
                                         table={
-                                            (this.props.data_name ==
+                                            (this.props.data_name ===
                                                 "addSkill" &&
                                                 this.props.skills) ||
-                                            (this.props.data_name ==
+                                            (this.props.data_name ===
                                                 "addTeamLead" &&
                                                 this.props.teamleads) ||
-                                            (this.props.data_name ==
+                                            (this.props.data_name ===
                                                 "addTeam" &&
                                                 this.props.teams)
                                         }

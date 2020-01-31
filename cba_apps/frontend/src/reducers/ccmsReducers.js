@@ -1,5 +1,4 @@
 import {
-    GET_MAILS,
     FETCHING,
     STOP_FETCHING,
     ACK_ENTRY,

@@ -11,7 +11,6 @@ class Mail(models.Model):
     sender_name = models.CharField(max_length=2000, blank=True)
     sender_email_address = models.CharField(max_length=2000, blank=True)
     receivedDateTime = models.CharField(max_length=2000, blank=True)
-     
 
     def __str__(self):
         return self.email_subject
@@ -51,6 +50,9 @@ class Ccms(models.Model):
         "AccountableTeam", on_delete=models.CASCADE, related_name="accountable_teams", blank=True, null=True)
     ticket_type = models.ForeignKey(
         "TicketType", on_delete=models.CASCADE, related_name="ticket_types", blank=True, null=True)
+
+    def __str__(self):
+        return self.pk
 
 
 class Mailbox_Monitor(models.Model):
@@ -120,7 +122,7 @@ class CCMSOwner(models.Model):
         User, on_delete=models.CASCADE, related_name="users", blank=True)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
 class AccountableTeam(models.Model):

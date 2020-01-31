@@ -107,13 +107,13 @@ class RCAFormModal extends Component {
     rcaData.surveyed_ticket = this.props.survey.reference_number;
     rcaData.agent = this.props.agent.operator_lan_id;
     rcaData.dsat_cause = this.props.dsat_code1.filter(
-      item => item.id == this.state.dsat_cause
+      item => item.id === this.state.dsat_cause
     )[0];
     rcaData.bb_driver_code2 = this.props.bb_driver_code2.filter(
-      item => item.id == this.state.bb_driver_code2
+      item => item.id === this.state.bb_driver_code2
     )[0];
     rcaData.bb_driver_code3 = this.props.bb_driver_code3.filter(
-      item => item.id == this.state.bb_driver_code3
+      item => item.id === this.state.bb_driver_code3
     )[0];
     rcaData.completed_by = this.props.user.email;
 
@@ -298,7 +298,7 @@ class RCAFormModal extends Component {
                         options={
                           this.state.dsat_cause
                             ? this.props.bb_driver_code2.filter(
-                                item => this.state.dsat_cause == item.dsat_Code1
+                                item => this.state.dsat_cause === item.dsat_Code1
                               )
                             : this.state.selectDefault
                         }
@@ -316,7 +316,7 @@ class RCAFormModal extends Component {
                           this.state.bb_driver_code2
                             ? this.props.bb_driver_code3.filter(
                                 item =>
-                                  this.state.bb_driver_code2 ==
+                                  this.state.bb_driver_code2 ===
                                   item.bb_Driver_Code2
                               )
                             : this.state.selectDefault

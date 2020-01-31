@@ -39,6 +39,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class CcmsSerializer(serializers.ModelSerializer):
 
+    ccms_owner_username = serializers.SerializerMethodField()
+
+    def get_ccms_owner_username(self, obj):
+
+        return obj.ccms_owner.user.username if obj.ccms_owner else ""
+
     email_subject = serializers.SerializerMethodField()
 
     def get_email_subject(self, obj):
@@ -116,6 +122,13 @@ class SiteCodeSerializer(serializers.ModelSerializer):
 
 
 class CCMSOwnerSerializer(serializers.ModelSerializer):
+
+    ccms_owner_username = serializers.SerializerMethodField()
+
+    def get_ccms_owner_username(self, obj):
+
+        return obj.user.username
+
     class Meta:
         model = CCMSOwner
         fields = '__all__'
