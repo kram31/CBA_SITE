@@ -88,7 +88,8 @@ class CcmsView extends Component {
 }
 
 const mapStateToProps = state => ({
-    ccms: state.ccms
+    ccms: state.ccms,
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, {})(CcmsView);

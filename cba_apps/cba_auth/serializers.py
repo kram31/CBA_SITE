@@ -18,6 +18,12 @@ class Auth_DetailsSerializer(serializers.ModelSerializer):
 
         return f'{obj.user.last_name}, {obj.user.first_name}'
 
+    is_staff = serializers.SerializerMethodField()
+
+    def get_is_staff(self, obj):
+
+        return obj.user.is_staff
+
     class Meta:
         model = Auth_Details
         fields = '__all__'
