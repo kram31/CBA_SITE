@@ -16,6 +16,8 @@ requests-oauthlib = "*"
 pyyaml = "*"
 pylint = "*"
 autopep8 = "*"
+pylint-django = "*"
+drf-writable-nested = "*"
 
 [requires]
 python_version = "3.7"

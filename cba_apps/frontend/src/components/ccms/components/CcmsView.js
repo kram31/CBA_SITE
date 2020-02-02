@@ -33,10 +33,10 @@ class CcmsView extends Component {
 
         let items = ccms.filter(
             item =>
-                kw === item.id ||
-                kw === item.escalated_ticket ||
-                kw === item.escalated_email_address ||
-                kw === item.escalated_name
+                kw == item.id ||
+                kw == item.escalated_ticket ||
+                kw == item.escalated_email_address ||
+                kw == item.escalated_name
         );
 
         this.setState({
@@ -50,13 +50,20 @@ class CcmsView extends Component {
 
         return (
             <Fragment>
-                <h1 style={{ color: "white" }}>
-                    {!title ? "CCMS List" : title}
-                </h1>
+                <Row className="mb-2">
+                    <Col>
+                        <h1 style={{ color: "orange" }}>
+                            {!title
+                                ? "CCMS CCA VIEW - Assigning Escalation"
+                                : title}
+                        </h1>
+                    </Col>
+                </Row>
                 <Row>
-                    <Col md={4} className="mb-3">
+                    <Col md={3} className="mb-3">
                         <Form autoComplete="off">
                             <Input
+                                bsSize="sm"
                                 type="text"
                                 name="search"
                                 placeholder="Search"

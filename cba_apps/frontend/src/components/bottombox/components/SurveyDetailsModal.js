@@ -201,6 +201,7 @@ class SurveyDetailsModal extends React.Component {
                                         size="sm"
                                         attr="phone_number"
                                         label_name="Phone Number"
+                                        attr="phone_number"
                                         value={this.state.phone_number}
                                         controlFunc={this.handleChange}
                                         readOnly={false}
@@ -607,4 +608,7 @@ class SurveyDetailsModal extends React.Component {
     }
 }
 
-export default connect(null, { updateSurvey })(SurveyDetailsModal);
+export default connect(
+    null,
+    { updateSurvey }
+)(SurveyDetailsModal);

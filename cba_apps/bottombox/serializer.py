@@ -87,9 +87,23 @@ class BB_Driver_Code3Serializer(serializers.ModelSerializer):
 
 class RCASerializer(serializers.ModelSerializer):
 
-    dsat_cause = DSAT_Code1Serializer()
-    bb_driver_code2 = BB_Driver_Code2Serializer()
-    bb_driver_code3 = BB_Driver_Code3Serializer()
+    dsat_cause = serializers.SerializerMethodField()
+
+    def get_dsat_cause(self, obj):
+
+        return obj.dsat_cause.name
+
+    bb_driver_code2 = serializers.SerializerMethodField()
+
+    def get_bb_driver_code2(self, obj):
+
+        return obj.bb_driver_code2.name
+
+    bb_driver_code3 = serializers.SerializerMethodField()
+
+    def get_bb_driver_code3(self, obj):
+
+        return obj.bb_driver_code3.name
 
     class Meta:
         model = RCA

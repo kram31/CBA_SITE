@@ -13,35 +13,30 @@ function SelectInput(props) {
                 bsSize={props.size}
                 type={props.type}
                 name={props.attr}
-                id={props.attr}
+                id={props.id}
                 onChange={props.controlFunc}
                 value={props.value}
                 required
             >
                 <option value="">--select--</option>
-                {props.options.map(item => {
+                {props.options.map((item, index) => {
                     if (
-                        props.attr === "support_silo_issue_based" ||
-                        props.attr === "controllability" ||
-                        props.attr === "accountable_team" ||
-                        props.attr === "q1_answer" ||
-                        props.attr === "contacted_customer" ||
-                        props.attr === "coaching"
+                        props.attr == "support_silo_issue_based" ||
+                        props.attr == "controllability" ||
+                        props.attr == "accountable_team" ||
+                        props.attr == "q1_answer" ||
+                        props.attr == "contacted_customer" ||
+                        props.attr == "coaching" ||
+                        props.attr == "dsat_cause"
                     ) {
                         return (
-                            <option key={item.name} value={item.name}>
-                                {item.name}
-                            </option>
-                        );
-                    } else if (props.attr === "dsat_cause") {
-                        return (
-                            <option key={item.name} value={item.id}>
+                            <option key={index} value={item.name}>
                                 {item.name}
                             </option>
                         );
                     } else {
                         return (
-                            <option key={item.id} value={item.id}>
+                            <option key={index} value={item.name}>
                                 {item.name}
                             </option>
                         );

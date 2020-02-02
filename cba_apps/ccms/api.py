@@ -1,4 +1,5 @@
 from rest_framework import viewsets, permissions
+from django.contrib.auth.models import User
 from .models import (
     Mail,
     Mailbox_Monitor,
@@ -27,8 +28,17 @@ from .serializers import (
     SiteCodeSerializer,
     CCMSOwnerSerializer,
     AccountableTeamSerializer,
-    TicketTypeSerializer
+    TicketTypeSerializer,
+    UserSerializer
 )
+
+
+class UserViewset(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
 
 
 class TicketTypeViewset(viewsets.ModelViewSet):

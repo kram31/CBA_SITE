@@ -6,10 +6,15 @@ import {
     isFetching,
     getSurveys,
     ack_entry,
-    getComments
+    getComments,
+    get_business_unit,
+    get_ticket_status,
+    get_escalation_type,
+    get_accountable_team,
+    get_site_code
 } from "../../../actions/ccmsActions";
 
-import { Spinner, Container } from "reactstrap";
+import { Spinner, Container, Row, Col } from "reactstrap";
 
 import CcmsView from "./CcmsView";
 
@@ -19,6 +24,11 @@ class Ccms extends Component {
 
         props.get_ccms_list();
         props.getComments();
+        props.get_business_unit();
+        props.get_ticket_status();
+        props.get_escalation_type();
+        props.get_accountable_team();
+        props.get_site_code();
 
         this.state = {
             user_details: this.props.auth.user
@@ -51,18 +61,6 @@ class Ccms extends Component {
         return mm + "/" + dd + "/" + yyyy;
     };
 
-    getListPerOwner = username => {
-        const { ccms } = this.props;
-
-        let x = [];
-
-        if (username) {
-            return ccms.ccms_list.filter(
-                item => item.ccms_owner_username == username
-            );
-        }
-    };
-
     render() {
         const { ccms, auth } = this.props;
 
@@ -71,20 +69,31 @@ class Ccms extends Component {
         if (ccms.ccms_list.length && auth.user) {
             return (
                 <Container>
-                    {auth.user.group_list.includes("CCMS Admin") && (
-                        <CcmsView title="" ccms_array={ccms.ccms_list} />
-                    )}
-
-                    {auth.user.username && (
-                        <CcmsView
-                            title="Owner's List"
-                            ccms_array={ccms.ccms_list.filter(
-                                item =>
-                                    item.ccms_owner_username ==
-                                    auth.user.username
+                    <Row className="mb-5">
+                        <Col>
+                            {auth.user.group_list.includes("CCMS Admin") && (
+                                <CcmsView
+                                    title=""
+                                    ccms_array={ccms.ccms_list}
+                                />
                             )}
-                        />
-                    )}
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col>
+                            {auth.user.username && (
+                                <CcmsView
+                                    title="CCMS Owner VIEW - Assigning Escalation"
+                                    ccms_array={ccms.ccms_list.filter(
+                                        item =>
+                                            ((item.ccms_owner || {}).user || {})
+                                                .email == auth.user.username
+                                    )}
+                                />
+                            )}
+                        </Col>
+                    </Row>
                 </Container>
             );
         }
@@ -108,7 +117,12 @@ export default connect(mapStateToProps, {
     isFetching,
     getSurveys,
     ack_entry,
-    getComments
+    getComments,
+    get_business_unit,
+    get_ticket_status,
+    get_escalation_type,
+    get_accountable_team,
+    get_site_code
 })(Ccms);
 
 export const Loading = () => (

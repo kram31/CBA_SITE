@@ -24,6 +24,7 @@ import { loadUser } from "../actions/auth";
 import { getAllData2 } from "../actions/surveyActions";
 
 import store from "../store";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 // import "bootstrap/dist/css/bootstrap.css";
 import "../font/stylesheet.css";

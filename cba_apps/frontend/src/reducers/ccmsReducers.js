@@ -4,13 +4,23 @@ import {
     ACK_ENTRY,
     ADD_UPDATE,
     GET_COMMENTS,
-    GET_CCMS
+    GET_CCMS,
+    GET_BUSINESS_UNIT,
+    GET_TICKET_STATUS,
+    GET_ESCALATION_TYPE,
+    GET_ACCOUNTABLE_TEAM,
+    GET_SITE_CODE
 } from "../actions/types";
 
 const initialState = {
     ccms_list: [],
     isFetching: false,
-    comments: []
+    comments: [],
+    business_unit: null,
+    ticket_status: null,
+    escalation_type: null,
+    accountable_team: null,
+    site_code: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -24,6 +34,31 @@ const ccmsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: false
+            };
+        case GET_SITE_CODE:
+            return {
+                ...state,
+                site_code: action.payload
+            };
+        case GET_ACCOUNTABLE_TEAM:
+            return {
+                ...state,
+                accountable_team: action.payload
+            };
+        case GET_ESCALATION_TYPE:
+            return {
+                ...state,
+                escalation_type: action.payload
+            };
+        case GET_TICKET_STATUS:
+            return {
+                ...state,
+                ticket_status: action.payload
+            };
+        case GET_BUSINESS_UNIT:
+            return {
+                ...state,
+                business_unit: action.payload
             };
         case GET_CCMS:
             // console.log(action.payload);
