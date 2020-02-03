@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from "react";
+import CcmsModal from "./Modals/CcmsModal";
+
 import {
     Form,
     Row,
@@ -13,7 +15,7 @@ import {
 import { connect } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
 
-import { get_business_unit } from "../../../actions/ccmsActions";
+import { get_business_unit, update_ccms } from "../../../actions/ccmsActions";
 
 class CcmsForm extends Component {
     constructor(props) {
@@ -31,26 +33,38 @@ class CcmsForm extends Component {
             business_unit,
             escalation_type,
             accountable_team,
-            site_code
+            site_code,
+            escalated_ticket,
+            escalated_by,
+            escalated_email_address,
+            specific_business_unit,
+            escalated_name,
+            lan_id,
+            ccms_owner,
+            summary_complaint,
+            rca_required,
+            is_complaint,
+            is_compliment
         } = props.ccms_entry || {};
 
         this.state = {
-            escalated_ticket: "",
-            escalated_by: "",
-            escalated_email_address: "",
+            escalated_ticket,
+            escalated_by,
+            escalated_email_address,
             business_unit,
-            specific_business_unit: "",
+            specific_business_unit,
             ticket_status,
             escalation_type,
             accountable_team,
-            escalated_name: "",
-            lan_id: "",
+            escalated_name,
+            lan_id,
             site_code,
-            ccms_owner_username: "",
-            summary_complaint: "",
-            rca_required: "",
-            is_complaint: "",
-            is_compliment: ""
+            ccms_owner,
+            summary_complaint,
+            rca_required,
+            is_complaint,
+            is_compliment,
+            isOpen: false
         };
     }
 
@@ -69,14 +83,17 @@ class CcmsForm extends Component {
         });
     };
 
-    // handleSubmit = event => {
-    //     event.preventDefault();
-    //     console.log(event.target.value);
-    // };
-
     handleClick = event => {
         event.preventDefault();
-        console.log(event.target.value);
+
+        const { value } = event.target;
+
+        // create trigger to open up ARE YOU SURE? modal
+
+        if (value === "Compliment") {
+            console.log("Trigger Compliment Request");
+        } else if (value === "") console.log("Trigger Complaint Request");
+
         console.log(this.state);
     };
 
@@ -87,12 +104,42 @@ class CcmsForm extends Component {
         "escalation_type",
         "accountable_team",
         "site_code",
-        "ticket_status"
+        "ticket_status",
+        "ccms_owner"
     ];
+
+    typeaheadProps = col => ({
+        bsSize: "sm",
+        labelKey:
+            col == "ccms_owner" ? option => `${option.user.email}` : "name",
+        onChange: selected =>
+            this.setState(
+                { [col]: selected[0] },
+                console.log({ [col]: selected[0] })
+            ),
+        id: "id_" + col,
+        options: this.props[col],
+        selected: this.state[col] ? [this.state[col]] : [],
+        disabled: this.props.list_type ? true : false,
+        placeholder: "Select...",
+        ref: typeahead => (this.typeahead = typeahead),
+        selectHintOnEnter: true,
+        clearButton: true
+    });
+
+    inputProps = col => ({
+        bsSize: "sm",
+        type: col == "escalated_email_address" ? "email" : "text",
+        name: col,
+        id: "id_" + col,
+        value: this.state[col],
+        onChange: this.handleChange,
+        disabled: this.props.list_type ? true : false
+    });
 
     formContructor = key_list => {
         return key_list.map((item, i) => (
-            <FormGroup row key={i}>
+            <Row key={i} className="mb-2">
                 {item.map((col, index) => {
                     let x = col
                         .split("_")
@@ -106,32 +153,9 @@ class CcmsForm extends Component {
                             {this.arrayElements.includes(col) ? (
                                 <Col>
                                     <Label for={"id_" + col}>{x}: </Label>
-
                                     <Typeahead
-                                        bsSize="sm"
-                                        labelKey="name"
-                                        onChange={selected => {
-                                            this.setState({
-                                                [col]: selected[0]
-                                            });
-                                        }}
-                                        id={"id_" + col}
-                                        options={this.props[col]}
-                                        selected={
-                                            this.state[col]
-                                                ? [this.state[col]]
-                                                : []
-                                        }
-                                        disabled={
-                                            this.props.list_type ? true : false
-                                        }
-                                        placeholder="Select..."
-                                        // ref="ticket_status"
-                                        ref={typeahead =>
-                                            (this.typeahead = typeahead)
-                                        }
-                                        selectHintOnEnter={true}
-                                        clearButton
+                                        {...this.typeaheadProps(col)}
+                                        required
                                     />
                                 </Col>
                             ) : (
@@ -139,22 +163,15 @@ class CcmsForm extends Component {
                                     <Label for={"id_" + col}>{x}: </Label>
 
                                     <Input
-                                        bsSize="sm"
-                                        type="text"
-                                        name={col}
-                                        id={"id_" + col}
-                                        value={this.state[col]}
-                                        onChange={this.handleChange}
-                                        disabled={
-                                            this.props.list_type ? true : false
-                                        }
+                                        {...this.inputProps(col)}
+                                        required
                                     ></Input>
                                 </Col>
                             )}
                         </Fragment>
                     );
                 })}
-            </FormGroup>
+            </Row>
         ));
     };
 
@@ -167,28 +184,94 @@ class CcmsForm extends Component {
         return newArr;
     };
 
+    updateStateThenSend = (property, id) => {
+        this.setState({ [property]: true }, () =>
+            this.submitForm(this.state, id)
+        );
+    };
+
+    callbackFunction = childData => {
+        const { is_sending, value, ccms_entry_id } = childData;
+
+        if (is_sending == "Yes" && value == "Complaint") {
+            this.updateStateThenSend("is_complaint", ccms_entry_id);
+        } else if (is_sending == "Yes" && value == "Compliment") {
+            this.updateStateThenSend("is_compliment", ccms_entry_id);
+        }
+
+        // clear state ????
+    };
+
+    submitForm = (data, id) => {
+        console.log(data);
+        this.props.update_ccms(data, id);
+    };
+
+    modalButtonProps = [
+        {
+            buttonLabel: "Submit Compliment",
+            value: "Compliment",
+            color: "success",
+            className: "mr-2",
+            parentCallback: this.callbackFunction
+        },
+        {
+            buttonLabel: "Submit Complaint",
+            value: "Complaint",
+            color: "danger",
+            className: "mr-2",
+            parentCallback: this.callbackFunction
+        }
+    ];
+
+    validate;
+
+    handleSubmit = event => {
+        const form = event.currentTarget;
+        console.log(this.state.ccms_owner);
+        if (!this.state.ccms_owner) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            return false;
+        }
+
+        event.preventDefault();
+        this.setState({ isOpen: !this.state.isOpen }, () =>
+            console.log(this.state)
+        );
+    };
+
+    toggleModalCallback = () => {
+        this.setState({ isOpen: false });
+    };
+
     render() {
         // props.ccms_entry CCMS DETAILS
 
         // excluding below array from formContructor
+
         let toRemove = [
             "summary_complaint",
             "rca_required",
             "is_complaint",
-            "is_compliment"
+            "is_compliment",
+            "isOpen",
+            "validationState"
         ];
 
         return (
             <Fragment>
-                <Form autoComplete="off">
-                    {this.formContructor(
-                        this.convertToTwoDim(
-                            Object.keys(this.state).filter(
-                                item => !toRemove.includes(item)
-                            )
-                        )
-                    )}
+                <Form autoComplete="off" onSubmit={this.handleSubmit}>
                     <FormGroup>
+                        {this.formContructor(
+                            this.convertToTwoDim(
+                                Object.keys(this.state).filter(
+                                    item => !toRemove.includes(item)
+                                )
+                            )
+                        )}
+
                         <Label for="id_summary_complaint">Summary: </Label>
                         <Input
                             type="textarea"
@@ -197,26 +280,61 @@ class CcmsForm extends Component {
                             id="id_summary_complaint"
                             value={this.state.summary_complaint}
                             onChange={this.handleChange}
+                            required
+                            disabled={this.props.list_type ? true : false}
                         />
                     </FormGroup>
+
                     <Row>
-                        <Col md={10}>
+                        <Col>
                             <Button
+                                type="submit"
+                                name="is_compliment"
+                                onClick={e =>
+                                    this.setState({
+                                        [e.target.name]: true
+                                    })
+                                }
                                 color="success"
                                 className="mr-2"
-                                value="Compliment"
-                                onClick={e => this.handleClick(e)}
                             >
-                                Submit Compliment
+                                Compliment
                             </Button>
                             <Button
+                                type="submit"
+                                name="is_complaint"
+                                onClick={e =>
+                                    this.setState({
+                                        [e.target.name]: true
+                                    })
+                                }
                                 color="danger"
                                 className="mr-2"
-                                value="Complaint"
-                                onClick={e => this.handleClick(e)}
                             >
-                                Submit Complaint
+                                Complaint
                             </Button>
+
+                            {/* {this.modalButtonProps.map((btn, index) => (
+                                <CcmsModal
+                                    key={index}
+                                    ccms_entry_id={
+                                        (this.props.ccms_entry || {}).id
+                                    }
+                                    {...btn}
+                                    isOpen
+                                />
+                            ))} */}
+                            <CcmsModal
+                                isOpen={this.state.isOpen}
+                                parentToggle={this.toggleModalCallback}
+                                parentCallback={this.callbackFunction}
+                                value={
+                                    this.state.is_compliment
+                                        ? "Compliment"
+                                        : "Complaint"
+                                }
+                                ccms_entry_id={(this.props.ccms_entry || {}).id}
+                            />
                         </Col>
                         <Col md={2}>
                             <Input
@@ -226,6 +344,7 @@ class CcmsForm extends Component {
                                 id="id_rca_required"
                                 checked={this.state.rca_required}
                                 onChange={this.handleChange}
+                                disabled={this.props.list_type ? true : false}
                             />
                             <Label for="id_rca_required">RCA Required?</Label>
                         </Col>
@@ -241,7 +360,10 @@ const mapStateToProps = state => ({
     ticket_status: state.ccms.ticket_status,
     escalation_type: state.ccms.escalation_type,
     accountable_team: state.ccms.accountable_team,
-    site_code: state.ccms.site_code
+    site_code: state.ccms.site_code,
+    ccms_owner: state.ccms.ccms_owner
 });
 
-export default connect(mapStateToProps, { get_business_unit })(CcmsForm);
+export default connect(mapStateToProps, { get_business_unit, update_ccms })(
+    CcmsForm
+);

@@ -9,7 +9,9 @@ import {
     GET_TICKET_STATUS,
     GET_ESCALATION_TYPE,
     GET_ACCOUNTABLE_TEAM,
-    GET_SITE_CODE
+    GET_SITE_CODE,
+    UPDATE_CCMS,
+    GET_CCMS_OWNER
 } from "../actions/types";
 
 const initialState = {
@@ -20,7 +22,8 @@ const initialState = {
     ticket_status: null,
     escalation_type: null,
     accountable_team: null,
-    site_code: null
+    site_code: null,
+    ccms_owner: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -34,6 +37,11 @@ const ccmsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: false
+            };
+        case GET_CCMS_OWNER:
+            return {
+                ...state,
+                ccms_owner: action.payload
             };
         case GET_SITE_CODE:
             return {
@@ -84,6 +92,12 @@ const ccmsReducer = (state = initialState, action) => {
                     }
                 })
             };
+        case UPDATE_CCMS:
+            // console.log(action.payload);
+            return {
+                ...state,
+                ccms_list: update_list(state.ccms_list, action.payload)
+            };
         case ADD_UPDATE:
             // console.log(action.payload);
             return {
@@ -95,5 +109,8 @@ const ccmsReducer = (state = initialState, action) => {
             return state;
     }
 };
+
+const update_list = (list, new_entry) =>
+    list.map(item => (item.id == new_entry.id ? new_entry : item));
 
 export default ccmsReducer;

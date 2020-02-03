@@ -10,12 +10,52 @@ import {
     GET_TICKET_STATUS,
     GET_ESCALATION_TYPE,
     GET_ACCOUNTABLE_TEAM,
-    GET_SITE_CODE
+    GET_SITE_CODE,
+    UPDATE_CCMS,
+    GET_CCMS_OWNER
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export const update_ccms = (data, id) => dispatch => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .put(`/api/ccms/${id}/`, data)
+        .then(res => {
+            dispatch({
+                type: UPDATE_CCMS,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const get_ccms_owner = () => dispatch => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .get("/api/ccms_owners/")
+        .then(res => {
+            dispatch({
+                type: GET_CCMS_OWNER,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING
+            });
+        })
+        .catch(err => console.log(err.response));
+};
 
 export const get_site_code = () => dispatch => {
     dispatch({

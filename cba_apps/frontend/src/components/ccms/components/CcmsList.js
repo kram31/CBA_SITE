@@ -170,32 +170,30 @@ class CcmsList extends Component {
                                         <tr>
                                             <td colSpan={10}>
                                                 <Collapse isOpen={isOpen}>
-                                                    <div className="section">
-                                                        <Fade>
-                                                            <Card>
-                                                                <CardHeader>
-                                                                    <h3>
-                                                                        CCMS ID:{" "}
-                                                                        {
-                                                                            activeItem.id
-                                                                        }
-                                                                    </h3>
-                                                                </CardHeader>
-                                                                <CardBody>
-                                                                    <CcmsForm
-                                                                        list_type={
-                                                                            this
-                                                                                .props
-                                                                                .list_type
-                                                                        }
-                                                                        ccms_entry={
-                                                                            activeItem
-                                                                        }
-                                                                    />
-                                                                </CardBody>
-                                                            </Card>
-                                                        </Fade>
-                                                    </div>
+                                                    <Fade>
+                                                        <Card>
+                                                            <CardHeader>
+                                                                <h3>
+                                                                    CCMS ID:{" "}
+                                                                    {
+                                                                        activeItem.id
+                                                                    }
+                                                                </h3>
+                                                            </CardHeader>
+                                                            <CardBody>
+                                                                <CcmsForm
+                                                                    list_type={
+                                                                        this
+                                                                            .props
+                                                                            .list_type
+                                                                    }
+                                                                    ccms_entry={
+                                                                        activeItem
+                                                                    }
+                                                                />
+                                                            </CardBody>
+                                                        </Card>
+                                                    </Fade>
                                                 </Collapse>
                                             </td>
                                         </tr>
