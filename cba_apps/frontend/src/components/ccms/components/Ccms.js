@@ -17,7 +17,7 @@ import {
 
 import { Spinner, Container, Row, Col } from "reactstrap";
 
-import CcmsView from "./CcmsView";
+import CcmsTable from "./CcmsTable";
 
 class Ccms extends Component {
     constructor(props) {
@@ -74,7 +74,7 @@ class Ccms extends Component {
                     <Row className="mb-5">
                         <Col>
                             {auth.user.group_list.includes("CCMS Admin") && (
-                                <CcmsView
+                                <CcmsTable
                                     title=""
                                     ccms_array={ccms.ccms_list}
                                 />
@@ -85,7 +85,7 @@ class Ccms extends Component {
                     <Row>
                         <Col>
                             {auth.user.username && (
-                                <CcmsView
+                                <CcmsTable
                                     title="CCMS Owner VIEW - Assigning Escalation"
                                     ccms_array={ccms.ccms_list.filter(
                                         item =>

@@ -12,57 +12,48 @@ class CcmsForm extends Component {
     constructor(props) {
         super(props);
 
-        // this.state = { ...props.ccms_entry };
-        // "business_unit",
-        // "ticket_status"
-        // "escalation_type",
-        // "accountable_team",
-        // "site_code"
+        this.state = { ...props.ccms_entry, isOpen: false };
 
-        const {
-            ticket_status,
-            business_unit,
-            escalation_type,
-            accountable_team,
-            site_code,
-            escalated_ticket,
-            escalated_by,
-            escalated_email_address,
-            specific_business_unit,
-            escalated_name,
-            lan_id,
-            ccms_owner,
-            summary_complaint,
-            rca_required,
-            is_complaint
-        } = props.ccms_entry || {};
+        // const {
+        //     ticket_status,
+        //     business_unit,
+        //     escalation_type,
+        //     accountable_team,
+        //     site_code,
+        //     escalated_ticket,
+        //     escalated_by,
+        //     escalated_email_address,
+        //     specific_business_unit,
+        //     escalated_name,
+        //     lan_id,
+        //     ccms_owner,
+        //     summary_complaint,
+        //     rca_required,
+        //     is_complaint
+        // } = props.ccms_entry || {};
 
-        this.state = {
-            escalated_ticket,
-            escalated_by,
-            escalated_email_address,
-            business_unit,
-            specific_business_unit,
-            ticket_status,
-            escalation_type,
-            accountable_team,
-            escalated_name,
-            lan_id,
-            site_code,
-            ccms_owner,
-            summary_complaint,
-            rca_required,
-            is_complaint,
+        // this.state = {
+        //     escalated_ticket,
+        //     escalated_by,
+        //     escalated_email_address,
+        //     business_unit,
+        //     specific_business_unit,
+        //     ticket_status,
+        //     escalation_type,
+        //     accountable_team,
+        //     escalated_name,
+        //     lan_id,
+        //     site_code,
+        //     ccms_owner,
+        //     summary_complaint,
+        //     rca_required,
+        //     is_complaint,
 
-            isOpen: false
-        };
+        //     isOpen: false
+        // };
     }
 
     handleChange = event => {
-        // this.setState({
-        //     [e.target.name]: e.target.value
-        // });
-
         const target = event.target;
         const value =
             target.type === "checkbox" ? target.checked : target.value;
@@ -72,6 +63,9 @@ class CcmsForm extends Component {
             [name]: value
         });
     };
+
+    // NOT BEING USED YET
+    // WILL USE IT FOR RCA FORM
 
     handleClick = event => {
         event.preventDefault();
@@ -226,7 +220,7 @@ class CcmsForm extends Component {
         // }
 
         event.preventDefault();
-        this.setState({ isOpen: !this.state.isOpen, popoverOpen: false }, () =>
+        this.setState({ isOpen: !this.state.isOpen }, () =>
             console.log(this.state)
         );
     };
@@ -236,8 +230,6 @@ class CcmsForm extends Component {
     };
 
     render() {
-        // props.ccms_entry CCMS DETAILS
-
         // excluding below array from formContructor
 
         let toRemove = [
@@ -245,8 +237,16 @@ class CcmsForm extends Component {
             "rca_required",
             "is_complaint",
             "isOpen",
-            "validationState",
-            "popoverOpen"
+            "id",
+            "mail",
+            "silo",
+            "ticket_type",
+            "ccms_status",
+            "mail_age",
+            "acknowledged_by",
+            "is_acknowledged",
+            "is_resolved",
+            "date_acknowledged"
         ];
 
         return (
@@ -330,7 +330,8 @@ class CcmsForm extends Component {
                                 <Button onClick={() => console.log("Open RCA")}>
                                     RCA
                                 </Button>
-                            ) : (
+                            ) : this.props.list_type &&
+                              !this.state.rca_required ? null : (
                                 <Fragment>
                                     <Input
                                         bsSize="md"

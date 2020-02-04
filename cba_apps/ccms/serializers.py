@@ -141,17 +141,17 @@ class TicketTypeSerializer(serializers.ModelSerializer):
 
 class CcmsSerializer(serializers.ModelSerializer):
 
-    mail = MailSerializer(read_only=True)
+    ccms_owner = CCMSOwnerSerializer(required=False)
     site_code = SiteCodeSerializer(required=False)
     accountable_team = AccountableTeamSerializer(required=False)
     escalation_type = EscalationTypeSerializer(required=False)
     business_unit = BusinessUnitSerializer(required=False)
-    ccms_owner = CCMSOwnerSerializer(required=False)
     ticket_status = TicketStatusSerializer(required=False)
     silo = SiloSerializer(required=False)
     ticket_type = TicketTypeSerializer(required=False)
     ccms_status = CCMSStatusSerializer(required=False)
 
+    mail = MailSerializer(read_only=True)
     mail_age = serializers.SerializerMethodField()
 
     def get_mail_age(self, obj):

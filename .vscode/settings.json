@@ -1,4 +1,8 @@
 {
     "python.pythonPath": "C:\\Users\\mlascano\\.virtualenvs\\CBA_SITE-DOpgbcQ-\\Scripts\\python.exe",
-    "python.jediEnabled": true
+    "python.jediEnabled": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django",
+        "--errors-only"
+    ]
 }

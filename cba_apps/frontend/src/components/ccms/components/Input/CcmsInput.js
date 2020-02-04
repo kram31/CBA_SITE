@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from "react";
-import { Popover, PopoverHeader, PopoverBody, Label } from "reactstrap";
+import { Label } from "reactstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 
 const CcmsInput = props => {
