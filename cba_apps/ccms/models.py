@@ -34,7 +34,7 @@ class Ccms(models.Model):
     specific_business_unit = models.CharField(max_length=2000, blank=True)
     rca_required = models.BooleanField(default=False)
     is_complaint = models.BooleanField(default=False)
-    is_compliment = models.BooleanField(default=False)
+    # is_compliment = models.BooleanField(default=False)
     summary_complaint = models.TextField(blank=True)
 
     business_unit = models.ForeignKey(

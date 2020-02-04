@@ -1,17 +1,8 @@
 import React, { Component, Fragment } from "react";
+
 import CcmsModal from "./Modals/CcmsModal";
 
-import {
-    Form,
-    Row,
-    Col,
-    Input,
-    Label,
-    FormGroup,
-    Button,
-    InputGroup,
-    InputGroupAddon
-} from "reactstrap";
+import { Form, Row, Col, Input, Label, FormGroup, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
 
@@ -43,8 +34,7 @@ class CcmsForm extends Component {
             ccms_owner,
             summary_complaint,
             rca_required,
-            is_complaint,
-            is_compliment
+            is_complaint
         } = props.ccms_entry || {};
 
         this.state = {
@@ -63,7 +53,7 @@ class CcmsForm extends Component {
             summary_complaint,
             rca_required,
             is_complaint,
-            is_compliment,
+
             isOpen: false
         };
     }
@@ -122,9 +112,9 @@ class CcmsForm extends Component {
         selected: this.state[col] ? [this.state[col]] : [],
         disabled: this.props.list_type ? true : false,
         placeholder: "Select...",
-        ref: typeahead => (this.typeahead = typeahead),
         selectHintOnEnter: true,
-        clearButton: true
+        clearButton: true,
+        name: col
     });
 
     inputProps = col => ({
@@ -155,7 +145,7 @@ class CcmsForm extends Component {
                                     <Label for={"id_" + col}>{x}: </Label>
                                     <Typeahead
                                         {...this.typeaheadProps(col)}
-                                        required
+                                        inputProps={{ required: true }}
                                     />
                                 </Col>
                             ) : (
@@ -184,8 +174,8 @@ class CcmsForm extends Component {
         return newArr;
     };
 
-    updateStateThenSend = (property, id) => {
-        this.setState({ [property]: true }, () =>
+    updateStateThenSend = id => {
+        this.setState({ is_complaint: true }, () =>
             this.submitForm(this.state, id)
         );
     };
@@ -194,16 +184,13 @@ class CcmsForm extends Component {
         const { is_sending, value, ccms_entry_id } = childData;
 
         if (is_sending == "Yes" && value == "Complaint") {
-            this.updateStateThenSend("is_complaint", ccms_entry_id);
-        } else if (is_sending == "Yes" && value == "Compliment") {
-            this.updateStateThenSend("is_compliment", ccms_entry_id);
+            this.updateStateThenSend(ccms_entry_id);
         }
 
         // clear state ????
     };
 
     submitForm = (data, id) => {
-        console.log(data);
         this.props.update_ccms(data, id);
     };
 
@@ -213,31 +200,33 @@ class CcmsForm extends Component {
             value: "Compliment",
             color: "success",
             className: "mr-2",
-            parentCallback: this.callbackFunction
+            parentCallback: this.callbackFunction,
+            submitForm: this.handleSubmit
         },
         {
             buttonLabel: "Submit Complaint",
             value: "Complaint",
             color: "danger",
             className: "mr-2",
-            parentCallback: this.callbackFunction
+            parentCallback: this.callbackFunction,
+            submitForm: this.handleSubmit
         }
     ];
 
-    validate;
-
     handleSubmit = event => {
+        console.log("submit working");
         const form = event.currentTarget;
         console.log(this.state.ccms_owner);
-        if (!this.state.ccms_owner) {
-            event.preventDefault();
-            event.stopPropagation();
+        // if (!this.state.ccms_owner) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     this.setState({ popoverOpen: true });
 
-            return false;
-        }
+        //     return false;
+        // }
 
         event.preventDefault();
-        this.setState({ isOpen: !this.state.isOpen }, () =>
+        this.setState({ isOpen: !this.state.isOpen, popoverOpen: false }, () =>
             console.log(this.state)
         );
     };
@@ -255,9 +244,9 @@ class CcmsForm extends Component {
             "summary_complaint",
             "rca_required",
             "is_complaint",
-            "is_compliment",
             "isOpen",
-            "validationState"
+            "validationState",
+            "popoverOpen"
         ];
 
         return (
@@ -287,12 +276,23 @@ class CcmsForm extends Component {
 
                     <Row>
                         <Col>
+                            <CcmsModal
+                                isOpen={this.state.isOpen}
+                                parentToggle={this.toggleModalCallback}
+                                parentCallback={this.callbackFunction}
+                                value={
+                                    this.state.is_compliment
+                                        ? "Compliment"
+                                        : "Complaint"
+                                }
+                                ccms_entry_id={(this.props.ccms_entry || {}).id}
+                            />
                             <Button
                                 type="submit"
                                 name="is_compliment"
                                 onClick={e =>
                                     this.setState({
-                                        [e.target.name]: true
+                                        is_complaint: false
                                     })
                                 }
                                 color="success"
@@ -324,29 +324,30 @@ class CcmsForm extends Component {
                                     isOpen
                                 />
                             ))} */}
-                            <CcmsModal
-                                isOpen={this.state.isOpen}
-                                parentToggle={this.toggleModalCallback}
-                                parentCallback={this.callbackFunction}
-                                value={
-                                    this.state.is_compliment
-                                        ? "Compliment"
-                                        : "Complaint"
-                                }
-                                ccms_entry_id={(this.props.ccms_entry || {}).id}
-                            />
                         </Col>
                         <Col md={2}>
-                            <Input
-                                bsSize="md"
-                                type="checkbox"
-                                name="rca_required"
-                                id="id_rca_required"
-                                checked={this.state.rca_required}
-                                onChange={this.handleChange}
-                                disabled={this.props.list_type ? true : false}
-                            />
-                            <Label for="id_rca_required">RCA Required?</Label>
+                            {this.props.list_type && this.state.rca_required ? (
+                                <Button onClick={() => console.log("Open RCA")}>
+                                    RCA
+                                </Button>
+                            ) : (
+                                <Fragment>
+                                    <Input
+                                        bsSize="md"
+                                        type="checkbox"
+                                        name="rca_required"
+                                        id="id_rca_required"
+                                        checked={this.state.rca_required}
+                                        onChange={this.handleChange}
+                                        disabled={
+                                            this.props.list_type ? true : false
+                                        }
+                                    />
+                                    <Label for="id_rca_required">
+                                        RCA Required?
+                                    </Label>
+                                </Fragment>
+                            )}
                         </Col>
                     </Row>
                 </Form>

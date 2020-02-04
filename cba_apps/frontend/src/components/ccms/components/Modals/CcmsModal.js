@@ -3,9 +3,13 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 const CcmsModal = props => {
     const {
+        color,
+        className,
+        buttonLabel,
         parentCallback,
         value,
         ccms_entry_id,
+        submitForm,
         // Testing new modal button
         isOpen,
         parentToggle
@@ -22,7 +26,7 @@ const CcmsModal = props => {
 
     return (
         <Fragment>
-            {/* <Button color={color} className={className} onClick={toggle}>
+            {/* <Button color={color} className={className} onSubmit={submitForm}>
                 {buttonLabel}
             </Button> */}
             <Modal isOpen={isOpen} toggle={parentToggle}>
