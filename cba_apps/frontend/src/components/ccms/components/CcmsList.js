@@ -211,7 +211,8 @@ class CcmsList extends Component {
 }
 
 const mapStateToProps = state => ({
-    business_unit: state.ccms.business_unit
+    business_unit: state.ccms.business_unit,
+    comments: state.ccms.comments
 });
 
 export default connect(mapStateToProps, { get_business_unit })(CcmsList);

@@ -57,7 +57,7 @@ class Ccms(models.Model):
         "TicketType", on_delete=models.CASCADE, related_name="ticket_types", blank=True, null=True)
 
     def __str__(self):
-        return self.pk
+        return f"CBA CCMS ID: {str(self.pk)}"
 
 
 class Mailbox_Monitor(models.Model):
@@ -71,7 +71,8 @@ class Mailbox_Monitor(models.Model):
 # comment_entry_date, contributor_name, ccms_entry(foreign key)
 class Comment(models.Model):
     entry = models.TextField()
-    contributor_name = models.CharField(max_length=2000)
+    contributor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="contributors", blank=True, null=True)
     comment_entry_date = models.CharField(max_length=2000)
     ccms = models.ForeignKey(
         "Ccms", on_delete=models.CASCADE, related_name="ccms", blank=True, null=True)

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 
 import CcmsModal from "./Modals/CcmsModal";
+import CommentForm from "./Comment/CommentForm";
 
 import { Form, Row, Col, Input, Label, FormGroup, Button } from "reactstrap";
 import { connect } from "react-redux";
@@ -168,57 +169,45 @@ class CcmsForm extends Component {
         return newArr;
     };
 
-    updateStateThenSend = id => {
-        this.setState({ is_complaint: true }, () =>
-            this.submitForm(this.state, id)
-        );
+    updateStateThenSend = (id, value) => {
+        if (value == "Complaint") {
+            this.setState(
+                {
+                    is_complaint: true,
+                    ccms_status: {
+                        id: 1,
+                        name: "Open - Assigned"
+                    }
+                },
+                () => this.submitForm(this.state, id)
+            );
+        } else if (value == "Compliment") {
+            this.setState(
+                {
+                    is_complaint: false,
+                    ccms_status: {
+                        id: 10,
+                        name: "Closed"
+                    }
+                },
+                () => this.submitForm(this.state, id)
+            );
+        }
     };
 
     callbackFunction = childData => {
         const { is_sending, value, ccms_entry_id } = childData;
 
-        if (is_sending == "Yes" && value == "Complaint") {
-            this.updateStateThenSend(ccms_entry_id);
+        if (is_sending == "Yes") {
+            this.updateStateThenSend(ccms_entry_id, value);
         }
-
-        // clear state ????
     };
 
     submitForm = (data, id) => {
         this.props.update_ccms(data, id);
     };
 
-    modalButtonProps = [
-        {
-            buttonLabel: "Submit Compliment",
-            value: "Compliment",
-            color: "success",
-            className: "mr-2",
-            parentCallback: this.callbackFunction,
-            submitForm: this.handleSubmit
-        },
-        {
-            buttonLabel: "Submit Complaint",
-            value: "Complaint",
-            color: "danger",
-            className: "mr-2",
-            parentCallback: this.callbackFunction,
-            submitForm: this.handleSubmit
-        }
-    ];
-
     handleSubmit = event => {
-        console.log("submit working");
-        const form = event.currentTarget;
-        console.log(this.state.ccms_owner);
-        // if (!this.state.ccms_owner) {
-        //     event.preventDefault();
-        //     event.stopPropagation();
-        //     this.setState({ popoverOpen: true });
-
-        //     return false;
-        // }
-
         event.preventDefault();
         this.setState({ isOpen: !this.state.isOpen }, () =>
             console.log(this.state)
@@ -251,70 +240,78 @@ class CcmsForm extends Component {
 
         return (
             <Fragment>
-                <Form autoComplete="off" onSubmit={this.handleSubmit}>
-                    <FormGroup>
-                        {this.formContructor(
-                            this.convertToTwoDim(
-                                Object.keys(this.state).filter(
-                                    item => !toRemove.includes(item)
-                                )
-                            )
-                        )}
+                <Row className="mb-2">
+                    <Col>
+                        <Form autoComplete="off" onSubmit={this.handleSubmit}>
+                            <FormGroup>
+                                {this.formContructor(
+                                    this.convertToTwoDim(
+                                        Object.keys(this.state).filter(
+                                            item => !toRemove.includes(item)
+                                        )
+                                    )
+                                )}
 
-                        <Label for="id_summary_complaint">Summary: </Label>
-                        <Input
-                            type="textarea"
-                            rows="4"
-                            name="summary_complaint"
-                            id="id_summary_complaint"
-                            value={this.state.summary_complaint}
-                            onChange={this.handleChange}
-                            required
-                            disabled={this.props.list_type ? true : false}
-                        />
-                    </FormGroup>
+                                <Label for="id_summary_complaint">
+                                    Summary:{" "}
+                                </Label>
+                                <Input
+                                    type="textarea"
+                                    rows="4"
+                                    name="summary_complaint"
+                                    id="id_summary_complaint"
+                                    value={this.state.summary_complaint}
+                                    onChange={this.handleChange}
+                                    required
+                                    disabled={
+                                        this.props.list_type ? true : false
+                                    }
+                                />
+                            </FormGroup>
 
-                    <Row>
-                        <Col>
-                            <CcmsModal
-                                isOpen={this.state.isOpen}
-                                parentToggle={this.toggleModalCallback}
-                                parentCallback={this.callbackFunction}
-                                value={
-                                    this.state.is_compliment
-                                        ? "Compliment"
-                                        : "Complaint"
-                                }
-                                ccms_entry_id={(this.props.ccms_entry || {}).id}
-                            />
-                            <Button
-                                type="submit"
-                                name="is_compliment"
-                                onClick={e =>
-                                    this.setState({
-                                        is_complaint: false
-                                    })
-                                }
-                                color="success"
-                                className="mr-2"
-                            >
-                                Compliment
-                            </Button>
-                            <Button
-                                type="submit"
-                                name="is_complaint"
-                                onClick={e =>
-                                    this.setState({
-                                        [e.target.name]: true
-                                    })
-                                }
-                                color="danger"
-                                className="mr-2"
-                            >
-                                Complaint
-                            </Button>
+                            <Row>
+                                <Col>
+                                    <CcmsModal
+                                        isOpen={this.state.isOpen}
+                                        parentToggle={this.toggleModalCallback}
+                                        parentCallback={this.callbackFunction}
+                                        value={
+                                            this.state.is_compliment
+                                                ? "Compliment"
+                                                : "Complaint"
+                                        }
+                                        ccms_entry_id={
+                                            (this.props.ccms_entry || {}).id
+                                        }
+                                    />
+                                    <Button
+                                        type="submit"
+                                        name="is_compliment"
+                                        onClick={e =>
+                                            this.setState({
+                                                is_complaint: false
+                                            })
+                                        }
+                                        color="success"
+                                        className="mr-2"
+                                    >
+                                        Compliment
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        name="is_complaint"
+                                        onClick={e =>
+                                            this.setState({
+                                                [e.target.name]: true
+                                            })
+                                        }
+                                        color="danger"
+                                        className="mr-2"
+                                    >
+                                        Complaint
+                                    </Button>
 
-                            {/* {this.modalButtonProps.map((btn, index) => (
+                                    {/* {this.modalButtonProps.map((btn, index) => (
                                 <CcmsModal
                                     key={index}
                                     ccms_entry_id={
@@ -324,34 +321,47 @@ class CcmsForm extends Component {
                                     isOpen
                                 />
                             ))} */}
-                        </Col>
-                        <Col md={2}>
-                            {this.props.list_type && this.state.rca_required ? (
-                                <Button onClick={() => console.log("Open RCA")}>
-                                    RCA
-                                </Button>
-                            ) : this.props.list_type &&
-                              !this.state.rca_required ? null : (
-                                <Fragment>
-                                    <Input
-                                        bsSize="md"
-                                        type="checkbox"
-                                        name="rca_required"
-                                        id="id_rca_required"
-                                        checked={this.state.rca_required}
-                                        onChange={this.handleChange}
-                                        disabled={
-                                            this.props.list_type ? true : false
-                                        }
-                                    />
-                                    <Label for="id_rca_required">
-                                        RCA Required?
-                                    </Label>
-                                </Fragment>
-                            )}
-                        </Col>
-                    </Row>
-                </Form>
+                                </Col>
+                                <Col md={2}>
+                                    {this.props.list_type &&
+                                    this.state.rca_required ? (
+                                        <Button
+                                            onClick={() =>
+                                                console.log("Open RCA")
+                                            }
+                                        >
+                                            RCA
+                                        </Button>
+                                    ) : this.props.list_type &&
+                                      !this.state.rca_required ? null : (
+                                        <Fragment>
+                                            <Input
+                                                bsSize="md"
+                                                type="checkbox"
+                                                name="rca_required"
+                                                id="id_rca_required"
+                                                checked={
+                                                    this.state.rca_required
+                                                }
+                                                onChange={this.handleChange}
+                                                disabled={
+                                                    this.props.list_type
+                                                        ? true
+                                                        : false
+                                                }
+                                            />
+                                            <Label for="id_rca_required">
+                                                RCA Required?
+                                            </Label>
+                                        </Fragment>
+                                    )}
+                                </Col>
+                            </Row>
+                        </Form>
+                    </Col>
+                </Row>
+
+                <CommentForm ccms_entry={this.props.ccms_entry} />
             </Fragment>
         );
     }
@@ -363,7 +373,8 @@ const mapStateToProps = state => ({
     escalation_type: state.ccms.escalation_type,
     accountable_team: state.ccms.accountable_team,
     site_code: state.ccms.site_code,
-    ccms_owner: state.ccms.ccms_owner
+    ccms_owner: state.ccms.ccms_owner,
+    comments: state.ccms.comments
 });
 
 export default connect(mapStateToProps, { get_business_unit, update_ccms })(

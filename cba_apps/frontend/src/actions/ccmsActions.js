@@ -12,12 +12,34 @@ import {
     GET_ACCOUNTABLE_TEAM,
     GET_SITE_CODE,
     UPDATE_CCMS,
-    GET_CCMS_OWNER
+    GET_CCMS_OWNER,
+    GET_CCMS_STATUS,
+    ADD_COMMENT
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export const add_comment = data => dispatch => {
+    console.log(data);
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .post("/api/comments/", data)
+        .then(res => {
+            dispatch({
+                type: ADD_COMMENT,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING
+            });
+        })
+        .catch(err => console.log(err.response));
+};
 
 export const update_ccms = (data, id) => dispatch => {
     dispatch({
@@ -29,6 +51,25 @@ export const update_ccms = (data, id) => dispatch => {
         .then(res => {
             dispatch({
                 type: UPDATE_CCMS,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const get_ccms_status = () => dispatch => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .get("/api/ccms_status/")
+        .then(res => {
+            dispatch({
+                type: GET_CCMS_STATUS,
                 payload: res.data
             });
             dispatch({

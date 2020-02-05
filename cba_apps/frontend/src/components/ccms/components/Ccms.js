@@ -12,7 +12,8 @@ import {
     get_escalation_type,
     get_accountable_team,
     get_site_code,
-    get_ccms_owner
+    get_ccms_owner,
+    get_ccms_status
 } from "../../../actions/ccmsActions";
 
 import { Spinner, Container, Row, Col } from "reactstrap";
@@ -31,6 +32,7 @@ class Ccms extends Component {
         props.get_accountable_team();
         props.get_site_code();
         props.get_ccms_owner();
+        props.get_ccms_status();
 
         this.state = {
             user_details: this.props.auth.user
@@ -125,7 +127,8 @@ export default connect(mapStateToProps, {
     get_escalation_type,
     get_accountable_team,
     get_site_code,
-    get_ccms_owner
+    get_ccms_owner,
+    get_ccms_status
 })(Ccms);
 
 export const Loading = () => (

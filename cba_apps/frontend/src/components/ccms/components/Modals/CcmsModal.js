@@ -3,13 +3,10 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 const CcmsModal = props => {
     const {
-        color,
-        className,
-        buttonLabel,
         parentCallback,
         value,
         ccms_entry_id,
-        submitForm,
+
         // Testing new modal button
         isOpen,
         parentToggle

@@ -19,11 +19,11 @@ const CommentList = props => {
         marginLeft: "5px"
     };
 
-    return props.comments.map(comment => (
+    return (props.comments || []).map(comment => (
         <div key={comment.id}>
             <p style={commentBoxStyle}>
                 <a href="" style={{ color: "blue", fontWeight: "bold" }}>
-                    {comment.contributor_name}
+                    {comment.contributor.username}
                 </a>
                 : {comment.entry}
             </p>

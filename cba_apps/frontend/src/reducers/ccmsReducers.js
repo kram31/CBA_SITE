@@ -11,7 +11,9 @@ import {
     GET_ACCOUNTABLE_TEAM,
     GET_SITE_CODE,
     UPDATE_CCMS,
-    GET_CCMS_OWNER
+    GET_CCMS_OWNER,
+    GET_CCMS_STATUS,
+    ADD_COMMENT
 } from "../actions/types";
 
 const initialState = {
@@ -23,7 +25,8 @@ const initialState = {
     escalation_type: null,
     accountable_team: null,
     site_code: null,
-    ccms_owner: null
+    ccms_owner: null,
+    ccms_status: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -37,6 +40,16 @@ const ccmsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: false
+            };
+        case ADD_COMMENT:
+            return {
+                ...state,
+                comments: [action.payload, ...state.comments]
+            };
+        case GET_CCMS_STATUS:
+            return {
+                ...state,
+                ccms_status: action.payload
             };
         case GET_CCMS_OWNER:
             return {

@@ -31,12 +31,6 @@ class Mailbox_MonitorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
-
 class BusinessUnitSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
 
@@ -140,6 +134,7 @@ class TicketTypeSerializer(serializers.ModelSerializer):
 
 
 class CcmsSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     ccms_owner = CCMSOwnerSerializer(required=False)
     site_code = SiteCodeSerializer(required=False)
@@ -226,3 +221,24 @@ class CcmsSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    ccms = CcmsSerializer(required=False)
+    contributor = UserSerializer(required=False)
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+    def create(self, validated_data):
+        print(validated_data)
+        ccms = validated_data.pop('ccms')
+        ccms1 = Ccms.objects.get(id=ccms.id)
+        contrib = validated_data.pop('contributor')
+        contrib1 = Ccms.objects.get(username=contrib.username)
+        comment = Comment.objects.create(
+            contributor=contrib1, ccms=ccms1, **validated_data)
+        comment.save()
+        return comment

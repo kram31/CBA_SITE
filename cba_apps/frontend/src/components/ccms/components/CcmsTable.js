@@ -5,7 +5,7 @@ import CcmsList from "./CcmsList";
 
 import { Row, Col, Form, Input } from "reactstrap";
 
-class CcmsView extends Component {
+class CcmsTable extends Component {
     constructor(props) {
         super(props);
 
@@ -88,4 +88,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {})(CcmsView);
+export default connect(mapStateToProps, {})(CcmsTable);

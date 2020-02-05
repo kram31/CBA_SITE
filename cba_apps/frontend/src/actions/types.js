@@ -99,3 +99,5 @@ export const GET_SITE_CODE = "GET_SITE_CODE";
 export const GET_ACCOUNTABLE_TEAM = "GET_ACCOUNTABLE_TEAM";
 export const GET_CCMS_OWNER = "GET_CCMS_OWNER";
 export const UPDATE_CCMS = "UPDATE_CCMS";
+export const GET_CCMS_STATUS = "GET_CCMS_STATUS";
+export const ADD_COMMENT = "ADD_COMMENT";
