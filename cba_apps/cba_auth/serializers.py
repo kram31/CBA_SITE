@@ -15,6 +15,14 @@ class Auth_DetailsSerializer(serializers.ModelSerializer):
 
         return True if CCMSOwner.objects.get(user=obj.user.id) else False
 
+    user_id = serializers.SerializerMethodField()
+
+    def get_user_id(self, obj):
+
+        return obj.user.pk
+
+    group_list = serializers.SerializerMethodField()
+
     username = serializers.SerializerMethodField()
 
     def get_username(self, obj):

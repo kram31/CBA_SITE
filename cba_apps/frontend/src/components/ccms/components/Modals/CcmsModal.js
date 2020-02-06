@@ -16,10 +16,11 @@ const CcmsModal = props => {
 
     const toggle = () => setModal(!modal);
 
-    const sendData = e =>
+    const sendData = e => {
         e == "Yes"
             ? parentCallback({ is_sending: e, value, ccms_entry_id }, toggle())
             : toggle();
+    };
 
     return (
         <Fragment>

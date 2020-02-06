@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cba_auth.models import Auth_Details
 
 # mail, is_acknowledged?, acknowledged_by, is_resolved?, date_acknowledged
 
@@ -72,8 +73,8 @@ class Mailbox_Monitor(models.Model):
 class Comment(models.Model):
     entry = models.TextField()
     contributor = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="contributors", blank=True, null=True)
-    comment_entry_date = models.CharField(max_length=2000)
+        Auth_Details, on_delete=models.CASCADE, related_name="contributors", blank=True, null=True)
+    comment_entry_date = models.DateField(auto_now=True)
     ccms = models.ForeignKey(
         "Ccms", on_delete=models.CASCADE, related_name="ccms", blank=True, null=True)
 

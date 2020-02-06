@@ -198,6 +198,10 @@ class CcmsForm extends Component {
     callbackFunction = childData => {
         const { is_sending, value, ccms_entry_id } = childData;
 
+        this.setState({
+            isOpen: false
+        });
+
         if (is_sending == "Yes") {
             this.updateStateThenSend(ccms_entry_id, value);
         }

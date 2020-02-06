@@ -1,7 +1,8 @@
 from datetime import datetime
 from rest_framework import serializers
 from django.contrib.auth.models import User
-
+from cba_auth.models import Auth_Details
+from cba_auth.serializers import Auth_DetailsSerializer
 from .models import (Mail,
                      Mailbox_Monitor,
                      Comment,
@@ -226,19 +227,39 @@ class CcmsSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
 
     ccms = CcmsSerializer(required=False)
-    contributor = UserSerializer(required=False)
+    contributor = Auth_DetailsSerializer(required=False)
+    ccms_status = CCMSStatusSerializer(required=False)
 
     class Meta:
         model = Comment
         fields = '__all__'
 
     def create(self, validated_data):
+
         print(validated_data)
+
+        # get CCMS obj for updating CCMS Status
         ccms = validated_data.pop('ccms')
-        ccms1 = Ccms.objects.get(id=ccms.id)
-        contrib = validated_data.pop('contributor')
-        contrib1 = Ccms.objects.get(username=contrib.username)
+
+        ccms_obj = Ccms.objects.get(id=ccms['id'])
+
+        # get ccms_status to update CCMS obj
+        ccms_status = validated_data.pop('ccms_status')
+        ccms_status_obj = CCMSStatus.objects.get(id=ccms_status['id'])
+
+        # update and save ccms obj
+        ccms_obj.ccms_status = ccms_status_obj
+        ccms_obj.save()
+
+        # get contributor
+        contributor = validated_data.pop('contributor')
+        # print(f"MRK 1 = CONTRIBUTOR ===== {contributor}")
+        user = Auth_Details.objects.get(id=contributor['id'])
+
+        # create comment entry
+
         comment = Comment.objects.create(
-            contributor=contrib1, ccms=ccms1, **validated_data)
+            contributor=user, ccms=ccms_obj, **validated_data)
         comment.save()
+
         return comment
