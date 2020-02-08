@@ -14,12 +14,59 @@ import {
     UPDATE_CCMS,
     GET_CCMS_OWNER,
     GET_CCMS_STATUS,
-    ADD_COMMENT
+    ADD_COMMENT,
+    GET_SILO,
+    GET_TICKET_TYPE,
+    GET_SELECTED_CCMS,
+    REMOVE_SELECTED_CCMS,
+    GET_CCMS_LIST_PER_USER,
+    OPEN_COLLAPSE,
+    CLOSE_COLLAPSE,
+    SEARCH
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export const search_ccms = data => dispatch => {
+    dispatch({
+        type: SEARCH,
+        payload: data
+    });
+};
+
+export const close_collapse = () => dispatch => {
+    dispatch({
+        type: CLOSE_COLLAPSE
+    });
+};
+
+export const open_collapse = () => dispatch => {
+    dispatch({
+        type: OPEN_COLLAPSE
+    });
+};
+
+export const get_ccms_list_per_user = data => dispatch => {
+    dispatch({
+        type: GET_CCMS_LIST_PER_USER,
+        payload: data
+    });
+};
+
+export const remove_selected_ccms = () => dispatch => {
+    dispatch({
+        type: REMOVE_SELECTED_CCMS
+    });
+};
+
+export const get_selected_ccms = data => dispatch => {
+    dispatch({
+        type: GET_SELECTED_CCMS,
+        payload: data
+    });
+};
 
 export const add_comment = data => dispatch => {
     console.log(data);
@@ -51,6 +98,44 @@ export const update_ccms = (data, id) => dispatch => {
         .then(res => {
             dispatch({
                 type: UPDATE_CCMS,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const get_silo = () => dispatch => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .get("/api/silo/")
+        .then(res => {
+            dispatch({
+                type: GET_SILO,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const get_ticket_type = () => dispatch => {
+    dispatch({
+        type: FETCHING
+    });
+
+    axios
+        .get("/api/ticket_type/")
+        .then(res => {
+            dispatch({
+                type: GET_TICKET_TYPE,
                 payload: res.data
             });
             dispatch({
@@ -234,13 +319,13 @@ export const ack_entry = (id, data) => dispatch => {
     });
 };
 
-export const getComments = () => dispatch => {
+export const getComments = id => dispatch => {
     dispatch({
         type: FETCHING
     });
 
     axios
-        .get("/api/comments/")
+        .get(`/api/comments/?ccms__id=${id}`)
         .then(res => {
             dispatch({
                 type: GET_COMMENTS,

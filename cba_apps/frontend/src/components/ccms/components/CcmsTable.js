@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
+import { search_ccms } from "../../../actions/ccmsActions";
+
 import CcmsList from "./CcmsList";
 
 import { Row, Col, Form, Input } from "reactstrap";
@@ -12,8 +14,8 @@ class CcmsTable extends Component {
         this.state = {
             title: props.title,
             search: "",
-            search_results: [],
-            ccms: props.ccms_array
+            search_results: props.filtered_ccms_list,
+            ccms_from_parent: props.ccms_array
         };
     }
 
@@ -27,26 +29,27 @@ class CcmsTable extends Component {
         });
 
         let kw = e.target.value;
+        this.props.search_ccms(kw);
 
         // search for ccms.ccms_list.id, ccms.ccms_list.escalated_ticket, ccms.ccms_list.escalated_email_address, ccms.ccms_list.escalated_name
         // all results will be stored in an array of objects
 
-        let items = ccms.filter(
-            item =>
-                kw == item.id ||
-                kw == item.escalated_ticket ||
-                kw == item.escalated_email_address ||
-                kw == item.escalated_name
-        );
+        // let items = ccms.filter(
+        //     item =>
+        //         kw == item.id ||
+        //         kw == item.escalated_ticket ||
+        //         kw == item.escalated_email_address ||
+        //         kw == item.escalated_name
+        // );
 
-        this.setState({
-            search_results: items
-        });
+        // this.setState({
+        //     search_results: items
+        // });
     };
 
     render() {
-        const { title } = this.props;
-        const { search_results, search, ccms } = this.state;
+        const { title, ccms } = this.props;
+        const { search, ccms_from_parent } = this.state;
 
         return (
             <Fragment>
@@ -73,8 +76,9 @@ class CcmsTable extends Component {
                     </Col>
                 </Row>
                 <CcmsList
-                    ccms={
-                        !search ? ccms : search_results.length && search_results
+                    table_name={this.props.table_name}
+                    ccms_list={
+                        search ? ccms.filtered_ccms_list : ccms_from_parent
                     }
                     list_type={title}
                 />
@@ -85,7 +89,8 @@ class CcmsTable extends Component {
 
 const mapStateToProps = state => ({
     ccms: state.ccms,
+    filtered_ccms_list: state.ccms.filtered_ccms_list,
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {})(CcmsTable);
+export default connect(mapStateToProps, { search_ccms })(CcmsTable);

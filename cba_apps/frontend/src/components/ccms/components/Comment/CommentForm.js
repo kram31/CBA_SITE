@@ -19,14 +19,7 @@ class CommentForm extends Component {
     constructor(props) {
         super(props);
 
-        // props needed
-        // ccms_entry
-        // ccms_entry_comments
-
-        console.log(props.ccms_entry.ccms_status);
-
         this.state = {
-            // ...props.ccms_entry,
             ccms: props.ccms_entry,
             entry: "",
             ccms_status:
@@ -55,8 +48,6 @@ class CommentForm extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        console.log(this.state);
-        console.log("submit");
 
         this.props.add_comment(this.state);
     };
@@ -78,7 +69,9 @@ class CommentForm extends Component {
                     <Col>
                         {this.getList(ccms.id).length != 0 ? (
                             <CommentList comments={this.getList(ccms.id)} />
-                        ) : null}
+                        ) : (
+                            <p>No comments...</p>
+                        )}
                     </Col>
                 </Row>
                 <Form onSubmit={this.handleSubmit} autoComplete="off">
@@ -92,22 +85,7 @@ class CommentForm extends Component {
                                     value={ccms_status}
                                     onChange={this.handleChange}
                                     required
-
-                                    // onClick={() =>
-                                    //     this.setState({ ccms_status: "" })
-                                    // }
                                 >
-                                    {/* {ccms_status ? (
-                                        <option
-                                            key={ccms_status.id}
-                                            value={ccms_status.id}
-                                        >
-                                            {ccms_status.name}
-                                        </option>
-                                    ) : (
-                                        <option value="">select...</option>
-                                    )} */}
-
                                     <option
                                         key={ccms_status.id}
                                         value={ccms_status.id}
@@ -126,48 +104,9 @@ class CommentForm extends Component {
                                         )
                                     )}
                                 </Input>
-                                {/* <Typeahead
-                                    labelKey="name"
-                                    onChange={selected =>
-                                        this.setState({
-                                            ccms_status: selected[0]
-                                        })
-                                    }
-                                    id="id_ccms_status"
-                                    options={
-                                        (this.props.ccms || {}).ccms_status
-                                    }
-                                    selected={
-                                        this.state.ccms_status
-                                            ? [this.state.ccms_status]
-                                            : []
-                                    }
-                                    placeholder="Select..."
-                                    selectHintOnEnter={true}
-                                    clearButton={true}
-                                    name="ccms_status"
-                                /> */}
                             </Col>
                             <Col>
                                 <InputGroup className="mb-4">
-                                    {/* <InputGroupAddon addonType="prepend">
-                                <Input
-                                    color="primary"
-                                    name="ccms_status"
-                                    type="select"
-                                    value={ccms_status}
-                                    onChange={this.handleChange}
-                                >
-                                    <option value="">select...</option>
-                                    {(this.props.ccms || {}).ccms_status.map(
-                                        (item, index) => (
-                                            <option key={item.id} value={index}>
-                                                {item.name}
-                                            </option>
-                                        )
-                                    )}
-                                </Input>
-                            </InputGroupAddon> */}
                                     <Input
                                         name="entry"
                                         value={entry}

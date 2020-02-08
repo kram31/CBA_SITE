@@ -77,6 +77,8 @@ class Comment(models.Model):
     comment_entry_date = models.DateField(auto_now=True)
     ccms = models.ForeignKey(
         "Ccms", on_delete=models.CASCADE, related_name="ccms", blank=True, null=True)
+    ccms_status_during_comment = models.CharField(
+        max_length=2000, blank=True, null=True)
 
     def __str__(self):
         return f"Comment for {self.ccms}"

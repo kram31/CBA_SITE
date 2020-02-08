@@ -12,7 +12,14 @@ import { connect } from "react-redux";
 
 import CcmsForm from "./CcmsForm";
 
-import { get_business_unit } from "../../../actions/ccmsActions";
+import {
+    get_business_unit,
+    get_selected_ccms,
+    remove_selected_ccms,
+    close_collapse,
+    open_collapse,
+    getComments
+} from "../../../actions/ccmsActions";
 
 class CcmsList extends Component {
     constructor(props) {
@@ -69,7 +76,7 @@ class CcmsList extends Component {
         }
     };
 
-    setOptions = () => {
+    setOptions = item => {
         if (this.props.list_type) {
             return {
                 th: (
@@ -81,10 +88,20 @@ class CcmsList extends Component {
                 td: (
                     <Fragment>
                         <td>
-                            <Button>View Case</Button>
+                            <Button
+                                color="primary"
+                                onClick={() =>
+                                    this.handleClick(
+                                        item,
+                                        this.props.table_name
+                                    )
+                                }
+                            >
+                                View Case
+                            </Button>
                         </td>
                         <td>
-                            <Button>Change Owner</Button>
+                            <Button color="success">Change Owner</Button>
                         </td>
                     </Fragment>
                 )
@@ -100,32 +117,55 @@ class CcmsList extends Component {
             td: (
                 <Fragment>
                     <td>
-                        <Button>View Case</Button>
+                        <Button
+                            color="primary"
+                            onClick={() =>
+                                this.handleClick(item, this.props.table_name)
+                            }
+                        >
+                            View Case
+                        </Button>
                     </td>
                     <td>
-                        <Button>Open RCA</Button>
+                        <Button color="success">Open RCA</Button>
                     </td>
                 </Fragment>
             )
         };
     };
 
-    handleClick = data => {
-        const { isOpen, activeItem } = this.state;
+    handleClick = (data, table_name) => {
+        const { selected_ccms } = (this.props || {}).ccms;
 
-        this.setState({
-            isOpen: !isOpen,
-            activeItem: activeItem ? null : data
-        });
+        // this.setState({
+        //     activeItem: data
+        // });
+
+        // this.props.open_collapse(data);
+
+        this.props.get_selected_ccms(data);
+
+        if ((selected_ccms || {}).id == data.id) {
+            // this.props.close_collapse();
+            // this.setState({
+            //     activeItem: null
+            // });
+            this.props.remove_selected_ccms();
+        }
+        this.props.getComments(data.id);
     };
 
     render() {
-        const { activeItem, isOpen } = this.state;
+        const { activeItem } = this.state;
+        const { selected_ccms, collapse, ccms_list } = (this.props || {}).ccms;
 
-        if (this.props.ccms) {
+        if (ccms_list) {
             return (
                 <Fragment>
-                    <Table hover style={{ color: "white" }}>
+                    <Table
+                        key={this.props.table_name}
+                        style={{ color: "white" }}
+                    >
                         <thead>
                             <tr>
                                 <th>CCMS ID</th>
@@ -136,12 +176,9 @@ class CcmsList extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.ccms.map(item => (
+                            {this.props.ccms_list.map(item => (
                                 <Fragment key={item.id}>
-                                    <tr
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => this.handleClick(item)}
-                                    >
+                                    <tr>
                                         <td>{item.id}</td>
                                         <td>
                                             {item.escalated_by === ""
@@ -164,40 +201,41 @@ class CcmsList extends Component {
                                                     .displayText
                                             }
                                         </td>
-                                        {this.setOptions().td}
+                                        {this.setOptions(item).td}
                                     </tr>
-                                    {activeItem && activeItem.id === item.id && (
-                                        <tr>
-                                            <td colSpan={10}>
-                                                <Collapse isOpen={isOpen}>
-                                                    <Fade>
-                                                        <Card>
-                                                            <CardHeader>
-                                                                <h3>
-                                                                    CCMS ID:{" "}
-                                                                    {
-                                                                        activeItem.id
-                                                                    }
-                                                                </h3>
-                                                            </CardHeader>
-                                                            <CardBody>
-                                                                <CcmsForm
-                                                                    list_type={
-                                                                        this
-                                                                            .props
-                                                                            .list_type
-                                                                    }
-                                                                    ccms_entry={
-                                                                        activeItem
-                                                                    }
-                                                                />
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Fade>
-                                                </Collapse>
-                                            </td>
-                                        </tr>
-                                    )}
+                                    {selected_ccms &&
+                                        selected_ccms.id === item.id && (
+                                            <tr>
+                                                <td colSpan={10}>
+                                                    <Collapse isOpen={collapse}>
+                                                        <Fade>
+                                                            <Card>
+                                                                <CardHeader>
+                                                                    <h3>
+                                                                        CCMS ID:{" "}
+                                                                        {
+                                                                            selected_ccms.id
+                                                                        }
+                                                                    </h3>
+                                                                </CardHeader>
+                                                                <CardBody>
+                                                                    <CcmsForm
+                                                                        list_type={
+                                                                            this
+                                                                                .props
+                                                                                .list_type
+                                                                        }
+                                                                        ccms_entry={
+                                                                            selected_ccms
+                                                                        }
+                                                                    />
+                                                                </CardBody>
+                                                            </Card>
+                                                        </Fade>
+                                                    </Collapse>
+                                                </td>
+                                            </tr>
+                                        )}
                                 </Fragment>
                             ))}
                         </tbody>
@@ -212,7 +250,15 @@ class CcmsList extends Component {
 
 const mapStateToProps = state => ({
     business_unit: state.ccms.business_unit,
-    comments: state.ccms.comments
+    comments: state.ccms.comments,
+    ccms: state.ccms
 });
 
-export default connect(mapStateToProps, { get_business_unit })(CcmsList);
+export default connect(mapStateToProps, {
+    get_business_unit,
+    get_selected_ccms,
+    remove_selected_ccms,
+    close_collapse,
+    open_collapse,
+    getComments
+})(CcmsList);

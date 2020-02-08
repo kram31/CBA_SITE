@@ -18,6 +18,7 @@ pylint = "*"
 autopep8 = "*"
 pylint-django = "*"
 drf-writable-nested = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.7"

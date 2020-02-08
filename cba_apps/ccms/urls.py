@@ -17,7 +17,8 @@ from .api import (
     CCMSOwnerViewset,
     AccountableTeamViewset,
     TicketTypeViewset,
-    UserViewset
+    UserViewset,
+    CCMSOwnerListViewset
 )
 
 urlpatterns = [
@@ -43,5 +44,6 @@ router.register('api/accountable_team',
                 AccountableTeamViewset, 'accountable_team')
 router.register('api/ticket_type', TicketTypeViewset, 'ticket_type')
 router.register('api/users', UserViewset, 'users')
+router.register('api/ccms_owner_list', CCMSOwnerListViewset, 'ccms_owner_list')
 
 urlpatterns.extend(router.urls)

@@ -13,45 +13,49 @@ class CcmsForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { ...props.ccms_entry, isOpen: false };
+        // this.state = { ...props.ccms_entry, isOpen: false };
 
-        // const {
-        //     ticket_status,
-        //     business_unit,
-        //     escalation_type,
-        //     accountable_team,
-        //     site_code,
-        //     escalated_ticket,
-        //     escalated_by,
-        //     escalated_email_address,
-        //     specific_business_unit,
-        //     escalated_name,
-        //     lan_id,
-        //     ccms_owner,
-        //     summary_complaint,
-        //     rca_required,
-        //     is_complaint
-        // } = props.ccms_entry || {};
+        const {
+            ticket_status,
+            ticket_type,
+            business_unit,
+            escalation_type,
+            accountable_team,
+            site_code,
+            escalated_ticket,
+            escalated_by,
+            escalated_email_address,
+            specific_business_unit,
+            escalated_name,
+            lan_id,
+            silo,
+            ccms_owner,
+            summary_complaint,
+            rca_required,
+            is_complaint
+        } = props.ccms_entry || {};
 
-        // this.state = {
-        //     escalated_ticket,
-        //     escalated_by,
-        //     escalated_email_address,
-        //     business_unit,
-        //     specific_business_unit,
-        //     ticket_status,
-        //     escalation_type,
-        //     accountable_team,
-        //     escalated_name,
-        //     lan_id,
-        //     site_code,
-        //     ccms_owner,
-        //     summary_complaint,
-        //     rca_required,
-        //     is_complaint,
+        this.state = {
+            escalated_ticket,
+            ticket_type,
+            escalated_by,
+            escalated_email_address,
+            business_unit,
+            specific_business_unit,
+            ticket_status,
+            escalation_type,
+            accountable_team,
+            escalated_name,
+            lan_id,
+            silo,
+            site_code,
+            ccms_owner,
+            summary_complaint,
+            rca_required,
+            is_complaint,
 
-        //     isOpen: false
-        // };
+            isOpen: false
+        };
     }
 
     handleChange = event => {
@@ -78,8 +82,6 @@ class CcmsForm extends Component {
         if (value === "Compliment") {
             console.log("Trigger Compliment Request");
         } else if (value === "") console.log("Trigger Complaint Request");
-
-        console.log(this.state);
     };
 
     // Look for a way to make below dynamically
@@ -90,7 +92,9 @@ class CcmsForm extends Component {
         "accountable_team",
         "site_code",
         "ticket_status",
-        "ccms_owner"
+        "ccms_owner",
+        "ticket_type",
+        "silo"
     ];
 
     typeaheadProps = col => ({
@@ -198,9 +202,11 @@ class CcmsForm extends Component {
     callbackFunction = childData => {
         const { is_sending, value, ccms_entry_id } = childData;
 
-        this.setState({
-            isOpen: false
-        });
+        if (is_sending == "No") {
+            return this.setState({
+                isOpen: false
+            });
+        }
 
         if (is_sending == "Yes") {
             this.updateStateThenSend(ccms_entry_id, value);
@@ -232,8 +238,6 @@ class CcmsForm extends Component {
             "isOpen",
             "id",
             "mail",
-            "silo",
-            "ticket_type",
             "ccms_status",
             "mail_age",
             "acknowledged_by",
@@ -365,7 +369,9 @@ class CcmsForm extends Component {
                     </Col>
                 </Row>
 
-                <CommentForm ccms_entry={this.props.ccms_entry} />
+                {this.props.ccms_entry.ccms_status ? (
+                    <CommentForm ccms_entry={this.props.ccms_entry} />
+                ) : null}
             </Fragment>
         );
     }
@@ -378,7 +384,9 @@ const mapStateToProps = state => ({
     accountable_team: state.ccms.accountable_team,
     site_code: state.ccms.site_code,
     ccms_owner: state.ccms.ccms_owner,
-    comments: state.ccms.comments
+    comments: state.ccms.comments,
+    silo: state.ccms.silo,
+    ticket_type: state.ccms.ticket_type
 });
 
 export default connect(mapStateToProps, { get_business_unit, update_ccms })(

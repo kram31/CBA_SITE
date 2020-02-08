@@ -13,7 +13,15 @@ import {
     UPDATE_CCMS,
     GET_CCMS_OWNER,
     GET_CCMS_STATUS,
-    ADD_COMMENT
+    ADD_COMMENT,
+    GET_SILO,
+    GET_TICKET_TYPE,
+    GET_SELECTED_CCMS,
+    REMOVE_SELECTED_CCMS,
+    GET_CCMS_LIST_PER_USER,
+    OPEN_COLLAPSE,
+    CLOSE_COLLAPSE,
+    SEARCH
 } from "../actions/types";
 
 const initialState = {
@@ -26,25 +34,83 @@ const initialState = {
     accountable_team: null,
     site_code: null,
     ccms_owner: null,
-    ccms_status: null
+    ccms_status: null,
+    ticket_type: null,
+    silo: null,
+    selected_ccms: null,
+    ccms_list_per_user: null,
+    collapse: false,
+    filtered_ccms_list: []
 };
 
 const ccmsReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SEARCH:
+            return {
+                ...state,
+                filtered_ccms_list: state.ccms_list.filter(
+                    item =>
+                        action.payload == item.id ||
+                        action.payload == item.escalated_ticket ||
+                        action.payload == item.escalated_email_address ||
+                        action.payload == item.escalated_name
+                )
+            };
         case FETCHING:
             return {
                 ...state,
                 isFetching: true
+            };
+        case CLOSE_COLLAPSE:
+            return {
+                ...state,
+                collapse: false
+            };
+        case OPEN_COLLAPSE:
+            return {
+                ...state,
+                collapse: true
             };
         case STOP_FETCHING:
             return {
                 ...state,
                 isFetching: false
             };
+        case GET_CCMS_LIST_PER_USER:
+            return {
+                ...state,
+                ccms_list_per_user: action.payload
+            };
         case ADD_COMMENT:
             return {
                 ...state,
-                comments: [action.payload, ...state.comments]
+                comments: [...state.comments, action.payload],
+                selected_ccms: {
+                    ...state.selected_ccms,
+                    ccms_status: action.payload.ccms.ccms_status
+                }
+            };
+        case REMOVE_SELECTED_CCMS:
+            return {
+                ...state,
+                selected_ccms: null,
+                collapse: false
+            };
+        case GET_SELECTED_CCMS:
+            return {
+                ...state,
+                selected_ccms: action.payload,
+                collapse: true
+            };
+        case GET_SILO:
+            return {
+                ...state,
+                silo: action.payload
+            };
+        case GET_TICKET_TYPE:
+            return {
+                ...state,
+                ticket_type: action.payload
             };
         case GET_CCMS_STATUS:
             return {
@@ -109,7 +175,8 @@ const ccmsReducer = (state = initialState, action) => {
             // console.log(action.payload);
             return {
                 ...state,
-                ccms_list: update_list(state.ccms_list, action.payload)
+                ccms_list: update_list(state.ccms_list, action.payload),
+                selected_ccms: action.payload
             };
         case ADD_UPDATE:
             // console.log(action.payload);

@@ -13,7 +13,9 @@ import {
     get_accountable_team,
     get_site_code,
     get_ccms_owner,
-    get_ccms_status
+    get_ccms_status,
+    get_silo,
+    get_ticket_type
 } from "../../../actions/ccmsActions";
 
 import { Spinner, Container, Row, Col } from "reactstrap";
@@ -25,7 +27,6 @@ class Ccms extends Component {
         super(props);
 
         props.get_ccms_list();
-        props.getComments();
         props.get_business_unit();
         props.get_ticket_status();
         props.get_escalation_type();
@@ -33,6 +34,8 @@ class Ccms extends Component {
         props.get_site_code();
         props.get_ccms_owner();
         props.get_ccms_status();
+        props.get_silo();
+        props.get_ticket_type();
 
         this.state = {
             user_details: this.props.auth.user
@@ -73,29 +76,45 @@ class Ccms extends Component {
         if (ccms.ccms_list.length && auth.user) {
             return (
                 <Container>
-                    <Row className="mb-5">
-                        <Col>
-                            {auth.user.group_list.includes("CCMS Admin") && (
+                    {auth.user.group_list.includes("CCMS Admin") ? (
+                        <Row className="mb-5">
+                            <Col>
                                 <CcmsTable
+                                    key={1}
+                                    table_name="main"
                                     title=""
                                     ccms_array={ccms.ccms_list}
                                 />
-                            )}
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            {auth.user.username && (
+                            </Col>
+                        </Row>
+                    ) : (
+                        <Row>
+                            <Col>
                                 <CcmsTable
+                                    key={2}
+                                    table_name="owner"
                                     title="CCMS Owner VIEW - Assigning Escalation"
                                     ccms_array={ccms.ccms_list.filter(
                                         item =>
                                             ((item.ccms_owner || {}).user || {})
-                                                .email == auth.user.username
+                                                .email ==
+                                            (auth.user || {}).username
                                     )}
                                 />
-                            )}
+                            </Col>
+                        </Row>
+                    )}
+                    <Row>
+                        <Col>
+                            <CcmsTable
+                                table_name="owner"
+                                title="CCMS Owner VIEW - Assigning Escalation"
+                                ccms_array={ccms.ccms_list.filter(
+                                    item =>
+                                        ((item.ccms_owner || {}).user || {})
+                                            .email == (auth.user || {}).username
+                                )}
+                            />
                         </Col>
                     </Row>
                 </Container>
@@ -121,14 +140,15 @@ export default connect(mapStateToProps, {
     isFetching,
     getSurveys,
     ack_entry,
-    getComments,
     get_business_unit,
     get_ticket_status,
     get_escalation_type,
     get_accountable_team,
     get_site_code,
     get_ccms_owner,
-    get_ccms_status
+    get_ccms_status,
+    get_silo,
+    get_ticket_type
 })(Ccms);
 
 export const Loading = () => (

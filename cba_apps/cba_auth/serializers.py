@@ -6,6 +6,7 @@ from .models import Auth_Details
 
 
 class Auth_DetailsSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     # user = serializers.RelatedField(read_only=True)
 

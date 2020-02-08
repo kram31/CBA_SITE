@@ -253,13 +253,14 @@ class CommentSerializer(serializers.ModelSerializer):
 
         # get contributor
         contributor = validated_data.pop('contributor')
-        # print(f"MRK 1 = CONTRIBUTOR ===== {contributor}")
+
+        print(f"MRK 1 = CONTRIBUTOR ===== {contributor}")
         user = Auth_Details.objects.get(id=contributor['id'])
 
         # create comment entry
 
         comment = Comment.objects.create(
-            contributor=user, ccms=ccms_obj, **validated_data)
+            contributor=user, ccms=ccms_obj, **validated_data, ccms_status_during_comment=ccms_status['name'])
         comment.save()
 
         return comment

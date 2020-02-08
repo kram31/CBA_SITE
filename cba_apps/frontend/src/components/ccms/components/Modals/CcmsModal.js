@@ -17,9 +17,10 @@ const CcmsModal = props => {
     const toggle = () => setModal(!modal);
 
     const sendData = e => {
+        console.log("No working");
         e == "Yes"
             ? parentCallback({ is_sending: e, value, ccms_entry_id }, toggle())
-            : toggle();
+            : parentCallback({ is_sending: e });
     };
 
     return (

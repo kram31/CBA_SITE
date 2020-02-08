@@ -1,4 +1,6 @@
 from rest_framework import viewsets, permissions
+from django_filters.rest_framework import DjangoFilterBackend
+
 from django.contrib.auth.models import User
 from .models import (
     Mail,
@@ -31,6 +33,20 @@ from .serializers import (
     TicketTypeSerializer,
     UserSerializer
 )
+
+
+class CCMSOwnerListViewset(viewsets.ModelViewSet):
+
+    serializer_class = CcmsSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+    def get_queryset(self):
+
+        user = self.request.user
+
+        return Ccms.objects.filter(ccms_owner__user__username=user)
 
 
 class UserViewset(viewsets.ModelViewSet):
@@ -138,8 +154,11 @@ class Mailbox_MonitorViewset(viewsets.ModelViewSet):
 
 
 class CommentViewset(viewsets.ModelViewSet):
+
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['ccms__id', ]
     permission_classes = [
         permissions.AllowAny
     ]
