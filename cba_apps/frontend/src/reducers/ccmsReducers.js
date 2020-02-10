@@ -21,7 +21,11 @@ import {
     GET_CCMS_LIST_PER_USER,
     OPEN_COLLAPSE,
     CLOSE_COLLAPSE,
-    SEARCH
+    SEARCH,
+    GET_CCMS_ADMIN_LIST,
+    GET_USERS_LIST,
+    REMOVE_USER_FROM_CCMS_ADMIN,
+    ADD_USER_TO_CCMS_ADMIN
 } from "../actions/types";
 
 const initialState = {
@@ -40,7 +44,9 @@ const initialState = {
     selected_ccms: null,
     ccms_list_per_user: null,
     collapse: false,
-    filtered_ccms_list: []
+    filtered_ccms_list: [],
+    ccms_admin_list: null,
+    users_list: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -60,6 +66,16 @@ const ccmsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: true
+            };
+        case GET_USERS_LIST:
+            return {
+                ...state,
+                users_list: action.payload
+            };
+        case GET_CCMS_ADMIN_LIST:
+            return {
+                ...state,
+                ccms_admin_list: action.payload
             };
         case CLOSE_COLLAPSE:
             return {
@@ -89,6 +105,22 @@ const ccmsReducer = (state = initialState, action) => {
                     ...state.selected_ccms,
                     ccms_status: action.payload.ccms.ccms_status
                 }
+            };
+        case ADD_USER_TO_CCMS_ADMIN:
+            return {
+                ...state,
+                users_list: state.users_list.filter(
+                    item => item.id != action.payload.id
+                ),
+                ccms_admin_list: [...state.ccms_admin_list, action.payload]
+            };
+        case REMOVE_USER_FROM_CCMS_ADMIN:
+            return {
+                ...state,
+                ccms_admin_list: state.ccms_admin_list.filter(
+                    item => item.id != action.payload.id
+                ),
+                users_list: [...state.users_list, action.payload]
             };
         case REMOVE_SELECTED_CCMS:
             return {

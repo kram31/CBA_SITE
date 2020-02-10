@@ -15,27 +15,35 @@ import {
     get_ccms_owner,
     get_ccms_status,
     get_silo,
-    get_ticket_type
+    get_ticket_type,
+    get_ccms_admin_list,
+    get_users_list,
+    get_all_data
 } from "../../../actions/ccmsActions";
 
 import { Spinner, Container, Row, Col } from "reactstrap";
 
 import CcmsTable from "./CcmsTable";
+import CcmsAdminForm from "./CcmsAdmin/CcmsAdminForm";
 
 class Ccms extends Component {
     constructor(props) {
         super(props);
 
-        props.get_ccms_list();
-        props.get_business_unit();
-        props.get_ticket_status();
-        props.get_escalation_type();
-        props.get_accountable_team();
-        props.get_site_code();
-        props.get_ccms_owner();
-        props.get_ccms_status();
-        props.get_silo();
-        props.get_ticket_type();
+        props.get_all_data();
+
+        // props.get_ccms_list();
+        // props.get_business_unit();
+        // props.get_ticket_status();
+        // props.get_escalation_type();
+        // props.get_accountable_team();
+        // props.get_site_code();
+        // props.get_ccms_owner();
+        // props.get_ccms_status();
+        // props.get_silo();
+        // props.get_ticket_type();
+        // props.get_ccms_admin_list();
+        // props.get_users_list();
 
         this.state = {
             user_details: this.props.auth.user
@@ -76,6 +84,11 @@ class Ccms extends Component {
         if (ccms.ccms_list.length && auth.user) {
             return (
                 <Container>
+                    <Row>
+                        <Col>
+                            <CcmsAdminForm />
+                        </Col>
+                    </Row>
                     {auth.user.group_list.includes("CCMS Admin") ? (
                         <Row className="mb-5">
                             <Col>
@@ -148,7 +161,10 @@ export default connect(mapStateToProps, {
     get_ccms_owner,
     get_ccms_status,
     get_silo,
-    get_ticket_type
+    get_ticket_type,
+    get_ccms_admin_list,
+    get_users_list,
+    get_all_data
 })(Ccms);
 
 export const Loading = () => (
