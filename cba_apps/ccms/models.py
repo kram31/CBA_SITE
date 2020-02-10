@@ -84,6 +84,19 @@ class Comment(models.Model):
         return f"Comment for {self.ccms}"
 
 
+class CcmsRca(models.Model):
+    
+    completed_by = models.ForeignKey(
+        Auth_Details, on_delete=models.CASCADE, related_name="completed_by_rca", blank=True, null=True)
+    completed_on = models.DateField(auto_now=True)
+    ccms = models.ForeignKey(
+        "Ccms", on_delete=models.CASCADE, related_name="ccms_rca", blank=True, null=True)
+    
+
+    def __str__(self):
+        return f"CCMS RCA for {self.ccms}"
+
+
 class BusinessUnit(models.Model):
     name = models.CharField(max_length=2000, blank=True, null=True)
 

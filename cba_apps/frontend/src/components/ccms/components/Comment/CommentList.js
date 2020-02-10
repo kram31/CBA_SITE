@@ -1,4 +1,6 @@
 import React, { useState, Fragment } from "react";
+import { Fade } from "reactstrap";
+import InputForm from "./InputForm";
 
 const CommentList = props => {
     const [showAll, setView] = useState(false);
@@ -38,13 +40,7 @@ const CommentList = props => {
                 </p>
                 <p style={commentBoxStyle}>
                     <i>{comment.ccms_status_during_comment}</i> :{" "}
-                    <strong
-                        value="comment_detail"
-                        onMouseEnter={e => setToolView(console.log(e.target))}
-                    >
-                        {comment.entry}{" "}
-                        {showEdit ? <i className="fas fa-edit"></i> : null}
-                    </strong>
+                    <InputForm comment={comment} />
                 </p>
                 <p style={dateCommentStyle}>
                     date posted: {comment.comment_entry_date}
@@ -84,6 +80,26 @@ const CommentList = props => {
             </p>
             {displayComment(props.comments)}
         </Fragment>
+    );
+};
+
+const CommentEntry = props => {
+    const [showEdit, setToolView] = useState(false);
+
+    return (
+        <strong
+            value="comment_detail"
+            onMouseEnter={() => setToolView(!showEdit)}
+            onMouseLeave={() => setToolView(!showEdit)}
+        >
+            {props.comment.entry}{" "}
+            {showEdit ? (
+                <i
+                    className="fas fa-edit"
+                    onClick={() => console.log("clicking")}
+                ></i>
+            ) : null}
+        </strong>
     );
 };
 

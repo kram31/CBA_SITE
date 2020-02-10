@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\Mark\\.virtualenvs\\CBA_SITE-D3nd6M4h\\Scripts\\python.exe",
+    "python.pythonPath": "C:\\Users\\mlascano\\.virtualenvs\\CBA_SITE-DOpgbcQ-\\Scripts\\python.exe",
     "python.jediEnabled": true,
     "python.linting.pylintArgs": [
         "--load-plugins=pylint_django",
