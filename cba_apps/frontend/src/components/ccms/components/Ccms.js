@@ -24,8 +24,9 @@ import {
 import { Spinner, Container, Row, Col } from "reactstrap";
 
 import CcmsTable from "./CcmsTable";
-import CcmsAdminForm from "./CcmsAdmin/CcmsAdminForm";
-import CcmsAdminModal from "./CcmsAdmin/CcmsAdminModal";
+import CcmsTable2 from "./Tables/CcmsTable2";
+
+import { column } from "./Tables/columns";
 
 class Ccms extends Component {
     constructor(props) {
@@ -88,22 +89,22 @@ class Ccms extends Component {
                     {auth.user.group_list.includes("CCMS Admin") ? (
                         <Row className="mb-5">
                             <Col>
-                                <CcmsTable
+                                <CcmsTable2
                                     key={1}
                                     table_name="main"
                                     title=""
-                                    ccms_array={ccms.ccms_list}
+                                    data={ccms.ccms_list}
                                 />
                             </Col>
                         </Row>
                     ) : (
                         <Row>
                             <Col>
-                                <CcmsTable
+                                <CcmsTable2
                                     key={2}
                                     table_name="owner"
                                     title="CCMS Owner VIEW - Assigning Escalation"
-                                    ccms_array={ccms.ccms_list.filter(
+                                    data={ccms.ccms_list.filter(
                                         item =>
                                             ((item.ccms_owner || {}).user || {})
                                                 .email ==
@@ -113,19 +114,19 @@ class Ccms extends Component {
                             </Col>
                         </Row>
                     )}
-                    <Row>
+                    {/* <Row>
                         <Col>
-                            <CcmsTable
+                            <CcmsTable2
                                 table_name="owner"
                                 title="CCMS Owner VIEW - Assigning Escalation"
-                                ccms_array={ccms.ccms_list.filter(
+                                data={ccms.ccms_list.filter(
                                     item =>
                                         ((item.ccms_owner || {}).user || {})
                                             .email == (auth.user || {}).username
                                 )}
                             />
                         </Col>
-                    </Row>
+                    </Row> */}
                 </Container>
             );
         }

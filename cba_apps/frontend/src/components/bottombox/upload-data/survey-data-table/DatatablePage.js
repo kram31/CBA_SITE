@@ -422,8 +422,8 @@ class DatatablePage extends Component {
                     // DATA that will be displayed should be the same data to be extracted
                     data={this.props.surveys_view}
                     columns={columns}
-                    minRows={5}
-                    defaultPageSize={5}
+                    minRows={10}
+                    defaultPageSize={10}
                     filterable={this.state.filter}
                 />
             </Fragment>

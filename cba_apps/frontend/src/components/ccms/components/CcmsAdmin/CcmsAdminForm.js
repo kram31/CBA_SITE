@@ -61,84 +61,104 @@ class CcmsAdminForm extends Component {
 
     render() {
         const { ccms } = this.props;
+
+        const labelStyle = { color: "white" };
         return (
-            <Form>
-                <FormGroup>
-                    <Row>
-                        <Col>
-                            <Label for="id_users_list">Users List</Label>
+            <Row>
+                <Col className="mb-3">
+                    <Form>
+                        <FormGroup>
+                            <Row>
+                                <Col>
+                                    <Label
+                                        style={labelStyle}
+                                        for="id_users_list"
+                                    >
+                                        Users List
+                                    </Label>
 
-                            <Input
-                                type="select"
-                                name="users_list"
-                                id="id_users_list"
-                                size="7"
-                                onChange={this.handleChange}
-                                // value={this.state.users_list}
-                            >
-                                {this.getListofNotCcmsAdmin(
-                                    (ccms || {}).users_list
-                                ).map((item, index) => {
-                                    const {
-                                        first_name,
-                                        last_name,
-                                        username
-                                    } = item;
-                                    return (
-                                        <option
-                                            key={item.id}
-                                            value={index}
-                                        >{`${first_name} ${last_name} - ${username}`}</option>
-                                    );
-                                })}
-                            </Input>
-                            <Button
-                                onClick={this.handleAdd}
-                                color="primary"
-                                className="mt-3"
-                            >
-                                Add
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Label for="id_ccms_admin">
-                                CCMS Administrators
-                            </Label>
+                                    <Input
+                                        type="select"
+                                        name="users_list"
+                                        id="id_users_list"
+                                        size="7"
+                                        onChange={this.handleChange}
+                                        // value={this.state.users_list}
+                                    >
+                                        {this.getListofNotCcmsAdmin(
+                                            (ccms || {}).users_list
+                                        ).map((item, index) => {
+                                            const {
+                                                first_name,
+                                                last_name,
+                                                username
+                                            } = item;
+                                            return (
+                                                <option
+                                                    key={item.id}
+                                                    value={index}
+                                                >{`${first_name} ${last_name} - ${username}`}</option>
+                                            );
+                                        })}
+                                    </Input>
+                                </Col>
+                                <Col md={1} className="my-auto">
+                                    <Row>
+                                        <Col className="text-center">
+                                            <i
+                                                onClick={this.handleAdd}
+                                                id="ccms-btn-right"
+                                                className="fas fa-chevron-circle-right"
+                                            ></i>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col className="text-center">
+                                            <i
+                                                onClick={this.handleRemove}
+                                                id="ccms-btn-left"
+                                                className="fas fa-chevron-circle-left"
+                                            ></i>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col>
+                                    <Label
+                                        style={labelStyle}
+                                        for="id_ccms_admin"
+                                    >
+                                        CCMS Administrators
+                                    </Label>
 
-                            <Input
-                                type="select"
-                                name="ccms_admin_list"
-                                id="id_ccms_admin_list"
-                                size="7"
-                                onChange={this.handleChange}
-                            >
-                                {(ccms || {}).ccms_admin_list.map(
-                                    (item, index) => {
-                                        const {
-                                            first_name,
-                                            last_name,
-                                            username
-                                        } = item;
-                                        return (
-                                            <option
-                                                key={item.id}
-                                                value={index}
-                                            >{`${first_name} ${last_name} - ${username}`}</option>
-                                        );
-                                    }
-                                )}
-                            </Input>
-                            <Button
-                                className="mt-3"
-                                onClick={this.handleRemove}
-                                color="danger"
-                            >
-                                Remove
-                            </Button>
-                        </Col>
-                    </Row>
-                </FormGroup>
-            </Form>
+                                    <Input
+                                        type="select"
+                                        name="ccms_admin_list"
+                                        id="id_ccms_admin_list"
+                                        size="7"
+                                        onChange={this.handleChange}
+                                    >
+                                        {(ccms || {}).ccms_admin_list.map(
+                                            (item, index) => {
+                                                const {
+                                                    first_name,
+                                                    last_name,
+                                                    username
+                                                } = item;
+                                                return (
+                                                    <option
+                                                        key={item.id}
+                                                        value={index}
+                                                    >{`${first_name} ${last_name} - ${username}`}</option>
+                                                );
+                                            }
+                                        )}
+                                    </Input>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Form>
+                </Col>
+            </Row>
         );
     }
 }

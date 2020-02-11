@@ -26,7 +26,10 @@ import {
     GET_CCMS_ADMIN_LIST,
     GET_USERS_LIST,
     REMOVE_USER_FROM_CCMS_ADMIN,
-    ADD_USER_TO_CCMS_ADMIN
+    ADD_USER_TO_CCMS_ADMIN,
+    TOGGLE_MODAL,
+    OPEN_MODAL,
+    CLOSE_MODAL
 } from "./types";
 
 import axios from "axios";
@@ -163,6 +166,44 @@ export const get_all_data = () => dispatch => {
     });
 };
 
+export const get_selected_ccms_new = data => dispatch => {
+    axios.get(`/api/comments/?ccms__id=${data.id}`).then(
+        res => {
+            dispatch({
+                type: GET_COMMENTS,
+                payload: res.data
+            });
+        },
+
+        dispatch(
+            {
+                type: GET_SELECTED_CCMS,
+                payload: data
+            },
+            dispatch({
+                type: OPEN_MODAL
+            })
+        )
+    );
+};
+
+export const open_modal = () => dispatch => {
+    dispatch({
+        type: OPEN_MODAL
+    });
+};
+export const close_modal = () => dispatch => {
+    dispatch({
+        type: CLOSE_MODAL
+    });
+};
+
+export const toggle_modal = () => dispatch => {
+    dispatch({
+        type: TOGGLE_MODAL
+    });
+};
+
 export const search_ccms = data => dispatch => {
     dispatch({
         type: SEARCH,
@@ -203,9 +244,6 @@ export const get_selected_ccms = data => dispatch => {
 };
 
 export const add_user_to_ccms_admin = users_list => dispatch => {
-    dispatch({
-        type: FETCHING
-    });
     users_list.forEach(item => {
         axios
             .put(`/api/users/${item.id}/`, {

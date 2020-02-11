@@ -15,38 +15,23 @@ class CcmsAdminModal extends Component {
     toggle = () => this.setState({ isOpen: !this.state.isOpen });
 
     render() {
-        const { color, buttonLabel } = this.props;
-
         return (
             <Fragment>
-                <Button color={color} onClick={this.toggle}>
-                    {buttonLabel}
-                </Button>
+                <i
+                    id="btn_ccms_admin"
+                    onClick={this.toggle}
+                    className="fas fa-user-shield"
+                ></i>
+
                 <Modal
                     isOpen={this.state.isOpen}
                     toggle={this.toggle}
                     size="lg"
                 >
                     <ModalHeader toggle={this.toggle}>CCMS Admin</ModalHeader>
-                    <ModalBody>
+                    <ModalBody style={{ backgroundColor: "black" }}>
                         <CcmsAdminForm />
                     </ModalBody>
-                    {/* <ModalFooter>
-                        <Button
-                            color="primary"
-                            onClick={e => sendData(e.target.value)}
-                            value="Yes"
-                        >
-                            Yes
-                        </Button>{" "}
-                        <Button
-                            color="secondary"
-                            onClick={e => sendData(e.target.value)}
-                            value="No"
-                        >
-                            No
-                        </Button>
-                    </ModalFooter> */}
                 </Modal>
             </Fragment>
         );

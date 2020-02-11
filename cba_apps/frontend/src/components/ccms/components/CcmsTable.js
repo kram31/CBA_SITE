@@ -63,12 +63,14 @@ class CcmsTable extends Component {
                                 : title}
                         </h1>
                     </Col>
-                    <Col>
-                        <CcmsAdminModal
-                            color="primary"
-                            buttonLabel="CCMS Admin"
-                        />
-                    </Col>
+                    {!title ? (
+                        <Col>
+                            <CcmsAdminModal
+                                color="primary"
+                                buttonLabel="CCMS Admin"
+                            />
+                        </Col>
+                    ) : null}
                 </Row>
                 <Row>
                     <Col md={3} className="mb-3">

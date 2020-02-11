@@ -33,6 +33,43 @@ body.modal-open {
   line-height: 100px;
 }
 
+#btn_ccms_admin {
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+#btn_ccms_admin:hover {
+  color: black;
+}
+
+#ccms-btn-right {
+  color: white;
+  font-size: 25px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-top: 25px;
+}
+
+#ccms-btn-right:hover {
+  color: green;
+}
+
+#ccms-btn-left {
+  color: white;
+  font-size: 25px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#ccms-btn-left:hover {
+  color: green;
+}
+
+.ReactTable .rt-thead .rt-th:last-child {
+  border-right: 1px solid white;
+}
+
 #section1 {
   -webkit-transition: 600ms;
   transition: 600ms;

@@ -7,11 +7,17 @@ import { Form, Row, Col, Input, Label, FormGroup, Button } from "reactstrap";
 import { connect } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
 
-import { get_business_unit, update_ccms } from "../../../actions/ccmsActions";
+import {
+    get_business_unit,
+    update_ccms,
+    getComments
+} from "../../../actions/ccmsActions";
 
 class CcmsForm extends Component {
     constructor(props) {
         super(props);
+
+        // props.getComments(props.ccms_entry.id);
 
         // this.state = { ...props.ccms_entry, isOpen: false };
 
@@ -278,59 +284,54 @@ class CcmsForm extends Component {
                             </FormGroup>
 
                             <Row>
-                                <Col>
-                                    <CcmsModal
-                                        isOpen={this.state.isOpen}
-                                        parentToggle={this.toggleModalCallback}
-                                        parentCallback={this.callbackFunction}
-                                        value={
-                                            this.state.is_compliment
-                                                ? "Compliment"
-                                                : "Complaint"
-                                        }
-                                        ccms_entry_id={
-                                            (this.props.ccms_entry || {}).id
-                                        }
-                                    />
-                                    <Button
-                                        type="submit"
-                                        name="is_compliment"
-                                        onClick={e =>
-                                            this.setState({
-                                                is_complaint: false
-                                            })
-                                        }
-                                        color="success"
-                                        className="mr-2"
-                                    >
-                                        Compliment
-                                    </Button>
-                                    <Button
-                                        type="submit"
-                                        name="is_complaint"
-                                        onClick={e =>
-                                            this.setState({
-                                                [e.target.name]: true
-                                            })
-                                        }
-                                        color="danger"
-                                        className="mr-2"
-                                    >
-                                        Complaint
-                                    </Button>
-
-                                    {/* {this.modalButtonProps.map((btn, index) => (
-                                <CcmsModal
-                                    key={index}
-                                    ccms_entry_id={
-                                        (this.props.ccms_entry || {}).id
-                                    }
-                                    {...btn}
-                                    isOpen
-                                />
-                            ))} */}
-                                </Col>
-                                <Col md={2}>
+                                {!this.props.list_type ? (
+                                    <Col>
+                                        <CcmsModal
+                                            isOpen={this.state.isOpen}
+                                            parentToggle={
+                                                this.toggleModalCallback
+                                            }
+                                            parentCallback={
+                                                this.callbackFunction
+                                            }
+                                            value={
+                                                this.state.is_compliment
+                                                    ? "Compliment"
+                                                    : "Complaint"
+                                            }
+                                            ccms_entry_id={
+                                                (this.props.ccms_entry || {}).id
+                                            }
+                                        />
+                                        <Button
+                                            type="submit"
+                                            name="is_compliment"
+                                            onClick={e =>
+                                                this.setState({
+                                                    is_complaint: false
+                                                })
+                                            }
+                                            color="success"
+                                            className="mr-2"
+                                        >
+                                            Compliment
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            name="is_complaint"
+                                            onClick={e =>
+                                                this.setState({
+                                                    [e.target.name]: true
+                                                })
+                                            }
+                                            color="danger"
+                                            className="mr-2"
+                                        >
+                                            Complaint
+                                        </Button>
+                                    </Col>
+                                ) : null}
+                                <Col md={3}>
                                     {this.props.list_type &&
                                     this.state.rca_required ? (
                                         <Button
@@ -389,6 +390,8 @@ const mapStateToProps = state => ({
     ticket_type: state.ccms.ticket_type
 });
 
-export default connect(mapStateToProps, { get_business_unit, update_ccms })(
-    CcmsForm
-);
+export default connect(mapStateToProps, {
+    get_business_unit,
+    update_ccms,
+    getComments
+})(CcmsForm);

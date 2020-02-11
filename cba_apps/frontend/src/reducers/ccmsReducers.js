@@ -25,7 +25,10 @@ import {
     GET_CCMS_ADMIN_LIST,
     GET_USERS_LIST,
     REMOVE_USER_FROM_CCMS_ADMIN,
-    ADD_USER_TO_CCMS_ADMIN
+    ADD_USER_TO_CCMS_ADMIN,
+    TOGGLE_MODAL,
+    OPEN_MODAL,
+    CLOSE_MODAL
 } from "../actions/types";
 
 const initialState = {
@@ -46,7 +49,8 @@ const initialState = {
     collapse: false,
     filtered_ccms_list: [],
     ccms_admin_list: null,
-    users_list: null
+    users_list: null,
+    modal: false
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -61,6 +65,23 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case OPEN_MODAL:
+            return {
+                ...state,
+                modal: true
+            };
+        case CLOSE_MODAL:
+            return {
+                ...state,
+                modal: false,
+                selected_ccms: null,
+                comments: []
+            };
+        case TOGGLE_MODAL:
+            return {
+                ...state,
+                modal: !state.modal
             };
         case FETCHING:
             return {
