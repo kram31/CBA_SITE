@@ -66,12 +66,7 @@ class CcmsAdminForm extends Component {
                 <FormGroup>
                     <Row>
                         <Col>
-                            <Label
-                                style={{ color: "white" }}
-                                for="id_users_list"
-                            >
-                                Users List
-                            </Label>
+                            <Label for="id_users_list">Users List</Label>
 
                             <Input
                                 type="select"
@@ -100,16 +95,13 @@ class CcmsAdminForm extends Component {
                             <Button
                                 onClick={this.handleAdd}
                                 color="primary"
-                                className="mt-2"
+                                className="mt-3"
                             >
                                 Add
                             </Button>
                         </Col>
                         <Col>
-                            <Label
-                                style={{ color: "white" }}
-                                for="id_ccms_admin"
-                            >
+                            <Label for="id_ccms_admin">
                                 CCMS Administrators
                             </Label>
 
@@ -137,7 +129,7 @@ class CcmsAdminForm extends Component {
                                 )}
                             </Input>
                             <Button
-                                className="mt-2"
+                                className="mt-3"
                                 onClick={this.handleRemove}
                                 color="danger"
                             >

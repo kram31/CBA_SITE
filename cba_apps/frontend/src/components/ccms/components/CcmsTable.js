@@ -7,6 +7,8 @@ import CcmsList from "./CcmsList";
 
 import { Row, Col, Form, Input } from "reactstrap";
 
+import CcmsAdminModal from "./CcmsAdmin/CcmsAdminModal";
+
 class CcmsTable extends Component {
     constructor(props) {
         super(props);
@@ -60,6 +62,12 @@ class CcmsTable extends Component {
                                 ? "CCMS CCA VIEW - Assigning Escalation"
                                 : title}
                         </h1>
+                    </Col>
+                    <Col>
+                        <CcmsAdminModal
+                            color="primary"
+                            buttonLabel="CCMS Admin"
+                        />
                     </Col>
                 </Row>
                 <Row>

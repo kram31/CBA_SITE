@@ -25,6 +25,7 @@ import { Spinner, Container, Row, Col } from "reactstrap";
 
 import CcmsTable from "./CcmsTable";
 import CcmsAdminForm from "./CcmsAdmin/CcmsAdminForm";
+import CcmsAdminModal from "./CcmsAdmin/CcmsAdminModal";
 
 class Ccms extends Component {
     constructor(props) {
@@ -84,11 +85,6 @@ class Ccms extends Component {
         if (ccms.ccms_list.length && auth.user) {
             return (
                 <Container>
-                    <Row>
-                        <Col>
-                            <CcmsAdminForm />
-                        </Col>
-                    </Row>
                     {auth.user.group_list.includes("CCMS Admin") ? (
                         <Row className="mb-5">
                             <Col>
