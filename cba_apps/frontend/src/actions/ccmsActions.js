@@ -29,7 +29,8 @@ import {
     ADD_USER_TO_CCMS_ADMIN,
     TOGGLE_MODAL,
     OPEN_MODAL,
-    CLOSE_MODAL
+    CLOSE_MODAL,
+    FETCHING_COMMENTS
 } from "./types";
 
 import axios from "axios";
@@ -167,24 +168,17 @@ export const get_all_data = () => dispatch => {
 };
 
 export const get_selected_ccms_new = data => dispatch => {
-    axios.get(`/api/comments/?ccms__id=${data.id}`).then(
-        res => {
-            dispatch({
-                type: GET_COMMENTS,
-                payload: res.data
-            });
-        },
+    dispatch({
+        type: FETCHING_COMMENTS
+    });
 
-        dispatch(
-            {
-                type: GET_SELECTED_CCMS,
-                payload: data
-            },
-            dispatch({
-                type: OPEN_MODAL
-            })
-        )
-    );
+    // WILL INCLUDE
+    axios.get(`/api/comments/?ccms__id=${data.id}`).then(res => {
+        dispatch({
+            type: GET_SELECTED_CCMS,
+            payload: { comments: res.data, selected_ccms: data }
+        });
+    });
 };
 
 export const open_modal = () => dispatch => {
@@ -282,20 +276,12 @@ export const remove_user_from_ccms_admin = ccms_admin_list => dispatch => {
 };
 
 export const add_comment = data => dispatch => {
-    console.log(data);
-    dispatch({
-        type: FETCHING
-    });
-
     axios
         .post("/api/comments/", data)
         .then(res => {
             dispatch({
                 type: ADD_COMMENT,
                 payload: res.data
-            });
-            dispatch({
-                type: STOP_FETCHING
             });
         })
         .catch(err => console.log(err.response));

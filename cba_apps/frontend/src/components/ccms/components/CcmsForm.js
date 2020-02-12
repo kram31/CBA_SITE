@@ -3,7 +3,16 @@ import React, { Component, Fragment } from "react";
 import CcmsModal from "./Modals/CcmsModal";
 import CommentForm from "./Comment/CommentForm";
 
-import { Form, Row, Col, Input, Label, FormGroup, Button } from "reactstrap";
+import {
+    Form,
+    Row,
+    Col,
+    Input,
+    Label,
+    FormGroup,
+    Button,
+    Spinner
+} from "reactstrap";
 import { connect } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
 
@@ -371,7 +380,11 @@ class CcmsForm extends Component {
                 </Row>
 
                 {this.props.ccms_entry.ccms_status ? (
-                    <CommentForm ccms_entry={this.props.ccms_entry} />
+                    this.props.is_fetching_comments ? (
+                        <Spinner />
+                    ) : (
+                        <CommentForm ccms_entry={this.props.ccms_entry} />
+                    )
                 ) : null}
             </Fragment>
         );
@@ -387,7 +400,8 @@ const mapStateToProps = state => ({
     ccms_owner: state.ccms.ccms_owner,
     comments: state.ccms.comments,
     silo: state.ccms.silo,
-    ticket_type: state.ccms.ticket_type
+    ticket_type: state.ccms.ticket_type,
+    is_fetching_comments: state.ccms.is_fetching_comments
 });
 
 export default connect(mapStateToProps, {

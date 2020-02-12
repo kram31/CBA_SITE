@@ -114,7 +114,7 @@ class CCMSOwnerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = validated_data.pop('user')
         u = User.objects.get(id=user['id'])
-        co = CCMSOwner.objects.create(user=u, **user)
+        co = CCMSOwner.objects.create(user=u)
 
         return co
 

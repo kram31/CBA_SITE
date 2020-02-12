@@ -17,6 +17,8 @@ class Auth_DetailsViewset(viewsets.ModelViewSet):
 
         user = self.request.user
 
+        print(user)
+
         try:
             return Auth_Details.objects.filter(user=user)
         except:

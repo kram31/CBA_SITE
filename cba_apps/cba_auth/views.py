@@ -121,7 +121,17 @@ def callback(request):
 def sign_out(request):
     # Clear out the user and token
     user = request.session['user']
-    User.objects.get(username=user['email']).delete()
+    # print(user)
+    u1 = User.objects.get(username=user['email'])
+    a1 = Auth_Details.objects.get(user=u1)
+    a1.expires_in = 0
+    a1.ext_expires_in = 0
+    a1.access_token = ""
+    a1.refresh_token = ""
+    a1.id_token = ""
+    a1.expires_at = 0
+    a1.save()
+
     remove_user_and_token(request)
     logout(request)
 

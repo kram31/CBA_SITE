@@ -28,7 +28,8 @@ import {
     ADD_USER_TO_CCMS_ADMIN,
     TOGGLE_MODAL,
     OPEN_MODAL,
-    CLOSE_MODAL
+    CLOSE_MODAL,
+    FETCHING_COMMENTS
 } from "../actions/types";
 
 const initialState = {
@@ -50,7 +51,8 @@ const initialState = {
     filtered_ccms_list: [],
     ccms_admin_list: null,
     users_list: null,
-    modal: false
+    modal: false,
+    is_fetching_comments: false
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -65,6 +67,11 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case FETCHING_COMMENTS:
+            return {
+                ...state,
+                is_fetching_comments: true
             };
         case OPEN_MODAL:
             return {
@@ -152,8 +159,10 @@ const ccmsReducer = (state = initialState, action) => {
         case GET_SELECTED_CCMS:
             return {
                 ...state,
-                selected_ccms: action.payload,
-                collapse: true
+                selected_ccms: action.payload.selected_ccms,
+                comments: action.payload.comments,
+                is_fetching_comments: false,
+                modal: true
             };
         case GET_SILO:
             return {
@@ -210,7 +219,8 @@ const ccmsReducer = (state = initialState, action) => {
             // console.log(action.payload);
             return {
                 ...state,
-                comments: action.payload
+                comments: action.payload,
+                is_fetching_comments: false
             };
         case ACK_ENTRY:
             // console.log(action.payload);

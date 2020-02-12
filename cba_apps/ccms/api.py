@@ -1,6 +1,9 @@
 from rest_framework import viewsets, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rest_framework.authentication import TokenAuthentication
+
+
 from django.contrib.auth.models import User
 from .models import (
     Mail,
@@ -38,6 +41,7 @@ from .serializers import (
 class CCMSOwnerListViewset(viewsets.ModelViewSet):
 
     serializer_class = CcmsSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -52,6 +56,7 @@ class CCMSOwnerListViewset(viewsets.ModelViewSet):
 class UserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -60,6 +65,7 @@ class UserViewset(viewsets.ModelViewSet):
 class TicketTypeViewset(viewsets.ModelViewSet):
     queryset = TicketType.objects.all()
     serializer_class = TicketTypeSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -68,6 +74,7 @@ class TicketTypeViewset(viewsets.ModelViewSet):
 class AccountableTeamViewset(viewsets.ModelViewSet):
     queryset = AccountableTeam.objects.all()
     serializer_class = AccountableTeamSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -76,6 +83,7 @@ class AccountableTeamViewset(viewsets.ModelViewSet):
 class CCMSOwnerViewset(viewsets.ModelViewSet):
     queryset = CCMSOwner.objects.all()
     serializer_class = CCMSOwnerSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -84,6 +92,7 @@ class CCMSOwnerViewset(viewsets.ModelViewSet):
 class SiteCodeViewset(viewsets.ModelViewSet):
     queryset = SiteCode.objects.all()
     serializer_class = SiteCodeSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -92,6 +101,7 @@ class SiteCodeViewset(viewsets.ModelViewSet):
 class SiloViewset(viewsets.ModelViewSet):
     queryset = Silo.objects.all()
     serializer_class = SiloSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -100,6 +110,7 @@ class SiloViewset(viewsets.ModelViewSet):
 class TicketStatusViewset(viewsets.ModelViewSet):
     queryset = TicketStatus.objects.all()
     serializer_class = TicketStatusSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -108,6 +119,7 @@ class TicketStatusViewset(viewsets.ModelViewSet):
 class CCMSStatusViewset(viewsets.ModelViewSet):
     queryset = CCMSStatus.objects.all()
     serializer_class = CCMSStatusSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -116,6 +128,7 @@ class CCMSStatusViewset(viewsets.ModelViewSet):
 class EscalationTypeViewset(viewsets.ModelViewSet):
     queryset = EscalationType.objects.all()
     serializer_class = EscalationTypeSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -124,6 +137,7 @@ class EscalationTypeViewset(viewsets.ModelViewSet):
 class BusinessUnitViewset(viewsets.ModelViewSet):
     queryset = BusinessUnit.objects.all()
     serializer_class = BusinessUnitSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -132,6 +146,7 @@ class BusinessUnitViewset(viewsets.ModelViewSet):
 class CcmsViewset(viewsets.ModelViewSet):
     queryset = Ccms.objects.all()
     serializer_class = CcmsSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -140,6 +155,7 @@ class CcmsViewset(viewsets.ModelViewSet):
 class MailViewset(viewsets.ModelViewSet):
     queryset = Mail.objects.all()
     serializer_class = MailSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -148,17 +164,20 @@ class MailViewset(viewsets.ModelViewSet):
 class Mailbox_MonitorViewset(viewsets.ModelViewSet):
     queryset = Mailbox_Monitor.objects.all()
     serializer_class = Mailbox_MonitorSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
 
 
+# @csrf_exempt
 class CommentViewset(viewsets.ModelViewSet):
 
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['ccms__id', ]
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]

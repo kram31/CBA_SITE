@@ -15,7 +15,9 @@ class Auth_DetailsSerializer(serializers.ModelSerializer):
 
     def get_is_member_of_ccms_owners(self, obj):
 
-        return True if CCMSOwner.objects.get(user=obj.user.id) else False
+        print(f"from serializer  =========== {obj.user.id}")
+
+        return True if CCMSOwner.objects.filter(user=obj.user.id).count() != 0 else False
 
     user_id = serializers.SerializerMethodField()
 
