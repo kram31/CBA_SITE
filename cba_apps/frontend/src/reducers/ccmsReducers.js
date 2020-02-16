@@ -29,7 +29,8 @@ import {
     TOGGLE_MODAL,
     OPEN_MODAL,
     CLOSE_MODAL,
-    FETCHING_COMMENTS
+    FETCHING_COMMENTS,
+    ADD_REQUEST_ACCESS
 } from "../actions/types";
 
 const initialState = {
@@ -52,7 +53,8 @@ const initialState = {
     ccms_admin_list: null,
     users_list: null,
     modal: false,
-    is_fetching_comments: false
+    is_fetching_comments: false,
+    access_request: []
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -67,6 +69,11 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case ADD_REQUEST_ACCESS:
+            return {
+                ...state,
+                access_request: [action.payload, ...state.access_request]
             };
         case FETCHING_COMMENTS:
             return {

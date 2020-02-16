@@ -85,13 +85,12 @@ class Comment(models.Model):
 
 
 class CcmsRca(models.Model):
-    
+
     completed_by = models.ForeignKey(
         Auth_Details, on_delete=models.CASCADE, related_name="completed_by_rca", blank=True, null=True)
     completed_on = models.DateField(auto_now=True)
     ccms = models.ForeignKey(
         "Ccms", on_delete=models.CASCADE, related_name="ccms_rca", blank=True, null=True)
-    
 
     def __str__(self):
         return f"CCMS RCA for {self.ccms}"
@@ -159,3 +158,11 @@ class TicketType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CcmsAccessRequest(models.Model):
+    user = models.ForeignKey(Auth_Details, on_delete=models.CASCADE,
+                             related_name="users", blank=True)
+
+    def __str__(self):
+        return self.user.user.username

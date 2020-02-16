@@ -12,3 +12,6 @@ class Auth_Details(models.Model):
     refresh_token = models.CharField(max_length=10000)
     id_token = models.CharField(max_length=10000)
     expires_at = models.FloatField()
+
+    def __str__(self):
+        return self.user.username

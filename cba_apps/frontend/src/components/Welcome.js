@@ -4,7 +4,7 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 import image1 from "../images/feedback.png";
 import { connect } from "react-redux";
 
-function WelcomeContent(props) {
+const WelcomeContent = props => {
     // If authenticated, greet the user
     if (props.isAuthenticated) {
         return (
@@ -28,7 +28,7 @@ function WelcomeContent(props) {
             }}
         />
     );
-}
+};
 
 class Welcome extends React.Component {
     state = {
@@ -75,48 +75,6 @@ class Welcome extends React.Component {
                 </Jumbotron>
                 <div className="section-main">
                     <Fade>
-                        {/* <div style={{ display: "flex" }}>
-                            <div
-                                id="section1"
-                                onMouseEnter={this.handleMouseEnter}
-                                onMouseLeave={this.handleMouseLeave}
-                                style={{
-                                    backgroundColor: "white",
-                                    width:
-                                        this.state.target_div === null &&
-                                        !this.state.isHovered
-                                            ? "50%"
-                                            : this.state.isHovered &&
-                                              this.state.target_div ===
-                                                  "section1"
-                                            ? "80%"
-                                            : "20%",
-                                    height: "400px",
-                                    transition: "width 0.5s"
-                                }}
-                            >
-                                <h1>BOTTOMBOX</h1>
-                            </div>
-                            <div
-                                id="section2"
-                                onMouseEnter={this.handleMouseEnter}
-                                onMouseLeave={this.handleMouseLeave}
-                                style={{
-                                    backgroundColor: "black",
-                                    width:
-                                        this.state.target_div === null &&
-                                        !this.state.isHovered
-                                            ? "50%"
-                                            : this.state.isHovered &&
-                                              this.state.target_div ===
-                                                  "section2"
-                                            ? "80%"
-                                            : "20%",
-                                    height: "400px",
-                                    transition: "width 0.5s"
-                                }}
-                            ></div>
-                        </div> */}
                         <Container>
                             <Row>
                                 <Col

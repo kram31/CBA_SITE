@@ -30,7 +30,8 @@ import {
     TOGGLE_MODAL,
     OPEN_MODAL,
     CLOSE_MODAL,
-    FETCHING_COMMENTS
+    FETCHING_COMMENTS,
+    ADD_REQUEST_ACCESS
 } from "./types";
 
 import axios from "axios";
@@ -164,6 +165,15 @@ export const get_all_data = () => dispatch => {
 
     dispatch({
         type: STOP_FETCHING
+    });
+};
+
+export const add_access_request = data => dispatch => {
+    axios.post(`/api/ccms_access_request`, data).then(res => {
+        dispatch({
+            type: ADD_REQUEST_ACCESS,
+            payload: res.data
+        });
     });
 };
 

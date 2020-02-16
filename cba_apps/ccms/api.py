@@ -18,7 +18,8 @@ from .models import (
     SiteCode,
     CCMSOwner,
     AccountableTeam,
-    TicketType
+    TicketType,
+    CcmsAccessRequest
 )
 from .serializers import (
     MailSerializer,
@@ -34,7 +35,8 @@ from .serializers import (
     CCMSOwnerSerializer,
     AccountableTeamSerializer,
     TicketTypeSerializer,
-    UserSerializer
+    UserSerializer,
+    CcmsAccessRequestSerializer
 )
 
 
@@ -177,6 +179,15 @@ class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['ccms__id', ]
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+class CcmsAccessRequestViewset(viewsets.ModelViewSet):
+    queryset = CcmsAccessRequest.objects.all()
+    serializer_class = CcmsAccessRequestSerializer
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny

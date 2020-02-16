@@ -15,7 +15,8 @@ from .models import (Mail,
                      SiteCode,
                      CCMSOwner,
                      AccountableTeam,
-                     TicketType
+                     TicketType,
+                     CcmsAccessRequest
                      )
 
 
@@ -265,3 +266,24 @@ class CommentSerializer(serializers.ModelSerializer):
         comment.save()
 
         return comment
+
+
+class CcmsAccessRequestSerializer(serializers.ModelSerializer):
+
+    user = Auth_DetailsSerializer(required=False)
+
+    class Meta:
+        model = CcmsAccessRequest
+        fields = '__all__'
+
+    def create(self, validated_data):
+
+        auth_user = validated_data.pop('user')
+        print(auth_user)
+
+        auth_obj = Auth_Details.objects.get(pk=auth_user['id'])
+
+        access_request = CcmsAccessRequest.objects.create(user=auth_obj)
+        access_request.save()
+
+        return access_request
