@@ -6,6 +6,16 @@ from .models import Auth_Details
 from django.contrib.auth.models import Group, User
 
 
+class UserSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = User
+        # fields = ['id', 'username', 'email', 'groups']
+        read_only_fields = ('username', 'email')
+        exclude = ['password']
+
+
 class Auth_DetailsSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
 
@@ -52,6 +62,8 @@ class Auth_DetailsSerializer(serializers.ModelSerializer):
     def get_is_staff(self, obj):
 
         return obj.user.is_staff
+
+    user = UserSerializer()
 
     class Meta:
         model = Auth_Details

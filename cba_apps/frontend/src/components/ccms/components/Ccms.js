@@ -25,6 +25,7 @@ import { Spinner, Container, Row, Col } from "reactstrap";
 
 import CcmsTable from "./CcmsTable";
 import CcmsTable2 from "./Tables/CcmsTable2";
+import CcmsAccessRequest from "./CcmsAccessRequest/CcmsAccessRequest";
 
 import { column } from "./Tables/columns";
 
@@ -33,19 +34,6 @@ class Ccms extends Component {
         super(props);
 
         props.get_all_data();
-
-        // props.get_ccms_list();
-        // props.get_business_unit();
-        // props.get_ticket_status();
-        // props.get_escalation_type();
-        // props.get_accountable_team();
-        // props.get_site_code();
-        // props.get_ccms_owner();
-        // props.get_ccms_status();
-        // props.get_silo();
-        // props.get_ticket_type();
-        // props.get_ccms_admin_list();
-        // props.get_users_list();
 
         this.state = {
             user_details: this.props.auth.user
@@ -79,13 +67,14 @@ class Ccms extends Component {
     };
 
     render() {
-        const { ccms, auth } = this.props;
+        const { ccms, auth, access_request } = this.props;
 
         if (ccms.isFetching) return <Loading />;
 
         if (ccms.ccms_list.length && auth.user) {
             return (
                 <Container>
+                    {access_request ? <CcmsAccessRequest /> : null}
                     {auth.user.group_list.includes("CCMS Admin") ? (
                         <Row className="mb-5">
                             <Col>
@@ -142,7 +131,8 @@ class Ccms extends Component {
 const mapStateToProps = state => ({
     ccms: state.ccms,
     auth: state.auth,
-    comments: state.ccms.comments
+    comments: state.ccms.comments,
+    access_request: state.ccms.access_request
 });
 
 export default connect(mapStateToProps, {

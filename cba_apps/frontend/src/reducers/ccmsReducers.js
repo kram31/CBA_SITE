@@ -30,7 +30,10 @@ import {
     OPEN_MODAL,
     CLOSE_MODAL,
     FETCHING_COMMENTS,
-    ADD_REQUEST_ACCESS
+    ADD_REQUEST_ACCESS,
+    GET_REQUEST_ACCESS,
+    ADD_CCMS_OWNER,
+    REMOVE_ACCESS_REQUEST
 } from "../actions/types";
 
 const initialState = {
@@ -54,7 +57,7 @@ const initialState = {
     users_list: null,
     modal: false,
     is_fetching_comments: false,
-    access_request: []
+    access_request: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -69,6 +72,24 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case REMOVE_ACCESS_REQUEST:
+            return {
+                ...state,
+                access_request: state.access_request.filter(
+                    item => item.id != action.payload.id
+                )
+            };
+        case ADD_CCMS_OWNER:
+            return {
+                ...state,
+                ccms_owner: [...state.ccms_owner, action.payload]
+            };
+        case GET_REQUEST_ACCESS:
+            return {
+                ...state,
+                access_request:
+                    action.payload.length != 0 ? action.payload : null
             };
         case ADD_REQUEST_ACCESS:
             return {
@@ -144,9 +165,7 @@ const ccmsReducer = (state = initialState, action) => {
         case ADD_USER_TO_CCMS_ADMIN:
             return {
                 ...state,
-                users_list: state.users_list.filter(
-                    item => item.id != action.payload.id
-                ),
+
                 ccms_admin_list: [...state.ccms_admin_list, action.payload]
             };
         case REMOVE_USER_FROM_CCMS_ADMIN:
@@ -154,8 +173,9 @@ const ccmsReducer = (state = initialState, action) => {
                 ...state,
                 ccms_admin_list: state.ccms_admin_list.filter(
                     item => item.id != action.payload.id
-                ),
-                users_list: [...state.users_list, action.payload]
+                )
+
+                // users_list: [...state.users_list, action.payload]
             };
         case REMOVE_SELECTED_CCMS:
             return {

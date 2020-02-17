@@ -13,7 +13,8 @@ class CcmsAdminForm extends Component {
 
         this.state = {
             users_list: [],
-            ccms_admin_list: []
+            ccms_admin_list: [],
+            ccms_owner: []
         };
     }
 
@@ -26,21 +27,24 @@ class CcmsAdminForm extends Component {
     };
 
     handleAdd = () => {
-        this.props.add_user_to_ccms_admin(this.state.users_list);
+        this.props.add_user_to_ccms_admin(this.state.ccms_owner);
     };
 
     handleChange = e => {
         const { name, selectedOptions } = e.target;
-        const { users_list, ccms_admin_list } = this.props;
+        const { users_list, ccms_admin_list, ccms_owner } = this.props;
 
-        if (name == "users_list") {
+        if (name == "ccms_owner") {
             let selected = [...selectedOptions].map(
-                item => this.getListofNotCcmsAdmin(users_list)[item.value]
+                item =>
+                    ccms_owner.filter(item => !item.user.groups.includes(1))[
+                        item.value
+                    ]
             );
 
             this.setState(
                 {
-                    users_list: selected
+                    ccms_owner: selected
                 },
                 () => console.log(this.state)
             );
@@ -74,32 +78,38 @@ class CcmsAdminForm extends Component {
                                         style={labelStyle}
                                         for="id_users_list"
                                     >
-                                        Users List
+                                        CCMS Owner's List
                                     </Label>
 
                                     <Input
                                         type="select"
-                                        name="users_list"
-                                        id="id_users_list"
+                                        name="ccms_owner"
+                                        id="id_ccms_owner"
                                         size="7"
                                         onChange={this.handleChange}
                                         // value={this.state.users_list}
                                     >
-                                        {this.getListofNotCcmsAdmin(
-                                            (ccms || {}).users_list
-                                        ).map((item, index) => {
-                                            const {
-                                                first_name,
-                                                last_name,
-                                                username
-                                            } = item;
-                                            return (
-                                                <option
-                                                    key={item.id}
-                                                    value={index}
-                                                >{`${first_name} ${last_name} - ${username}`}</option>
-                                            );
-                                        })}
+                                        {(ccms || {}).ccms_owner
+                                            .filter(
+                                                item =>
+                                                    !(
+                                                        (item.user || {})
+                                                            .groups || {}
+                                                    ).includes(1)
+                                            )
+                                            .map((item, index) => {
+                                                const {
+                                                    first_name,
+                                                    last_name,
+                                                    username
+                                                } = item.user;
+                                                return (
+                                                    <option
+                                                        key={item.id}
+                                                        value={index}
+                                                    >{`${first_name} ${last_name} - ${username}`}</option>
+                                                );
+                                            })}
                                     </Input>
                                 </Col>
                                 <Col md={1} className="my-auto">
@@ -117,7 +127,7 @@ class CcmsAdminForm extends Component {
                                             <i
                                                 onClick={this.handleRemove}
                                                 id="ccms-btn-left"
-                                                className="fas fa-chevron-circle-left"
+                                                className="fas fa-minus-circle"
                                             ></i>
                                         </Col>
                                     </Row>
@@ -166,7 +176,8 @@ class CcmsAdminForm extends Component {
 const mapStateToProps = state => ({
     ccms: state.ccms,
     ccms_admin_list: state.ccms.ccms_admin_list,
-    users_list: state.ccms.users_list
+    users_list: state.ccms.users_list,
+    ccms_owner: state.ccms.ccms_owner
 });
 
 export default connect(mapStateToProps, {

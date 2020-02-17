@@ -31,7 +31,10 @@ import {
     OPEN_MODAL,
     CLOSE_MODAL,
     FETCHING_COMMENTS,
-    ADD_REQUEST_ACCESS
+    ADD_REQUEST_ACCESS,
+    GET_REQUEST_ACCESS,
+    ADD_CCMS_OWNER,
+    REMOVE_ACCESS_REQUEST
 } from "./types";
 
 import axios from "axios";
@@ -168,13 +171,44 @@ export const get_all_data = () => dispatch => {
     });
 };
 
-export const add_access_request = data => dispatch => {
-    axios.post(`/api/ccms_access_request`, data).then(res => {
+export const get_access_request = () => dispatch => {
+    axios.get(`/api/ccms_access_request/`).then(res => {
         dispatch({
-            type: ADD_REQUEST_ACCESS,
+            type: GET_REQUEST_ACCESS,
             payload: res.data
         });
     });
+};
+
+export const add_ccms_owner = data => dispatch => {
+    console.log(data.user.user);
+    axios
+        .post(`/api/ccms_owners/`, { user: data.user.user })
+        .then(
+            res => {
+                dispatch({
+                    type: ADD_CCMS_OWNER,
+                    payload: res.data
+                });
+            },
+            axios.delete(`/api/ccms_access_request/${data.id}`).then(res => {
+                dispatch({
+                    type: REMOVE_ACCESS_REQUEST,
+                    payload: data
+                });
+            })
+        )
+        .catch(err => console.log(err.response));
+};
+
+export const add_access_request = data => dispatch => {
+    console.log(data);
+    // axios.post(`/api/ccms_access_request`, data).then(res => {
+    //     dispatch({
+    //         type: ADD_REQUEST_ACCESS,
+    //         payload: res.data
+    //     });
+    // });
 };
 
 export const get_selected_ccms_new = data => dispatch => {
@@ -250,7 +284,7 @@ export const get_selected_ccms = data => dispatch => {
 export const add_user_to_ccms_admin = users_list => dispatch => {
     users_list.forEach(item => {
         axios
-            .put(`/api/users/${item.id}/`, {
+            .put(`/api/users/${item.user.id}/`, {
                 groups: [1]
             })
             .then(res => {
