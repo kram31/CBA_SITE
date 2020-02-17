@@ -19,6 +19,8 @@ import { connect } from "react-redux";
 
 import NewCcmsFormModal from "../Modals/NewCcmsFormModal";
 import CcmsAdminModal from "../CcmsAdmin/CcmsAdminModal";
+import CcmsAccessRequestModal from "../CcmsAccessRequest/CcmsAccessRequestModal";
+import DriverForm from "../Drivers/DriversForm";
 
 import { search_ccms } from "../../../../actions/ccmsActions";
 
@@ -79,6 +81,7 @@ class CcmsTable2 extends Component {
     render() {
         return (
             <Fragment>
+                <DriverForm />
                 <Card>
                     <CardHeader>
                         <h2>
@@ -102,9 +105,26 @@ class CcmsTable2 extends Component {
                                     />
                                 </Form>
                             </Col>
+
                             {!this.props.title ? (
-                                <Col>
-                                    <div className="float-right">
+                                <Col style={{ textAlign: "right" }}>
+                                    {this.props.access_request &&
+                                    this.props.access_request.length != 0 ? (
+                                        <div
+                                            style={{
+                                                display: "inline-block",
+                                                marginRight: "10px"
+                                            }}
+                                        >
+                                            <CcmsAccessRequestModal
+                                                requestCount={
+                                                    this.props.access_request
+                                                        .length
+                                                }
+                                            />
+                                        </div>
+                                    ) : null}
+                                    <div style={{ display: "inline-block" }}>
                                         <CcmsAdminModal />
                                     </div>
                                 </Col>
@@ -136,7 +156,8 @@ const mapStateToProps = state => ({
     business_unit: state.ccms.business_unit,
     comments: state.ccms.comments,
     filtered_ccms_list: state.ccms.filtered_ccms_list,
-    ccms: state.ccms
+    ccms: state.ccms,
+    access_request: state.ccms.access_request
 });
 
 export default connect(mapStateToProps, {

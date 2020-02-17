@@ -432,5 +432,625 @@
         "fields": {
             "name": "Request"
         }
+    },
+    {
+        "model": "ccms.CauseCode",
+        "pk": 1,
+        "fields": {
+            "name": "AGENT/TECHNICIAN"
+        }
+    },
+    {
+        "model": "ccms.CauseCode",
+        "pk": 2,
+        "fields": {
+            "name": "PROCESS"
+        }
+    },
+    {
+        "model": "ccms.CauseCode",
+        "pk": 3,
+        "fields": {
+            "name": "TOOL"
+        }
+    },
+    {
+        "model": "ccms.CauseCode",
+        "pk": 4,
+        "fields": {
+            "name": "UNKNOWN"
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 1,
+        "fields": {
+            "name": "Customer Service Skills",
+            "cause_code": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 2,
+        "fields": {
+            "name": "Technical ability",
+            "cause_code": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 3,
+        "fields": {
+            "name": "Unhappy with resolution time",
+            "cause_code": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 4,
+        "fields": {
+            "name": "SPG Technical ability",
+            "cause_code": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 5,
+        "fields": {
+            "name": "SPG Customer Service Skills",
+            "cause_code": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 6,
+        "fields": {
+            "name": "Unhappy with SPG resolution time",
+            "cause_code": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 7,
+        "fields": {
+            "name": "PROCESS",
+            "cause_code": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 8,
+        "fields": {
+            "name": "USER",
+            "cause_code": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 9,
+        "fields": {
+            "name": "Application functionality issue (DXC)",
+            "cause_code": 3
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 10,
+        "fields": {
+            "name": "Tool working as designed (user complaint) (DXC)",
+            "cause_code": 3
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 11,
+        "fields": {
+            "name": "Application functionality issue (CBA)",
+            "cause_code": 3
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 12,
+        "fields": {
+            "name": "Tool working as designed (user complaint) (CBA)",
+            "cause_code": 3
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 13,
+        "fields": {
+            "name": "Client machine or client environment issues ",
+            "cause_code": 3
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 14,
+        "fields": {
+            "name": "No meaningful comments in the survey and unable to contact the user (3 contacts made)",
+            "cause_code": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 15,
+        "fields": {
+            "name": "Positive Feedback",
+            "cause_code": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 16,
+        "fields": {
+            "name": "Referring to another ticket",
+            "cause_code": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 17,
+        "fields": {
+            "name": "3 Contact Rule initiated",
+            "cause_code": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 18,
+        "fields": {
+            "name": "Escalation Request",
+            "cause_code": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriver",
+        "pk": 19,
+        "fields": {
+            "name": "Normal Technical issue",
+            "cause_code": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 1,
+        "fields": {
+            "name": "Did not check previous tickets",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 2,
+        "fields": {
+            "name": "Did not Set Expectations",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 3,
+        "fields": {
+            "name": "Did not walk the user through the KM/AskIT TS",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 4,
+        "fields": {
+            "name": "Follow up ticket creation",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 5,
+        "fields": {
+            "name": "Lack of Ownership ",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 6,
+        "fields": {
+            "name": "Lacked confidence",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 7,
+        "fields": {
+            "name": "Missed Callback",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 8,
+        "fields": {
+            "name": "No IM created",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 9,
+        "fields": {
+            "name": "No SD created",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 10,
+        "fields": {
+            "name": "Poor Soft Skills",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 11,
+        "fields": {
+            "name": "Process not followed",
+            "escalation_driver": 1
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 12,
+        "fields": {
+            "name": "Incomplete Notes",
+            "escalation_driver": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 13,
+        "fields": {
+            "name": "Incomplete TS",
+            "escalation_driver": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 14,
+        "fields": {
+            "name": "Incorrect Assignment Group",
+            "escalation_driver": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 15,
+        "fields": {
+            "name": "Incorrect Diagnosis",
+            "escalation_driver": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 16,
+        "fields": {
+            "name": "Lacked Tools Utilization",
+            "escalation_driver": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 17,
+        "fields": {
+            "name": "Incorrect KM",
+            "escalation_driver": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 18,
+        "fields": {
+            "name": "KM not used",
+            "escalation_driver": 2
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 19,
+        "fields": {
+            "name": "Time spent on the phone",
+            "escalation_driver": 3
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 20,
+        "fields": {
+            "name": "Incorrect SPG Diagnosis",
+            "escalation_driver": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 21,
+        "fields": {
+            "name": "Not Knowledgeable",
+            "escalation_driver": 4
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 22,
+        "fields": {
+            "name": "Poor SPG Technician behaviour",
+            "escalation_driver": 5
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 23,
+        "fields": {
+            "name": "Missed Callback",
+            "escalation_driver": 5
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 24,
+        "fields": {
+            "name": "Lack of Ownership",
+            "escalation_driver": 5
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 25,
+        "fields": {
+            "name": "Did not Set Expectations",
+            "escalation_driver": 5
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 26,
+        "fields": {
+            "name": "Process not followed",
+            "escalation_driver": 5
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 27,
+        "fields": {
+            "name": "Time spent on resolving issue",
+            "escalation_driver": 6
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 28,
+        "fields": {
+            "name": "Auto Closure - Issue not resolved",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 29,
+        "fields": {
+            "name": "No customer contact from the Service Desk",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 30,
+        "fields": {
+            "name": "No solution in KM available",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 31,
+        "fields": {
+            "name": "Process Breakdown",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 32,
+        "fields": {
+            "name": "Unhappy with resolution time",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 33,
+        "fields": {
+            "name": "No customer contact from the SPG",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 34,
+        "fields": {
+            "name": "Incorrect closure from the SPG",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 35,
+        "fields": {
+            "name": "Issue not resolved",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 36,
+        "fields": {
+            "name": "issue outstanding or reoccurred",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 37,
+        "fields": {
+            "name": "Process Complaint",
+            "escalation_driver": 7
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 38,
+        "fields": {
+            "name": "Incorrect process followed",
+            "escalation_driver": 8
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 39,
+        "fields": {
+            "name": "No response from the customer",
+            "escalation_driver": 8
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 40,
+        "fields": {
+            "name": "Customer not able to provide information",
+            "escalation_driver": 8
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 41,
+        "fields": {
+            "name": "Request Cancelled - Incorrect/Insufficient details provided",
+            "escalation_driver": 8
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 42,
+        "fields": {
+            "name": "Request Cancelled - Incorrect request raised",
+            "escalation_driver": 8
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 43,
+        "fields": {
+            "name": "Request not immediately approved by Manager",
+            "escalation_driver": 8
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 44,
+        "fields": {
+            "name": "Customer uncooperative",
+            "escalation_driver": 8
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 45,
+        "fields": {
+            "name": "Application functionality issue (DXC)",
+            "escalation_driver": 9
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 46,
+        "fields": {
+            "name": "Tool working as designed (user complaint) (DXC)",
+            "escalation_driver": 10
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 47,
+        "fields": {
+            "name": "Application functionality issue (CBA)",
+            "escalation_driver": 11
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 48,
+        "fields": {
+            "name": "Tool working as designed (user complaint) (CBA)",
+            "escalation_driver": 12
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 49,
+        "fields": {
+            "name": "Client machine or client environment issues",
+            "escalation_driver": 13
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 50,
+        "fields": {
+            "name": "No meaningful comments in the survey and unable to contact the user (3 contacts made)",
+            "escalation_driver": 14
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 51,
+        "fields": {
+            "name": "Positive Feedback",
+            "escalation_driver": 15
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 52,
+        "fields": {
+            "name": "Referring to another ticket",
+            "escalation_driver": 16
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 53,
+        "fields": {
+            "name": "3 Contact Rule initiated",
+            "escalation_driver": 17
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 54,
+        "fields": {
+            "name": "FastTrack / Escalating open request or case",
+            "escalation_driver": 18
+        }
+    },
+    {
+        "model": "ccms.EscalationDriverCause",
+        "pk": 55,
+        "fields": {
+            "name": "Normal Technical issue",
+            "escalation_driver": 19
+        }
     }
 ]

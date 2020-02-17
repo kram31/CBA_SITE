@@ -74,7 +74,6 @@ class Ccms extends Component {
         if (ccms.ccms_list.length && auth.user) {
             return (
                 <Container>
-                    {access_request ? <CcmsAccessRequest /> : null}
                     {auth.user.group_list.includes("CCMS Admin") ? (
                         <Row className="mb-5">
                             <Col>

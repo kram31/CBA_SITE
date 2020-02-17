@@ -39,23 +39,23 @@ class Ccms(models.Model):
     summary_complaint = models.TextField(blank=True)
 
     business_unit = models.ForeignKey(
-        "BusinessUnit", on_delete=models.CASCADE, related_name="business_units", blank=True, null=True)
+        "BusinessUnit", on_delete=models.SET_NULL, related_name="business_units", blank=True, null=True)
     escalation_type = models.ForeignKey(
-        "EscalationType", on_delete=models.CASCADE, related_name="escalation_types", blank=True, null=True)
+        "EscalationType", on_delete=models.SET_NULL, related_name="escalation_types", blank=True, null=True)
     ccms_status = models.ForeignKey(
-        "CCMSStatus", on_delete=models.CASCADE, related_name="ccms_status", blank=True, null=True)
+        "CCMSStatus", on_delete=models.SET_NULL, related_name="ccms_status", blank=True, null=True)
     ticket_status = models.ForeignKey(
-        "TicketStatus", on_delete=models.CASCADE, related_name="ticket_status", blank=True, null=True)
+        "TicketStatus", on_delete=models.SET_NULL, related_name="ticket_status", blank=True, null=True)
     silo = models.ForeignKey(
-        "Silo", on_delete=models.CASCADE, related_name="silos", blank=True, null=True)
+        "Silo", on_delete=models.SET_NULL, related_name="silos", blank=True, null=True)
     site_code = models.ForeignKey(
-        "SiteCode", on_delete=models.CASCADE, related_name="site_codes", blank=True, null=True)
+        "SiteCode", on_delete=models.SET_NULL, related_name="site_codes", blank=True, null=True)
     ccms_owner = models.ForeignKey(
-        "CCMSOwner", on_delete=models.CASCADE, related_name="ccms_owners", blank=True, null=True)
+        "CCMSOwner", on_delete=models.SET_NULL, related_name="ccms_owners", blank=True, null=True)
     accountable_team = models.ForeignKey(
-        "AccountableTeam", on_delete=models.CASCADE, related_name="accountable_teams", blank=True, null=True)
+        "AccountableTeam", on_delete=models.SET_NULL, related_name="accountable_teams", blank=True, null=True)
     ticket_type = models.ForeignKey(
-        "TicketType", on_delete=models.CASCADE, related_name="ticket_types", blank=True, null=True)
+        "TicketType", on_delete=models.SET_NULL, related_name="ticket_types", blank=True, null=True)
 
     def __str__(self):
         return f"CBA CCMS ID: {str(self.pk)}"
@@ -82,18 +82,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment for {self.ccms}"
-
-
-class CcmsRca(models.Model):
-
-    completed_by = models.ForeignKey(
-        Auth_Details, on_delete=models.CASCADE, related_name="completed_by_rca", blank=True, null=True)
-    completed_on = models.DateField(auto_now=True)
-    ccms = models.ForeignKey(
-        "Ccms", on_delete=models.CASCADE, related_name="ccms_rca", blank=True, null=True)
-
-    def __str__(self):
-        return f"CCMS RCA for {self.ccms}"
 
 
 class BusinessUnit(models.Model):
@@ -140,7 +128,7 @@ class SiteCode(models.Model):
 
 class CCMSOwner(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="users", blank=True)
+        User, on_delete=models.CASCADE, related_name="users", blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -166,3 +154,74 @@ class CcmsAccessRequest(models.Model):
 
     def __str__(self):
         return self.user.user.username
+
+
+class CauseCode(models.Model):
+    name = models.CharField(max_length=2000, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class EscalationDriver(models.Model):
+    name = models.CharField(max_length=2000, blank=True, null=True)
+    cause_code = models.ForeignKey(
+        CauseCode, on_delete=models.CASCADE, related_name="cause_codes")
+
+    def __str__(self):
+        return self.name
+
+
+class EscalationDriverCause(models.Model):
+    name = models.CharField(max_length=2000, blank=True, null=True)
+    escalation_driver = models.ForeignKey(
+        EscalationDriver, on_delete=models.CASCADE, related_name="escalation_drivers")
+
+    def __str__(self):
+        return self.name
+
+
+class CcmsRca(models.Model):
+
+    agent_name = models.CharField(max_length=2000, blank=True, null=True)
+
+    agent_silo = models.ForeignKey(
+        "Silo", on_delete=models.CASCADE, related_name="agent_silos", blank=True, null=True)
+
+    ticket_description = models.CharField(
+        max_length=5000, blank=True, null=True)
+
+    ccms_ticket_description = models.CharField(
+        max_length=5000, blank=True, null=True)
+
+    controllability = models.ForeignKey(
+        "AccountableTeam", on_delete=models.CASCADE, related_name="agent_silos", blank=True, null=True)
+
+    cause_code = models.ForeignKey(
+        CauseCode, on_delete=models.CASCADE, related_name="rca_cause_codes", blank=True, null=True)
+
+    escalation_driver = models.ForeignKey(
+        EscalationDriver, on_delete=models.CASCADE, related_name="rca_escalation_drivers", blank=True, null=True)
+
+    escalation_driver_cause = models.ForeignKey(
+        EscalationDriverCause, on_delete=models.CASCADE, related_name="rca_escalation_driver_causes", blank=True, null=True)
+
+    team_spg_accountability = models.CharField(
+        max_length=2000, blank=True, null=True)
+
+    business_unit = models.CharField(
+        max_length=2000, blank=True, null=True)
+
+    specific_bu = models.CharField(
+        max_length=2000, blank=True, null=True)
+
+    completed_by = models.ForeignKey(
+        Auth_Details, on_delete=models.CASCADE, related_name="completed_by_rca", blank=True, null=True)
+
+    completed_on = models.DateField(auto_now=True)
+
+    ccms = models.ForeignKey(
+        "Ccms", on_delete=models.CASCADE, related_name="ccms_rca", blank=True, null=True)
+
+    def __str__(self):
+        return f"CCMS RCA for {self.ccms}"

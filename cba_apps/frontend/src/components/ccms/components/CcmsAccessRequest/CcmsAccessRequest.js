@@ -29,7 +29,6 @@ class CcmsAccessRequest extends Component {
 
     // add user to ccms_owner list then remove remove by deleting it
     handleClick = () => {
-        console.log(this.state.access_request);
         this.props.add_ccms_owner(this.state.access_request);
     };
 
@@ -38,7 +37,6 @@ class CcmsAccessRequest extends Component {
         const { access_request } = this.props;
         return (
             <Fragment>
-                <h2>CCMS Access Request Form</h2>
                 <Form>
                     <FormGroup>
                         <Row>
@@ -64,7 +62,11 @@ class CcmsAccessRequest extends Component {
                                         );
                                     })}
                                 </Input>
-                                <Button onClick={this.handleClick}>
+                                <Button
+                                    onClick={this.handleClick}
+                                    className="mt-3"
+                                    color="success"
+                                >
                                     Approve
                                 </Button>
                             </Col>

@@ -16,7 +16,10 @@ from .models import (Mail,
                      CCMSOwner,
                      AccountableTeam,
                      TicketType,
-                     CcmsAccessRequest
+                     CcmsAccessRequest,
+                     CauseCode,
+                     EscalationDriver,
+                     EscalationDriverCause
                      )
 
 
@@ -287,3 +290,24 @@ class CcmsAccessRequestSerializer(serializers.ModelSerializer):
         access_request.save()
 
         return access_request
+
+
+class CauseCodeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CauseCode
+        fields = '__all__'
+
+
+class EscalationDriverSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EscalationDriver
+        fields = '__all__'
+
+
+class EscalationDriverCauseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EscalationDriverCause
+        fields = '__all__'

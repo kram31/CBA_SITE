@@ -33,7 +33,11 @@ import {
     ADD_REQUEST_ACCESS,
     GET_REQUEST_ACCESS,
     ADD_CCMS_OWNER,
-    REMOVE_ACCESS_REQUEST
+    REMOVE_ACCESS_REQUEST,
+    GET_CAUSE_CODE,
+    GET_ESCALATION_DRIVER,
+    GET_ESCALATION_DRIVER_CAUSE,
+    ADD_CAUSE_CODE
 } from "../actions/types";
 
 const initialState = {
@@ -57,7 +61,10 @@ const initialState = {
     users_list: null,
     modal: false,
     is_fetching_comments: false,
-    access_request: null
+    access_request: null,
+    cause_code: null,
+    escalation_driver: null,
+    escalation_driver_cause: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -72,6 +79,26 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case ADD_CAUSE_CODE:
+            return {
+                ...state,
+                cause_code: [...state.cause_code, action.payload]
+            };
+        case GET_ESCALATION_DRIVER_CAUSE:
+            return {
+                ...state,
+                escalation_driver_cause: action.payload
+            };
+        case GET_ESCALATION_DRIVER:
+            return {
+                ...state,
+                escalation_driver: action.payload
+            };
+        case GET_CAUSE_CODE:
+            return {
+                ...state,
+                cause_code: action.payload
             };
         case REMOVE_ACCESS_REQUEST:
             return {

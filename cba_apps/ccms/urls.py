@@ -19,7 +19,10 @@ from .api import (
     TicketTypeViewset,
     UserViewset,
     CCMSOwnerListViewset,
-    CcmsAccessRequestViewset
+    CcmsAccessRequestViewset,
+    CauseCodeViewset,
+    EscalationDriverViewset,
+    EscalationDriverCauseViewset
 )
 
 urlpatterns = [
@@ -48,5 +51,10 @@ router.register('api/users', UserViewset, 'users')
 router.register('api/ccms_owner_list', CCMSOwnerListViewset, 'ccms_owner_list')
 router.register('api/ccms_access_request',
                 CcmsAccessRequestViewset, 'ccms_access_request')
+router.register('api/cause_code', CauseCodeViewset, 'cause_code')
+router.register('api/escalation_driver',
+                EscalationDriverViewset, 'escalation_driver')
+router.register('api/escalation_driver_cause',
+                EscalationDriverCauseViewset, 'escalation_driver_cause')
 
 urlpatterns.extend(router.urls)

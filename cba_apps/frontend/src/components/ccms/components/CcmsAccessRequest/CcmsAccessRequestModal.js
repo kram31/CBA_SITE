@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
-import { Modal, ModalHeader, ModalBody } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, Badge } from "reactstrap";
 
-import CcmsAdminForm from "./CcmsAdminForm";
+import CcmsAccessRequest from "./CcmsAccessRequest";
 
-class CcmsAdminModal extends Component {
+class CcmsAccessRequestModal extends Component {
     constructor(props) {
         super(props);
 
@@ -18,24 +18,28 @@ class CcmsAdminModal extends Component {
         return (
             <Fragment>
                 <div style={{ textAlign: "center" }} id="icon_w_badge">
+                    <Badge style={{ fontSize: "12px" }} color="primary">
+                        {this.props.requestCount}
+                    </Badge>
                     <i
                         id="btn_ccms_admin"
                         onClick={this.toggle}
-                        className="fas fa-user-shield"
+                        className="fas fa-user-plus"
                     ></i>
                     <figcaption style={{ fontSize: "12px" }}>
-                        CCMS Admin
+                        Access Request
                     </figcaption>
                 </div>
-
                 <Modal
                     isOpen={this.state.isOpen}
                     toggle={this.toggle}
                     size="lg"
                 >
-                    <ModalHeader toggle={this.toggle}>CCMS Admin</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>
+                        CCMS Access Requests
+                    </ModalHeader>
                     <ModalBody style={{ backgroundColor: "black" }}>
-                        <CcmsAdminForm />
+                        <CcmsAccessRequest />
                     </ModalBody>
                 </Modal>
             </Fragment>
@@ -43,4 +47,4 @@ class CcmsAdminModal extends Component {
     }
 }
 
-export default CcmsAdminModal;
+export default CcmsAccessRequestModal;

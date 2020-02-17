@@ -12,6 +12,8 @@ const NoAccess = props => {
     const user = useSelector(state => state.auth.user);
     const access_request_list = useSelector(state => state.ccms.access_request);
 
+    console.log(user);
+
     return (
         <Container>
             <h2>

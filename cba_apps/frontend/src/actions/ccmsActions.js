@@ -34,12 +34,26 @@ import {
     ADD_REQUEST_ACCESS,
     GET_REQUEST_ACCESS,
     ADD_CCMS_OWNER,
-    REMOVE_ACCESS_REQUEST
+    REMOVE_ACCESS_REQUEST,
+    GET_CAUSE_CODE,
+    GET_ESCALATION_DRIVER,
+    GET_ESCALATION_DRIVER_CAUSE,
+    ADD_CAUSE_CODE
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export const add_cause_code = data => dispatch => {
+    console.log(data);
+    // axios.post(`/api/cause_code/`, data).then(res => {
+    //     dispatch({
+    //         type: ADD_CAUSE_CODE,
+    //         payload: res.data
+    //     });
+    // });
+};
 
 export const get_all_data = () => dispatch => {
     dispatch({
@@ -166,6 +180,36 @@ export const get_all_data = () => dispatch => {
         })
         .catch(err => console.log(err));
 
+    axios
+        .get("/api/cause_code/")
+        .then(res => {
+            dispatch({
+                type: GET_CAUSE_CODE,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err));
+
+    axios
+        .get("/api/escalation_driver/")
+        .then(res => {
+            dispatch({
+                type: GET_ESCALATION_DRIVER,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err));
+
+    axios
+        .get("/api/escalation_driver_cause/")
+        .then(res => {
+            dispatch({
+                type: GET_ESCALATION_DRIVER_CAUSE,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err));
+
     dispatch({
         type: STOP_FETCHING
     });
@@ -202,13 +246,16 @@ export const add_ccms_owner = data => dispatch => {
 };
 
 export const add_access_request = data => dispatch => {
-    console.log(data);
-    // axios.post(`/api/ccms_access_request`, data).then(res => {
-    //     dispatch({
-    //         type: ADD_REQUEST_ACCESS,
-    //         payload: res.data
-    //     });
-    // });
+    axios
+        .post(`/api/ccms_access_request/`, { user: data })
+        .then(res => {
+            dispatch({
+                type: ADD_REQUEST_ACCESS,
+                payload: res.data
+            });
+            console.log(res.data);
+        })
+        .catch(err => console.log(err.response));
 };
 
 export const get_selected_ccms_new = data => dispatch => {
