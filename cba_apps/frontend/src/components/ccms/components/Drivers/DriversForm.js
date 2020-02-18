@@ -79,7 +79,7 @@ class DriverForm extends Component {
                                                 Cause Code
                                             </div>
                                             <div className="float-right">
-                                                <AddDriverForm />
+                                                <AddDriverForm tableName="Cause Code" />
                                             </div>
                                         </th>
                                     </tr>
