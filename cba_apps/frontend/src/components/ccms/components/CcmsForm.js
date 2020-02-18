@@ -69,7 +69,8 @@ class CcmsForm extends Component {
             rca_required,
             is_complaint,
 
-            isOpen: false
+            isOpen: false,
+            updateButton: true
         };
     }
 
@@ -312,32 +313,51 @@ class CcmsForm extends Component {
                                                 (this.props.ccms_entry || {}).id
                                             }
                                         />
-                                        <Button
-                                            type="submit"
-                                            name="is_compliment"
-                                            onClick={e =>
-                                                this.setState({
-                                                    is_complaint: false
-                                                })
-                                            }
-                                            color="success"
-                                            className="mr-2"
-                                        >
-                                            Compliment
-                                        </Button>
-                                        <Button
-                                            type="submit"
-                                            name="is_complaint"
-                                            onClick={e =>
-                                                this.setState({
-                                                    [e.target.name]: true
-                                                })
-                                            }
-                                            color="danger"
-                                            className="mr-2"
-                                        >
-                                            Complaint
-                                        </Button>
+                                        {this.props.ccms_entry.ccms_status &&
+                                        this.state.updateButton ? (
+                                            <Button
+                                                name="is_complaint"
+                                                onClick={e =>
+                                                    this.setState({
+                                                        updateButton: false
+                                                    })
+                                                }
+                                                color="success"
+                                                className="mr-2"
+                                            >
+                                                Update
+                                            </Button>
+                                        ) : (
+                                            <Fragment>
+                                                <Button
+                                                    type="submit"
+                                                    name="is_compliment"
+                                                    onClick={e =>
+                                                        this.setState({
+                                                            is_complaint: false
+                                                        })
+                                                    }
+                                                    color="success"
+                                                    className="mr-2"
+                                                >
+                                                    Compliment
+                                                </Button>
+                                                <Button
+                                                    type="submit"
+                                                    name="is_complaint"
+                                                    onClick={e =>
+                                                        this.setState({
+                                                            [e.target
+                                                                .name]: true
+                                                        })
+                                                    }
+                                                    color="danger"
+                                                    className="mr-2"
+                                                >
+                                                    Complaint
+                                                </Button>
+                                            </Fragment>
+                                        )}
                                     </Col>
                                 ) : null}
                                 <Col md={3}>
@@ -379,7 +399,8 @@ class CcmsForm extends Component {
                     </Col>
                 </Row>
 
-                {this.props.ccms_entry.ccms_status ? (
+                {this.props.ccms_entry.ccms_status &&
+                this.props.ccms_entry.ccms_owner ? (
                     this.props.is_fetching_comments ? (
                         <Spinner />
                     ) : (

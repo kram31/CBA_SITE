@@ -14,7 +14,8 @@ class DriverForm extends Component {
                 cause_code: "",
                 escalation_driver: "",
                 escalation_driver_cause: ""
-            }
+            },
+            addOption: false
         };
     }
 
@@ -46,17 +47,19 @@ class DriverForm extends Component {
             )[index];
         }
 
-        this.setState(
-            {
-                selected
-            },
-            () => console.log(this.state)
-        );
+        this.setState({
+            selected
+        });
+    };
+
+    handleEditOptionClick = () => {
+        this.setState({
+            addOption: !this.state.addOption
+        });
     };
 
     render() {
-        const tdStyle = { cursor: "pointer" };
-        const { selected } = this.state;
+        const { selected, addOption } = this.state;
 
         const {
             cause_code,
@@ -79,7 +82,60 @@ class DriverForm extends Component {
                                                 Cause Code
                                             </div>
                                             <div className="float-right">
-                                                <AddDriverForm tableName="Cause Code" />
+                                                {addOption ? (
+                                                    <div>
+                                                        <div
+                                                            style={{
+                                                                float: "left"
+                                                            }}
+                                                        >
+                                                            <AddDriverForm
+                                                                tableName="Cause Code"
+                                                                task="add"
+                                                                cancelEdit={
+                                                                    this
+                                                                        .handleEditOptionClick
+                                                                }
+                                                            />
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                float: "right",
+                                                                textAlign:
+                                                                    "center",
+                                                                marginLeft:
+                                                                    "10px"
+                                                            }}
+                                                        >
+                                                            <i
+                                                                onClick={
+                                                                    this
+                                                                        .handleEditOptionClick
+                                                                }
+                                                                style={{
+                                                                    color:
+                                                                        "red",
+                                                                    fontSize:
+                                                                        "25px",
+                                                                    cursor:
+                                                                        "pointer"
+                                                                }}
+                                                                className="fas fa-ban"
+                                                            ></i>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <i
+                                                        onClick={
+                                                            this
+                                                                .handleEditOptionClick
+                                                        }
+                                                        style={{
+                                                            cursor: "pointer"
+                                                        }}
+                                                        className="fas fa-ellipsis-h"
+                                                    ></i>
+                                                )}
                                             </div>
                                         </th>
                                     </tr>
@@ -88,14 +144,6 @@ class DriverForm extends Component {
                                     {cause_code.map((code, index) => (
                                         <tr key={code.id}>
                                             <td
-                                                style={{
-                                                    ...tdStyle,
-                                                    color:
-                                                        selected.cause_code
-                                                            .id == code.id
-                                                            ? "yellow"
-                                                            : null
-                                                }}
                                                 onClick={() =>
                                                     this.handleSelect(
                                                         index,
@@ -104,8 +152,14 @@ class DriverForm extends Component {
                                                 }
                                             >
                                                 <DriverData
-                                                    driverName={code.name}
+                                                    tableName="Cause Code"
                                                     driverDetails={code}
+                                                    color={
+                                                        selected.cause_code
+                                                            .id == code.id
+                                                            ? "yellow"
+                                                            : null
+                                                    }
                                                 />
                                             </td>
                                         </tr>
@@ -130,15 +184,6 @@ class DriverForm extends Component {
                                     ).map((code, index) => (
                                         <tr key={code.id}>
                                             <td
-                                                style={{
-                                                    ...tdStyle,
-                                                    color:
-                                                        selected
-                                                            .escalation_driver
-                                                            .id == code.id
-                                                            ? "yellow"
-                                                            : null
-                                                }}
                                                 onClick={() =>
                                                     this.handleSelect(
                                                         index,
@@ -170,15 +215,6 @@ class DriverForm extends Component {
                                     ).map((code, index) => (
                                         <tr key={code.id}>
                                             <td
-                                                style={{
-                                                    ...tdStyle,
-                                                    color:
-                                                        selected
-                                                            .escalation_driver_cause
-                                                            .id == code.id
-                                                            ? "yellow"
-                                                            : null
-                                                }}
                                                 onClick={() =>
                                                     this.handleSelect(
                                                         index,

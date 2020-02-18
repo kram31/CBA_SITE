@@ -1,35 +1,66 @@
 import React, { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Form
+} from "reactstrap";
 
-const ConfirmModal = props => {
-    const [modal, setModal] = useState(false);
+const ConfirmModal = ({
+    open,
+    toggle,
+    parentCallback,
+    tableName,
+    input,
+    task
+}) => {
+    const sendConfirmation = e => {
+        const { value } = e.target;
 
-    const toggle = () => setModal(!modal);
+        parentCallback(value);
+        toggle();
+    };
 
     return (
         <div>
-            <Button size="sm" color="success" onClick={toggle}>
+            {/* <Button size="sm" color="success">
                 <i className="fas fa-plus"></i>
-            </Button>
+            </Button> */}
 
-            <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+            <Modal isOpen={open} toggle={e => sendConfirmation(e)}>
+                <ModalHeader toggle={e => sendConfirmation(e)}>
+                    {tableName}
+                </ModalHeader>
                 <ModalBody>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    {task == "add" ? (
+                        <div>
+                            <p>
+                                Are you sure you want to add{" "}
+                                <strong>{input}</strong> to{" "}
+                                <strong>{tableName}</strong> table?
+                            </p>
+                        </div>
+                    ) : (
+                        <div>
+                            <p>
+                                Are you sure you want to change it to{" "}
+                                <strong>{input}</strong>?
+                            </p>
+                        </div>
+                    )}
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary" onClick={toggle}>
-                        Do Something
+                    <Button
+                        color="success"
+                        onClick={e => sendConfirmation(e)}
+                        value="Yes"
+                    >
+                        Yes
                     </Button>{" "}
-                    <Button color="secondary" onClick={toggle}>
-                        Cancel
+                    <Button color="danger" onClick={e => sendConfirmation(e)}>
+                        No
                     </Button>
                 </ModalFooter>
             </Modal>

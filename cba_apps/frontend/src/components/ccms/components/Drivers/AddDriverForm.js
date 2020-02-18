@@ -10,18 +10,52 @@ class AddDriverForm extends Component {
         super(props);
 
         this.state = {
-            name: ""
+            name: props.task == "add" ? "" : props.driverDetails.name,
+            isOpen: false
         };
     }
 
     handleSubmit = e => {
         e.preventDefault();
-        const { tableName, add_cause_code } = this.props;
 
-        if (tableName == "Cause Code") {
-            add_cause_code(this.state);
-            console.log(this.state);
+        const { isOpen } = this.state;
+
+        // Open Modal
+
+        this.setState({ isOpen: !isOpen });
+    };
+
+    handleModalToggle = () => {
+        this.setState({ isOpen: !this.state.isOpen, name: "" });
+    };
+
+    parentCallback = childData => {
+        const { add_cause_code, tableName, task } = this.props;
+        const { name } = this.state;
+
+        if (childData == "Yes") {
+            console.log(`from AddDriverForm - ${childData}`);
+            // Send
+            if (task == "add") {
+                // ADD
+                if (tableName == "Cause Code") {
+                    add_cause_code({ name });
+                    console.log({ name });
+                }
+            } else if (task == "edit") {
+                // EDIT
+                console.log("EDIT");
+                console.log({ name });
+
+                this.props.cancelEdit();
+            }
         }
+
+        this.props.cancelEdit();
+
+        console.log("after no");
+
+        this.setState({ name: "" });
     };
 
     handleChange = e => {
@@ -31,22 +65,37 @@ class AddDriverForm extends Component {
         });
     };
 
+    handleKeyDown = e => {
+        if (e.keyCode == 27) {
+            this.props.cancelEdit();
+        }
+    };
+
     render() {
+        const { isOpen, name } = this.state;
+        const { tableName, task } = this.props;
+
         return (
             <Form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
-                <InputGroup size="sm">
-                    <Input
-                        type="text"
-                        name="name"
-                        onChange={e => this.handleChange(e)}
-                    />
-                    <InputGroupAddon addonType="append">
-                        <ConfirmModal />
-                        {/* <Button color="success">
-                            <i className="fas fa-plus"></i>
-                        </Button> */}
-                    </InputGroupAddon>
-                </InputGroup>
+                <Input
+                    className="w-200"
+                    required
+                    type="text"
+                    name="name"
+                    onKeyDown={e => this.handleKeyDown(e)}
+                    onChange={e => this.handleChange(e)}
+                    value={name}
+                    placeholder="Enter name..."
+                />
+
+                <ConfirmModal
+                    open={isOpen}
+                    toggle={this.handleModalToggle}
+                    parentCallback={this.parentCallback}
+                    tableName={tableName}
+                    input={name}
+                    task={task}
+                />
             </Form>
         );
     }
