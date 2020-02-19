@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
     add_cause_code,
-    edit_cause_code
+    edit_cause_code,
+    addEscalationDriver,
+    editEscalationDriver,
+    addEscalationDriverCause,
+    editEscalationDriverCause
 } from "../../../../actions/ccmsActions";
 
 import { Form, Input, InputGroup, InputGroupAddon, Button } from "reactstrap";
@@ -34,28 +38,78 @@ class AddDriverForm extends Component {
 
     parentCallback = childData => {
         const {
+            editEscalationDriverCause,
+            addEscalationDriverCause,
+            addEscalationDriver,
+            editEscalationDriver,
             add_cause_code,
             edit_cause_code,
             tableName,
             task,
             cancelEdit,
-            driverDetails
+            driverDetails,
+            selectedCode
         } = this.props;
+
         const { name } = this.state;
 
         if (childData == "Yes") {
-            console.log(`from AddDriverForm - ${childData}`);
             // Send
-            if (task == "add") {
-                // ADD
-                if (tableName == "Cause Code") {
-                    add_cause_code({ name });
-                }
-            } else if (task == "edit") {
-                // EDIT
 
-                edit_cause_code(driverDetails, { name });
+            switch (tableName) {
+                case "Cause Code":
+                    if (task == "add") {
+                        add_cause_code({ name });
+                        break;
+                    } else if (task == "edit") {
+                        edit_cause_code(driverDetails, { name });
+                        break;
+                    }
+
+                case "Escalation Driver":
+                    if (task == "add") {
+                        addEscalationDriver({
+                            name,
+                            cause_code: selectedCode.id
+                        });
+                        break;
+                    } else if (task == "edit") {
+                        editEscalationDriver(driverDetails, {
+                            name,
+                            cause_code: driverDetails.cause_code
+                        });
+                        break;
+                    }
+                case "Escalation Driver Cause":
+                    if (task == "add") {
+                        console.log(selectedCode);
+                        addEscalationDriverCause({
+                            name,
+                            escalation_driver: selectedCode.id
+                        });
+                        break;
+                    } else if (task == "edit") {
+                        editEscalationDriverCause(driverDetails, {
+                            name,
+                            escalation_driver: driverDetails.escalation_driver
+                        });
+                        break;
+                    }
+                // else if (task == "edit") {
+                //     edit_cause_code(driverDetails, { name });
+                //     break;
+                // }
+
+                default:
+                    break;
             }
+            // if (task == "add" && tableName == "Cause Code") {
+            //     // ADD CAUSE CODE
+            // } else if (task == "edit") {
+            //     // EDIT
+
+            //     edit_cause_code(driverDetails, { name });
+            // }
         }
 
         cancelEdit();
@@ -83,10 +137,6 @@ class AddDriverForm extends Component {
         return (
             <Form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
                 <Input
-                    style={{
-                        backgroundColor: "rgb(52,58,64)",
-                        color: "white"
-                    }}
                     bsSize="sm"
                     className="w-200"
                     required
@@ -95,7 +145,7 @@ class AddDriverForm extends Component {
                     onKeyDown={e => this.handleKeyDown(e)}
                     onChange={e => this.handleChange(e)}
                     value={name}
-                    placeholder="Enter name..."
+                    placeholder="Input here..."
                 />
 
                 <ConfirmModal
@@ -111,6 +161,11 @@ class AddDriverForm extends Component {
     }
 }
 
-export default connect(null, { add_cause_code, edit_cause_code })(
-    AddDriverForm
-);
+export default connect(null, {
+    add_cause_code,
+    edit_cause_code,
+    addEscalationDriver,
+    editEscalationDriver,
+    addEscalationDriverCause,
+    editEscalationDriverCause
+})(AddDriverForm);

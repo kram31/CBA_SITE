@@ -356,6 +356,21 @@ class CcmsForm extends Component {
                                                 >
                                                     Complaint
                                                 </Button>
+                                                {this.props.ccms_entry
+                                                    .ccms_status ? (
+                                                    <Button
+                                                        name="is_complaint"
+                                                        onClick={e =>
+                                                            this.setState({
+                                                                updateButton: true
+                                                            })
+                                                        }
+                                                        color="warning"
+                                                        className="mr-2"
+                                                    >
+                                                        Cancel Update
+                                                    </Button>
+                                                ) : null}
                                             </Fragment>
                                         )}
                                     </Col>

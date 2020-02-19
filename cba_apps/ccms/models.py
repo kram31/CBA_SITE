@@ -186,7 +186,7 @@ class CcmsRca(models.Model):
     agent_name = models.CharField(max_length=2000, blank=True, null=True)
 
     agent_silo = models.ForeignKey(
-        "Silo", on_delete=models.CASCADE, related_name="agent_silos", blank=True, null=True)
+        "Silo", on_delete=models.SET_NULL, related_name="agent_silos", blank=True, null=True)
 
     ticket_description = models.CharField(
         max_length=5000, blank=True, null=True)
@@ -195,16 +195,16 @@ class CcmsRca(models.Model):
         max_length=5000, blank=True, null=True)
 
     controllability = models.ForeignKey(
-        "AccountableTeam", on_delete=models.CASCADE, related_name="agent_silos", blank=True, null=True)
+        "AccountableTeam", on_delete=models.SET_NULL, related_name="agent_silos", blank=True, null=True)
 
     cause_code = models.ForeignKey(
-        CauseCode, on_delete=models.CASCADE, related_name="rca_cause_codes", blank=True, null=True)
+        CauseCode, on_delete=models.SET_NULL, related_name="rca_cause_codes", blank=True, null=True)
 
     escalation_driver = models.ForeignKey(
-        EscalationDriver, on_delete=models.CASCADE, related_name="rca_escalation_drivers", blank=True, null=True)
+        EscalationDriver, on_delete=models.SET_NULL, related_name="rca_escalation_drivers", blank=True, null=True)
 
     escalation_driver_cause = models.ForeignKey(
-        EscalationDriverCause, on_delete=models.CASCADE, related_name="rca_escalation_driver_causes", blank=True, null=True)
+        EscalationDriverCause, on_delete=models.SET_NULL, related_name="rca_escalation_driver_causes", blank=True, null=True)
 
     team_spg_accountability = models.CharField(
         max_length=2000, blank=True, null=True)
@@ -216,7 +216,7 @@ class CcmsRca(models.Model):
         max_length=2000, blank=True, null=True)
 
     completed_by = models.ForeignKey(
-        Auth_Details, on_delete=models.CASCADE, related_name="completed_by_rca", blank=True, null=True)
+        Auth_Details, on_delete=models.SET_NULL, related_name="completed_by_rca", blank=True, null=True)
 
     completed_on = models.DateField(auto_now=True)
 

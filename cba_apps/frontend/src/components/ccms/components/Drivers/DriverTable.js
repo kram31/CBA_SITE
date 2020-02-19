@@ -1,8 +1,15 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 import { connect } from "react-redux";
 
-import { Table } from "reactstrap";
+import {
+    Table,
+    Row,
+    Col,
+    PopoverHeader,
+    PopoverBody,
+    UncontrolledPopover
+} from "reactstrap";
 import AddDriverForm from "./AddDriverForm";
 import DriverData from "./DriverData";
 
@@ -11,11 +18,7 @@ class DriverTable extends Component {
         super(props);
 
         this.state = {
-            selected: {
-                cause_code: "",
-                escalation_driver: "",
-                escalation_driver_cause: ""
-            },
+            selected: "",
             addOption: false
         };
     }
@@ -29,61 +32,96 @@ class DriverTable extends Component {
     // tableName, driverList, selectCallback
 
     render() {
-        const { tableName, driverList, selectCallback } = this.props;
-        const { addOption } = this.state;
+        const {
+            tableName,
+            driverList,
+            selectCallback,
+            selectedCode
+        } = this.props;
+        const { addOption, selected } = this.state;
+
+        let newName = tableName.replace(/\s/g, "_").toLowerCase();
+
+        let icon_id = "id_" + newName;
 
         return (
-            <Table dark hover>
+            <Table dark hover bordered>
                 <thead>
                     <tr>
                         <th>
-                            <div className="float-left">{tableName}</div>
-                            <div className="float-right">
-                                {addOption ? (
-                                    <div>
-                                        <div
-                                            style={{
-                                                float: "left"
-                                            }}
-                                        >
-                                            <AddDriverForm
-                                                tableName="Cause Code"
-                                                task="add"
-                                                cancelEdit={
-                                                    this.handleEditOptionClick
-                                                }
-                                            />
-                                        </div>
-                                        <div
-                                            style={{
-                                                float: "right",
-                                                textAlign: "center",
-                                                marginLeft: "10px"
-                                            }}
-                                        >
-                                            <i
-                                                onClick={
-                                                    this.handleEditOptionClick
-                                                }
-                                                style={{
-                                                    color: "red",
-                                                    fontSize: "25px",
-                                                    cursor: "pointer"
-                                                }}
-                                                className="fas fa-ban"
-                                            ></i>
-                                        </div>
-                                    </div>
-                                ) : (
+                            <Row className="text-warning">
+                                <Col className="d-flex justify-content-start">
+                                    {tableName}
+                                </Col>
+                                <Col className="d-flex justify-content-end">
                                     <i
                                         onClick={this.handleEditOptionClick}
                                         style={{
                                             cursor: "pointer"
                                         }}
                                         className="fas fa-ellipsis-h"
+                                        id={icon_id}
                                     ></i>
-                                )}
-                            </div>
+                                </Col>
+                                {/* {!addOption ? (
+                                    <Col className="d-flex justify-content-end">
+                                        <i
+                                            onClick={this.handleEditOptionClick}
+                                            style={{
+                                                cursor: "pointer"
+                                            }}
+                                            className="fas fa-ellipsis-h"
+                                            id="id_add"
+                                        ></i>
+                                    </Col>
+                                ) : (
+                                    <Col className="d-flex justify-content-end">
+                                        <i
+                                            onClick={this.handleEditOptionClick}
+                                            style={{
+                                                color: "red",
+                                                fontSize: "20px",
+                                                cursor: "pointer",
+                                                verticalAlign: "middle",
+                                                marginTop: "5px"
+                                            }}
+                                            className="fas fa-ban"
+                                        ></i>
+                                    </Col>
+                                )} */}
+                            </Row>
+
+                            <UncontrolledPopover
+                                placement="left"
+                                isOpen={addOption}
+                                target={icon_id}
+                                toggle={this.handleEditOptionClick}
+                                trigger="legacy"
+                            >
+                                <PopoverHeader>Add {tableName}</PopoverHeader>
+                                <PopoverBody>
+                                    <AddDriverForm
+                                        tableName={tableName}
+                                        task="add"
+                                        cancelEdit={this.handleEditOptionClick}
+                                        selectedCode={selectedCode}
+                                    />
+                                </PopoverBody>
+                            </UncontrolledPopover>
+                            {/* {addOption ? (
+                                <Row className="my-3">
+                                    <Col sm={12}>
+                                        <AddDriverForm
+                                            tableName={tableName}
+                                            task="add"
+                                            cancelEdit={
+                                                this.handleEditOptionClick
+                                            }
+                                            selectedCode={selectedCode}
+                                        />
+                                    </Col>
+                                </Row>
+                            ) : null} */}
                         </th>
                     </tr>
                 </thead>
@@ -91,18 +129,19 @@ class DriverTable extends Component {
                     {driverList.map((code, index) => (
                         <tr key={code.id}>
                             <td
-                                onClick={() =>
-                                    this.handleSelect(index, tableName)
-                                }
+                                onClick={() => {
+                                    this.setState({
+                                        selected: code
+                                    });
+                                    selectCallback(index, tableName);
+                                }}
                             >
                                 <DriverData
                                     tableName={tableName}
                                     driverDetails={code}
-                                    // color={
-                                    //     selected.cause_code.id == code.id
-                                    //         ? "yellow"
-                                    //         : null
-                                    // }
+                                    color={
+                                        selected.id == code.id ? "green" : null
+                                    }
                                 />
                             </td>
                         </tr>

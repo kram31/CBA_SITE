@@ -69,6 +69,9 @@ class CcmsAccessRequest extends Component {
                                 >
                                     Approve
                                 </Button>
+                                <Button className="mt-3 ml-2" color="danger">
+                                    Deny
+                                </Button>
                             </Col>
                         </Row>
                     </FormGroup>

@@ -40,12 +40,102 @@ import {
     GET_ESCALATION_DRIVER_CAUSE,
     ADD_CAUSE_CODE,
     DELETE_CAUSE_CODE,
-    EDIT_CAUSE_CODE
+    EDIT_CAUSE_CODE,
+    ADD_ESCALATION_DRIVER,
+    DELETE_ESCALATION_DRIVER,
+    EDIT_ESCALATION_DRIVER,
+    ADD_ESCALATION_DRIVER_CAUSE,
+    DELETE_ESCALATION_DRIVER_CAUSE,
+    EDIT_ESCALATION_DRIVER_CAUSE
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export const addEscalationDriverCause = data => dispatch => {
+    axios
+        .post(`/api/escalation_driver_cause/`, data)
+        .then(res => {
+            dispatch({
+                type: ADD_ESCALATION_DRIVER_CAUSE,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const deleteEscalationDriverCause = data => dispatch => {
+    // console.log(`FROM REDUX ACTION - DELETE`);
+    // console.log(data);
+
+    axios.delete(`/api/escalation_driver_cause/${data.id}/`).then(res => {
+        dispatch({
+            type: DELETE_ESCALATION_DRIVER_CAUSE,
+            payload: data
+        });
+    });
+};
+
+export const editEscalationDriverCause = (oldData, newData) => dispatch => {
+    console.log(`FROM REDUX ACTION - EDIT`);
+    console.log("OLDDATA");
+    console.log(oldData);
+    console.log("NewDATA");
+    console.log(newData);
+
+    axios
+        .put(`/api/escalation_driver_cause/${oldData.id}/`, newData)
+        .then(res => {
+            dispatch({
+                type: EDIT_ESCALATION_DRIVER_CAUSE,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const addEscalationDriver = data => dispatch => {
+    axios
+        .post(`/api/escalation_driver/`, data)
+        .then(res => {
+            dispatch({
+                type: ADD_ESCALATION_DRIVER,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const deleteEscalationDriver = data => dispatch => {
+    // console.log(`FROM REDUX ACTION - DELETE`);
+    // console.log(data);
+
+    axios.delete(`/api/escalation_driver/${data.id}/`).then(res => {
+        dispatch({
+            type: DELETE_ESCALATION_DRIVER,
+            payload: data
+        });
+    });
+};
+
+export const editEscalationDriver = (oldData, newData) => dispatch => {
+    console.log(`FROM REDUX ACTION - EDIT`);
+    console.log("OLDDATA");
+    console.log(oldData);
+    console.log("NewDATA");
+    console.log(newData);
+
+    axios
+        .put(`/api/escalation_driver/${oldData.id}/`, newData)
+        .then(res => {
+            dispatch({
+                type: EDIT_ESCALATION_DRIVER,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
 
 export const edit_cause_code = (oldData, newData) => dispatch => {
     console.log(`FROM REDUX ACTION - EDIT`);

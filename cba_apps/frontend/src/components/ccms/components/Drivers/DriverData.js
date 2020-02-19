@@ -1,10 +1,14 @@
 import React, { useState, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Fade, Row, Col } from "reactstrap";
+import { Fade, Row, Col, UncontrolledTooltip } from "reactstrap";
 
 import AddDriverForm from "./AddDriverForm";
-import { delete_cause_code } from "../../../../actions/ccmsActions";
+import {
+    delete_cause_code,
+    deleteEscalationDriver,
+    deleteEscalationDriverCause
+} from "../../../../actions/ccmsActions";
 import ConfirmModal from "./ConfirmModal";
 
 const DriverData = ({ driverDetails, color, tableName }) => {
@@ -32,8 +36,30 @@ const DriverData = ({ driverDetails, color, tableName }) => {
             //  DELETE
             if (tableName == "Cause Code") {
                 dispatch(delete_cause_code(driverDetails));
+            } else if (tableName == "Escalation Driver") {
+                dispatch(deleteEscalationDriver(driverDetails));
+            } else if (tableName == "Escalation Driver Cause") {
+                dispatch(deleteEscalationDriverCause(driverDetails));
             }
             // }
+        }
+    };
+
+    const toolTip = {
+        hide: {
+            placement: "top",
+            text: "Hide",
+            target: "id_hide"
+        },
+        edit: {
+            placement: "top",
+            text: "Edit",
+            target: "id_edit"
+        },
+        delete: {
+            placement: "top",
+            text: "Delete",
+            target: "id_delete"
         }
     };
 
@@ -62,8 +88,7 @@ const DriverData = ({ driverDetails, color, tableName }) => {
             <div
                 className="float-right"
                 style={{ ...tdStyle }}
-                onMouseEnter={() => setOptions(true)}
-                onMouseLeave={() => setOptions(false)}
+                onClick={() => setOptions(!options)}
             >
                 {options || edit ? (
                     <div style={{ fontSize: "18px" }}>
@@ -76,34 +101,58 @@ const DriverData = ({ driverDetails, color, tableName }) => {
                         ) : (
                             <Fragment>
                                 <div
+                                    className="d-inline"
+                                    onClick={() => setModal(true)}
+                                    style={{
+                                        marginRight: "5px",
+                                        color: "red"
+                                    }}
+                                >
+                                    {/* DELETE */}
+                                    <i
+                                        className="far fa-minus-square"
+                                        id="id_delete"
+                                    ></i>
+                                    <UncontrolledTooltip {...toolTip.delete}>
+                                        {toolTip.delete.text}
+                                    </UncontrolledTooltip>
+                                </div>
+                                <div
+                                    className="d-inline"
                                     onClick={() => setEdit(true)}
                                     style={{
-                                        float: "left",
-                                        marginRight: "5px",
-                                        color: "green"
+                                        color: "green",
+                                        marginRight: "5px"
                                     }}
                                 >
                                     {/* EDIT */}
                                     <i
                                         className="fas fa-pencil-alt"
+                                        id="id_edit"
                                         style={{ top: "20px" }}
                                     ></i>
+                                    <UncontrolledTooltip {...toolTip.edit}>
+                                        {toolTip.edit.text}
+                                    </UncontrolledTooltip>
                                 </div>
-                                <div
-                                    onClick={() => setModal(true)}
-                                    style={{
-                                        float: "right",
-                                        color: "red"
-                                    }}
-                                >
-                                    {/* DELETE */}
-                                    <i className="far fa-minus-square"></i>
+                                <div className="d-inline">
+                                    <i
+                                        onClick={() => setOptions(!options)}
+                                        style={{ color: "white" }}
+                                        className="fas fa-angle-double-right"
+                                        id="id_hide"
+                                    ></i>
+                                    <UncontrolledTooltip {...toolTip.hide}>
+                                        {toolTip.hide.text}
+                                    </UncontrolledTooltip>
                                 </div>
                             </Fragment>
                         )}
                     </div>
                 ) : (
-                    <i className="fas fa-ellipsis-h"></i>
+                    <Fragment>
+                        <i className="fas fa-ellipsis-h"></i>
+                    </Fragment>
                 )}
             </div>
         </div>

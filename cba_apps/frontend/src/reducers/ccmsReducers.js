@@ -39,7 +39,13 @@ import {
     GET_ESCALATION_DRIVER_CAUSE,
     ADD_CAUSE_CODE,
     DELETE_CAUSE_CODE,
-    EDIT_CAUSE_CODE
+    EDIT_CAUSE_CODE,
+    ADD_ESCALATION_DRIVER,
+    DELETE_ESCALATION_DRIVER,
+    EDIT_ESCALATION_DRIVER,
+    ADD_ESCALATION_DRIVER_CAUSE,
+    DELETE_ESCALATION_DRIVER_CAUSE,
+    EDIT_ESCALATION_DRIVER_CAUSE
 } from "../actions/types";
 
 const initialState = {
@@ -82,6 +88,51 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_name
                 )
             };
+        case ADD_ESCALATION_DRIVER_CAUSE:
+            return {
+                ...state,
+                escalation_driver_cause: [
+                    ...state.escalation_driver_cause,
+                    action.payload
+                ]
+            };
+        case ADD_ESCALATION_DRIVER:
+            return {
+                ...state,
+                escalation_driver: [...state.escalation_driver, action.payload]
+            };
+        case DELETE_ESCALATION_DRIVER_CAUSE:
+            return {
+                ...state,
+                escalation_driver_cause: removeItemFromList(
+                    state.escalation_driver_cause,
+                    action.payload
+                )
+            };
+        case DELETE_ESCALATION_DRIVER:
+            return {
+                ...state,
+                escalation_driver: removeItemFromList(
+                    state.escalation_driver,
+                    action.payload
+                )
+            };
+        case EDIT_ESCALATION_DRIVER_CAUSE:
+            return {
+                ...state,
+                escalation_driver_cause: update_list(
+                    state.escalation_driver_cause,
+                    action.payload
+                )
+            };
+        case EDIT_ESCALATION_DRIVER:
+            return {
+                ...state,
+                escalation_driver: update_list(
+                    state.escalation_driver,
+                    action.payload
+                )
+            };
         case EDIT_CAUSE_CODE:
             return {
                 ...state,
@@ -90,7 +141,13 @@ const ccmsReducer = (state = initialState, action) => {
         case DELETE_CAUSE_CODE:
             return {
                 ...state,
-                cause_code: removeItemFromList(state.cause_code, action.payload)
+                cause_code: removeItemFromList(
+                    state.cause_code,
+                    action.payload
+                ),
+                escalation_driver: state.escalation_driver.filter(
+                    item => item.cause_code != action.payload.id
+                )
             };
         case ADD_CAUSE_CODE:
             return {

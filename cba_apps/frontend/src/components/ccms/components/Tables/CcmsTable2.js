@@ -11,7 +11,9 @@ import {
     Card,
     CardHeader,
     CardBody,
-    Button
+    Button,
+    Fade,
+    Collapse
 } from "reactstrap";
 
 import { columns } from "./columns";
@@ -21,6 +23,7 @@ import NewCcmsFormModal from "../Modals/NewCcmsFormModal";
 import CcmsAdminModal from "../CcmsAdmin/CcmsAdminModal";
 import CcmsAccessRequestModal from "../CcmsAccessRequest/CcmsAccessRequestModal";
 import DriverForm from "../Drivers/DriversForm";
+import DriversModal from "../Drivers/DriversModal";
 
 import { search_ccms } from "../../../../actions/ccmsActions";
 
@@ -28,7 +31,7 @@ class CcmsTable2 extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = { fadeIn: false };
     }
 
     buttonOptions = title => {
@@ -81,7 +84,31 @@ class CcmsTable2 extends Component {
     render() {
         return (
             <Fragment>
-                <DriverForm />
+                <Collapse isOpen={this.state.fadeIn} className="mb-3">
+                    <Card>
+                        <CardHeader>
+                            <Row>
+                                <Col className="d-flex justify-content-start">
+                                    Drivers
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <i
+                                        onClick={() =>
+                                            this.setState({
+                                                fadeIn: !this.state.fadeIn
+                                            })
+                                        }
+                                        style={{ cursor: "pointer" }}
+                                        className="fas fa-times mt-1"
+                                    ></i>
+                                </Col>
+                            </Row>
+                        </CardHeader>
+                        <CardBody>
+                            <DriverForm />
+                        </CardBody>
+                    </Card>
+                </Collapse>
                 <Card>
                     <CardHeader>
                         <h2>
@@ -113,7 +140,7 @@ class CcmsTable2 extends Component {
                                         <div
                                             style={{
                                                 display: "inline-block",
-                                                marginRight: "10px"
+                                                marginRight: "15px"
                                             }}
                                         >
                                             <CcmsAccessRequestModal
@@ -124,6 +151,33 @@ class CcmsTable2 extends Component {
                                             />
                                         </div>
                                     ) : null}
+                                    <div
+                                        style={{
+                                            display: "inline-block",
+                                            marginRight: "15px"
+                                        }}
+                                    >
+                                        <div
+                                            style={{ textAlign: "center" }}
+                                            id="icon_w_badge"
+                                        >
+                                            <i
+                                                id="btn_ccms_admin"
+                                                onClick={() =>
+                                                    this.setState({
+                                                        fadeIn: !this.state
+                                                            .fadeIn
+                                                    })
+                                                }
+                                                className="fas fa-table"
+                                            ></i>
+                                            <figcaption
+                                                style={{ fontSize: "12px" }}
+                                            >
+                                                Drivers
+                                            </figcaption>
+                                        </div>
+                                    </div>
                                     <div style={{ display: "inline-block" }}>
                                         <CcmsAdminModal />
                                     </div>

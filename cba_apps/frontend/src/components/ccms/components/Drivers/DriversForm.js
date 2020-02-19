@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import { Table, Row, Col } from "reactstrap";
+import { Row, Col } from "reactstrap";
 
-import DriverData from "./DriverData";
-import AddDriverForm from "./AddDriverForm";
+import DriverTable from "./DriverTable";
 
 class DriverForm extends Component {
     constructor(props) {
@@ -14,8 +13,7 @@ class DriverForm extends Component {
                 cause_code: "",
                 escalation_driver: "",
                 escalation_driver_cause: ""
-            },
-            addOption: false
+            }
         };
     }
 
@@ -28,18 +26,18 @@ class DriverForm extends Component {
 
         let selected = { ...this.state.selected };
 
-        if (driver_type == "cause_code") {
+        if (driver_type == "Cause Code") {
             selected.cause_code = cause_code[index];
             selected.escalation_driver = "";
             selected.escalation_driver_cause = "";
-        } else if (driver_type == "escalation_driver") {
+        } else if (driver_type == "Escalation Driver") {
             selected.escalation_driver = this.filteredDriverList(
                 escalation_driver,
                 selected.cause_code,
                 "Escalation Driver"
             )[index];
             selected.escalation_driver_cause = "";
-        } else if (driver_type == "escalation_driver_cause") {
+        } else if (driver_type == "Escalation Driver Cause") {
             selected.escalation_driver_cause = this.filteredDriverList(
                 escalation_driver_cause,
                 selected.escalation_driver,
@@ -52,14 +50,8 @@ class DriverForm extends Component {
         });
     };
 
-    handleEditOptionClick = () => {
-        this.setState({
-            addOption: !this.state.addOption
-        });
-    };
-
     render() {
-        const { selected, addOption } = this.state;
+        const { selected } = this.state;
 
         const {
             cause_code,
@@ -69,165 +61,42 @@ class DriverForm extends Component {
 
         return (
             <Fragment>
-                <h3>Driver Form</h3>
-
                 <Row>
                     {cause_code ? (
                         <Col>
-                            <Table dark hover>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <div className="float-left">
-                                                Cause Code
-                                            </div>
-                                            <div className="float-right">
-                                                {addOption ? (
-                                                    <div>
-                                                        <div
-                                                            style={{
-                                                                float: "left"
-                                                            }}
-                                                        >
-                                                            <AddDriverForm
-                                                                tableName="Cause Code"
-                                                                task="add"
-                                                                cancelEdit={
-                                                                    this
-                                                                        .handleEditOptionClick
-                                                                }
-                                                            />
-                                                        </div>
-                                                        <div
-                                                            style={{
-                                                                float: "right",
-                                                                textAlign:
-                                                                    "center",
-                                                                marginLeft:
-                                                                    "10px"
-                                                            }}
-                                                        >
-                                                            <i
-                                                                onClick={
-                                                                    this
-                                                                        .handleEditOptionClick
-                                                                }
-                                                                style={{
-                                                                    color:
-                                                                        "red",
-                                                                    fontSize:
-                                                                        "25px",
-                                                                    cursor:
-                                                                        "pointer"
-                                                                }}
-                                                                className="fas fa-ban"
-                                                            ></i>
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <i
-                                                        onClick={
-                                                            this
-                                                                .handleEditOptionClick
-                                                        }
-                                                        style={{
-                                                            cursor: "pointer"
-                                                        }}
-                                                        className="fas fa-ellipsis-h"
-                                                    ></i>
-                                                )}
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {cause_code.map((code, index) => (
-                                        <tr key={code.id}>
-                                            <td
-                                                onClick={() =>
-                                                    this.handleSelect(
-                                                        index,
-                                                        "cause_code"
-                                                    )
-                                                }
-                                            >
-                                                <DriverData
-                                                    tableName="Cause Code"
-                                                    driverDetails={code}
-                                                    color={
-                                                        selected.cause_code
-                                                            .id == code.id
-                                                            ? "yellow"
-                                                            : null
-                                                    }
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
+                            <DriverTable
+                                tableName="Cause Code"
+                                driverList={cause_code}
+                                selectCallback={this.handleSelect}
+                            />
                         </Col>
                     ) : null}
                     {selected.cause_code ? (
                         <Col>
-                            <Table dark hover>
-                                <thead>
-                                    <tr>
-                                        <th>Escalation Driver</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.filteredDriverList(
-                                        escalation_driver,
-                                        selected.cause_code,
-                                        "Escalation Driver"
-                                    ).map((code, index) => (
-                                        <tr key={code.id}>
-                                            <td
-                                                onClick={() =>
-                                                    this.handleSelect(
-                                                        index,
-                                                        "escalation_driver"
-                                                    )
-                                                }
-                                            >
-                                                {code.name}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
+                            <DriverTable
+                                tableName="Escalation Driver"
+                                driverList={this.filteredDriverList(
+                                    escalation_driver,
+                                    selected.cause_code,
+                                    "Escalation Driver"
+                                )}
+                                selectCallback={this.handleSelect}
+                                selectedCode={selected.cause_code}
+                            />
                         </Col>
                     ) : null}
                     {selected.escalation_driver ? (
                         <Col>
-                            <Table dark hover>
-                                <thead>
-                                    <tr>
-                                        <th>Escalation Driver Cause</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.filteredDriverList(
-                                        escalation_driver_cause,
-                                        selected.escalation_driver,
-                                        "Escalation Driver Cause"
-                                    ).map((code, index) => (
-                                        <tr key={code.id}>
-                                            <td
-                                                onClick={() =>
-                                                    this.handleSelect(
-                                                        index,
-                                                        "escalation_driver_cause"
-                                                    )
-                                                }
-                                            >
-                                                {code.name}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
+                            <DriverTable
+                                tableName="Escalation Driver Cause"
+                                driverList={this.filteredDriverList(
+                                    escalation_driver_cause,
+                                    selected.escalation_driver,
+                                    "Escalation Driver Cause"
+                                )}
+                                selectCallback={this.handleSelect}
+                                selectedCode={selected.escalation_driver}
+                            />
                         </Col>
                     ) : null}
                 </Row>
