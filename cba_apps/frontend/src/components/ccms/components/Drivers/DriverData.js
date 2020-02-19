@@ -4,22 +4,49 @@ import { useDispatch, useSelector } from "react-redux";
 import { Fade, Row, Col } from "reactstrap";
 
 import AddDriverForm from "./AddDriverForm";
+import { delete_cause_code } from "../../../../actions/ccmsActions";
+import ConfirmModal from "./ConfirmModal";
 
 const DriverData = ({ driverDetails, color, tableName }) => {
     const tdStyle = { cursor: "pointer" };
     // const count = useSelector(state => state.counter.count);
     const [options, setOptions] = useState(false);
     const [edit, setEdit] = useState(false);
+    // Modal
+    const [isModalOpen, setModal] = useState(false);
 
     const dispatch = useDispatch();
 
     const callbackCancelEdit = () => {
-        console.log("from driver data");
         setEdit(false);
+    };
+
+    const handleModalToggle = () => {
+        setModal(!isModalOpen);
+    };
+
+    const parentCallback = childData => {
+        if (childData == "Yes") {
+            // Send
+            // if (task == "delete") {
+            //  DELETE
+            if (tableName == "Cause Code") {
+                dispatch(delete_cause_code(driverDetails));
+            }
+            // }
+        }
     };
 
     return (
         <div>
+            <ConfirmModal
+                open={isModalOpen}
+                toggle={handleModalToggle}
+                parentCallback={parentCallback}
+                tableName={tableName}
+                input={driverDetails.name}
+                task="delete"
+            />
             <div className="float-left" style={{ ...tdStyle, color: color }}>
                 {edit ? (
                     <AddDriverForm
@@ -56,17 +83,20 @@ const DriverData = ({ driverDetails, color, tableName }) => {
                                         color: "green"
                                     }}
                                 >
+                                    {/* EDIT */}
                                     <i
                                         className="fas fa-pencil-alt"
                                         style={{ top: "20px" }}
                                     ></i>
                                 </div>
                                 <div
+                                    onClick={() => setModal(true)}
                                     style={{
                                         float: "right",
                                         color: "red"
                                     }}
                                 >
+                                    {/* DELETE */}
                                     <i className="far fa-minus-square"></i>
                                 </div>
                             </Fragment>

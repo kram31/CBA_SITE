@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { add_cause_code } from "../../../../actions/ccmsActions";
+import {
+    add_cause_code,
+    edit_cause_code
+} from "../../../../actions/ccmsActions";
 
 import { Form, Input, InputGroup, InputGroupAddon, Button } from "reactstrap";
 import ConfirmModal from "./ConfirmModal";
@@ -30,7 +33,14 @@ class AddDriverForm extends Component {
     };
 
     parentCallback = childData => {
-        const { add_cause_code, tableName, task } = this.props;
+        const {
+            add_cause_code,
+            edit_cause_code,
+            tableName,
+            task,
+            cancelEdit,
+            driverDetails
+        } = this.props;
         const { name } = this.state;
 
         if (childData == "Yes") {
@@ -40,20 +50,15 @@ class AddDriverForm extends Component {
                 // ADD
                 if (tableName == "Cause Code") {
                     add_cause_code({ name });
-                    console.log({ name });
                 }
             } else if (task == "edit") {
                 // EDIT
-                console.log("EDIT");
-                console.log({ name });
 
-                this.props.cancelEdit();
+                edit_cause_code(driverDetails, { name });
             }
         }
 
-        this.props.cancelEdit();
-
-        console.log("after no");
+        cancelEdit();
 
         this.setState({ name: "" });
     };
@@ -78,6 +83,11 @@ class AddDriverForm extends Component {
         return (
             <Form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
                 <Input
+                    style={{
+                        backgroundColor: "rgb(52,58,64)",
+                        color: "white"
+                    }}
+                    bsSize="sm"
                     className="w-200"
                     required
                     type="text"
@@ -101,4 +111,6 @@ class AddDriverForm extends Component {
     }
 }
 
-export default connect(null, { add_cause_code })(AddDriverForm);
+export default connect(null, { add_cause_code, edit_cause_code })(
+    AddDriverForm
+);

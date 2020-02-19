@@ -38,14 +38,44 @@ import {
     GET_CAUSE_CODE,
     GET_ESCALATION_DRIVER,
     GET_ESCALATION_DRIVER_CAUSE,
-    ADD_CAUSE_CODE
+    ADD_CAUSE_CODE,
+    DELETE_CAUSE_CODE,
+    EDIT_CAUSE_CODE
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
+export const edit_cause_code = (oldData, newData) => dispatch => {
+    console.log(`FROM REDUX ACTION - EDIT`);
+    console.log("OLDDATA");
+    console.log(oldData);
+    console.log("NewDATA");
+    console.log(newData);
+
+    // axios.put(`/api/cause_code/${data.id}/`, newData).then(res => {
+    //     dispatch({
+    //         type: EDIT_CAUSE_CODE,
+    //         payload: res.data
+    //     });
+    // });
+};
+
+export const delete_cause_code = data => dispatch => {
+    console.log(`FROM REDUX ACTION - DELETE`);
+    console.log(data);
+
+    // axios.delete(`/api/cause_code/${data.id}/`).then(res => {
+    //     dispatch({
+    //         type: DELETE_CAUSE_CODE,
+    //         payload: res.data
+    //     });
+    // });
+};
+
 export const add_cause_code = data => dispatch => {
+    console.log(`FROM REDUX ACTION - ADD`);
     console.log(data);
     // axios.post(`/api/cause_code/`, data).then(res => {
     //     dispatch({
