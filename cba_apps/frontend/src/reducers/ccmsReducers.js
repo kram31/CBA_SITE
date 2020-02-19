@@ -37,7 +37,9 @@ import {
     GET_CAUSE_CODE,
     GET_ESCALATION_DRIVER,
     GET_ESCALATION_DRIVER_CAUSE,
-    ADD_CAUSE_CODE
+    ADD_CAUSE_CODE,
+    DELETE_CAUSE_CODE,
+    EDIT_CAUSE_CODE
 } from "../actions/types";
 
 const initialState = {
@@ -79,6 +81,16 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case EDIT_CAUSE_CODE:
+            return {
+                ...state,
+                cause_code: update_list(state.cause_code, action.payload)
+            };
+        case DELETE_CAUSE_CODE:
+            return {
+                ...state,
+                cause_code: removeItemFromList(state.cause_code, action.payload)
             };
         case ADD_CAUSE_CODE:
             return {
@@ -309,5 +321,8 @@ const ccmsReducer = (state = initialState, action) => {
 
 const update_list = (list, new_entry) =>
     list.map(item => (item.id == new_entry.id ? new_entry : item));
+
+const removeItemFromList = (list, new_entry) =>
+    list.filter(item => item.id != new_entry.id);
 
 export default ccmsReducer;

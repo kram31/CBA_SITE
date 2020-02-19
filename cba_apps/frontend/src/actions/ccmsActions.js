@@ -54,35 +54,35 @@ export const edit_cause_code = (oldData, newData) => dispatch => {
     console.log("NewDATA");
     console.log(newData);
 
-    // axios.put(`/api/cause_code/${data.id}/`, newData).then(res => {
-    //     dispatch({
-    //         type: EDIT_CAUSE_CODE,
-    //         payload: res.data
-    //     });
-    // });
+    axios.put(`/api/cause_code/${oldData.id}/`, newData).then(res => {
+        dispatch({
+            type: EDIT_CAUSE_CODE,
+            payload: res.data
+        });
+    });
 };
 
 export const delete_cause_code = data => dispatch => {
-    console.log(`FROM REDUX ACTION - DELETE`);
-    console.log(data);
+    // console.log(`FROM REDUX ACTION - DELETE`);
+    // console.log(data);
 
-    // axios.delete(`/api/cause_code/${data.id}/`).then(res => {
-    //     dispatch({
-    //         type: DELETE_CAUSE_CODE,
-    //         payload: res.data
-    //     });
-    // });
+    axios.delete(`/api/cause_code/${data.id}/`).then(res => {
+        dispatch({
+            type: DELETE_CAUSE_CODE,
+            payload: data
+        });
+    });
 };
 
 export const add_cause_code = data => dispatch => {
     console.log(`FROM REDUX ACTION - ADD`);
     console.log(data);
-    // axios.post(`/api/cause_code/`, data).then(res => {
-    //     dispatch({
-    //         type: ADD_CAUSE_CODE,
-    //         payload: res.data
-    //     });
-    // });
+    axios.post(`/api/cause_code/`, data).then(res => {
+        dispatch({
+            type: ADD_CAUSE_CODE,
+            payload: res.data
+        });
+    });
 };
 
 export const get_all_data = () => dispatch => {
