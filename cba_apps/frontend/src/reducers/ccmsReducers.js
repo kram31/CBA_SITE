@@ -45,7 +45,9 @@ import {
     EDIT_ESCALATION_DRIVER,
     ADD_ESCALATION_DRIVER_CAUSE,
     DELETE_ESCALATION_DRIVER_CAUSE,
-    EDIT_ESCALATION_DRIVER_CAUSE
+    EDIT_ESCALATION_DRIVER_CAUSE,
+    GET_CCMS_RCA,
+    CLOSE_RCA_MODAL
 } from "../actions/types";
 
 const initialState = {
@@ -72,7 +74,9 @@ const initialState = {
     access_request: null,
     cause_code: null,
     escalation_driver: null,
-    escalation_driver_cause: null
+    escalation_driver_cause: null,
+    ccms_rca: null,
+    ccms_rca_modal: false
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -87,6 +91,18 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case CLOSE_RCA_MODAL:
+            return {
+                ...state,
+                ccms_rca_modal: false,
+                ccms_rca: null
+            };
+        case GET_CCMS_RCA:
+            return {
+                ...state,
+                ccms_rca: action.payload[0],
+                ccms_rca_modal: true
             };
         case ADD_ESCALATION_DRIVER_CAUSE:
             return {

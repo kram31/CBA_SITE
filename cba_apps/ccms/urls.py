@@ -22,7 +22,8 @@ from .api import (
     CcmsAccessRequestViewset,
     CauseCodeViewset,
     EscalationDriverViewset,
-    EscalationDriverCauseViewset
+    EscalationDriverCauseViewset,
+    CcmsRcaViewset
 )
 
 urlpatterns = [
@@ -56,5 +57,7 @@ router.register('api/escalation_driver',
                 EscalationDriverViewset, 'escalation_driver')
 router.register('api/escalation_driver_cause',
                 EscalationDriverCauseViewset, 'escalation_driver_cause')
+router.register('api/ccms_rca',
+                CcmsRcaViewset, 'ccms_rca')
 
 urlpatterns.extend(router.urls)

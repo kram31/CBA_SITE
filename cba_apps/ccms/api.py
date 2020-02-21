@@ -22,7 +22,8 @@ from .models import (
     CcmsAccessRequest,
     CauseCode,
     EscalationDriver,
-    EscalationDriverCause
+    EscalationDriverCause,
+    CcmsRca
 )
 from .serializers import (
     MailSerializer,
@@ -42,7 +43,8 @@ from .serializers import (
     CcmsAccessRequestSerializer,
     CauseCodeSerializer,
     EscalationDriverSerializer,
-    EscalationDriverCauseSerializer
+    EscalationDriverCauseSerializer,
+    CcmsRcaSerializer
 )
 
 
@@ -221,6 +223,17 @@ class EscalationDriverViewset(viewsets.ModelViewSet):
 class EscalationDriverCauseViewset(viewsets.ModelViewSet):
     queryset = EscalationDriverCause.objects.all()
     serializer_class = EscalationDriverCauseSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+class CcmsRcaViewset(viewsets.ModelViewSet):
+    queryset = CcmsRca.objects.all()
+    serializer_class = CcmsRcaSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['ccms__id', ]
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny

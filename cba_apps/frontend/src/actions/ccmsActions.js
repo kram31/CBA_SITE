@@ -46,12 +46,29 @@ import {
     EDIT_ESCALATION_DRIVER,
     ADD_ESCALATION_DRIVER_CAUSE,
     DELETE_ESCALATION_DRIVER_CAUSE,
-    EDIT_ESCALATION_DRIVER_CAUSE
+    EDIT_ESCALATION_DRIVER_CAUSE,
+    GET_CCMS_RCA,
+    CLOSE_RCA_MODAL
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export const close_ccms_rca = () => dispatch => {
+    dispatch({
+        type: CLOSE_RCA_MODAL
+    });
+};
+
+export const get_ccms_rca = data => dispatch => {
+    axios.get(`/api/ccms_rca/?ccms__id=${data.id}`).then(res => {
+        dispatch({
+            type: GET_CCMS_RCA,
+            payload: res.data
+        });
+    });
+};
 
 export const addEscalationDriverCause = data => dispatch => {
     axios

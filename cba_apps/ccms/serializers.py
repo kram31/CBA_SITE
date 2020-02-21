@@ -19,7 +19,8 @@ from .models import (Mail,
                      CcmsAccessRequest,
                      CauseCode,
                      EscalationDriver,
-                     EscalationDriverCause
+                     EscalationDriverCause,
+                     CcmsRca
                      )
 
 
@@ -226,6 +227,14 @@ class CcmsSerializer(serializers.ModelSerializer):
         instance = super().update(instance, validated_data)
         instance.save()
 
+        # if rca_required is true > create a CcmsRca object
+        # required ccms id == instance.id
+
+        if instance.rca_required:
+            ccms_instance = Ccms.objects.get(pk=instance.id)
+            ccms_rca = CcmsRca.objects.create(ccms=ccms_instance)
+            ccms_rca.save()
+
         return instance
 
 
@@ -310,4 +319,11 @@ class EscalationDriverCauseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EscalationDriverCause
+        fields = '__all__'
+
+
+class CcmsRcaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CcmsRca
         fields = '__all__'

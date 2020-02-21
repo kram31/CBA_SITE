@@ -218,7 +218,7 @@ class CcmsRca(models.Model):
     completed_by = models.ForeignKey(
         Auth_Details, on_delete=models.SET_NULL, related_name="completed_by_rca", blank=True, null=True)
 
-    completed_on = models.DateField(auto_now=True)
+    completed_on = models.CharField(max_length=2000, blank=True)
 
     ccms = models.ForeignKey(
         "Ccms", on_delete=models.CASCADE, related_name="ccms_rca", blank=True, null=True)

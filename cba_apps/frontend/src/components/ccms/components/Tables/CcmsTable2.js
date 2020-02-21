@@ -23,7 +23,7 @@ import NewCcmsFormModal from "../Modals/NewCcmsFormModal";
 import CcmsAdminModal from "../CcmsAdmin/CcmsAdminModal";
 import CcmsAccessRequestModal from "../CcmsAccessRequest/CcmsAccessRequestModal";
 import DriverForm from "../Drivers/DriversForm";
-import DriversModal from "../Drivers/DriversModal";
+import CcmsRcaModal from "../CcmsRca/CcmsRcaModal";
 
 import { search_ccms } from "../../../../actions/ccmsActions";
 
@@ -66,7 +66,12 @@ class CcmsTable2 extends Component {
                 },
                 {
                     Header: "Review Case",
-                    Cell: cellprops => <Button color="success">Open RCA</Button>
+                    Cell: cellprops =>
+                        cellprops.original.rca_required ? (
+                            <CcmsRcaModal ccms={cellprops.original} />
+                        ) : (
+                            <Button color="success">NO RCA</Button>
+                        )
                 }
             ];
         }

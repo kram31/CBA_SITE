@@ -19,7 +19,8 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import {
     get_business_unit,
     update_ccms,
-    getComments
+    getComments,
+    get_ccms_rca
 } from "../../../actions/ccmsActions";
 
 class CcmsForm extends Component {
@@ -259,7 +260,8 @@ class CcmsForm extends Component {
             "acknowledged_by",
             "is_acknowledged",
             "is_resolved",
-            "date_acknowledged"
+            "date_acknowledged",
+            "updateButton"
         ];
 
         return (
@@ -443,5 +445,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     get_business_unit,
     update_ccms,
-    getComments
+    getComments,
+    get_ccms_rca
 })(CcmsForm);
