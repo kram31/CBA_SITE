@@ -20,7 +20,9 @@ from .models import (Mail,
                      CauseCode,
                      EscalationDriver,
                      EscalationDriverCause,
-                     CcmsRca
+                     CcmsRca,
+                     FindingsAndInvestigation,
+                     CorrectiveAction
                      )
 
 
@@ -302,6 +304,7 @@ class CcmsAccessRequestSerializer(serializers.ModelSerializer):
 
 
 class CauseCodeSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = CauseCode
@@ -309,6 +312,7 @@ class CauseCodeSerializer(serializers.ModelSerializer):
 
 
 class EscalationDriverSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = EscalationDriver
@@ -316,6 +320,7 @@ class EscalationDriverSerializer(serializers.ModelSerializer):
 
 
 class EscalationDriverCauseSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = EscalationDriverCause
@@ -324,6 +329,72 @@ class EscalationDriverCauseSerializer(serializers.ModelSerializer):
 
 class CcmsRcaSerializer(serializers.ModelSerializer):
 
+    agent_silo = SiloSerializer(required=False)
+    controllability = AccountableTeamSerializer(required=False)
+    cause_code = SiloSerializer(required=False)
+    escalation_driver = SiloSerializer(required=False)
+    escalation_driver_cause = SiloSerializer(required=False)
+
     class Meta:
         model = CcmsRca
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+
+        if "agent_silo" in validated_data.keys():
+            agent_silo = validated_data.pop('agent_silo')
+            instance.agent_silo = Silo.objects.get(
+                id=agent_silo['id'])
+            instance.save()
+
+        if "controllability" in validated_data.keys():
+            controllability = validated_data.pop('controllability')
+            instance.controllability = AccountableTeam.objects.get(
+                id=controllability['id'])
+            instance.save()
+
+        if "cause_code" in validated_data.keys():
+            cause_code = validated_data.pop('cause_code')
+            instance.cause_code = CauseCode.objects.get(
+                id=cause_code['id'])
+            instance.save()
+
+        if "escalation_driver" in validated_data.keys():
+            escalation_driver = validated_data.pop('escalation_driver')
+            instance.escalation_driver = EscalationDriver.objects.get(
+                id=escalation_driver['id'])
+            instance.save()
+
+        if "escalation_driver_cause" in validated_data.keys():
+            escalation_driver_cause = validated_data.pop(
+                'escalation_driver_cause')
+            instance.escalation_driver_cause = EscalationDriverCause.objects.get(
+                id=escalation_driver_cause['id'])
+            instance.save()
+
+        instance = super().update(instance, validated_data)
+
+        instance.completed_on = datetime.now().date()
+
+        instance.save()
+
+        return instance
+
+        #  FindingsAndInvestigation,
+        #  CorrectiveAction
+
+
+class FindingsAndInvestigationSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = FindingsAndInvestigation
+        fields = '__all__'
+
+
+class CorrectiveActionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = CorrectiveAction
         fields = '__all__'

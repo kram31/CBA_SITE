@@ -48,17 +48,64 @@ import {
     DELETE_ESCALATION_DRIVER_CAUSE,
     EDIT_ESCALATION_DRIVER_CAUSE,
     GET_CCMS_RCA,
-    CLOSE_RCA_MODAL
+    CLOSE_RCA_MODAL,
+    COMPLETE_CCMS_RCA,
+    TOGGLE_ACTIVE_TAB,
+    COMPLETE_FNI,
+    GET_FNI_LIST
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
+export const get_fni_list = data => dispatch => {
+    axios
+        .get(`/api/findings_and_investigation/?ccms_rca__id=${data}`)
+        .then(res => {
+            dispatch({
+                type: GET_FNI_LIST,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const complete_fni = data => dispatch => {
+    axios
+        .post(`/api/findings_and_investigation/`, data)
+        .then(res => {
+            dispatch({
+                type: COMPLETE_FNI,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
+
+export const toggle_active_tab = tab => dispatch => {
+    dispatch({
+        type: TOGGLE_ACTIVE_TAB,
+        payload: tab
+    });
+};
+
 export const close_ccms_rca = () => dispatch => {
     dispatch({
         type: CLOSE_RCA_MODAL
     });
+};
+
+export const complete_ccms_rca = data => dispatch => {
+    axios
+        .put(`/api/ccms_rca/${data.ccms_rca.id}/`, data.ccms_rca_state)
+        .then(res => {
+            dispatch({
+                type: COMPLETE_CCMS_RCA,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
 };
 
 export const get_ccms_rca = data => dispatch => {
@@ -67,6 +114,18 @@ export const get_ccms_rca = data => dispatch => {
             type: GET_CCMS_RCA,
             payload: res.data
         });
+
+        axios
+            .get(
+                `/api/findings_and_investigation/?ccms_rca__id=${res.data[0].id}`
+            )
+            .then(res => {
+                dispatch({
+                    type: GET_FNI_LIST,
+                    payload: res.data
+                });
+            })
+            .catch(err => console.log(err.response));
     });
 };
 

@@ -47,7 +47,11 @@ import {
     DELETE_ESCALATION_DRIVER_CAUSE,
     EDIT_ESCALATION_DRIVER_CAUSE,
     GET_CCMS_RCA,
-    CLOSE_RCA_MODAL
+    CLOSE_RCA_MODAL,
+    COMPLETE_CCMS_RCA,
+    TOGGLE_ACTIVE_TAB,
+    COMPLETE_FNI,
+    GET_FNI_LIST
 } from "../actions/types";
 
 const initialState = {
@@ -76,7 +80,9 @@ const initialState = {
     escalation_driver: null,
     escalation_driver_cause: null,
     ccms_rca: null,
-    ccms_rca_modal: false
+    ccms_rca_modal: false,
+    activeTab: 1,
+    fni: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -92,11 +98,32 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_name
                 )
             };
+        case GET_FNI_LIST:
+            return {
+                ...state,
+                fni: action.payload
+            };
+        case COMPLETE_FNI:
+            return {
+                ...state,
+                fni: [...state.fni, action.payload]
+            };
+        case TOGGLE_ACTIVE_TAB:
+            return {
+                ...state,
+                activeTab: action.payload
+            };
         case CLOSE_RCA_MODAL:
             return {
                 ...state,
                 ccms_rca_modal: false,
-                ccms_rca: null
+                ccms_rca: null,
+                fni: null
+            };
+        case COMPLETE_CCMS_RCA:
+            return {
+                ...state,
+                ccms_rca: action.payload
             };
         case GET_CCMS_RCA:
             return {

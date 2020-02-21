@@ -23,7 +23,9 @@ from .api import (
     CauseCodeViewset,
     EscalationDriverViewset,
     EscalationDriverCauseViewset,
-    CcmsRcaViewset
+    CcmsRcaViewset,
+    FindingsAndInvestigationViewset,
+    CorrectiveActionViewset
 )
 
 urlpatterns = [
@@ -59,5 +61,9 @@ router.register('api/escalation_driver_cause',
                 EscalationDriverCauseViewset, 'escalation_driver_cause')
 router.register('api/ccms_rca',
                 CcmsRcaViewset, 'ccms_rca')
+router.register('api/findings_and_investigation',
+                FindingsAndInvestigationViewset, 'findings_and_investigation')
+router.register('api/corrective_action',
+                CorrectiveActionViewset, 'corrective_action')
 
 urlpatterns.extend(router.urls)

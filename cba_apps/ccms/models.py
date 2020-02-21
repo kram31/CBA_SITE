@@ -195,7 +195,7 @@ class CcmsRca(models.Model):
         max_length=5000, blank=True, null=True)
 
     controllability = models.ForeignKey(
-        "AccountableTeam", on_delete=models.SET_NULL, related_name="agent_silos", blank=True, null=True)
+        "AccountableTeam", on_delete=models.SET_NULL, related_name="controllabilities", blank=True, null=True)
 
     cause_code = models.ForeignKey(
         CauseCode, on_delete=models.SET_NULL, related_name="rca_cause_codes", blank=True, null=True)
@@ -223,5 +223,40 @@ class CcmsRca(models.Model):
     ccms = models.ForeignKey(
         "Ccms", on_delete=models.CASCADE, related_name="ccms_rca", blank=True, null=True)
 
+    event_description = models.TextField(blank=True)
+
+    ticket_number = models.CharField(
+        max_length=2000, blank=True, null=True)
+
     def __str__(self):
         return f"CCMS RCA for {self.ccms}"
+
+
+class FindingsAndInvestigation(models.Model):
+
+    ccms_rca = models.ForeignKey(
+        "CcmsRca", on_delete=models.CASCADE, related_name="findings_and_investigation_ccms_rcas", blank=True, null=True)
+
+    agent_name = models.CharField(max_length=2000, blank=True, null=True)
+
+    ticket_number = models.CharField(max_length=2000, blank=True, null=True)
+
+    description = models.TextField(blank=True)
+
+    submitted_date = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"Findings and Investigation for {self.ccms_rca.pk}"
+
+
+class CorrectiveAction(models.Model):
+
+    ccms_rca = models.ForeignKey(
+        "CcmsRca", on_delete=models.CASCADE, related_name="corrective_action_ccms_rcas", blank=True, null=True)
+
+    ticket_number = models.CharField(max_length=2000, blank=True, null=True)
+
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Corrective Action for {self.ccms_rca.pk}"

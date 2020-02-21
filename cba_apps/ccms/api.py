@@ -23,7 +23,9 @@ from .models import (
     CauseCode,
     EscalationDriver,
     EscalationDriverCause,
-    CcmsRca
+    CcmsRca,
+    FindingsAndInvestigation,
+    CorrectiveAction
 )
 from .serializers import (
     MailSerializer,
@@ -44,7 +46,9 @@ from .serializers import (
     CauseCodeSerializer,
     EscalationDriverSerializer,
     EscalationDriverCauseSerializer,
-    CcmsRcaSerializer
+    CcmsRcaSerializer,
+    FindingsAndInvestigationSerializer,
+    CorrectiveActionSerializer
 )
 
 
@@ -234,6 +238,28 @@ class CcmsRcaViewset(viewsets.ModelViewSet):
     serializer_class = CcmsRcaSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['ccms__id', ]
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+class FindingsAndInvestigationViewset(viewsets.ModelViewSet):
+    queryset = FindingsAndInvestigation.objects.all()
+    serializer_class = FindingsAndInvestigationSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['ccms_rca__id', ]
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+class CorrectiveActionViewset(viewsets.ModelViewSet):
+    queryset = CorrectiveAction.objects.all()
+    serializer_class = CorrectiveActionSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['ccms__id', ]
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
