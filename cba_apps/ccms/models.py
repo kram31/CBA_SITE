@@ -235,9 +235,24 @@ class CcmsRca(models.Model):
 class FindingsAndInvestigation(models.Model):
 
     ccms_rca = models.ForeignKey(
-        "CcmsRca", on_delete=models.CASCADE, related_name="findings_and_investigation_ccms_rcas", blank=True, null=True)
+        "CcmsRca", on_delete=models.CASCADE, related_name="fni_ccms_rcas", blank=True, null=True)
+
+    ticket_number = models.CharField(max_length=2000, blank=True, null=True)
 
     agent_name = models.CharField(max_length=2000, blank=True, null=True)
+
+    description = models.TextField(blank=True)
+
+    submitted_date = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"Findings and Investigation for {self.ccms_rca.id}"
+
+
+class CorrectiveAction(models.Model):
+
+    ccms_rca = models.ForeignKey(
+        "CcmsRca", on_delete=models.CASCADE, related_name="ca_fni_ccms_rcas", blank=True, null=True)
 
     ticket_number = models.CharField(max_length=2000, blank=True, null=True)
 
@@ -246,17 +261,14 @@ class FindingsAndInvestigation(models.Model):
     submitted_date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"Findings and Investigation for {self.ccms_rca.pk}"
+        return f"Corrective Action for {self.ccms_rca.id}"
 
 
-class CorrectiveAction(models.Model):
+# class RcaTicketNumber(models.Model):
 
-    ccms_rca = models.ForeignKey(
-        "CcmsRca", on_delete=models.CASCADE, related_name="corrective_action_ccms_rcas", blank=True, null=True)
-
-    ticket_number = models.CharField(max_length=2000, blank=True, null=True)
-
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return f"Corrective Action for {self.ccms_rca.pk}"
+#     ccms_rca = models.ForeignKey(
+#         "CcmsRca", on_delete=models.CASCADE, related_name="ccms_rca_ticket_numbers", blank=True, null=True)
+#     ticket_number = models.CharField(
+#         max_length=2000, blank=True, null=True, unique=True)
+#     event_description = models.TextField(blank=True)
+#     submitted_date = models.DateField(auto_now=True)

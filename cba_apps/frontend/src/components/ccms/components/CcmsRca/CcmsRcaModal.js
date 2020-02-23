@@ -71,6 +71,7 @@ class CcmsRcaModal extends Component {
             <Fragment>
                 <Button onClick={this.getData}>Open RCA</Button>
                 <Modal
+                    // className="modal-xl"
                     size="lg"
                     isOpen={ccms_rca_modal && ccms.id == ccms_rca.ccms}
                     toggle={close_ccms_rca}

@@ -27,8 +27,8 @@ class RcaFniList extends Component {
                         {fni_list.map((item, index) => (
                             <tr key={index}>
                                 <th scope="row">{item.id}</th>
-                                <td>{item.agent_name}</td>
                                 <td>{item.ticket_number}</td>
+                                <td>{item.agent_name}</td>
                                 <td>{item.description}</td>
                                 <td>{item.submitted_date}</td>
                                 <td>{item.ccms_rca}</td>

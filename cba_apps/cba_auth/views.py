@@ -23,6 +23,9 @@ from cba_auth.graph_helper import (
 
 )
 
+from ccms.graph_helper import is_get_member_of
+from ccms.models import CCMSOwner
+
 # Create your views here.
 
 
@@ -113,6 +116,9 @@ def callback(request):
         )
 
     login(request, userobj)
+
+    if is_get_member_of(token, "Automations.ILCManila"):
+        CCMSOwner.objects.create(user=userobj)
 
     # Redirect to CBA Apps Link
     return HttpResponseRedirect(reverse('index'))

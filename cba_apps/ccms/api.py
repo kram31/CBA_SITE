@@ -3,6 +3,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.authentication import TokenAuthentication
 
+from ccms.graph_helper import is_get_member_of
+
+from cba_auth.auth_helper import get_token
+
 
 from django.contrib.auth.models import User
 from .models import (
@@ -88,15 +92,6 @@ class TicketTypeViewset(viewsets.ModelViewSet):
 class AccountableTeamViewset(viewsets.ModelViewSet):
     queryset = AccountableTeam.objects.all()
     serializer_class = AccountableTeamSerializer
-    authentication_classes = [TokenAuthentication, ]
-    permission_classes = [
-        permissions.AllowAny
-    ]
-
-
-class CCMSOwnerViewset(viewsets.ModelViewSet):
-    queryset = CCMSOwner.objects.all()
-    serializer_class = CCMSOwnerSerializer
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
@@ -260,6 +255,19 @@ class CorrectiveActionViewset(viewsets.ModelViewSet):
     serializer_class = CorrectiveActionSerializer
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['ccms__id', ]
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+# GET MEMBERS LIST FROM GRAPH API
+# LOOP FOR EACH AND CREATE
+# CREATE USER OBJ THEN ADD TO CCMSOwner OBJ
+
+class CCMSOwnerViewset(viewsets.ModelViewSet):
+    queryset = CCMSOwner.objects.all()
+    serializer_class = CCMSOwnerSerializer
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny

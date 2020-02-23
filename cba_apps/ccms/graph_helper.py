@@ -17,7 +17,6 @@ def get_user(token):
     return user.json()
 
 
-
 def get_mails(token, upn):
 
     emails = []
@@ -169,3 +168,20 @@ def check_mailbox_access(token, upn):
         "{0}/users/{1}/".format(graph_url, upn))
 
     return result.json()
+
+
+def is_get_member_of(token, group):
+
+    graph_client = OAuth2Session(token=token)
+
+    query_params = {
+        '$select': "displayName"
+    }
+
+    result = graph_client.get(
+        "{0}/me/memberOf/".format(graph_url), params=query_params, headers=headers)
+
+    values = result.json()['value']
+
+    return any(v.get("displayName", None) ==
+               group for v in values)
