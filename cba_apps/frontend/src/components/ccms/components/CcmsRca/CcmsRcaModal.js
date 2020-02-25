@@ -26,6 +26,7 @@ import {
 } from "../../../../actions/ccmsActions";
 import classnames from "classnames";
 
+import DynamicForm from "../Forms/DynamicForm";
 import CcmsRcaForm from "./CcmsRcaForm";
 import RcaFindingsAndInvestigation from "./RcaFindingsAndInvestigation/RcaFindingsAndInvestigationForm";
 
@@ -55,13 +56,29 @@ class CcmsRcaModal extends Component {
         }
     };
 
+    checkStatus = data => {
+        if (data.is_rca_completed) {
+            return {
+                color: "success",
+                text: "Completed RCA"
+            };
+        } else {
+            return {
+                color: "danger",
+                text: "Incomplete RCA"
+            };
+        }
+    };
+
     render() {
         const {
             ccms_rca_modal,
             ccms,
             ccms_rca,
             close_ccms_rca,
-            activeTab
+            activeTab,
+            fni_list,
+            ca_list
         } = this.props;
         // const { activeTab } = this.state;
 
@@ -69,7 +86,12 @@ class CcmsRcaModal extends Component {
 
         return (
             <Fragment>
-                <Button onClick={this.getData}>Open RCA</Button>
+                <Button
+                    onClick={this.getData}
+                    color={this.checkStatus(ccms).color}
+                >
+                    {this.checkStatus(ccms).text}
+                </Button>
                 <Modal
                     // className="modal-xl"
                     size="lg"
@@ -145,32 +167,22 @@ class CcmsRcaModal extends Component {
                                 </Row>
                             </TabPane>
                             <TabPane tabId={3}>
-                                <Row>
-                                    <Col sm="6">
-                                        <Card body>
-                                            <CardTitle>
-                                                Special Title Treatment
-                                            </CardTitle>
-                                            <CardText>
-                                                With supporting text below as a
-                                                natural lead-in to additional
-                                                content.
-                                            </CardText>
-                                            <Button>Go somewhere</Button>
-                                        </Card>
-                                    </Col>
-                                    <Col sm="6">
-                                        <Card body>
-                                            <CardTitle>
-                                                Special Title Treatment
-                                            </CardTitle>
-                                            <CardText>
-                                                With supporting text below as a
-                                                natural lead-in to additional
-                                                content.
-                                            </CardText>
-                                            <Button>Go somewhere</Button>
-                                        </Card>
+                                <Row className="mt-3">
+                                    <Col sm="12">
+                                        {fni_list && fni_list.length ? (
+                                            <DynamicForm
+                                                form_title="corrective_actions"
+                                                form_inputs={{
+                                                    select_ticket_number: "",
+                                                    text_description: ""
+                                                }}
+                                                display_list={ca_list}
+                                                select_options={fni_list}
+                                                labelKey="ticket_number"
+                                            />
+                                        ) : (
+                                            <h4>No data found</h4>
+                                        )}
                                     </Col>
                                 </Row>
                             </TabPane>
@@ -185,7 +197,9 @@ class CcmsRcaModal extends Component {
 const mapStateToProps = state => ({
     ccms_rca: state.ccms.ccms_rca,
     ccms_rca_modal: state.ccms.ccms_rca_modal,
-    activeTab: state.ccms.activeTab
+    activeTab: state.ccms.activeTab,
+    fni_list: state.ccms.fni,
+    ca_list: state.ccms.ca
 });
 
 export default connect(mapStateToProps, {

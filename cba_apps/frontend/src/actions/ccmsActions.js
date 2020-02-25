@@ -52,12 +52,31 @@ import {
     COMPLETE_CCMS_RCA,
     TOGGLE_ACTIVE_TAB,
     COMPLETE_FNI,
-    GET_FNI_LIST
+    GET_FNI_LIST,
+    SUBMIT_CA,
+    GET_CA_LIST,
+    GET_SELECTED_CCMS_ONLY
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export const submit_ca = data => dispatch => {
+    // console.log({ fni: data.ticket_number.id, ...data });
+    axios
+        .post(`/api/corrective_action/`, {
+            fni: data.ticket_number.id,
+            ...data
+        })
+        .then(res => {
+            dispatch({
+                type: SUBMIT_CA,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err.response));
+};
 
 export const get_fni_list = data => dispatch => {
     axios
@@ -124,6 +143,17 @@ export const get_ccms_rca = data => dispatch => {
                     type: GET_FNI_LIST,
                     payload: res.data
                 });
+
+                axios
+                    .get(
+                        `/api/corrective_action/?fni__ccms_rca__id=${res.data[0].ccms_rca}`
+                    )
+                    .then(res => {
+                        dispatch({
+                            type: GET_CA_LIST,
+                            payload: res.data
+                        });
+                    });
             })
             .catch(err => console.log(err.response));
     });
@@ -518,8 +548,9 @@ export const remove_selected_ccms = () => dispatch => {
 };
 
 export const get_selected_ccms = data => dispatch => {
+    console.log(data);
     dispatch({
-        type: GET_SELECTED_CCMS,
+        type: GET_SELECTED_CCMS_ONLY,
         payload: data
     });
 };
@@ -575,6 +606,7 @@ export const add_comment = data => dispatch => {
 };
 
 export const update_ccms = (data, id) => dispatch => {
+    console.log(data);
     dispatch({
         type: FETCHING
     });

@@ -25,6 +25,22 @@ from .models import (Mail,
                      CorrectiveAction
                      )
 
+from cba_auth.auth_helper import get_token
+from ccms.graph_helper import send_mail_graph
+
+from django.core.mail import EmailMessage
+
+
+def send_email():
+    email = EmailMessage(
+        'Title',
+        'Body',
+        'cba-ccms@donot-reply.com',
+        ['mark.lascano@dxc.com']
+    )
+    # email.attach_file()
+    email.send()
+
 
 class MailSerializer(serializers.ModelSerializer):
 
@@ -167,6 +183,18 @@ class CcmsSerializer(serializers.ModelSerializer):
 
         return dt.days
 
+    is_rca_completed = serializers.SerializerMethodField()
+
+    def get_is_rca_completed(self, obj):
+
+        try:
+            query = CcmsRca.objects.get(ccms=obj.id)
+            return True if query.completed_on else False
+        except CcmsRca.DoesNotExist:
+            return False
+
+    cba_auth_user = Auth_DetailsSerializer(required=False)
+
     class Meta:
         model = Ccms
         fields = '__all__'
@@ -222,9 +250,35 @@ class CcmsSerializer(serializers.ModelSerializer):
 
         if "ccms_status" in validated_data.keys():
             ccms_status = validated_data.pop('ccms_status')
-            instance.ccms_status = CCMSStatus.objects.get(
+            ccms_status_obj = CCMSStatus.objects.get(
                 id=ccms_status['id'])
+            instance.ccms_status = ccms_status_obj
             instance.save()
+
+        if "cba_auth_user" in validated_data.keys():
+            cba_auth_user = validated_data.pop('cba_auth_user')
+            user = Auth_Details.objects.get(id=cba_auth_user['id'])
+            token = {
+                "token_type": "Bearer",
+                "scope": [
+                    "Calendars.Read",
+                    "Mail.Read",
+                    "Mail.Read.Shared",
+                    "Mail.ReadWrite",
+                    "Mail.Send",
+                    "openid",
+                    "profile",
+                    "User.Read",
+                    "User.ReadBasic.All",
+                    "email"
+                ],
+                "expires_in": cba_auth_user['expires_in'],
+                "ext_expires_in": cba_auth_user['ext_expires_in'],
+                "access_token": cba_auth_user['access_token'],
+                "refresh_token": cba_auth_user['refresh_token'],
+                "id_token": cba_auth_user['id_token'],
+                "expires_at": cba_auth_user['expires_at']
+            }
 
         instance = super().update(instance, validated_data)
         instance.save()
@@ -232,10 +286,24 @@ class CcmsSerializer(serializers.ModelSerializer):
         # if rca_required is true > create a CcmsRca object
         # required ccms id == instance.id
 
+        ccms_instance = Ccms.objects.get(pk=instance.id)
         if instance.rca_required:
-            ccms_instance = Ccms.objects.get(pk=instance.id)
-            ccms_rca = CcmsRca.objects.create(ccms=ccms_instance)
-            ccms_rca.save()
+            CcmsRca.objects.update_or_create(ccms=ccms_instance)
+        else:
+            try:
+                CcmsRca.objects.get(ccms=ccms_instance).delete()
+            except CcmsRca.DoesNotExist:
+                print("does not exists")
+
+        # create comment on submit
+        # comment = Comment.objects.create(
+        #     contributor=user, ccms=ccms_instance, entry=f"Assigned by {user.username}", ccms_status_during_comment=ccms_status_obj['name'])
+        # comment.save()
+
+        # send_mail_graph(token=token, subject="Turned OFF", recipients=[
+        #     "mark.lascano@dxc.com"], body='TURNED OFF')
+
+        # send_email()
 
         return instance
 
@@ -252,11 +320,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        print(validated_data)
-
         # get CCMS obj for updating CCMS Status
         ccms = validated_data.pop('ccms')
-
         ccms_obj = Ccms.objects.get(id=ccms['id'])
 
         # get ccms_status to update CCMS obj
@@ -270,7 +335,6 @@ class CommentSerializer(serializers.ModelSerializer):
         # get contributor
         contributor = validated_data.pop('contributor')
 
-        print(f"MRK 1 = CONTRIBUTOR ===== {contributor}")
         user = Auth_Details.objects.get(id=contributor['id'])
 
         # create comment entry
@@ -394,6 +458,12 @@ class FindingsAndInvestigationSerializer(serializers.ModelSerializer):
 
 class CorrectiveActionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
+
+    ticket_number = serializers.SerializerMethodField()
+
+    def get_ticket_number(self, obj):
+
+        return obj.fni.ticket_number
 
     class Meta:
         model = CorrectiveAction

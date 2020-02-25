@@ -3,6 +3,8 @@ import React, { Component, Fragment } from "react";
 import CcmsModal from "./Modals/CcmsModal";
 import CommentForm from "./Comment/CommentForm";
 
+import CcmsRcaModal from "./CcmsRca/CcmsRcaModal";
+
 import {
     Form,
     Row,
@@ -190,6 +192,8 @@ class CcmsForm extends Component {
         return newArr;
     };
 
+    // AUTO SET OF CCMS STATUS WHEN SUBMITTED
+
     updateStateThenSend = (id, value) => {
         if (value == "Complaint") {
             this.setState(
@@ -231,7 +235,10 @@ class CcmsForm extends Component {
     };
 
     submitForm = (data, id) => {
-        this.props.update_ccms(data, id);
+        this.props.update_ccms(
+            { ...data, cba_auth_user: this.props.cba_auth_user },
+            id
+        );
     };
 
     handleSubmit = event => {
@@ -380,13 +387,16 @@ class CcmsForm extends Component {
                                 <Col md={3}>
                                     {this.props.list_type &&
                                     this.state.rca_required ? (
-                                        <Button
-                                            onClick={() =>
-                                                console.log("Open RCA")
-                                            }
-                                        >
-                                            RCA
-                                        </Button>
+                                        // <Button
+                                        //     onClick={() =>
+                                        //         console.log("Open RCA")
+                                        //     }
+                                        // >
+                                        //     RCA
+                                        // </Button>
+                                        <CcmsRcaModal
+                                            ccms={this.props.ccms_entry}
+                                        />
                                     ) : this.props.list_type &&
                                       !this.state.rca_required ? null : (
                                         <Fragment>
@@ -439,7 +449,8 @@ const mapStateToProps = state => ({
     comments: state.ccms.comments,
     silo: state.ccms.silo,
     ticket_type: state.ccms.ticket_type,
-    is_fetching_comments: state.ccms.is_fetching_comments
+    is_fetching_comments: state.ccms.is_fetching_comments,
+    cba_auth_user: state.auth.user
 });
 
 export default connect(mapStateToProps, {

@@ -251,17 +251,15 @@ class FindingsAndInvestigation(models.Model):
 
 class CorrectiveAction(models.Model):
 
-    ccms_rca = models.ForeignKey(
-        "CcmsRca", on_delete=models.CASCADE, related_name="ca_fni_ccms_rcas", blank=True, null=True)
-
-    ticket_number = models.CharField(max_length=2000, blank=True, null=True)
+    fni = models.ForeignKey(
+        "FindingsAndInvestigation", on_delete=models.CASCADE, related_name="ca_fni", blank=True, null=True)
 
     description = models.TextField(blank=True)
 
     submitted_date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"Corrective Action for {self.ccms_rca.id}"
+        return f"Corrective Action for {self.fni.ticket_number}"
 
 
 # class RcaTicketNumber(models.Model):

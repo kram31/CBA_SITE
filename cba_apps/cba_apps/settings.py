@@ -142,3 +142,10 @@ STATICFILES_DIRS = (
 CORS_ORIGIN_ALLOW_ALL = True
 
 # CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+
+
+EMAIL_HOST = 'smtp.svcs.entsvcs.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'mark.lascano@dxc.com'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False

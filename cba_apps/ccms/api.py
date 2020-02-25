@@ -3,11 +3,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.authentication import TokenAuthentication
 
-from ccms.graph_helper import is_get_member_of
-
-from cba_auth.auth_helper import get_token
-
-
 from django.contrib.auth.models import User
 from .models import (
     Mail,
@@ -253,8 +248,8 @@ class FindingsAndInvestigationViewset(viewsets.ModelViewSet):
 class CorrectiveActionViewset(viewsets.ModelViewSet):
     queryset = CorrectiveAction.objects.all()
     serializer_class = CorrectiveActionSerializer
-    # filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['ccms__id', ]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['fni__ccms_rca__id', ]
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny

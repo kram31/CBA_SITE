@@ -101,7 +101,7 @@ class CcmsRcaForm extends Component {
             }
             return this.setState({ ccms_rca_state });
         },
-        id: "id_" + col,
+        id: "id_rca_" + col,
         options: !this.exemptions.includes(col)
             ? this.props[col]
             : this.filteredDriverList(
@@ -199,7 +199,10 @@ class CcmsRcaForm extends Component {
                     <Card body className="mb-2">
                         <CardTitle>TICKET AND AGENT INFORMATION</CardTitle>
                         <FormGroup row size="sm">
-                            <Label for="id_escalated_ticket" md={labelLength}>
+                            <Label
+                                for="id_rca_escalated_ticket"
+                                md={labelLength}
+                            >
                                 Escalated Ticket
                             </Label>
 
@@ -208,7 +211,7 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="escalated_ticket"
-                                    id="id_escalated_ticket"
+                                    id="id_rca_escalated_ticket"
                                     disabled
                                     value={ccms.escalated_ticket}
                                 />
@@ -216,7 +219,7 @@ class CcmsRcaForm extends Component {
                         </FormGroup>
 
                         <FormGroup row>
-                            <Label for="id_agent_name" sm={labelLength}>
+                            <Label for="id_rca_agent_name" sm={labelLength}>
                                 Agent's Name
                             </Label>
 
@@ -226,14 +229,14 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="agent_name"
-                                    id="id_agent_name"
+                                    id="id_rca_agent_name"
                                     value={ccms_rca_state.agent_name}
                                 />
                             </Col>
                         </FormGroup>
 
                         <FormGroup row>
-                            <Label for="id_agent_silo" sm={labelLength}>
+                            <Label for="id_rca_agent_silo" sm={labelLength}>
                                 Agent's Silo
                             </Label>
 
@@ -246,7 +249,10 @@ class CcmsRcaForm extends Component {
                         </FormGroup>
 
                         <FormGroup row>
-                            <Label for="id_ticket_description" sm={labelLength}>
+                            <Label
+                                for="id_rca_ticket_description"
+                                sm={labelLength}
+                            >
                                 Ticket's Description
                             </Label>
 
@@ -256,14 +262,17 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="ticket_description"
-                                    id="id_ticket_description"
+                                    id="id_rca_ticket_description"
                                     value={ccms_rca_state.ticket_description}
                                 />
                             </Col>
                         </FormGroup>
 
                         <FormGroup row size="sm">
-                            <Label for="id_summary_complaint" md={labelLength}>
+                            <Label
+                                for="id_rca_summary_complaint"
+                                md={labelLength}
+                            >
                                 Captured Issue
                             </Label>
 
@@ -272,7 +281,7 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="summary_complaint"
-                                    id="id_summary_complaint"
+                                    id="id_rca_summary_complaint"
                                     disabled
                                     value={ccms.summary_complaint}
                                 />
@@ -280,7 +289,7 @@ class CcmsRcaForm extends Component {
                         </FormGroup>
                         <FormGroup row>
                             <Label
-                                for="id_ccms_ticket_description"
+                                for="id_rca_ccms_ticket_description"
                                 sm={labelLength}
                             >
                                 CCMS Ticket Description
@@ -292,7 +301,7 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="ccms_ticket_description"
-                                    id="id_ccms_ticket_description"
+                                    id="id_rca_ccms_ticket_description"
                                     value={
                                         ccms_rca_state.ccms_ticket_description
                                     }
@@ -304,7 +313,10 @@ class CcmsRcaForm extends Component {
                     <Card body className="mb-2">
                         <CardTitle>RCA DETAILS</CardTitle>
                         <FormGroup row>
-                            <Label for="id_controllability" sm={labelLength}>
+                            <Label
+                                for="id_rca_controllability"
+                                sm={labelLength}
+                            >
                                 Controllability
                             </Label>
 
@@ -316,7 +328,7 @@ class CcmsRcaForm extends Component {
                             </Col>
                         </FormGroup>
                         <FormGroup row>
-                            <Label for="id_cause_code" sm={labelLength}>
+                            <Label for="id_rca_cause_code" sm={labelLength}>
                                 Cause Code
                             </Label>
 
@@ -329,7 +341,10 @@ class CcmsRcaForm extends Component {
                         </FormGroup>
 
                         <FormGroup row>
-                            <Label for="id_escalation_driver" sm={labelLength}>
+                            <Label
+                                for="id_rca_escalation_driver"
+                                sm={labelLength}
+                            >
                                 Escalation Driver
                             </Label>
 
@@ -347,7 +362,7 @@ class CcmsRcaForm extends Component {
                         </FormGroup>
                         <FormGroup row>
                             <Label
-                                for="id_escalation_driver_causer"
+                                for="id_rca_escalation_driver_causer"
                                 sm={labelLength}
                             >
                                 Escalation Driver Cause
@@ -370,7 +385,7 @@ class CcmsRcaForm extends Component {
                         </FormGroup>
                         <FormGroup row>
                             <Label
-                                for="id_team_spg_accountability"
+                                for="id_rca_team_spg_accountability"
                                 sm={labelLength}
                             >
                                 Team (SPG Accountability)
@@ -382,7 +397,7 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="team_spg_accountability"
-                                    id="id_team_spg_accountability"
+                                    id="id_rca_team_spg_accountability"
                                     value={
                                         ccms_rca_state.team_spg_accountability
                                     }
@@ -390,7 +405,7 @@ class CcmsRcaForm extends Component {
                             </Col>
                         </FormGroup>
                         <FormGroup row>
-                            <Label for="id_business_unit" sm={labelLength}>
+                            <Label for="id_rca_business_unit" sm={labelLength}>
                                 Business Unit
                             </Label>
 
@@ -400,13 +415,13 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="business_unit"
-                                    id="id_business_unit"
+                                    id="id_rca_business_unit"
                                     value={ccms_rca_state.business_unit}
                                 />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
-                            <Label for="id_specific_bu" sm={labelLength}>
+                            <Label for="id_rca_specific_bu" sm={labelLength}>
                                 Specific BU
                             </Label>
 
@@ -416,7 +431,7 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="text"
                                     name="specific_bu"
-                                    id="id_specific_bu"
+                                    id="id_rca_specific_bu"
                                     value={ccms_rca_state.specific_bu}
                                 />
                             </Col>
@@ -427,7 +442,7 @@ class CcmsRcaForm extends Component {
                         <CardTitle>Summary</CardTitle>
 
                         <FormGroup row>
-                            <Label for="id_ticket_number" sm={labelLength}>
+                            <Label for="id_rca_ticket_number" sm={labelLength}>
                                 Ticket Number
                             </Label>
 
@@ -437,13 +452,16 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="input"
                                     name="ticket_number"
-                                    id="id_ticket_number"
+                                    id="id_rca_ticket_number"
                                     value={ccms_rca_state.ticket_number}
                                 />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
-                            <Label for="id_event_description" sm={labelLength}>
+                            <Label
+                                for="id_rca_event_description"
+                                sm={labelLength}
+                            >
                                 Event Description
                             </Label>
                             <Col>
@@ -452,7 +470,7 @@ class CcmsRcaForm extends Component {
                                     bsSize="sm"
                                     type="textarea"
                                     name="event_description"
-                                    id="id_event_description"
+                                    id="id_rca_event_description"
                                     value={ccms_rca_state.event_description}
                                     rows={4}
                                 />

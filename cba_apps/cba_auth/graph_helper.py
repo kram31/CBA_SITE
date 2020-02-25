@@ -17,8 +17,6 @@ def get_user(token):
     return user.json()
 
 
-
-
 def send_mail_graph(token, subject, recipients, body='', content_type='HTML',
                     attachments=None):
     """Send email from current user.
@@ -64,4 +62,3 @@ def send_mail_graph(token, subject, recipients, body='', content_type='HTML',
     return graph_client.post("{0}/me/sendMail".format(graph_url),
                              headers=headers,
                              json=email_msg)
-

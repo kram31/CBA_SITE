@@ -51,7 +51,10 @@ import {
     COMPLETE_CCMS_RCA,
     TOGGLE_ACTIVE_TAB,
     COMPLETE_FNI,
-    GET_FNI_LIST
+    GET_FNI_LIST,
+    SUBMIT_CA,
+    GET_CA_LIST,
+    GET_SELECTED_CCMS_ONLY
 } from "../actions/types";
 
 const initialState = {
@@ -82,7 +85,8 @@ const initialState = {
     ccms_rca: null,
     ccms_rca_modal: false,
     activeTab: 1,
-    fni: null
+    fni: null,
+    ca: null
 };
 
 const ccmsReducer = (state = initialState, action) => {
@@ -97,6 +101,18 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
                 )
+            };
+        case GET_CA_LIST:
+            console.log(action.payload);
+            return {
+                ...state,
+                ca: action.payload
+            };
+        case SUBMIT_CA:
+            console.log(action.payload);
+            return {
+                ...state,
+                ca: [...state.ca, action.payload]
             };
         case GET_FNI_LIST:
             return {
@@ -118,7 +134,8 @@ const ccmsReducer = (state = initialState, action) => {
                 ...state,
                 ccms_rca_modal: false,
                 ccms_rca: null,
-                fni: null
+                fni: null,
+                ca: null
             };
         case COMPLETE_CCMS_RCA:
             return {
@@ -329,6 +346,11 @@ const ccmsReducer = (state = initialState, action) => {
                 comments: action.payload.comments,
                 is_fetching_comments: false,
                 modal: true
+            };
+        case GET_SELECTED_CCMS_ONLY:
+            return {
+                ...state,
+                selected_ccms: action.payload
             };
         case GET_SILO:
             return {

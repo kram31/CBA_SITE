@@ -170,7 +170,7 @@ def check_mailbox_access(token, upn):
     return result.json()
 
 
-def is_get_member_of(token, group):
+def is_member_of(token, group):
 
     graph_client = OAuth2Session(token=token)
 

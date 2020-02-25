@@ -24,6 +24,8 @@ import CcmsAdminModal from "../CcmsAdmin/CcmsAdminModal";
 import CcmsAccessRequestModal from "../CcmsAccessRequest/CcmsAccessRequestModal";
 import DriverForm from "../Drivers/DriversForm";
 import CcmsRcaModal from "../CcmsRca/CcmsRcaModal";
+import DynamicFormModal from "../Modals/DynamicFormModal";
+import DynamicForm from "../Forms/DynamicForm";
 
 import { search_ccms } from "../../../../actions/ccmsActions";
 
@@ -31,8 +33,10 @@ class CcmsTable2 extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { fadeIn: false };
+        this.state = { fadeIn: false, isModalOpen: false };
     }
+
+    toggleModal = () => this.setState({ isModalOpen: !this.state.isModalOpen });
 
     buttonOptions = title => {
         if (title) {
@@ -50,7 +54,22 @@ class CcmsTable2 extends Component {
                 },
                 {
                     Header: "Reassign Case",
-                    Cell: cellprops => <Button>Change Owner</Button>
+                    Cell: cellprops => (
+                        <DynamicFormModal
+                            modal={this.state.isModalOpen}
+                            form_inputs={{
+                                select_ccms_owner: ""
+                            }}
+                            formattedFormTitle="Change Owner"
+                            form_title="change_owner"
+                            toggleModal={this.toggleModal}
+                            ComponentForm={DynamicForm}
+                            select_options={this.props.ccms.ccms_owner}
+                            labelKey={option => `${option.user.email}`}
+                            size="lg"
+                            ccms_entry={cellprops.original}
+                        />
+                    )
                 }
             ];
         } else {

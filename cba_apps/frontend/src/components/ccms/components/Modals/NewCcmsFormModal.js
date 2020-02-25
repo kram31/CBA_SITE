@@ -33,11 +33,28 @@ class NewCcmsFormModal extends Component {
         this.props.get_selected_ccms_new(this.props.ccms_entry);
     };
 
+    checkStatus = data => {
+        if (data.ccms_owner) {
+            return {
+                color: "success",
+                text: "View Case"
+            };
+        } else {
+            return {
+                color: "danger",
+                text: "Unassigned Case"
+            };
+        }
+    };
+
     render() {
         return (
             <Fragment>
-                <Button color="primary" onClick={this.toggle}>
-                    View Case
+                <Button
+                    color={this.checkStatus(this.props.ccms_entry).color}
+                    onClick={this.toggle}
+                >
+                    {this.checkStatus(this.props.ccms_entry).text}
                 </Button>
                 <Form>
                     <Modal
@@ -72,22 +89,6 @@ class NewCcmsFormModal extends Component {
                                 ccms_entry={this.props.selected_ccms}
                             />
                         </ModalBody>
-                        {/* <ModalFooter>
-                            <Button
-                                color="primary"
-                                onClick={this.toggle}
-                                value="Yes"
-                            >
-                                Yes
-                            </Button>{" "}
-                            <Button
-                                color="secondary"
-                                onClick={this.toggle}
-                                value="No"
-                            >
-                                No
-                            </Button>
-                        </ModalFooter> */}
                     </Modal>
                 </Form>
             </Fragment>
