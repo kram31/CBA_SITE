@@ -17,9 +17,7 @@ def get_user(token):
     return user.json()
 
 
-def get_mails(token, upn):
-
-    emails = []
+def get_mails(token, upn, folder_id):
 
     graph_client = OAuth2Session(token=token)
 
@@ -28,23 +26,23 @@ def get_mails(token, upn):
     }
 
     mails = graph_client.get(
-        "{0}/users/{1}/mailFolders('Inbox')/messages".format(graph_url, upn), params=query_params, headers=headers)
+        "{0}/users/{1}/mailFolders/{2}/messages".format(graph_url, upn, folder_id), params=query_params, headers=headers)
 
     mails_json = mails.json()
 
-    emails.extend(mails_json['value'])
+    # emails.extend(mails_json['value'])
 
-    # Handle pagination
-    # Loop to check below
-    # if @odata.nextLink exists send another request using @odata.nextLink value
+    # # Handle pagination
+    # # Loop to check below
+    # # if @odata.nextLink exists send another request using @odata.nextLink value
 
-    while '@odata.nextLink' in mails_json:
-        print(mails_json['@odata.nextLink'])
-        mails_json = graph_client.get(mails_json['@odata.nextLink'])
-        mails_json = mails_json.json()
-        emails.extend(mails_json['value'])
+    # while '@odata.nextLink' in mails_json:
 
-    return emails
+    #     mails_json = graph_client.get(mails_json['@odata.nextLink'])
+    #     mails_json = mails_json.json()
+    #     emails.extend(mails_json['value'])
+
+    return mails_json['value']
 
 
 def send_mail_graph(token, subject, recipients, body='', content_type='HTML',
@@ -92,6 +90,20 @@ def send_mail_graph(token, subject, recipients, body='', content_type='HTML',
     return graph_client.post("{0}/me/sendMail".format(graph_url),
                              headers=headers,
                              json=email_msg)
+
+
+def get_folder_list(token, upn):
+
+    graph_client = OAuth2Session(token=token)
+
+    query_params = {
+        '$select': "displayName, id"
+    }
+
+    mailfolders = graph_client.get(
+        "{0}/users/{1}/mailFolders".format(graph_url, upn), params=query_params, headers=headers)
+
+    return mailfolders.json()
 
 
 def check_designated_mailfolder(token, upn):

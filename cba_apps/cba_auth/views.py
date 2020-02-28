@@ -117,7 +117,7 @@ def callback(request):
 
     login(request, userobj)
 
-    if is_member_of(token, "Automations.ILCManila"):
+    if is_member_of(token, "Automations.ILCManila") and not CCMSOwner.objects.filter(user=userobj).exists():
         CCMSOwner.objects.create(user=userobj)
 
     # Redirect to CBA Apps Link

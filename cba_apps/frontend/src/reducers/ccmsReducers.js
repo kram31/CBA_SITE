@@ -54,7 +54,13 @@ import {
     GET_FNI_LIST,
     SUBMIT_CA,
     GET_CA_LIST,
-    GET_SELECTED_CCMS_ONLY
+    GET_SELECTED_CCMS_ONLY,
+    ADD_BUSINESS_UNIT,
+    DELETE_BUSINESS_UNIT,
+    EDIT_BUSINESS_UNIT,
+    ADD_TICKET_TYPE,
+    DELETE_TICKET_TYPE,
+    EDIT_TICKET_TYPE
 } from "../actions/types";
 
 const initialState = {
@@ -102,14 +108,48 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_name
                 )
             };
+        case EDIT_TICKET_TYPE:
+            return {
+                ...state,
+                ticket_type: update_list(state.ticket_type, action.payload)
+            };
+        case ADD_TICKET_TYPE:
+            return {
+                ...state,
+                ticket_type: [action.payload, ...state.ticket_type]
+            };
+        case DELETE_TICKET_TYPE:
+            return {
+                ...state,
+                ticket_type: removeItemFromList(
+                    state.ticket_type,
+                    action.payload
+                )
+            };
+        case EDIT_BUSINESS_UNIT:
+            return {
+                ...state,
+                business_unit: update_list(state.business_unit, action.payload)
+            };
+        case ADD_BUSINESS_UNIT:
+            return {
+                ...state,
+                business_unit: [action.payload, ...state.business_unit]
+            };
+        case DELETE_BUSINESS_UNIT:
+            return {
+                ...state,
+                business_unit: removeItemFromList(
+                    state.business_unit,
+                    action.payload
+                )
+            };
         case GET_CA_LIST:
-            console.log(action.payload);
             return {
                 ...state,
                 ca: action.payload
             };
         case SUBMIT_CA:
-            console.log(action.payload);
             return {
                 ...state,
                 ca: [...state.ca, action.payload]

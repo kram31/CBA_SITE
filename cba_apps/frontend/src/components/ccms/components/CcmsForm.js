@@ -13,7 +13,10 @@ import {
     Label,
     FormGroup,
     Button,
-    Spinner
+    Spinner,
+    Collapse,
+    Card,
+    CardTitle
 } from "reactstrap";
 import { connect } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
@@ -73,7 +76,8 @@ class CcmsForm extends Component {
             is_complaint,
 
             isOpen: false,
-            updateButton: true
+            updateButton: true,
+            collapse: false
         };
     }
 
@@ -119,7 +123,9 @@ class CcmsForm extends Component {
     typeaheadProps = col => ({
         bsSize: "sm",
         labelKey:
-            col == "ccms_owner" ? option => `${option.user.email}` : "name",
+            col == "ccms_owner"
+                ? option => `${typeof option.user.email}`
+                : "name",
         onChange: selected =>
             this.setState(
                 { [col]: selected[0] },
@@ -195,6 +201,7 @@ class CcmsForm extends Component {
     // AUTO SET OF CCMS STATUS WHEN SUBMITTED
 
     updateStateThenSend = (id, value) => {
+        console.log(value);
         if (value == "Complaint") {
             this.setState(
                 {
@@ -222,6 +229,8 @@ class CcmsForm extends Component {
 
     callbackFunction = childData => {
         const { is_sending, value, ccms_entry_id } = childData;
+
+        console.log(is_sending);
 
         if (is_sending == "No") {
             return this.setState({
@@ -268,11 +277,31 @@ class CcmsForm extends Component {
             "is_acknowledged",
             "is_resolved",
             "date_acknowledged",
-            "updateButton"
+            "updateButton",
+            "collapse"
         ];
 
         return (
             <Fragment>
+                <Row>
+                    <Col>
+                        <p
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                                this.setState({
+                                    collapse: !this.state.collapse
+                                })
+                            }
+                        >
+                            Show Mail details...
+                        </p>
+                    </Col>
+                </Row>
+
+                <Collapse isOpen={this.state.collapse}>
+                    <MailDetails mail={this.props.ccms_entry.mail} />
+                </Collapse>
+
                 <Row className="mb-2">
                     <Col>
                         <Form autoComplete="off" onSubmit={this.handleSubmit}>
@@ -314,9 +343,9 @@ class CcmsForm extends Component {
                                                 this.callbackFunction
                                             }
                                             value={
-                                                this.state.is_compliment
-                                                    ? "Compliment"
-                                                    : "Complaint"
+                                                this.state.is_complaint
+                                                    ? "Complaint"
+                                                    : "Compliment"
                                             }
                                             ccms_entry_id={
                                                 (this.props.ccms_entry || {}).id
@@ -438,6 +467,27 @@ class CcmsForm extends Component {
         );
     }
 }
+
+const MailDetails = ({ mail }) => {
+    return (
+        <Fragment>
+            <Row className="mb-2">
+                <Col>
+                    <Card body>
+                        <CardTitle>
+                            Subject: <span>{mail.email_subject}</span>
+                        </CardTitle>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: mail.email_body
+                            }}
+                        ></div>
+                    </Card>
+                </Col>
+            </Row>
+        </Fragment>
+    );
+};
 
 const mapStateToProps = state => ({
     business_unit: state.ccms.business_unit,

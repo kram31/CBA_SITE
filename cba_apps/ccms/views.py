@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from ccms.models import Mail, Mailbox_Monitor, Ccms
 import sys
+import pdb
 
 from cba_auth.auth_helper import (
     get_sign_in_url,
@@ -22,7 +23,8 @@ from .graph_helper import (
     create_mailfolder,
     mark_email_read,
     move_email,
-    change_email_subject
+    change_email_subject,
+    get_folder_list
 )
 
 import json
@@ -59,6 +61,8 @@ def app_control_view(request):
 
     mailbox_entry = Mailbox_Monitor.objects.get(id=1)
 
+    token = get_token(request)
+
     if request.method == 'GET':
 
         if mailbox_entry.monitor_on == True:
@@ -80,8 +84,6 @@ def app_control_view(request):
 
             post_email_address = request.POST['email_address']
 
-            token = get_token(request)
-
             # UPDATE monitored mailbox name
             mailbox_entry.mailbox_name = post_email_address
             mailbox_entry.save()
@@ -96,25 +98,40 @@ def app_control_view(request):
 
                 return render(request, 'ccms/app_control_view.html', context)
 
+            # GET ALL FOLDERS AND DISPLAY AS SELECT INPUT
+
+            folder_list = get_folder_list(token, post_email_address)
+
+            if 'error' in folder_list:
+                context['error'] = folder_list['error']
+
+            else:
+                context['folder_list'] = folder_list['value']
+                return render(request, 'ccms/app_control_select_folder.html', context)
+
+            return render(request, 'ccms/app_control_view.html', context)
+
+        if 'select_folder' in request.POST:
+
+            selected_folder_id = request.POST['select_folder']
+
             # Check if designated folder exists
 
             check_designated_mailfolder_result = check_designated_mailfolder(
-                token, post_email_address)
+                token, mailbox_entry.mailbox_name)
 
             if not check_designated_mailfolder_result['value']:
                 # If folder doesnot exist create folder "Processed"
                 folderid = create_mailfolder(
-                    token, post_email_address)
+                    token, mailbox_entry.mailbox_name)
                 print("No folder named Processed found! Created Processed folder")
             else:
                 print("Processed folder found")
                 folder_value = check_designated_mailfolder_result['value'][0]
                 folderid = folder_value['id']
 
-            # EXECUTE Process mail Thread function
-
             mailbox_process = Thread(
-                target=email_to_database, args=(request, post_email_address, folderid))
+                target=email_to_database, args=(request, mailbox_entry.mailbox_name, folderid, selected_folder_id))
 
             if not mailbox_process.is_alive():
 
@@ -139,24 +156,15 @@ def app_control_view(request):
     return render(request, 'ccms/app_control_view.html', context)
 
 
-def email_to_database(request, upn, folderid):
+def email_to_database(request, upn, folderid, folder_to_read):
 
-    while True:
+    while Mailbox_Monitor.objects.get(id=1).monitor_on:
 
         token = get_token(request)
 
-        print('GETTING UNREAD EMAILS')
         # GET UNREAD EMAILS
-        mails = get_mails(token, upn)
-
-        # CHECK IF TRIGGER IS STILL ON
-        mailbox_entry = Mailbox_Monitor.objects.get(id=1)
-        if mailbox_entry.monitor_on == False:
-            print('Turning OFF Thread')
-            send_mail_graph(token=token, subject="Turned OFF", recipients=[
-                            "mark.lascano@dxc.com"], body='TURNED OFF')
-
-            break
+        mails = get_mails(token, upn, folder_to_read)
+        print('GOT UNREAD EMAILS')
 
         uploaded_mails = []
         failed_uploads = []
@@ -164,15 +172,6 @@ def email_to_database(request, upn, folderid):
         # LOOP > save to database > mark email unread > move email to "Processed" folder > send email notif
 
         for mail in mails:
-
-            # CHECK IF TRIGGER IS STILL ON
-            mailbox_entry = Mailbox_Monitor.objects.get(id=1)
-            if mailbox_entry.monitor_on == False:
-                print('Turning OFF Thread')
-                send_mail_graph(token=token, subject="Turned OFF", recipients=[
-                                "mark.lascano@dxc.com"], body='TURNED OFF')
-
-                break
 
             sender_details = mail['sender']
             sender_emailaddress_details = sender_details['emailAddress']
@@ -223,3 +222,6 @@ def email_to_database(request, upn, folderid):
                 # send fail email notif
 
         time.sleep(10)
+
+    send_mail_graph(token=token, subject="Turned OFF", recipients=[
+        "mark.lascano@dxc.com"], body='TURNED OFF')

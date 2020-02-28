@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Modal, ModalHeader, ModalBody, Badge } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, Badge, Button } from "reactstrap";
 
 import CcmsAccessRequest from "./CcmsAccessRequest";
 
@@ -17,19 +17,19 @@ class CcmsAccessRequestModal extends Component {
     render() {
         return (
             <Fragment>
-                <div style={{ textAlign: "center" }} id="icon_w_badge">
-                    <Badge style={{ fontSize: "12px" }} color="primary">
+                <Button
+                    onClick={this.toggle}
+                    color={this.props.color}
+                    className="mr-1"
+                >
+                    <Badge style={{ fontSize: "10px" }} color="danger">
                         {this.props.requestCount}
                     </Badge>
-                    <i
-                        id="btn_ccms_admin"
-                        onClick={this.toggle}
-                        className="fas fa-user-plus"
-                    ></i>
-                    <figcaption style={{ fontSize: "12px" }}>
-                        Access Request
-                    </figcaption>
-                </div>
+                    <span className="mx-1">
+                        <i id="btn_ccms_admin" className="fas fa-user-plus"></i>
+                    </span>
+                    Access Request
+                </Button>
                 <Modal
                     isOpen={this.state.isOpen}
                     toggle={this.toggle}

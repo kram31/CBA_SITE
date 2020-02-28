@@ -13,7 +13,8 @@ import {
     CardBody,
     Button,
     Fade,
-    Collapse
+    Collapse,
+    ButtonGroup
 } from "reactstrap";
 
 import { columns } from "./columns";
@@ -26,6 +27,8 @@ import DriverForm from "../Drivers/DriversForm";
 import CcmsRcaModal from "../CcmsRca/CcmsRcaModal";
 import DynamicFormModal from "../Modals/DynamicFormModal";
 import DynamicForm from "../Forms/DynamicForm";
+import DataTableDropdownButton from "../Tables/DataTableDropdownButton";
+import GeneralDataTable from "./GeneralDataTable";
 
 import { search_ccms } from "../../../../actions/ccmsActions";
 
@@ -33,7 +36,12 @@ class CcmsTable2 extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { fadeIn: false, isModalOpen: false };
+        this.state = {
+            collapseDrivers: false,
+            isModalOpen: false,
+            collapseGeneralTable: false,
+            table: null
+        };
     }
 
     toggleModal = () => this.setState({ isModalOpen: !this.state.isModalOpen });
@@ -105,10 +113,77 @@ class CcmsTable2 extends Component {
         this.props.search_ccms(kw);
     };
 
+    tableSelectionCallback = childData => {
+        this.setState(
+            {
+                table: null
+            },
+            () =>
+                this.updateTable(childData).then(res =>
+                    this.setState({ collapseGeneralTable: true })
+                )
+        );
+    };
+
+    async updateTable(childData) {
+        this.setState({
+            table: childData
+        });
+    }
+
+    handlecollapseGeneralTable = () =>
+        this.setState(
+            {
+                table: null
+            },
+            () => this.setState({ collapseGeneralTable: false })
+        );
+
+    handlecollapseDrivers = () =>
+        this.setState({
+            collapseDrivers: !this.state.collapseDrivers
+        });
+
     render() {
+        const btnColor = "primary";
+
+        const { table } = this.state;
+
         return (
             <Fragment>
-                <Collapse isOpen={this.state.fadeIn} className="mb-3">
+                {this.props.ccms && table ? (
+                    <Collapse
+                        isOpen={this.state.collapseGeneralTable}
+                        className="mb-3"
+                    >
+                        <Card>
+                            <CardHeader>
+                                <Row>
+                                    <Col className="d-flex justify-content-start">
+                                        <h5>{table.name}</h5>
+                                    </Col>
+                                    <Col className="d-flex justify-content-end">
+                                        <i
+                                            onClick={
+                                                this.handlecollapseGeneralTable
+                                            }
+                                            style={{ cursor: "pointer" }}
+                                            className="fas fa-times mt-1"
+                                        ></i>
+                                    </Col>
+                                </Row>
+                            </CardHeader>
+                            <CardBody>
+                                <GeneralDataTable
+                                    table={table}
+                                    // columns={this.props.columns}
+                                />
+                            </CardBody>
+                        </Card>
+                    </Collapse>
+                ) : null}
+
+                <Collapse isOpen={this.state.collapseDrivers} className="mb-3">
                     <Card>
                         <CardHeader>
                             <Row>
@@ -117,11 +192,7 @@ class CcmsTable2 extends Component {
                                 </Col>
                                 <Col className="d-flex justify-content-end">
                                     <i
-                                        onClick={() =>
-                                            this.setState({
-                                                fadeIn: !this.state.fadeIn
-                                            })
-                                        }
+                                        onClick={this.handlecollapseDrivers}
                                         style={{ cursor: "pointer" }}
                                         className="fas fa-times mt-1"
                                     ></i>
@@ -159,52 +230,54 @@ class CcmsTable2 extends Component {
 
                             {!this.props.title ? (
                                 <Col style={{ textAlign: "right" }}>
-                                    {this.props.access_request &&
-                                    this.props.access_request.length != 0 ? (
-                                        <div
-                                            style={{
-                                                display: "inline-block",
-                                                marginRight: "15px"
-                                            }}
-                                        >
+                                    <ButtonGroup>
+                                        <DataTableDropdownButton
+                                            dataList={[
+                                                {
+                                                    name: "Ticket Type",
+                                                    endpoint: "ticket_type",
+                                                    data: this.props.ccms
+                                                        .ticket_type
+                                                },
+                                                {
+                                                    name: "Business Unit",
+                                                    endpoint: "business_unit",
+                                                    data: this.props.ccms
+                                                        .business_unit
+                                                }
+                                            ]}
+                                            color={btnColor}
+                                            selectionCallback={
+                                                this.tableSelectionCallback
+                                            }
+                                            toggleCollapse={
+                                                this.handlecollapseGeneralTable
+                                            }
+                                        />
+                                        {this.props.access_request &&
+                                        this.props.access_request.length !=
+                                            0 ? (
                                             <CcmsAccessRequestModal
                                                 requestCount={
                                                     this.props.access_request
                                                         .length
                                                 }
+                                                color={btnColor}
                                             />
-                                        </div>
-                                    ) : null}
-                                    <div
-                                        style={{
-                                            display: "inline-block",
-                                            marginRight: "15px"
-                                        }}
-                                    >
-                                        <div
-                                            style={{ textAlign: "center" }}
-                                            id="icon_w_badge"
+                                        ) : null}
+                                        <Button
+                                            onClick={this.handlecollapseDrivers}
+                                            color={btnColor}
+                                            className="mr-1"
                                         >
-                                            <i
-                                                id="btn_ccms_admin"
-                                                onClick={() =>
-                                                    this.setState({
-                                                        fadeIn: !this.state
-                                                            .fadeIn
-                                                    })
-                                                }
-                                                className="fas fa-table"
-                                            ></i>
-                                            <figcaption
-                                                style={{ fontSize: "12px" }}
-                                            >
-                                                Drivers
-                                            </figcaption>
-                                        </div>
-                                    </div>
-                                    <div style={{ display: "inline-block" }}>
-                                        <CcmsAdminModal />
-                                    </div>
+                                            <span className="mr-1">
+                                                <i className="fas fa-table"></i>
+                                            </span>
+                                            Drivers
+                                        </Button>
+
+                                        <CcmsAdminModal color={btnColor} />
+                                    </ButtonGroup>
                                 </Col>
                             ) : null}
                         </Row>

@@ -55,12 +55,58 @@ import {
     GET_FNI_LIST,
     SUBMIT_CA,
     GET_CA_LIST,
-    GET_SELECTED_CCMS_ONLY
+    GET_SELECTED_CCMS_ONLY,
+    ADD_BUSINESS_UNIT,
+    DELETE_BUSINESS_UNIT
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000";
+
+export class GeneralRequest {
+    constructor(endpoint, data, dispatchType) {
+        this.endpoint = endpoint;
+        this.data = data;
+        this.dispatchType = dispatchType;
+    }
+
+    addData = () => dispatch => {
+        axios
+            .post(`/api/${this.endpoint}/`, this.data)
+            .then(res => {
+                dispatch({
+                    type: this.dispatchType,
+                    payload: res.data
+                });
+            })
+            .catch(err => console.log(err.response));
+    };
+
+    deleteData = () => dispatch => {
+        axios
+            .delete(`/api/${this.endpoint}/${this.data.id}`)
+            .then(res => {
+                dispatch({
+                    type: this.dispatchType,
+                    payload: this.data
+                });
+            })
+            .catch(err => console.log(err.response));
+    };
+
+    editData = () => dispatch => {
+        axios
+            .put(`/api/${this.endpoint}/${this.data.id}/`, this.data)
+            .then(res => {
+                dispatch({
+                    type: this.dispatchType,
+                    payload: res.data
+                });
+            })
+            .catch(err => console.log(err.response));
+    };
+}
 
 export const submit_ca = data => dispatch => {
     // console.log({ fni: data.ticket_number.id, ...data });

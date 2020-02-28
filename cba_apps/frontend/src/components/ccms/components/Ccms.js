@@ -23,11 +23,7 @@ import {
 
 import { Spinner, Container, Row, Col } from "reactstrap";
 
-import CcmsTable from "./CcmsTable";
 import CcmsTable2 from "./Tables/CcmsTable2";
-import CcmsAccessRequest from "./CcmsAccessRequest/CcmsAccessRequest";
-
-import { column } from "./Tables/columns";
 
 class Ccms extends Component {
     constructor(props) {

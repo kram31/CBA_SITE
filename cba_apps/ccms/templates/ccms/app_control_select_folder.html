@@ -1,0 +1,16 @@
+{% extends "cba_auth/layout.html" %} {% block content %}
+
+<h1>Please select folder</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <select name="select_folder">
+        <option value="">---------</option>
+        {% for folder in folder_list %}
+        <option value="{{folder.id}}">{{folder.displayName}}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Select</button>
+</form>
+
+{% endblock %}

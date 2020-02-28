@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Modal, ModalHeader, ModalBody } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
 import CcmsAdminForm from "./CcmsAdminForm";
 
@@ -17,16 +17,10 @@ class CcmsAdminModal extends Component {
     render() {
         return (
             <Fragment>
-                <div style={{ textAlign: "center" }} id="icon_w_badge">
-                    <i
-                        id="btn_ccms_admin"
-                        onClick={this.toggle}
-                        className="fas fa-user-shield"
-                    ></i>
-                    <figcaption style={{ fontSize: "12px" }}>
-                        CCMS Admin
-                    </figcaption>
-                </div>
+                <Button onClick={this.toggle} color={this.props.color}>
+                    <i className="fas fa-user-shield mr-1"></i>
+                    CCMS Admin
+                </Button>
 
                 <Modal
                     isOpen={this.state.isOpen}
