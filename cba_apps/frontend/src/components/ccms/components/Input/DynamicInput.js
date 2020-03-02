@@ -37,39 +37,37 @@ class DynamicInput extends Component {
             name,
             onChange,
             value,
-            labelLength,
+
             form_title
         } = this.props;
         let newName = name.replace(/(select_|text_|textarea_)/i, "");
         let id = "id_" + form_title + newName;
 
         return (
-            <FormGroup row size="sm">
-                <Label for={id} md={labelLength}>
+            <FormGroup size="sm">
+                <Label for={id}>
                     {capsFirstWord(newName.replace("_", " "))}
                 </Label>
 
-                <Col>
-                    {name.includes("select_") ? (
-                        <Typeahead
-                            {...this.typeaheadProps(name, id)}
-                            inputProps={{ required: true }}
-                        />
-                    ) : (
-                        <Input
-                            bsSize={size}
-                            type="text"
-                            name={name}
-                            id={id}
-                            onChange={e => {
-                                const { value, name } = e.target;
-                                return onChange(value, name);
-                            }}
-                            value={value}
-                            required
-                        />
-                    )}
-                </Col>
+                {name.includes("select_") ? (
+                    <Typeahead
+                        {...this.typeaheadProps(name, id)}
+                        inputProps={{ required: true }}
+                    />
+                ) : (
+                    <Input
+                        bsSize={size}
+                        type="textarea"
+                        name={name}
+                        id={id}
+                        onChange={e => {
+                            const { value, name } = e.target;
+                            return onChange(value, name);
+                        }}
+                        value={value}
+                        required
+                    />
+                )}
             </FormGroup>
         );
     }

@@ -57,7 +57,10 @@ import {
     GET_CA_LIST,
     GET_SELECTED_CCMS_ONLY,
     ADD_BUSINESS_UNIT,
-    DELETE_BUSINESS_UNIT
+    DELETE_BUSINESS_UNIT,
+    COMPLETE_CCMS,
+    SET_TABLE_PAGE,
+    DENY_REQUEST_ACCESS
 } from "./types";
 
 import axios from "axios";
@@ -517,6 +520,19 @@ export const add_ccms_owner = data => dispatch => {
         .catch(err => console.log(err.response));
 };
 
+export const deny_access_request = data => dispatch => {
+    axios
+        .delete(`/api/ccms_access_request/${data.id}`)
+        .then(res => {
+            dispatch({
+                type: DENY_REQUEST_ACCESS,
+                payload: data
+            });
+            console.log(res.data);
+        })
+        .catch(err => console.log(err.response));
+};
+
 export const add_access_request = data => dispatch => {
     axios
         .post(`/api/ccms_access_request/`, { user: data })
@@ -558,6 +574,13 @@ export const close_modal = () => dispatch => {
 export const toggle_modal = () => dispatch => {
     dispatch({
         type: TOGGLE_MODAL
+    });
+};
+
+export const set_table_page = data => dispatch => {
+    dispatch({
+        type: SET_TABLE_PAGE,
+        payload: data
     });
 };
 
@@ -651,24 +674,50 @@ export const add_comment = data => dispatch => {
         .catch(err => console.log(err.response));
 };
 
-export const update_ccms = (data, id) => dispatch => {
-    console.log(data);
+export const update_ccms = (data, id, prev_data) => dispatch => {
     dispatch({
         type: FETCHING
     });
 
-    axios
-        .put(`/api/ccms/${id}/`, data)
-        .then(res => {
-            dispatch({
-                type: UPDATE_CCMS,
-                payload: res.data
+    if (prev_data.date_acknowledged) {
+        axios
+            .put(`/api/ccms/${id}/`, data)
+            .then(res => {
+                dispatch({
+                    type: UPDATE_CCMS,
+                    payload: res.data
+                });
+                dispatch({
+                    type: STOP_FETCHING
+                });
+            })
+            .catch(err => console.log(err.response));
+    } else {
+        Promise.all([
+            axios.put(`/api/ccms/${id}/`, data),
+            axios.post("/api/comments/", {
+                contributor: data.cba_auth_user,
+                ccms: { ...data, id: prev_data.id },
+                ccms_status: data.ccms_status,
+                entry: `Assigned by ${data.cba_auth_user.fullname}`
+            })
+        ])
+            .then(([res_ccms, res_comment]) => {
+                dispatch({
+                    type: COMPLETE_CCMS,
+                    payload: {
+                        completed_ccms: res_ccms.data,
+                        comment: res_comment.data
+                    }
+                });
+                dispatch({
+                    type: STOP_FETCHING
+                });
+            })
+            .catch(err => {
+                console.log(err.response, err);
             });
-            dispatch({
-                type: STOP_FETCHING
-            });
-        })
-        .catch(err => console.log(err.response));
+    }
 };
 
 export const get_users_list = () => dispatch => {

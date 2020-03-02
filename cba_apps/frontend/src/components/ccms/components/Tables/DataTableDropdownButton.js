@@ -17,12 +17,6 @@ const DataTableDropdownButton = ({
 
     const toggle = () => setdropdownOpen(!dropdownOpen);
 
-    const toggleWithCollapse = () => {
-        console.log("clicking");
-        toggleCollapse();
-        toggle();
-    };
-
     // const handleSelection = item => {
     //     selectionCallback();
     // };
@@ -35,7 +29,7 @@ const DataTableDropdownButton = ({
                 className="mr-1"
             >
                 <DropdownToggle color={color} caret>
-                    Data Table List
+                    <i className="fas fa-list mr-1"></i>Data Table List
                 </DropdownToggle>
                 <DropdownMenu>
                     {dataList.map((item, index) => (

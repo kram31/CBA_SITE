@@ -16,7 +16,9 @@ import {
     Spinner,
     Collapse,
     Card,
-    CardTitle
+    CardTitle,
+    ButtonGroup,
+    CustomInput
 } from "reactstrap";
 import { connect } from "react-redux";
 import { Typeahead } from "react-bootstrap-typeahead";
@@ -123,14 +125,8 @@ class CcmsForm extends Component {
     typeaheadProps = col => ({
         bsSize: "sm",
         labelKey:
-            col == "ccms_owner"
-                ? option => `${typeof option.user.email}`
-                : "name",
-        onChange: selected =>
-            this.setState(
-                { [col]: selected[0] },
-                console.log({ [col]: selected[0] })
-            ),
+            col === "ccms_owner" ? option => `${option.user.email}` : "name",
+        onChange: selected => this.setState({ [col]: selected[0] }),
         id: "id_" + col,
         options: this.props[col],
         selected: this.state[col] ? [this.state[col]] : [],
@@ -201,7 +197,6 @@ class CcmsForm extends Component {
     // AUTO SET OF CCMS STATUS WHEN SUBMITTED
 
     updateStateThenSend = (id, value) => {
-        console.log(value);
         if (value == "Complaint") {
             this.setState(
                 {
@@ -230,8 +225,6 @@ class CcmsForm extends Component {
     callbackFunction = childData => {
         const { is_sending, value, ccms_entry_id } = childData;
 
-        console.log(is_sending);
-
         if (is_sending == "No") {
             return this.setState({
                 isOpen: false
@@ -244,17 +237,17 @@ class CcmsForm extends Component {
     };
 
     submitForm = (data, id) => {
+        console.log(this.props.ccms_entry);
         this.props.update_ccms(
             { ...data, cba_auth_user: this.props.cba_auth_user },
-            id
+            id,
+            this.props.ccms_entry
         );
     };
 
     handleSubmit = event => {
         event.preventDefault();
-        this.setState({ isOpen: !this.state.isOpen }, () =>
-            console.log(this.state)
-        );
+        this.setState({ isOpen: !this.state.isOpen });
     };
 
     toggleModalCallback = () => {
@@ -363,91 +356,85 @@ class CcmsForm extends Component {
                                                 color="success"
                                                 className="mr-2"
                                             >
+                                                <i className="fas fa-pen mr-1"></i>
                                                 Update
                                             </Button>
                                         ) : (
                                             <Fragment>
-                                                <Button
-                                                    type="submit"
-                                                    name="is_compliment"
-                                                    onClick={e =>
-                                                        this.setState({
-                                                            is_complaint: false
-                                                        })
-                                                    }
-                                                    color="success"
-                                                    className="mr-2"
-                                                >
-                                                    Compliment
-                                                </Button>
-                                                <Button
-                                                    type="submit"
-                                                    name="is_complaint"
-                                                    onClick={e =>
-                                                        this.setState({
-                                                            [e.target
-                                                                .name]: true
-                                                        })
-                                                    }
-                                                    color="danger"
-                                                    className="mr-2"
-                                                >
-                                                    Complaint
-                                                </Button>
-                                                {this.props.ccms_entry
-                                                    .ccms_status ? (
+                                                <ButtonGroup>
                                                     <Button
+                                                        type="submit"
+                                                        name="is_compliment"
+                                                        onClick={e =>
+                                                            this.setState({
+                                                                is_complaint: false
+                                                            })
+                                                        }
+                                                        color="success"
+                                                        className="mr-1"
+                                                    >
+                                                        <i className="fas fa-thumbs-up mr-1"></i>
+                                                        Compliment
+                                                    </Button>
+                                                    <Button
+                                                        type="submit"
                                                         name="is_complaint"
                                                         onClick={e =>
                                                             this.setState({
-                                                                updateButton: true
+                                                                [e.target
+                                                                    .name]: true
                                                             })
                                                         }
-                                                        color="warning"
-                                                        className="mr-2"
+                                                        color="danger"
+                                                        className="mr-1"
                                                     >
-                                                        Cancel Update
+                                                        <i className="fas fa-thumbs-down mr-1"></i>
+                                                        Complaint
                                                     </Button>
-                                                ) : null}
+                                                    {this.props.ccms_entry
+                                                        .ccms_status ? (
+                                                        <Button
+                                                            name="is_complaint"
+                                                            onClick={e =>
+                                                                this.setState({
+                                                                    updateButton: true
+                                                                })
+                                                            }
+                                                            color="warning"
+                                                            className="mr-1"
+                                                        >
+                                                            <i className="fas fa-ban mr-1"></i>
+                                                            Cancel Update
+                                                        </Button>
+                                                    ) : null}
+                                                </ButtonGroup>
                                             </Fragment>
                                         )}
                                     </Col>
                                 ) : null}
-                                <Col md={3}>
+                                <Col md={3} className="mt-1">
                                     {this.props.list_type &&
                                     this.state.rca_required ? (
-                                        // <Button
-                                        //     onClick={() =>
-                                        //         console.log("Open RCA")
-                                        //     }
-                                        // >
-                                        //     RCA
-                                        // </Button>
                                         <CcmsRcaModal
                                             ccms={this.props.ccms_entry}
                                         />
                                     ) : this.props.list_type &&
-                                      !this.state.rca_required ? null : (
-                                        <Fragment>
-                                            <Input
-                                                bsSize="md"
-                                                type="checkbox"
-                                                name="rca_required"
-                                                id="id_rca_required"
-                                                checked={
-                                                    this.state.rca_required
-                                                }
-                                                onChange={this.handleChange}
-                                                disabled={
-                                                    this.props.list_type
-                                                        ? true
-                                                        : false
-                                                }
-                                            />
-                                            <Label for="id_rca_required">
-                                                RCA Required?
-                                            </Label>
-                                        </Fragment>
+                                      !this.state.rca_required ? (
+                                        <h5>RCA not required</h5>
+                                    ) : (
+                                        <CustomInput
+                                            type="checkbox"
+                                            name="rca_required"
+                                            id="id_rca_required"
+                                            checked={this.state.rca_required}
+                                            onChange={this.handleChange}
+                                            disabled={
+                                                this.props.list_type
+                                                    ? true
+                                                    : false
+                                            }
+                                            label="RCA required?"
+                                        />
                                     )}
                                 </Col>
                             </Row>
@@ -469,19 +456,58 @@ class CcmsForm extends Component {
 }
 
 const MailDetails = ({ mail }) => {
+    const spanStyle = { textDecoration: "underline" };
+    const rowMarginBottom = "mb-1";
+
+    let stringDate = new Date(mail.receivedDateTime).toString();
+
     return (
         <Fragment>
-            <Row className="mb-2">
+            <Row className="mb-3">
                 <Col>
-                    <Card body>
+                    <Card body style={{ fontSize: "14px" }}>
                         <CardTitle>
-                            Subject: <span>{mail.email_subject}</span>
+                            <Row className={rowMarginBottom}>
+                                <Col>
+                                    Sender Name:{" "}
+                                    <span style={spanStyle}>
+                                        {mail.sender_name}
+                                    </span>
+                                </Col>
+                                <Col>
+                                    Sender Email:{" "}
+                                    <span style={spanStyle}>
+                                        {mail.sender_email_address}
+                                    </span>
+                                </Col>
+                            </Row>
+                            <Row className={rowMarginBottom}>
+                                <Col>
+                                    Subject:{" "}
+                                    <span style={spanStyle}>
+                                        {mail.email_subject}
+                                    </span>
+                                </Col>
+                            </Row>
+                            <Row className={rowMarginBottom}>
+                                <Col>
+                                    Received Data and Time:{" "}
+                                    <span style={spanStyle}>{stringDate}</span>
+                                </Col>
+                            </Row>
                         </CardTitle>
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: mail.email_body
-                            }}
-                        ></div>
+                        <Row className={rowMarginBottom}>
+                            <Col>Email Body:</Col>
+                        </Row>
+                        <Row className={rowMarginBottom}>
+                            <Col>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: mail.email_body
+                                    }}
+                                ></div>
+                            </Col>
+                        </Row>
                     </Card>
                 </Col>
             </Row>

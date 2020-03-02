@@ -59,7 +59,7 @@ class DriverTable extends Component {
                                         style={{
                                             cursor: "pointer"
                                         }}
-                                        className="fas fa-ellipsis-h"
+                                        className="fas fa-plus-square"
                                         id={icon_id}
                                     ></i>
                                 </Col>

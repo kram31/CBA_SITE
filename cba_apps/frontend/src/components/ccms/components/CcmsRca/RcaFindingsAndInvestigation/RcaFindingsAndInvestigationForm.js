@@ -75,6 +75,8 @@ class RcaFindingsAndInvestigation extends Component {
         const labelLength = 3;
         const { fni, modal } = this.state;
         const { ccms_rca, fni_list } = this.props;
+
+        const titleStyle = { fontWeight: "bold", fontSize: "18px" };
         return (
             <Fragment>
                 <RcaFniModal
@@ -83,78 +85,78 @@ class RcaFindingsAndInvestigation extends Component {
                     parentCallback={this.parentCallback}
                     ccms_rca={ccms_rca}
                 />
-                <Form onSubmit={this.handleSubmit} autoComplete="off">
-                    <Card body className="mb-2">
-                        <CardTitle>
-                            <h5>Findings and Investigation</h5>
-                        </CardTitle>
-                        <FormGroup row size="sm">
-                            <Label for="id_fni_ticket_number" md={labelLength}>
+
+                <Card body className="mb-2">
+                    <CardTitle style={titleStyle}>
+                        Findings and Investigation
+                    </CardTitle>
+                    <Form
+                        onSubmit={this.handleSubmit}
+                        autoComplete="off"
+                        style={{ fontSize: "14px" }}
+                        className="mb-3"
+                    >
+                        <FormGroup size="sm">
+                            <Label for="id_fni_ticket_number">
                                 Ticket Number
                             </Label>
 
-                            <Col>
-                                <Input
-                                    bsSize="sm"
-                                    type="text"
-                                    name="ticket_number"
-                                    id="id_fni_ticket_number"
-                                    onChange={this.handleChange}
-                                    value={fni.ticket_number}
-                                    required
-                                />
-                            </Col>
+                            <Input
+                                bsSize="sm"
+                                type="text"
+                                name="ticket_number"
+                                id="id_fni_ticket_number"
+                                onChange={this.handleChange}
+                                value={fni.ticket_number}
+                                required
+                            />
                         </FormGroup>
-                        <FormGroup row size="sm">
-                            <Label for="id_fni_agent_name" md={labelLength}>
-                                Agent's Name
-                            </Label>
+                        <FormGroup size="sm">
+                            <Label for="id_fni_agent_name">Agent's Name</Label>
 
-                            <Col>
-                                <Input
-                                    bsSize="sm"
-                                    type="text"
-                                    name="agent_name"
-                                    id="id_fni_agent_name"
-                                    onChange={this.handleChange}
-                                    value={fni.agent_name}
-                                    required
-                                />
-                            </Col>
+                            <Input
+                                bsSize="sm"
+                                type="text"
+                                name="agent_name"
+                                id="id_fni_agent_name"
+                                onChange={this.handleChange}
+                                value={fni.agent_name}
+                                required
+                            />
                         </FormGroup>
-                        <FormGroup row size="sm">
-                            <Label for="id_fni_description" md={labelLength}>
-                                Description
-                            </Label>
+                        <FormGroup size="sm">
+                            <Label for="id_fni_description">Description</Label>
 
-                            <Col>
-                                <Input
-                                    bsSize="sm"
-                                    type="textarea"
-                                    name="description"
-                                    id="id_fni_description"
-                                    onChange={this.handleChange}
-                                    value={fni.description}
-                                    rows={4}
-                                    required
-                                />
-                            </Col>
+                            <Input
+                                bsSize="sm"
+                                type="textarea"
+                                name="description"
+                                id="id_fni_description"
+                                onChange={this.handleChange}
+                                value={fni.description}
+                                rows={4}
+                                required
+                            />
                         </FormGroup>
                         <Row className="mb-2">
                             <Col>
-                                <Button color="success">Submit</Button>
+                                <Button color="primary">
+                                    <i className="fas fa-paper-plane mr-1"></i>
+                                    Submit Findings
+                                </Button>
                             </Col>
                         </Row>
-                    </Card>
-                </Form>
-                {!fni_list || !fni_list.length ? null : (
-                    <Card body>
-                        <CardTitle>
-                            List of Findings and Investigation
-                        </CardTitle>
-                        <RcaFniList />
-                    </Card>
-                )}
+                    </Form>
+                    {!fni_list || !fni_list.length ? null : (
+                        <Fragment>
+                            <CardTitle style={titleStyle}>
+                                List of Findings and Investigation
+                            </CardTitle>
+
+                            <RcaFniList />
+                        </Fragment>
+                    )}
+                </Card>
             </Fragment>
         );
     }

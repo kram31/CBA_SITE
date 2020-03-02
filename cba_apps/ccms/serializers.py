@@ -28,15 +28,24 @@ from .models import (Mail,
 from cba_auth.auth_helper import get_token
 from ccms.graph_helper import send_mail_graph
 
+from django.core.mail import get_connection
 from django.core.mail import EmailMessage
 
 
-def send_email():
+def send_email(title, body, my_username):
+
+    connection = get_connection(host='smtp.svcs.entsvcs.com',
+                                port=25,
+                                username=my_username,
+                                use_ssl=False,
+                                use_tls=False)
+
     email = EmailMessage(
         'Title',
         'Body',
         'cba-ccms@donot-reply.com',
-        ['mark.lascano@dxc.com']
+        ['mark.lascano@dxc.com'],
+        connection=connection
     )
     # email.attach_file()
     email.send()
@@ -202,14 +211,36 @@ class CcmsSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
 
+        ccms_instance = Ccms.objects.get(pk=instance.id)
+
+        if "cba_auth_user" in validated_data.keys():
+            cba_auth_user = validated_data.pop('cba_auth_user')
+            user = Auth_Details.objects.get(id=cba_auth_user['id'])
+            token = {
+                "token_type": "Bearer",
+                "scope": [
+                    "Calendars.Read",
+                    "Mail.Read",
+                    "Mail.Read.Shared",
+                    "Mail.ReadWrite",
+                    "Mail.Send",
+                    "openid",
+                    "profile",
+                    "User.Read",
+                    "User.ReadBasic.All",
+                    "email"
+                ],
+                "expires_in": cba_auth_user['expires_in'],
+                "ext_expires_in": cba_auth_user['ext_expires_in'],
+                "access_token": cba_auth_user['access_token'],
+                "refresh_token": cba_auth_user['refresh_token'],
+                "id_token": cba_auth_user['id_token'],
+                "expires_at": cba_auth_user['expires_at']
+            }
+
         if "ticket_status" in validated_data.keys():
             ticket_status = validated_data.pop('ticket_status')
             instance.ticket_status = TicketStatus.objects.get(**ticket_status)
-            instance.save()
-
-        if "ccms_owner" in validated_data.keys():
-            ccms_owner = validated_data.pop('ccms_owner')
-            instance.ccms_owner = CCMSOwner.objects.get(id=ccms_owner['id'])
             instance.save()
 
         if "business_unit" in validated_data.keys():
@@ -255,38 +286,40 @@ class CcmsSerializer(serializers.ModelSerializer):
             instance.ccms_status = ccms_status_obj
             instance.save()
 
-        if "cba_auth_user" in validated_data.keys():
-            cba_auth_user = validated_data.pop('cba_auth_user')
-            user = Auth_Details.objects.get(id=cba_auth_user['id'])
-            token = {
-                "token_type": "Bearer",
-                "scope": [
-                    "Calendars.Read",
-                    "Mail.Read",
-                    "Mail.Read.Shared",
-                    "Mail.ReadWrite",
-                    "Mail.Send",
-                    "openid",
-                    "profile",
-                    "User.Read",
-                    "User.ReadBasic.All",
-                    "email"
-                ],
-                "expires_in": cba_auth_user['expires_in'],
-                "ext_expires_in": cba_auth_user['ext_expires_in'],
-                "access_token": cba_auth_user['access_token'],
-                "refresh_token": cba_auth_user['refresh_token'],
-                "id_token": cba_auth_user['id_token'],
-                "expires_at": cba_auth_user['expires_at']
-            }
+        if "ccms_owner" in validated_data.keys():
+            ccms_owner = validated_data.pop('ccms_owner')
+            validated_ccms_owner = CCMSOwner.objects.get(id=ccms_owner['id'])
+            prev_ccms_owner = instance.ccms_owner
 
-        instance = super().update(instance, validated_data)
-        instance.save()
+            instance.ccms_owner = validated_ccms_owner
+
+            # SEND EMAIL CONDITIONS
+            # CHANGE OF OWNERSHIP >> INDENTIFIER IS ALWAYS is instance.ccms_owner
+            # instance.ccms_owner == None not yet submitted
+
+            # if prev_ccms_owner != None:
+
+            #     if validated_ccms_owner.id != prev_ccms_owner.id:
+
+            #         print("new owner send email")
+
+            #         # create comment on owner change
+            #         comment = Comment.objects.create(
+            #             contributor=user, ccms=ccms_instance, entry=f"Assigned by {user.user.username}", ccms_status_during_comment=ccms_instance.ccms_status.name or ccms_status_obj.name)
+            #         comment.save()
+
+            #         # SEND EMAIL TO OWNER
+            #         send_mail_graph(token=token, subject=f"CCMS: {ccms_instance.id}", recipients=[
+            #             "mark.lascano@dxc.com"], body=f"Assigned by {user.user.username}")
+
+            #         # BELOW WILL BE USED FOR PRODUCTION
+            #         # send_email(f"{CCMS: ccms_instance.id}", f"Assigned by {user.username}")
+
+            instance.save()
 
         # if rca_required is true > create a CcmsRca object
         # required ccms id == instance.id
 
-        ccms_instance = Ccms.objects.get(pk=instance.id)
         if instance.rca_required:
             CcmsRca.objects.update_or_create(ccms=ccms_instance)
         else:
@@ -295,15 +328,22 @@ class CcmsSerializer(serializers.ModelSerializer):
             except CcmsRca.DoesNotExist:
                 print("does not exists")
 
-        # create comment on submit
-        # comment = Comment.objects.create(
-        #     contributor=user, ccms=ccms_instance, entry=f"Assigned by {user.username}", ccms_status_during_comment=ccms_status_obj['name'])
-        # comment.save()
+        prev_instance_date_acknowledged = instance.date_acknowledged
 
-        # send_mail_graph(token=token, subject="Turned OFF", recipients=[
-        #     "mark.lascano@dxc.com"], body='TURNED OFF')
+        instance.date_acknowledged = instance.date_acknowledged or datetime.now().date()
 
-        # send_email()
+        instance = super().update(instance, validated_data)
+        instance.save()
+
+        # if not prev_instance_date_acknowledged:
+        #     print("NEWLY COMPLETED CCMS!!! SEND EMAIL")
+
+        #     # SEND EMAIL TO OWNER
+        #     send_mail_graph(token=token, subject=f"CCMS: {ccms_instance.id}", recipients=[
+        #                     "mark.lascano@dxc.com"], body=f"Assigned by {user.user.username}")
+
+        #         # BELOW WILL BE USED FOR PRODUCTION
+        #         # send_email(f"{CCMS: ccms_instance.id}", f"Assigned by {user.username}")
 
         return instance
 
@@ -342,6 +382,40 @@ class CommentSerializer(serializers.ModelSerializer):
         comment = Comment.objects.create(
             contributor=user, ccms=ccms_obj, **validated_data, ccms_status_during_comment=ccms_status['name'])
         comment.save()
+
+        # SEND EMAIL TO OWNER
+        # recipients = [ccms_obj.ccms_owner.user.email, ]
+
+        token = {
+            "token_type": "Bearer",
+            "scope": [
+                "Calendars.Read",
+                "Mail.Read",
+                "Mail.Read.Shared",
+                "Mail.ReadWrite",
+                "Mail.Send",
+                "openid",
+                "profile",
+                "User.Read",
+                "User.ReadBasic.All",
+                "email"
+            ],
+            "expires_in": user.expires_in,
+            "ext_expires_in": user.ext_expires_in,
+            "access_token": user.access_token,
+            "refresh_token": user.refresh_token,
+            "id_token": user.id_token,
+            "expires_at": user.expires_at
+        }
+
+        try:
+            send_mail_graph(token=token, subject=f"CCMS ID: {ccms_obj.id} Update", recipients=[
+                "mark.lascano@dxc.com"], body=f"Update - {comment.entry}")
+        except:
+            print("An error occured while sending an email")
+
+        # BELOW WILL BE USED FOR PRODUCTION
+        # send_email(f"CCMS ID: {ccms_obj.id} Update", f"Update - {comment.entry}", {user.user.username})
 
         return comment
 
@@ -438,7 +512,7 @@ class CcmsRcaSerializer(serializers.ModelSerializer):
 
         instance = super().update(instance, validated_data)
 
-        instance.completed_on = datetime.now().date()
+        instance.completed_on = instance.completed_on or datetime.now().date()
 
         instance.save()
 

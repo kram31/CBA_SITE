@@ -88,7 +88,7 @@ def app_control_view(request):
             mailbox_entry.mailbox_name = post_email_address
             mailbox_entry.save()
 
-            # CHECK if provided email address is accessible
+            # # CHECK if provided email address is accessible
 
             result = check_mailbox_access(token, post_email_address)
 
@@ -103,10 +103,10 @@ def app_control_view(request):
             folder_list = get_folder_list(token, post_email_address)
 
             if 'error' in folder_list:
-                context['error'] = folder_list['error']
+                context['error'] = folder_list
 
             else:
-                context['folder_list'] = folder_list['value']
+                context['folder_list'] = folder_list
                 return render(request, 'ccms/app_control_select_folder.html', context)
 
             return render(request, 'ccms/app_control_view.html', context)
@@ -120,7 +120,7 @@ def app_control_view(request):
             check_designated_mailfolder_result = check_designated_mailfolder(
                 token, mailbox_entry.mailbox_name)
 
-            if not check_designated_mailfolder_result['value']:
+            if len(check_designated_mailfolder_result['value']) == 0:
                 # If folder doesnot exist create folder "Processed"
                 folderid = create_mailfolder(
                     token, mailbox_entry.mailbox_name)

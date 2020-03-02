@@ -15,7 +15,7 @@ class CcmsTable extends Component {
 
         this.state = {
             title: props.title,
-            search: "",
+            search: props.search,
             search_results: props.filtered_ccms_list,
             ccms_from_parent: props.ccms_array
         };
@@ -81,6 +81,7 @@ class CcmsTable extends Component {
                                 name="search"
                                 placeholder="Search"
                                 onChange={this.handleSearch}
+                                value={this.state.search}
                             />
                         </Form>
                     </Col>
@@ -100,6 +101,7 @@ class CcmsTable extends Component {
 const mapStateToProps = state => ({
     ccms: state.ccms,
     filtered_ccms_list: state.ccms.filtered_ccms_list,
+    search: state.ccms.search,
     auth: state.auth
 });
 

@@ -60,12 +60,14 @@ class CcmsRcaModal extends Component {
         if (data.is_rca_completed) {
             return {
                 color: "success",
-                text: "Completed RCA"
+                text: "Completed RCA",
+                icon: "fas fa-check"
             };
         } else {
             return {
                 color: "danger",
-                text: "Incomplete RCA"
+                text: "Incomplete RCA",
+                icon: "fas fa-exclamation"
             };
         }
     };
@@ -84,109 +86,65 @@ class CcmsRcaModal extends Component {
 
         const style = { cursor: "pointer" };
 
+        const getDetails = this.checkStatus(ccms);
+
         return (
             <Fragment>
-                <Button
-                    onClick={this.getData}
-                    color={this.checkStatus(ccms).color}
-                >
-                    {this.checkStatus(ccms).text}
+                <Button onClick={this.getData} color={getDetails.color}>
+                    <i className={`${getDetails.icon} mr-1`}></i>
+                    {getDetails.text}
                 </Button>
                 <Modal
-                    // className="modal-xl"
-                    size="lg"
+                    className="modal-xl"
                     isOpen={ccms_rca_modal && ccms.id == ccms_rca.ccms}
                     toggle={close_ccms_rca}
                 >
                     <ModalHeader toggle={close_ccms_rca}>CCMS RCA</ModalHeader>
                     <ModalBody>
-                        <Nav tabs>
-                            <NavItem>
-                                <NavLink
-                                    style={style}
-                                    className={classnames({
-                                        active: activeTab === 1
-                                    })}
-                                    onClick={() => {
-                                        this.toggleTab(1);
-                                    }}
-                                >
-                                    RCA
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink
-                                    style={style}
-                                    className={classnames({
-                                        active: activeTab === 2
-                                    })}
-                                    onClick={() => {
-                                        this.toggleTab(2);
-                                    }}
-                                >
-                                    FINDINGS and INVESTIGATION
-                                </NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink
-                                    style={style}
-                                    className={classnames({
-                                        active: activeTab === 3
-                                    })}
-                                    onClick={() => {
-                                        this.toggleTab(3);
-                                    }}
-                                >
-                                    CORRECTIVE ACTIONS
-                                </NavLink>
-                            </NavItem>
-                        </Nav>
-                        <TabContent activeTab={activeTab}>
-                            <TabPane tabId={1}>
-                                <Row className="mt-3">
-                                    <Col sm="12">
-                                        {ccms_rca ? (
-                                            <CcmsRcaForm
-                                                ccms_rca={ccms_rca}
-                                                ccms={ccms}
-                                            />
-                                        ) : null}
-                                    </Col>
-                                </Row>
-                            </TabPane>
-                            <TabPane tabId={2}>
-                                <Row className="mt-3">
-                                    <Col sm="12">
-                                        {ccms_rca ? (
-                                            <RcaFindingsAndInvestigation
-                                                ccms_rca={ccms_rca}
-                                                ccms={ccms}
-                                            />
-                                        ) : null}
-                                    </Col>
-                                </Row>
-                            </TabPane>
-                            <TabPane tabId={3}>
-                                <Row className="mt-3">
-                                    <Col sm="12">
-                                        {fni_list && fni_list.length ? (
-                                            <DynamicForm
-                                                form_title="corrective_actions"
-                                                form_inputs={{
-                                                    select_ticket_number: "",
-                                                    text_description: ""
-                                                }}
-                                                display_list={ca_list}
-                                                select_options={fni_list}
-                                                labelKey="ticket_number"
-                                            />
-                                        ) : (
-                                            <h4>No data found</h4>
-                                        )}
-                                    </Col>
-                                </Row>
-                            </TabPane>
-                        </TabContent>
+                        <Row className="mb-3">
+                            <Col className="mb-2">
+                                {ccms_rca ? (
+                                    <CcmsRcaForm
+                                        ccms_rca={ccms_rca}
+                                        ccms={ccms}
+                                    />
+                                ) : null}
+                            </Col>
+                            {(ccms_rca || {}).completed_on ? (
+                                <Col>
+                                    <Row>
+                                        <Col sm="12">
+                                            {ccms_rca ? (
+                                                <RcaFindingsAndInvestigation
+                                                    ccms_rca={ccms_rca}
+                                                    ccms={ccms}
+                                                />
+                                            ) : null}
+                                        </Col>
+                                    </Row>
+
+                                    <Row className="mt-2">
+                                        <Col sm="12">
+                                            {fni_list && fni_list.length ? (
+                                                <DynamicForm
+                                                    form_title="corrective_actions"
+                                                    form_inputs={{
+                                                        select_ticket_number:
+                                                            "",
+                                                        text_description: ""
+                                                    }}
+                                                    display_list={ca_list}
+                                                    select_options={fni_list}
+                                                    labelKey="ticket_number"
+                                                />
+                                            ) : (
+                                                <h4>No data found</h4>
+                                            )}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            ) : null}
+                        </Row>
                     </ModalBody>
                 </Modal>
             </Fragment>

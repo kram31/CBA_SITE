@@ -1052,5 +1052,275 @@
             "name": "Normal Technical issue",
             "escalation_driver": 19
         }
+    },
+    {
+        "model": "auth.user",
+        "pk": 69,
+        "fields": {
+            "username": "mark-anthony.lun.silvor@dxc.com",
+            "email": "mark-anthony.lun.silvor@dxc.com",
+            "password": 1234,
+            "first_name": "Mark Anthony Luntao",
+            "last_name": "Silvor"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 69,
+        "fields": {
+            "user": 69
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 70,
+        "fields": {
+            "username": "cris.nav.castro@dxc.com",
+            "email": "cris.nav.castro@dxc.com",
+            "password": 1234,
+            "first_name": "Cris Navia",
+            "last_name": "Castro"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 70,
+        "fields": {
+            "user": 70
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 71,
+        "fields": {
+            "username": "prince-deozel.espiritu@dxc.com",
+            "email": "prince-deozel.espiritu@dxc.com",
+            "password": 1234,
+            "first_name": "Prince Deozel",
+            "last_name": "Espiritu"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 71,
+        "fields": {
+            "user": 71
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 72,
+        "fields": {
+            "username": "mary-jane.ade.varona@dxc.com",
+            "email": "mary-jane.ade.varona@dxc.com",
+            "password": 1234,
+            "first_name": "Mary Jane Rio Adeva",
+            "last_name": "Varona"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 72,
+        "fields": {
+            "user": 72
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 73,
+        "fields": {
+            "username": "glaiza.sal.cayabyab@dxc.com",
+            "email": "glaiza.sal.cayabyab@dxc.com",
+            "password": 1234,
+            "first_name": "Glaiza Salunatin",
+            "last_name": "Cayabyab"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 73,
+        "fields": {
+            "user": 73
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 74,
+        "fields": {
+            "username": "ariane-dale-b.discar@dxc.com",
+            "email": "ariane-dale-b.discar@dxc.com",
+            "password": 1234,
+            "first_name": "Ariane Dale",
+            "last_name": "Discar-Diaz"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 74,
+        "fields": {
+            "user": 74
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 75,
+        "fields": {
+            "username": "terence.eusores@dxc.com",
+            "email": "terence.eusores@dxc.com",
+            "password": 1234,
+            "first_name": "Terence",
+            "last_name": "Eusores"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 75,
+        "fields": {
+            "user": 75
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 76,
+        "fields": {
+            "username": "laglagura.neil-revamuntan@dxc.com",
+            "email": "laglagura.neil-revamuntan@dxc.com",
+            "password": 1234,
+            "first_name": "Neil Revamuntan",
+            "last_name": "Laglagura"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 76,
+        "fields": {
+            "user": 76
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 77,
+        "fields": {
+            "username": "denmer.nec.leonillo@dxc.com",
+            "email": "denmer.nec.leonillo@dxc.com",
+            "password": 1234,
+            "first_name": "Denmer Necesito",
+            "last_name": "Leonillo"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 77,
+        "fields": {
+            "user": 77
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 78,
+        "fields": {
+            "username": "mary-grace.manahan@dxc.com",
+            "email": "mary-grace.manahan@dxc.com",
+            "password": 1234,
+            "first_name": "Mary Grace",
+            "last_name": "Manahan"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 78,
+        "fields": {
+            "user": 78
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 79,
+        "fields": {
+            "username": "aissa-mellee.ale.perez@dxc.com",
+            "email": "aissa-mellee.ale.perez@dxc.com",
+            "password": 1234,
+            "first_name": "Aissa Mellee",
+            "last_name": "Perez"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 79,
+        "fields": {
+            "user": 79
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 80,
+        "fields": {
+            "username": "khristina.non.ponce@dxc.com",
+            "email": "khristina.non.ponce@dxc.com",
+            "password": 1234,
+            "first_name": "Khristina Nonato",
+            "last_name": "Ponce"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 80,
+        "fields": {
+            "user": 80
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 81,
+        "fields": {
+            "username": "jose.pes.rigor@dxc.com",
+            "email": "jose.pes.rigor@dxc.com",
+            "password": 1234,
+            "first_name": "Jose Pestilos",
+            "last_name": "Rigor"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 81,
+        "fields": {
+            "user": 81
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 82,
+        "fields": {
+            "username": "dominic.de.delos-santos@dxc.com",
+            "email": "dominic.de.delos-santos@dxc.com",
+            "password": 1234,
+            "first_name": "Dominic",
+            "last_name": "Delos Santos"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 82,
+        "fields": {
+            "user": 82
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 83,
+        "fields": {
+            "username": "paulo-karachi.sor.hernandez@dxc.com",
+            "email": "paulo-karachi.sor.hernandez@dxc.com",
+            "password": 1234,
+            "first_name": "Paulo Karachi",
+            "last_name": "Hernandez"
+        }
+    },
+    {
+        "model": "ccms.CCMSOwner",
+        "pk": 83,
+        "fields": {
+            "user": 83
+        }
     }
 ]

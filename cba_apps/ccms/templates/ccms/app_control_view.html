@@ -4,11 +4,33 @@
 </div>
 
 {% endif %}
-<h1>App Control View</h1>
-<form method="POST">
-    {% csrf_token %}
-    <input type="email" name="email_address" value="" />
-    <button>submit</button>
-</form>
+<div class="container">
+    <div class="row mx-auto">
+        <div class="col mx-auto">
+            <h1>CCMS Mailbox Monitor Control</h1>
+        </div>
+    </div>
+    <div class="row mt-2 mx-auto">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_email_address"
+                        >Enter mailbox email address:
+                    </label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="id_email_address"
+                        aria-describedby="emailHelp"
+                        value=""
+                        name="email_address"
+                    />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

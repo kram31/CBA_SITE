@@ -35,5 +35,7 @@ const newBucketAge = row => {
         return <div style={{ ...style, color: "red" }}>{"11 to 30"}</div>;
     } else if (data >= 30 && data <= 160) {
         return <div style={{ ...style, color: "gray" }}>{"30 to 160"}</div>;
+    } else if (data > 161) {
+        return <div style={{ ...style, color: "black" }}>{`${data} days`}</div>;
     }
 };

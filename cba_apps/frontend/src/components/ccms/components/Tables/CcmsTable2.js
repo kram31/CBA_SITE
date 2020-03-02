@@ -12,10 +12,12 @@ import {
     CardHeader,
     CardBody,
     Button,
-    Fade,
+    Container,
     Collapse,
     ButtonGroup
 } from "reactstrap";
+
+import { Link } from "react-router-dom";
 
 import { columns } from "./columns";
 import { connect } from "react-redux";
@@ -30,7 +32,7 @@ import DynamicForm from "../Forms/DynamicForm";
 import DataTableDropdownButton from "../Tables/DataTableDropdownButton";
 import GeneralDataTable from "./GeneralDataTable";
 
-import { search_ccms } from "../../../../actions/ccmsActions";
+import { search_ccms, set_table_page } from "../../../../actions/ccmsActions";
 
 class CcmsTable2 extends Component {
     constructor(props) {
@@ -40,7 +42,9 @@ class CcmsTable2 extends Component {
             collapseDrivers: false,
             isModalOpen: false,
             collapseGeneralTable: false,
-            table: null
+            table: null,
+            search: props.search,
+            page: props.page
         };
     }
 
@@ -97,7 +101,7 @@ class CcmsTable2 extends Component {
                         cellprops.original.rca_required ? (
                             <CcmsRcaModal ccms={cellprops.original} />
                         ) : (
-                            <Button color="success">NO RCA</Button>
+                            "RCA not required"
                         )
                 }
             ];
@@ -113,54 +117,106 @@ class CcmsTable2 extends Component {
         this.props.search_ccms(kw);
     };
 
-    tableSelectionCallback = childData => {
-        this.setState(
-            {
-                table: null
-            },
-            () =>
-                this.updateTable(childData).then(res =>
-                    this.setState({ collapseGeneralTable: true })
-                )
-        );
-    };
-
-    async updateTable(childData) {
+    handlePageChange = data => {
         this.setState({
-            table: childData
+            page: data
         });
-    }
 
-    handlecollapseGeneralTable = () =>
-        this.setState(
-            {
-                table: null
-            },
-            () => this.setState({ collapseGeneralTable: false })
-        );
+        this.props.set_table_page(data);
+    };
 
     handlecollapseDrivers = () =>
         this.setState({
             collapseDrivers: !this.state.collapseDrivers
         });
 
+    // HANDLERS FOR DATA TABLE LIST
+    tableSelectionCallback = childData => {
+        // close collapse > remove data table > update data table > open collapse
+        this.closeCollapse().then(res =>
+            this.removeDataTable().then(res =>
+                this.updateTable(childData).then(res =>
+                    this.setState({ collapseGeneralTable: true })
+                )
+            )
+        );
+    };
+
+    async closeCollapse() {
+        this.setState({ collapseGeneralTable: false });
+    }
+
+    async removeDataTable() {
+        this.setState({
+            table: null
+        });
+    }
+
+    async updateTable(childData) {
+        this.closeCollapse().then(res =>
+            this.setState({
+                table: childData
+            })
+        );
+    }
+
+    handlecollapseGeneralTable = () =>
+        this.setState({
+            collapseGeneralTable: false
+        });
+
     render() {
         const btnColor = "primary";
 
-        const { table } = this.state;
+        const {
+            table,
+            collapseGeneralTable,
+            collapseDrivers,
+            search
+        } = this.state;
+
+        const { ccms } = this.props;
+
+        const dataList = [
+            {
+                name: "SILO",
+                endpoint: "silo"
+            },
+            {
+                name: "CCMS Status",
+                endpoint: "ccms_status"
+            },
+            {
+                name: "Site Code",
+                endpoint: "site_code"
+            },
+            {
+                name: "Accountable Team",
+                endpoint: "accountable_team"
+            },
+            {
+                name: "Ticket Type",
+                endpoint: "ticket_type"
+            },
+            {
+                name: "Escalation Type",
+                endpoint: "escalation_type"
+            },
+            {
+                name: "Business Unit",
+                endpoint: "business_unit"
+            }
+        ];
 
         return (
             <Fragment>
-                {this.props.ccms && table ? (
-                    <Collapse
-                        isOpen={this.state.collapseGeneralTable}
-                        className="mb-3"
-                    >
+                {ccms && table ? (
+                    <Collapse isOpen={collapseGeneralTable} className="mb-3">
                         <Card>
                             <CardHeader>
                                 <Row>
                                     <Col className="d-flex justify-content-start">
-                                        <h5>{table.name}</h5>
+                                        <h5>{table.name} Data Table</h5>
                                     </Col>
                                     <Col className="d-flex justify-content-end">
                                         <i
@@ -174,16 +230,23 @@ class CcmsTable2 extends Component {
                                 </Row>
                             </CardHeader>
                             <CardBody>
-                                <GeneralDataTable
-                                    table={table}
-                                    // columns={this.props.columns}
-                                />
+                                {/* FOR ADDING DATA TABLE >> UPDATE dataList >> UPDATE action/type.js >> UPDATE ccmsReducer */}
+                                <Container>
+                                    <GeneralDataTable
+                                        table={{
+                                            ...table,
+                                            data: this.props.ccms[
+                                                table.endpoint
+                                            ]
+                                        }}
+                                    />
+                                </Container>
                             </CardBody>
                         </Card>
                     </Collapse>
                 ) : null}
 
-                <Collapse isOpen={this.state.collapseDrivers} className="mb-3">
+                <Collapse isOpen={collapseDrivers} className="mb-3">
                     <Card>
                         <CardHeader>
                             <Row>
@@ -215,15 +278,15 @@ class CcmsTable2 extends Component {
                     <CardBody
                         style={{ backgroundColor: "rgb(169,169,169,0.5)" }}
                     >
-                        <Row>
-                            <Col md={3} className="mb-3">
+                        <Row className="mb-3">
+                            <Col md={3}>
                                 <Form autoComplete="off">
                                     <Input
-                                        bsSize="sm"
                                         type="text"
                                         name="search"
                                         placeholder="Search"
                                         onChange={this.handleSearch}
+                                        value={this.state.search}
                                     />
                                 </Form>
                             </Col>
@@ -232,20 +295,7 @@ class CcmsTable2 extends Component {
                                 <Col style={{ textAlign: "right" }}>
                                     <ButtonGroup>
                                         <DataTableDropdownButton
-                                            dataList={[
-                                                {
-                                                    name: "Ticket Type",
-                                                    endpoint: "ticket_type",
-                                                    data: this.props.ccms
-                                                        .ticket_type
-                                                },
-                                                {
-                                                    name: "Business Unit",
-                                                    endpoint: "business_unit",
-                                                    data: this.props.ccms
-                                                        .business_unit
-                                                }
-                                            ]}
+                                            dataList={dataList}
                                             color={btnColor}
                                             selectionCallback={
                                                 this.tableSelectionCallback
@@ -276,6 +326,23 @@ class CcmsTable2 extends Component {
                                             Drivers
                                         </Button>
 
+                                        <a href="http://localhost:8000/control">
+                                            <Button
+                                                onClick={() =>
+                                                    console.log(
+                                                        "got to control page"
+                                                    )
+                                                }
+                                                color={btnColor}
+                                                className="mr-1"
+                                            >
+                                                <span className="mr-1">
+                                                    <i className="fas fa-table"></i>
+                                                </span>
+                                                Mailbox Monitor
+                                            </Button>
+                                        </a>
+
                                         <CcmsAdminModal color={btnColor} />
                                     </ButtonGroup>
                                 </Col>
@@ -285,7 +352,7 @@ class CcmsTable2 extends Component {
                             className="-striped -highlight"
                             style={{ backgroundColor: "white" }}
                             data={
-                                this.state.search
+                                search
                                     ? this.props.filtered_ccms_list
                                     : this.props.data
                             }
@@ -295,6 +362,8 @@ class CcmsTable2 extends Component {
                             ]}
                             minRows={5}
                             defaultPageSize={10}
+                            onPageChange={page => this.handlePageChange(page)}
+                            page={this.state.page}
                         />
                     </CardBody>
                 </Card>
@@ -307,10 +376,13 @@ const mapStateToProps = state => ({
     business_unit: state.ccms.business_unit,
     comments: state.ccms.comments,
     filtered_ccms_list: state.ccms.filtered_ccms_list,
+    search: state.ccms.search,
+    page: state.ccms.page,
     ccms: state.ccms,
     access_request: state.ccms.access_request
 });
 
 export default connect(mapStateToProps, {
-    search_ccms
+    search_ccms,
+    set_table_page
 })(CcmsTable2);

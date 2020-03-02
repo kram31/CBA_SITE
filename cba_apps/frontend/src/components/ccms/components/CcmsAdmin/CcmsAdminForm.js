@@ -107,7 +107,7 @@ class CcmsAdminForm extends Component {
                                                     <option
                                                         key={item.id}
                                                         value={index}
-                                                    >{`${first_name} ${last_name} - ${username}`}</option>
+                                                    >{`${first_name} ${last_name}`}</option>
                                                 );
                                             })}
                                     </Input>
@@ -158,7 +158,7 @@ class CcmsAdminForm extends Component {
                                                     <option
                                                         key={item.id}
                                                         value={index}
-                                                    >{`${first_name} ${last_name} - ${username}`}</option>
+                                                    >{`${first_name} ${last_name}`}</option>
                                                 );
                                             }
                                         )}

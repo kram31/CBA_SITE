@@ -51,7 +51,14 @@ class DynamicForm extends Component {
                 case "change_owner":
                     console.log(newInput);
                     console.log(this.props.ccms_entry.id);
-                    this.props.update_ccms(newInput, this.props.ccms_entry.id);
+                    this.props.update_ccms(
+                        {
+                            ...newInput,
+                            cba_auth_user: this.props.cba_auth_user
+                        },
+                        this.props.ccms_entry.id,
+                        this.props.ccms_entry
+                    );
                     break;
 
                 default:
@@ -90,10 +97,11 @@ class DynamicForm extends Component {
     };
 
     render() {
-        const labelLength = 3;
         const { form_title, form_inputs, isModalOpen } = this.state;
         let labels = form_inputs ? Object.keys(form_inputs) : null;
         let formattedFormTitle = capsFirstWord(form_title.replace("_", " "));
+
+        const titleStyle = { fontWeight: "bold", fontSize: "18px" };
 
         return (
             <Fragment>
@@ -105,14 +113,12 @@ class DynamicForm extends Component {
                     form_inputs={form_inputs}
                     form_title={form_title}
                 />
-                <Form autoComplete="off" onSubmit={this.handleSubmit}>
-                    <Card body className="mb-2">
-                        <CardTitle>
-                            <h5>
-                                {form_title
-                                    ? formattedFormTitle
-                                    : "No Title Provided"}
-                            </h5>
+                <Card body className="mb-2">
+                    <Form autoComplete="off" onSubmit={this.handleSubmit}>
+                        <CardTitle style={titleStyle}>
+                            {form_title
+                                ? formattedFormTitle
+                                : "No Title Provided"}
                         </CardTitle>
 
                         {labels
@@ -124,33 +130,42 @@ class DynamicForm extends Component {
                                       name={label}
                                       onChange={this.handleChange}
                                       value={form_inputs[label]}
-                                      labelLength={labelLength}
                                       select_options={this.props.select_options}
                                       labelKey={this.props.labelKey}
                                   />
                               ))
                             : "No Inputs"}
 
-                        <Row className="mb-2">
+                        <Row className="mb-3">
                             <Col>
-                                <Button color="success">Submit</Button>
+                                <Button color="primary">
+                                    <i className="fas fa-paper-plane mr-1"></i>
+                                    Submit {formattedFormTitle}
+                                </Button>
                             </Col>
                         </Row>
-                    </Card>
-                </Form>
-                {this.props.display_list && this.props.display_list.length ? (
-                    <Card body>
-                        <CardTitle>{formattedFormTitle}</CardTitle>
-                        <DynamicList list={this.props.display_list} />
-                    </Card>
-                ) : null}
+                        {this.props.display_list &&
+                        this.props.display_list.length ? (
+                            <Fragment>
+                                <CardTitle style={titleStyle}>
+                                    List of {formattedFormTitle}
+                                </CardTitle>
+                                <DynamicList
+                                    list={this.props.display_list}
+                                    form_title={form_title}
+                                />
+                            </Fragment>
+                        ) : null}
+                    </Form>
+                </Card>
             </Fragment>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    fni_list: state.ccms.fni
+    fni_list: state.ccms.fni,
+    cba_auth_user: state.auth.user
 });
 
 export default connect(mapStateToProps, { submit_ca, update_ccms })(

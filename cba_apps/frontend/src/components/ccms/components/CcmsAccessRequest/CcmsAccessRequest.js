@@ -32,6 +32,10 @@ class CcmsAccessRequest extends Component {
         this.props.add_ccms_owner(this.state.access_request);
     };
 
+    handleDeny = () => {
+        this.props.add_ccms_owner(this.state.access_request);
+    };
+
     render() {
         const labelStyle = { color: "white" };
         const { access_request } = this.props;
@@ -69,7 +73,11 @@ class CcmsAccessRequest extends Component {
                                 >
                                     Approve
                                 </Button>
-                                <Button className="mt-3 ml-2" color="danger">
+                                <Button
+                                    className="mt-3 ml-2"
+                                    color="danger"
+                                    onClick={this.handleDeny}
+                                >
                                     Deny
                                 </Button>
                             </Col>

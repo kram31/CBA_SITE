@@ -94,21 +94,46 @@ def send_mail_graph(token, subject, recipients, body='', content_type='HTML',
 
 def get_folder_list(token, upn):
 
+    folders = []
+
     graph_client = OAuth2Session(token=token)
 
     query_params = {
         '$select': "displayName, id"
     }
 
+    # while '@odata.nextLink' in mails_json:
+
+    #     mails_json = graph_client.get(mails_json['@odata.nextLink'])
+    #     mails_json = mails_json.json()
+    #     emails.extend(mails_json['value'])
+
     mailfolders = graph_client.get(
         "{0}/users/{1}/mailFolders".format(graph_url, upn), params=query_params, headers=headers)
 
-    return mailfolders.json()
+    mailfolders_json = mailfolders.json()
+
+    folders.extend(mailfolders_json['value'])
+
+    while '@odata.nextLink' in mailfolders_json:
+
+        mailfolders_json = graph_client.get(
+            mailfolders_json['@odata.nextLink'])
+        mailfolders_json = mailfolders_json.json()
+        folders.extend(mailfolders_json['value'])
+
+    return folders
 
 
 def check_designated_mailfolder(token, upn):
 
     graph_client = OAuth2Session(token=token)
+
+    # while '@odata.nextLink' in mails_json:
+
+    #     mails_json = graph_client.get(mails_json['@odata.nextLink'])
+    #     mails_json = mails_json.json()
+    #     emails.extend(mails_json['value'])
 
     query_params = {
         '$filter': "displayName eq 'Processed'"
@@ -168,6 +193,8 @@ def create_mailfolder(token, upn):
 
     folder = result.json()
 
+    print(folder)
+
     return folder['id']
 
 
@@ -177,7 +204,7 @@ def check_mailbox_access(token, upn):
     graph_client = OAuth2Session(token=token)
 
     result = graph_client.get(
-        "{0}/users/{1}/".format(graph_url, upn))
+        "{0}/users/{1}/messages".format(graph_url, upn))
 
     return result.json()
 

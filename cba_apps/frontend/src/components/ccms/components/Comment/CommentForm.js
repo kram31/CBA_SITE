@@ -10,7 +10,11 @@ import {
     FormGroup,
     InputGroup,
     InputGroupAddon,
-    Button
+    Button,
+    InputGroupButtonDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem
 } from "reactstrap";
 
 import CommentList from "./CommentList";
@@ -20,6 +24,7 @@ class CommentForm extends Component {
         super(props);
 
         this.state = {
+            dropdownOpen: false,
             ccms: props.ccms_entry,
             entry: "",
             ccms_status:
@@ -33,13 +38,12 @@ class CommentForm extends Component {
 
     handleChange = event => {
         const target = event.target;
-        const value =
-            target.name === "ccms_status"
-                ? (this.props.ccms || {}).ccms_status.filter(
-                      item => item.id == target.value
-                  )[0]
-                : target.value;
         const name = target.name;
+
+        const value =
+            name === "ccms_status"
+                ? this.props.ccms.ccms_status[target.value]
+                : target.value;
 
         this.setState({
             [name]: value
@@ -52,6 +56,9 @@ class CommentForm extends Component {
         this.props.add_comment(this.state);
     };
 
+    toggleDropDown = () =>
+        this.setState({ dropdownOpen: !this.state.dropdownOpen });
+
     getList = id =>
         this.props.comments.filter(comment => (comment.ccms || {}).id == id);
 
@@ -62,7 +69,7 @@ class CommentForm extends Component {
             <Fragment>
                 <Row className="mt-3">
                     <Col>
-                        <h4>Comments</h4>
+                        <h4>Comments / Updates</h4>
                     </Col>
                 </Row>
                 <Row>
@@ -75,10 +82,33 @@ class CommentForm extends Component {
                     </Col>
                 </Row>
                 <Form onSubmit={this.handleSubmit} autoComplete="off">
-                    <FormGroup>
-                        <Row>
-                            <Col md={4}>
-                                <Input
+                    <FormGroup row>
+                        <Col>
+                            <InputGroup className="mb-4">
+                                <InputGroupButtonDropdown
+                                    addonType="prepend"
+                                    isOpen={this.state.dropdownOpen}
+                                    toggle={this.toggleDropDown}
+                                >
+                                    <DropdownToggle color="primary" caret>
+                                        {ccms_status.name}
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        {this.props.ccms.ccms_status.map(
+                                            (item, index) => (
+                                                <DropdownItem
+                                                    key={item.id}
+                                                    value={index}
+                                                    onClick={this.handleChange}
+                                                    name="ccms_status"
+                                                >
+                                                    {item.name}
+                                                </DropdownItem>
+                                            )
+                                        )}
+                                    </DropdownMenu>
+                                </InputGroupButtonDropdown>
+                                {/* <Input
                                     color="primary"
                                     name="ccms_status"
                                     type="select"
@@ -103,24 +133,20 @@ class CommentForm extends Component {
                                             </option>
                                         )
                                     )}
-                                </Input>
-                            </Col>
-                            <Col>
-                                <InputGroup className="mb-4">
-                                    <Input
-                                        name="entry"
-                                        value={entry}
-                                        onChange={this.handleChange}
-                                        placeholder="Enter comment here..."
-                                    />
-                                    <InputGroupAddon addonType="append">
-                                        <Button color="secondary">
-                                            <i className="fas fa-check"></i>
-                                        </Button>
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </Col>
-                        </Row>
+                                </Input> */}
+                                <Input
+                                    name="entry"
+                                    value={entry}
+                                    onChange={this.handleChange}
+                                    placeholder="Enter comment here..."
+                                />
+                                <InputGroupAddon addonType="append">
+                                    <Button color="success">
+                                        <i className="fas fa-paper-plane"></i>
+                                    </Button>
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </Col>
                     </FormGroup>
                 </Form>
             </Fragment>

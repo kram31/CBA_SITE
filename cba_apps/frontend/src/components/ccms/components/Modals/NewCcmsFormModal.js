@@ -36,25 +36,28 @@ class NewCcmsFormModal extends Component {
     checkStatus = data => {
         if (data.ccms_owner) {
             return {
-                color: "success",
-                text: "View Case"
+                color: this.props.ccms_entry.is_complaint ? "dark" : "success",
+                text: "View Case",
+                icon: this.props.ccms_entry.is_complaint
+                    ? "fas fa-thumbs-down"
+                    : "fas fa-thumbs-up"
             };
         } else {
             return {
                 color: "danger",
-                text: "Unassigned Case"
+                text: "Unassigned Case",
+                icon: "fas fa-exclamation"
             };
         }
     };
 
     render() {
+        let status = this.checkStatus(this.props.ccms_entry);
         return (
             <Fragment>
-                <Button
-                    color={this.checkStatus(this.props.ccms_entry).color}
-                    onClick={this.toggle}
-                >
-                    {this.checkStatus(this.props.ccms_entry).text}
+                <Button color={status.color} onClick={this.toggle}>
+                    <i className={`${status.icon} mr-1`}></i>
+                    {status.text}
                 </Button>
                 <Form>
                     <Modal
@@ -67,13 +70,18 @@ class NewCcmsFormModal extends Component {
                                 this.props.ccms_entry.id
                         }
                         toggle={this.props.close_modal}
-                        size="lg"
+                        // size="lg"
+                        className="modal-xl"
                     >
                         <ModalHeader
                             toggle={this.props.close_modal}
                             style={{
-                                color: "black",
-                                border: "1px solid white"
+                                color: "white",
+                                border: "1px solid white",
+                                backgroundColor: this.props.ccms_entry
+                                    .is_complaint
+                                    ? "red"
+                                    : "green"
                             }}
                         >
                             CCMS ID {this.props.ccms_entry.id}

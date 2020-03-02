@@ -6,7 +6,6 @@ import {
     Modal,
     ModalHeader,
     ModalBody,
-    ModalFooter,
     Input,
     FormGroup,
     Label,

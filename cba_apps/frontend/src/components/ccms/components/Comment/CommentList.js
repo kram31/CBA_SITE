@@ -21,7 +21,7 @@ const CommentList = props => {
         paddingTop: "3px",
         paddingBottom: "3px",
         fontSize: "15px",
-        marginRight: "12px"
+        marginRight: "8px"
     };
 
     const dateCommentStyle = {
@@ -30,17 +30,28 @@ const CommentList = props => {
         marginLeft: "5px"
     };
 
+    const toggleStyle = {
+        fontSize: "14px",
+        color: "blue",
+        cursor: "pointer"
+    };
+
+    const handleCommentView = () => setView(!showAll);
+
     const displayComment = comment_list =>
         comment_list.map(comment => (
             <div key={comment.id}>
                 <p style={commentBoxStyle}>
-                    <a href="" style={{ color: "blue", fontWeight: "bold" }}>
-                        {comment.contributor.username}
-                    </a>
+                    <span style={{ color: "blue", fontWeight: "bold" }}>
+                        {comment.contributor.fullname}
+                    </span>
                 </p>
                 <p style={commentBoxStyle}>
-                    <i>{comment.ccms_status_during_comment}</i> :{" "}
-                    <InputForm comment={comment} />
+                    <span>
+                        <strong>{comment.ccms_status_during_comment}</strong>:{" "}
+                    </span>
+                    {/* <InputForm comment={comment} /> */}
+                    {comment.entry}
                 </p>
                 <p style={dateCommentStyle}>
                     date posted: {comment.comment_entry_date}
@@ -51,15 +62,8 @@ const CommentList = props => {
     if (props.comments.length > 5 && !showAll) {
         return (
             <Fragment>
-                <p
-                    style={{
-                        fontSize: "12px",
-                        color: "blue",
-                        cursor: "pointer"
-                    }}
-                    onClick={() => setView(!showAll)}
-                >
-                    show all...
+                <p style={toggleStyle} onClick={handleCommentView}>
+                    Show all...
                 </p>
                 {displayComment(comment_list)}
             </Fragment>
@@ -68,16 +72,11 @@ const CommentList = props => {
 
     return (
         <Fragment>
-            <p
-                style={{
-                    fontSize: "12px",
-                    color: "blue",
-                    cursor: "pointer"
-                }}
-                onClick={() => setView(!showAll)}
-            >
-                Hide...
-            </p>
+            {props.comments.length > 5 ? (
+                <p style={toggleStyle} onClick={handleCommentView}>
+                    Hide...
+                </p>
+            ) : null}
             {displayComment(props.comments)}
         </Fragment>
     );

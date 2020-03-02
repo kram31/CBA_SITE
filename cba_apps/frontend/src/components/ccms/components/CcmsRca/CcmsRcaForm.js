@@ -180,7 +180,7 @@ class CcmsRcaForm extends Component {
             modal
         } = this.state;
 
-        const labelLength = 3;
+        const titleStyle = { fontWeight: "bold", fontSize: "18px" };
 
         // modal, toggle, parentCallback
         return (
@@ -191,299 +191,241 @@ class CcmsRcaForm extends Component {
                     parentCallback={this.parentCallback}
                     ccms_rca={ccms_rca}
                 />
-                <Form
-                    style={{ fontSize: "14px" }}
-                    autoComplete="off"
-                    onSubmit={this.handleSubmit}
-                >
-                    <Card body className="mb-2">
-                        <CardTitle>TICKET AND AGENT INFORMATION</CardTitle>
-                        <FormGroup row size="sm">
-                            <Label
-                                for="id_rca_escalated_ticket"
-                                md={labelLength}
-                            >
+                <Card body>
+                    <Form
+                        style={{ fontSize: "14px" }}
+                        autoComplete="off"
+                        onSubmit={this.handleSubmit}
+                    >
+                        <CardTitle style={titleStyle}>
+                            TICKET AND AGENT INFORMATION
+                        </CardTitle>
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_escalated_ticket">
                                 Escalated Ticket
                             </Label>
 
-                            <Col>
-                                <Input
-                                    bsSize="sm"
-                                    type="text"
-                                    name="escalated_ticket"
-                                    id="id_rca_escalated_ticket"
-                                    disabled
-                                    value={ccms.escalated_ticket}
-                                />
-                            </Col>
+                            <Input
+                                bsSize="sm"
+                                type="text"
+                                name="escalated_ticket"
+                                id="id_rca_escalated_ticket"
+                                disabled
+                                value={ccms.escalated_ticket}
+                            />
                         </FormGroup>
 
-                        <FormGroup row>
-                            <Label for="id_rca_agent_name" sm={labelLength}>
-                                Agent's Name
-                            </Label>
+                        <FormGroup size="sm">
+                            <Label for="id_rca_agent_name">Agent's Name</Label>
 
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="text"
-                                    name="agent_name"
-                                    id="id_rca_agent_name"
-                                    value={ccms_rca_state.agent_name}
-                                />
-                            </Col>
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="text"
+                                name="agent_name"
+                                id="id_rca_agent_name"
+                                value={ccms_rca_state.agent_name}
+                            />
                         </FormGroup>
 
-                        <FormGroup row>
-                            <Label for="id_rca_agent_silo" sm={labelLength}>
-                                Agent's Silo
-                            </Label>
+                        <FormGroup size="sm">
+                            <Label for="id_rca_agent_silo">Agent's Silo</Label>
 
-                            <Col>
-                                <Typeahead
-                                    {...this.typeaheadProps("agent_silo")}
-                                    inputProps={{ required: true }}
-                                />
-                            </Col>
+                            <Typeahead
+                                {...this.typeaheadProps("agent_silo")}
+                                inputProps={{ required: true }}
+                            />
                         </FormGroup>
 
-                        <FormGroup row>
-                            <Label
-                                for="id_rca_ticket_description"
-                                sm={labelLength}
-                            >
+                        <FormGroup size="sm">
+                            <Label for="id_rca_ticket_description">
                                 Ticket's Description
                             </Label>
 
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="text"
-                                    name="ticket_description"
-                                    id="id_rca_ticket_description"
-                                    value={ccms_rca_state.ticket_description}
-                                />
-                            </Col>
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="text"
+                                name="ticket_description"
+                                id="id_rca_ticket_description"
+                                value={ccms_rca_state.ticket_description}
+                            />
                         </FormGroup>
 
-                        <FormGroup row size="sm">
-                            <Label
-                                for="id_rca_summary_complaint"
-                                md={labelLength}
-                            >
+                        <FormGroup size="sm">
+                            <Label for="id_rca_summary_complaint">
                                 Captured Issue
                             </Label>
 
-                            <Col>
-                                <Input
-                                    bsSize="sm"
-                                    type="text"
-                                    name="summary_complaint"
-                                    id="id_rca_summary_complaint"
-                                    disabled
-                                    value={ccms.summary_complaint}
-                                />
-                            </Col>
+                            <Input
+                                bsSize="sm"
+                                type="text"
+                                name="summary_complaint"
+                                id="id_rca_summary_complaint"
+                                disabled
+                                value={ccms.summary_complaint}
+                            />
                         </FormGroup>
-                        <FormGroup row>
-                            <Label
-                                for="id_rca_ccms_ticket_description"
-                                sm={labelLength}
-                            >
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_ccms_ticket_description">
                                 CCMS Ticket Description
                             </Label>
 
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="text"
-                                    name="ccms_ticket_description"
-                                    id="id_rca_ccms_ticket_description"
-                                    value={
-                                        ccms_rca_state.ccms_ticket_description
-                                    }
-                                />
-                            </Col>
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="text"
+                                name="ccms_ticket_description"
+                                id="id_rca_ccms_ticket_description"
+                                value={ccms_rca_state.ccms_ticket_description}
+                            />
                         </FormGroup>
-                    </Card>
 
-                    <Card body className="mb-2">
-                        <CardTitle>RCA DETAILS</CardTitle>
-                        <FormGroup row>
-                            <Label
-                                for="id_rca_controllability"
-                                sm={labelLength}
-                            >
+                        <CardTitle style={titleStyle}>RCA DETAILS</CardTitle>
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_controllability">
                                 Controllability
                             </Label>
 
-                            <Col>
-                                <Typeahead
-                                    {...this.typeaheadProps("controllability")}
-                                    inputProps={{ required: true }}
-                                />
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="id_rca_cause_code" sm={labelLength}>
-                                Cause Code
-                            </Label>
-
-                            <Col>
-                                <Typeahead
-                                    {...this.typeaheadProps("cause_code")}
-                                    inputProps={{ required: true }}
-                                />
-                            </Col>
+                            <Typeahead
+                                {...this.typeaheadProps("controllability")}
+                                inputProps={{ required: true }}
+                            />
                         </FormGroup>
 
-                        <FormGroup row>
-                            <Label
-                                for="id_rca_escalation_driver"
-                                sm={labelLength}
-                            >
+                        <FormGroup size="sm">
+                            <Label for="id_rca_cause_code">Cause Code</Label>
+
+                            <Typeahead
+                                {...this.typeaheadProps("cause_code")}
+                                inputProps={{ required: true }}
+                            />
+                        </FormGroup>
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_escalation_driver">
                                 Escalation Driver
                             </Label>
 
-                            <Col>
-                                <Typeahead
-                                    {...this.typeaheadProps(
-                                        "escalation_driver"
-                                    )}
-                                    inputProps={{
-                                        required: true
-                                    }}
-                                    disabled={!ccms_rca_state.cause_code}
-                                />
-                            </Col>
+                            <Typeahead
+                                {...this.typeaheadProps("escalation_driver")}
+                                inputProps={{
+                                    required: true
+                                }}
+                                disabled={!ccms_rca_state.cause_code}
+                            />
                         </FormGroup>
-                        <FormGroup row>
-                            <Label
-                                for="id_rca_escalation_driver_causer"
-                                sm={labelLength}
-                            >
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_escalation_driver_causer">
                                 Escalation Driver Cause
                             </Label>
 
-                            <Col>
-                                <Typeahead
-                                    {...this.typeaheadProps(
-                                        "escalation_driver_cause"
-                                    )}
-                                    inputProps={{
-                                        required: true
-                                    }}
-                                    disabled={
-                                        !ccms_rca_state.escalation_driver ||
-                                        !ccms_rca_state.cause_code
-                                    }
-                                />
-                            </Col>
+                            <Typeahead
+                                {...this.typeaheadProps(
+                                    "escalation_driver_cause"
+                                )}
+                                inputProps={{
+                                    required: true
+                                }}
+                                disabled={
+                                    !ccms_rca_state.escalation_driver ||
+                                    !ccms_rca_state.cause_code
+                                }
+                            />
                         </FormGroup>
-                        <FormGroup row>
-                            <Label
-                                for="id_rca_team_spg_accountability"
-                                sm={labelLength}
-                            >
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_team_spg_accountability">
                                 Team (SPG Accountability)
                             </Label>
 
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="text"
-                                    name="team_spg_accountability"
-                                    id="id_rca_team_spg_accountability"
-                                    value={
-                                        ccms_rca_state.team_spg_accountability
-                                    }
-                                />
-                            </Col>
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="text"
+                                name="team_spg_accountability"
+                                id="id_rca_team_spg_accountability"
+                                value={ccms_rca_state.team_spg_accountability}
+                            />
                         </FormGroup>
-                        <FormGroup row>
-                            <Label for="id_rca_business_unit" sm={labelLength}>
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_business_unit">
                                 Business Unit
                             </Label>
 
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="text"
-                                    name="business_unit"
-                                    id="id_rca_business_unit"
-                                    value={ccms_rca_state.business_unit}
-                                />
-                            </Col>
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="text"
+                                name="business_unit"
+                                id="id_rca_business_unit"
+                                value={ccms_rca_state.business_unit}
+                            />
                         </FormGroup>
-                        <FormGroup row>
-                            <Label for="id_rca_specific_bu" sm={labelLength}>
-                                Specific BU
-                            </Label>
 
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="text"
-                                    name="specific_bu"
-                                    id="id_rca_specific_bu"
-                                    value={ccms_rca_state.specific_bu}
-                                />
-                            </Col>
+                        <FormGroup size="sm">
+                            <Label for="id_rca_specific_bu">Specific BU</Label>
+
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="text"
+                                name="specific_bu"
+                                id="id_rca_specific_bu"
+                                value={ccms_rca_state.specific_bu}
+                            />
                         </FormGroup>
-                    </Card>
 
-                    <Card body className="mb-2">
-                        <CardTitle>Summary</CardTitle>
+                        <CardTitle style={titleStyle}>SUMMARY</CardTitle>
 
-                        <FormGroup row>
-                            <Label for="id_rca_ticket_number" sm={labelLength}>
+                        <FormGroup size="sm">
+                            <Label for="id_rca_ticket_number">
                                 Ticket Number
                             </Label>
 
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="input"
-                                    name="ticket_number"
-                                    id="id_rca_ticket_number"
-                                    value={ccms_rca_state.ticket_number}
-                                />
-                            </Col>
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="input"
+                                name="ticket_number"
+                                id="id_rca_ticket_number"
+                                value={ccms_rca_state.ticket_number}
+                            />
                         </FormGroup>
-                        <FormGroup row>
-                            <Label
-                                for="id_rca_event_description"
-                                sm={labelLength}
-                            >
+
+                        <FormGroup size="sm">
+                            <Label for="id_rca_event_description">
                                 Event Description
                             </Label>
-                            <Col>
-                                <Input
-                                    onChange={this.handleChange}
-                                    bsSize="sm"
-                                    type="textarea"
-                                    name="event_description"
-                                    id="id_rca_event_description"
-                                    value={ccms_rca_state.event_description}
-                                    rows={4}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Card>
 
-                    {ccms_rca.completed_on ? (
-                        <Button>Update</Button>
-                    ) : (
-                        <Button>Submit</Button>
-                    )}
-                </Form>
+                            <Input
+                                onChange={this.handleChange}
+                                bsSize="sm"
+                                type="textarea"
+                                name="event_description"
+                                id="id_rca_event_description"
+                                value={ccms_rca_state.event_description}
+                                rows={4}
+                            />
+                        </FormGroup>
+
+                        {ccms_rca.completed_on ? (
+                            <Button color="success">
+                                <i className="fas fa-pen mr-1"></i>Update RCA
+                            </Button>
+                        ) : (
+                            <Button color="primary">
+                                <i className="fas fa-paper-plane mr-1"></i>
+                                Complete RCA
+                            </Button>
+                        )}
+                    </Form>
+                </Card>
             </Fragment>
         );
     }

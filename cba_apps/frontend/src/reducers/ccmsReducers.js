@@ -60,10 +60,30 @@ import {
     EDIT_BUSINESS_UNIT,
     ADD_TICKET_TYPE,
     DELETE_TICKET_TYPE,
-    EDIT_TICKET_TYPE
+    EDIT_TICKET_TYPE,
+    ADD_SILO,
+    DELETE_SILO,
+    EDIT_SILO,
+    ADD_CCMS_STATUS,
+    DELETE_CCMS_STATUS,
+    EDIT_CCMS_STATUS,
+    ADD_SITE_CODE,
+    DELETE_SITE_CODE,
+    EDIT_SITE_CODE,
+    ADD_ACCOUNTABLE_TEAM,
+    DELETE_ACCOUNTABLE_TEAM,
+    EDIT_ACCOUNTABLE_TEAM,
+    ADD_ESCALATION_TYPE,
+    DELETE_ESCALATION_TYPE,
+    EDIT_ESCALATION_TYPE,
+    COMPLETE_CCMS,
+    SET_TABLE_PAGE,
+    DENY_REQUEST_ACCESS
 } from "../actions/types";
 
 const initialState = {
+    page: 0,
+    search: "",
     ccms_list: [],
     isFetching: false,
     comments: [],
@@ -97,6 +117,11 @@ const initialState = {
 
 const ccmsReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_TABLE_PAGE:
+            return {
+                ...state,
+                page: action.payload
+            };
         case SEARCH:
             return {
                 ...state,
@@ -106,7 +131,98 @@ const ccmsReducer = (state = initialState, action) => {
                         action.payload == item.escalated_ticket ||
                         action.payload == item.escalated_email_address ||
                         action.payload == item.escalated_name
+                ),
+                search: action.payload
+            };
+        case EDIT_ESCALATION_TYPE:
+            return {
+                ...state,
+                escalation_type: update_list(
+                    state.escalation_type,
+                    action.payload
                 )
+            };
+        case ADD_ESCALATION_TYPE:
+            return {
+                ...state,
+                escalation_type: [action.payload, ...state.escalation_type]
+            };
+        case DELETE_ESCALATION_TYPE:
+            return {
+                ...state,
+                escalation_type: removeItemFromList(
+                    state.escalation_type,
+                    action.payload
+                )
+            };
+        case EDIT_ACCOUNTABLE_TEAM:
+            return {
+                ...state,
+                accountable_team: update_list(
+                    state.accountable_team,
+                    action.payload
+                )
+            };
+        case ADD_ACCOUNTABLE_TEAM:
+            return {
+                ...state,
+                accountable_team: [action.payload, ...state.accountable_team]
+            };
+        case DELETE_ACCOUNTABLE_TEAM:
+            return {
+                ...state,
+                accountable_team: removeItemFromList(
+                    state.accountable_team,
+                    action.payload
+                )
+            };
+        case EDIT_SITE_CODE:
+            return {
+                ...state,
+                site_code: update_list(state.site_code, action.payload)
+            };
+        case ADD_SITE_CODE:
+            return {
+                ...state,
+                site_code: [action.payload, ...state.site_code]
+            };
+        case DELETE_SITE_CODE:
+            return {
+                ...state,
+                site_code: removeItemFromList(state.site_code, action.payload)
+            };
+        case EDIT_CCMS_STATUS:
+            return {
+                ...state,
+                ccms_status: update_list(state.ccms_status, action.payload)
+            };
+        case ADD_CCMS_STATUS:
+            return {
+                ...state,
+                ccms_status: [action.payload, ...state.ccms_status]
+            };
+        case DELETE_CCMS_STATUS:
+            return {
+                ...state,
+                ccms_status: removeItemFromList(
+                    state.ccms_status,
+                    action.payload
+                )
+            };
+        case EDIT_SILO:
+            return {
+                ...state,
+                silo: update_list(state.silo, action.payload)
+            };
+        case ADD_SILO:
+            return {
+                ...state,
+                silo: [action.payload, ...state.silo]
+            };
+        case DELETE_SILO:
+            return {
+                ...state,
+                silo: removeItemFromList(state.silo, action.payload)
             };
         case EDIT_TICKET_TYPE:
             return {
@@ -180,7 +296,12 @@ const ccmsReducer = (state = initialState, action) => {
         case COMPLETE_CCMS_RCA:
             return {
                 ...state,
-                ccms_rca: action.payload
+                ccms_rca: action.payload,
+                ccms_list: state.ccms_list.map(ccms =>
+                    ccms.id === action.payload.ccms
+                        ? { ...ccms, is_rca_completed: true }
+                        : ccms
+                )
             };
         case GET_CCMS_RCA:
             return {
@@ -286,6 +407,14 @@ const ccmsReducer = (state = initialState, action) => {
                 ...state,
                 access_request:
                     action.payload.length != 0 ? action.payload : null
+            };
+        case DENY_REQUEST_ACCESS:
+            return {
+                ...state,
+                access_request: removeItemFromList(
+                    state.access_request,
+                    action.payload
+                )
             };
         case ADD_REQUEST_ACCESS:
             return {
@@ -461,6 +590,18 @@ const ccmsReducer = (state = initialState, action) => {
                         return item;
                     }
                 })
+            };
+        case COMPLETE_CCMS:
+            // console.log(action.payload);
+            return {
+                ...state,
+                ccms_list: update_list(
+                    state.ccms_list,
+                    action.payload.completed_ccms
+                ),
+                selected_ccms: action.payload.completed_ccms,
+                comments: [...state.comments, action.payload.comment],
+                isFetching: false
             };
         case UPDATE_CCMS:
             // console.log(action.payload);

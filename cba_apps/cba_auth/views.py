@@ -60,6 +60,8 @@ def sign_in(request):
 
 
 def callback(request):
+
+    # try:
     # Get the state saved in session
     expected_state = request.session.pop('auth_state', '')
     # Make the token request
@@ -69,8 +71,9 @@ def callback(request):
     # Get the user's profile
     user = get_user(token)
 
+    # except:
     # Temporary! Save the response in an error so it's displayed
-    request.session['flash_error'] = {'message': 'Token retrieved',
+    request.session['flash_error'] = {'message': 'Error during authentication',
                                       'debug': 'User: {0}\nToken: {1}'.format(user, token)}
 
     store_token(request, token)
@@ -116,6 +119,8 @@ def callback(request):
         )
 
     login(request, userobj)
+
+    # IT CURRENTLY MONITORS
 
     if is_member_of(token, "Automations.ILCManila") and not CCMSOwner.objects.filter(user=userobj).exists():
         CCMSOwner.objects.create(user=userobj)
