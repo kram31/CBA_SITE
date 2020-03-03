@@ -64,9 +64,9 @@ import {
 } from "./types";
 
 import axios from "axios";
+import { axiosDefault } from "./config";
 
-// axios.defaults.baseURL = "http://localhost:8000";
-axios.defaults.baseURL = "https://localhost:443";
+axios.defaults.baseURL = axiosDefault;
 
 export class GeneralRequest {
     constructor(endpoint, data, dispatchType) {

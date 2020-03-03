@@ -61,9 +61,9 @@ import { tokenConfig } from "./auth";
 import { createMessage } from "./messages";
 
 import axios from "axios";
+import { axiosDefault } from "./config";
 
-// axios.defaults.baseURL = "http://localhost:8000";
-axios.defaults.baseURL = "https://localhost:443";
+axios.defaults.baseURL = axiosDefault;
 
 // surveys: this.props.getSurveys(),
 // rcas: this.props.getRcas(),

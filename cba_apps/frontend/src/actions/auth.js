@@ -11,10 +11,11 @@ import {
     GET_ERRORS
 } from "./types";
 
+import { axiosDefault } from "./config";
+
 // check token and load user
 
-// axios.defaults.baseURL = "http://localhost:8000";
-axios.defaults.baseURL = "https://localhost:443";
+axios.defaults.baseURL = axiosDefault;
 
 export const loadUser = () => dispatch => {
     // user loading
