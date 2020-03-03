@@ -13,7 +13,10 @@ import {
 
 // check token and load user
 
-axios.defaults.baseURL = "http://localhost:8000";
+// axios.defaults.baseURL = "http://localhost:8000";
+
+// APACHE TESTING
+axios.defaults.baseURL = "https://localhost:443";
 
 export const loadUser = () => dispatch => {
     // user loading

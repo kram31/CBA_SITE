@@ -69,7 +69,7 @@ class Ccms extends Component {
 
         if (ccms.ccms_list.length && auth.user) {
             return (
-                <Container fluid>
+                <Container fluidx>
                     {auth.user.group_list.includes("CCMS Admin") ? (
                         <Row className="mb-5">
                             <Col>
