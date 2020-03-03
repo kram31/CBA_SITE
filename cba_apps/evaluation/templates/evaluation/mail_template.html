@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        table {
+            width: 50%;
+            text-align: left;
+            padding: 20px;
+        }
+        td {
+            border: 1px solid black;
+            background-color: black;
+            color: white;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .transaction_id {
+            color: white;
+            text-decoration: none;
+            text-align: center
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <tr>
+        <td colspan="2"><a class="transaction_id" href="{{ link }}"><h2>Transaction ID: {{ evaluation.transaction_id }}</h2></a></td>
+    </tr>
+    <tr>
+        <td>
+            <p>CQM SCORE: {{ evaluation.cqm_score }}</p
+            <p>TQM SCORE: {{ evaluation.tqm_score }}</p>
+        </td>
+        <td><h3>TOTAL SCORE: {{ evaluation.total_score }}</h3></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p>Ticket Number: {{ evaluation.ticket_number }}</p>
+            <p>Call Date: {{ evaluation.call_date }}</p>
+            <p>Evaluated by: {{ evaluation.audited_by }}</p>
+            <p>
+                NOTE: Please go to <a href="{{ link }}">{{ link }}</a> to confirm evaluation and further details
+            </p>
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>

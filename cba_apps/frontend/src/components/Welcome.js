@@ -100,8 +100,17 @@ class Welcome extends React.Component {
                                     </RouterNavLink>
                                 </Col>
                                 <Col>
-                                    <RouterNavLink
-                                        to="/"
+                                    <a
+                                        href="http://localhost:8000/eval"
+                                        className="section-navlink"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <h5 id="section3">
+                                            Quality Evaluatons
+                                        </h5>
+                                    </a>
+                                    {/* <RouterNavLink
+                                        to="/eval"
                                         className="section-navlink"
                                         exact
                                         style={{ textDecoration: "none" }}
@@ -109,7 +118,7 @@ class Welcome extends React.Component {
                                         <h5 id="section3">
                                             Quality Evaluatons
                                         </h5>
-                                    </RouterNavLink>
+                                    </RouterNavLink> */}
                                 </Col>
                                 <Col>
                                     <RouterNavLink

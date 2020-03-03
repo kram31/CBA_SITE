@@ -31,6 +31,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_tables2',
+    'bootstrap_datepicker_plus',
+    'crispy_forms',
     'django_filters',
     'cba_auth',
     'ccms',
@@ -38,7 +41,9 @@ INSTALLED_APPS = [
     'accounts',
     'knox',
     'corsheaders',
+    'user',
     'agents',
+    'evaluation',
     'bottombox',
     'rest_framework',
     'django.contrib.admin',
@@ -143,9 +148,16 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'eval_home_view'
+
 
 EMAIL_HOST = 'smtp.svcs.entsvcs.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'mark.lascano@dxc.com'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

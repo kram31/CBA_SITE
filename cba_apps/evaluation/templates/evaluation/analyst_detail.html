@@ -1,0 +1,22 @@
+{% extends 'evaluation/base.html' %}
+
+{% block content %}
+<div class="row mt-5">
+  <div class="col">
+    <div class="card bg-dark text-white mt-5">
+      <div class="card-header border-bottom border-white">
+        <h3>{{ object.name }}</h3>
+      </div>
+      <div class="card-body">
+        <p>CBA LAN ID: {{ object.cba_lan_id }}</p>
+        <p>What needs to be added?</p>
+
+        <a class="btn btn-success float-left mt-3 px-5" href="{% url 'analyst_update' object.cba_lan_id %}">Update</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

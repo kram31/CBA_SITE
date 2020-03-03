@@ -1,0 +1,757 @@
+{% extends 'evaluation/base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+  <div class="col border border-dark bg-white shadow-lg rounded my-4 px-4 pb-3">
+
+    <div class="row">
+      <div class="col">
+        <div class="card bg-dark text-white mt-5">
+          <div class="card-header border-bottom border-white">
+            <h3>Transaction ID: {{ object.transaction_id }}</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-md">
+
+                <div class="card bg-dark border border-white">
+
+                  <div class="card-header border-bottom border-white">
+                    <h5>Evaluation Details</h5>
+                  </div>
+
+                  <div class="card-body bg-white text-dark">
+
+                    <div class="row">
+
+                      <div class="col">
+
+                        <p><strong>Analyst Name: </strong> {{ object.analyst }}</p>
+                        <p><strong>Call Date: </strong> {{ object.call_date }}</p>
+                        <p><strong>Week Number: </strong> {{ object.week_number }}</p>
+                        <p><strong>Week Starting: </strong> {{ object.week_starting }}</p>
+
+                      </div>
+
+                      <div class="col">
+
+                        <p><strong>Ticket Number: </strong> {{ object.ticket_number }}</p>
+                        <p><strong>Qfiniti Transaction Number: </strong> {{ object.Qfiniti_Transaction_Number }}</p>
+                        <p><strong>Type of Monitoring: </strong> {{ object.type_monitoring }}</p>
+                        <p><strong>Application Service: </strong> {{ object.application_service }}</p>
+                        <p><strong>Audited by: </strong> {{ object.audited_by }}</p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="row mt-4">
+
+                  <div class="col-md-4">
+
+                    <div class="card bg-dark border border-white">
+                      <div class="card-header text-center border-bottom border-white">
+                        <h5>Total Score</h5>
+                      </div>
+
+                      {% if object.total_score <= 75 %}
+                        <div class="card-body bg-white text-danger text-center">
+                          <h3>{{ object.total_score }}</h3>
+                        </div>
+                      {% else %}
+                        <div class="card-body bg-white text-success text-center">
+                          <h3>{{ object.total_score }}</h3>
+                        </div>
+                      {% endif %}
+
+                    </div>
+
+                  </div>
+                  <div class="col-md-4">
+
+                    <div class="card bg-dark border border-white">
+                      <div class="card-header text-center border-bottom border-white">
+                        <h5>Agent Coached</h5>
+                      </div>
+
+                      <div class="card-body bg-white text-dark text-center">
+                        <h3>{{ object.is_coached }}</h3>
+                      </div>
+                    </div>
+
+                  </div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col">
+                  <div class="card bg-dark border border-white">
+                    <div class="card-header border-bottom border-white">
+                      <h5>CQM Category - {{ object.cqm_score }}</h5>
+                    </div>
+                    <div class="card-body bg-white text-dark">
+
+                      <div class="row">
+                          <div class="col pb-2 text-warning">
+                              <h5>Call Greeting and Verification</h5>
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col mb-1 text-success">
+                              <p><strong>A. Did analyst follow established call flow?</strong></p>
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark">
+                          <div class="col-4">
+                              <p>Parameter Line Items</p>
+                          </div>
+                          <div class="col-2">
+                              <p>Met?</p>
+                          </div>
+                          <div class="col-6">
+                              <p>Comments</p>
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+                                  <p>Opened the call properly</p>
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Opened_the_call_properly }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Opened_the_call_properly }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Validated customers contact details</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Validated_customers_contact_details }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Validated_customers_contact_details }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Checked for the customers ticket history</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Checked_for_the_customers_ticket_history }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Checked_for_the_customers_ticket_history }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Used the hold mute transfer procedure correctly</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Used_the_hold_mute_transfer_procedure_correctly }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Used_the_hold_mute_transfer_procedure_correctly }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Followed the complete remote connection process</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Followed_the_complete_remote_connection_process }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Followed_the_complete_remote_connection_process }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Offered the call ticket number to customer</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Offered_the_call_ticket_number_to_customer }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Offered_the_call_ticket_number_to_customer }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Confirmed closure of call ticket</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Confirmed_closure_of_call_ticket }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Confirmed_closure_of_call_ticket }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Used the standard call closing</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Used_the_standard_call_closing }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Used_the_standard_call_closing }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Complied with the CBA security process for verification</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Complied_with_the_CBA_security_process_for_verification }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Complied_with_the_CBA_security_process_for_verification }}
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col border-top border-white pb-2 pt-4 text-warning">
+                              <h5>Customer Service Skills</h5>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col mb-1 text-success">
+                              <p><strong>B. Was the analyst professional?</strong></p>
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Maintained professional and positive approach while handling the call</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Maintained_professional_and_positive_approach_while_handling_the_call }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Maintained_professional_and_positive_approach_while_handling_the_call }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Delivered information politely and courteously</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Delivered_information_politely_and_courteously }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Delivered_information_politely_and_courteously }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                                  <p>Usage of Jargon Dual Language and Cultural Awareness</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Usage_of_Jargon_Dual_Language_and_Cultural_Awareness }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Usage_of_Jargon_Dual_Language_and_Cultural_Awareness }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Showed empathy and willingness to assist</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Showed_empathy_and_willingness_to_assist }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Showed_empathy_and_willingness_to_assist }}
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col mb-1">
+                              <p><strong>C. Did the analyst display good listening skills?</strong></p>
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Displayed active listening throughout the call</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Displayed_active_listening_throughout_the_call }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Displayed_active_listening_throughout_the_call }}
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col mb-1">
+                              <p><strong>D. Did the analyst display effective communication skills?</strong></p>
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Maintained call control</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Maintained_call_control }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Maintained_call_control }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Effective Speaking</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Effective_Speaking }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Effective_Speaking }}
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col border-top border-white pb-2 pt-4 text-warning">
+                              <h5>Knowledge, Process and Issue Resolution</h5>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col mb-1 text-success">
+                              <p><strong>E. Was the analyst knowledgeable?</strong></p>
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Paraphrased issue of the user</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Paraphrased_issue_of_the_user }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Paraphrased_issue_of_the_user }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Used effective and appropriate questioning</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Used_effective_and_appropriate_questioning }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Used_effective_and_appropriate_questioning }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Provide complete and accurate information</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Provide_complete_and_accurate_information }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Provide_complete_and_accurate_information }}
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col mb-1">
+                              <p><strong>F. Did the analyst resolve the issue?</strong></p>
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Provide answer action to all the customers requests</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Provide_answer_action_to_all_the_customers_requests }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Provide_answer_action_to_all_the_customers_requests }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Resolution Accuracy</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Resolution_Accuracy }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Resolution_Accuracy }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Ensure customer understood resolution</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Ensure_customer_understood_resolution }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Ensure_customer_understood_resolution }}
+                          </div>
+                      </div>
+
+                      <div class="row border-bottom border-dark mt-2">
+                          <div class="col-4">
+
+                            <p>Took Full Ownership and Followed up</p>
+
+                          </div>
+                          <div class="col-2">
+                                  {{ object.Took_Full_Ownership_and_Followed_up }}
+                          </div>
+                          <div class="col-6">
+                                  {{ object.comment_Took_Full_Ownership_and_Followed_up }}
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col">
+                      <div class="card bg-dark border border-white">
+                        <div class="card-header border-bottom border-white">
+                          <h5>TQM Category - {{ object.tqm_score }}</h5>
+                        </div>
+
+                        <div class="card-body bg-white text-dark">
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Created a call ticket</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Created_a_call_ticket }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Created_a_call_ticket }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Entered the correct information in the Brief Description field</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Entered_the_correct_information_in_the_Brief_Description_field }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Entered_the_correct_information_in_the_Brief_Description_field }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Entered the correct information in the Call Type field</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Entered_the_correct_information_in_the_Call_Type_field }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Entered_the_correct_information_in_the_Call_Type_field }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Entered the correct information in the Service field</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Entered_the_correct_information_in_the_Service_field }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Entered_the_correct_information_in_the_Service_field }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Entered the correct information in the Service Component field</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Entered_the_correct_information_in_the_Service_Component_field }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Entered_the_correct_information_in_the_Service_Component_field }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Selected the correct source Phone Web</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Selected_the_correct_source_Phone_Web }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Selected_the_correct_source_Phone_Web }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Alternate Contact field used when customer is calling on behalf of the affected user</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Selected the correct Severity and Priority of ticket</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Selected_the_correct_Severity_and_Priority_of_ticket }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Selected_the_correct_Severity_and_Priority_of_ticket }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Dispatched the case to the right Fulfillment Group</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Dispatched_the_case_to_the_right_Fulfillment_Group }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Dispatched_the_case_to_the_right_Fulfillment_Group }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Selected correct Business Units</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Selected_correct_Business_Units }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Selected_correct_Business_Units }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Used and updated the Description field correctly</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Used_and_updated_the_Description_field_correctly }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Used_and_updated_the_Description_field_correctly }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Used correct Spelling Grammar in the ticket</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Used_correct_Spelling_Grammar_in_the_ticket }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Used_correct_Spelling_Grammar_in_the_ticket }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Clear resolution summary documented accurately</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Clear_resolution_summary_documented_accurately }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Clear_resolution_summary_documented_accurately }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Used and completed the escalation template correctly</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Used_and_completed_the_escalation_template_correctly }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Used_and_completed_the_escalation_template_correctly }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Analyst entered the right Asset ID tag</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Analyst_entered_the_right_Asset_ID_tag }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Analyst_entered_the_right_Asset_ID_tag }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Correct closure code entered in the Interaction Outcome field</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Correct_closure_code_entered_in_the_Interaction_Outcome_field }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Correct_closure_code_entered_in_the_Interaction_Outcome_field }}
+                              </div>
+                          </div>
+
+                          <div class="row border-bottom border-dark mt-2">
+                              <div class="col-4">
+
+                                <p>Used and linked the correct KM article</p>
+
+                              </div>
+                              <div class="col-2">
+                                      {{ object.Used_and_linked_the_correct_KM_article }}
+                              </div>
+                              <div class="col-6">
+                                      {{ object.comment_Used_and_linked_the_correct_KM_article }}
+                              </div>
+                          </div>
+
+
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+          </div>
+        </div>
+      <a class="btn btn-success float-left mt-3 px-5" href="{% url 'eval_update' object.transaction_id %}">Update</a>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+{% endblock %}

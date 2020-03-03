@@ -1,0 +1,1158 @@
+{% extends "evaluation/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<!-- {{ form.media }} -->
+
+
+<div class="row">
+    <div class="col border border-dark bg-white shadow-lg rounded my-4 px-4 pb-3">
+    <form action="" method="POST" autocomplete="off">
+        <div class="row">
+            <div class="col-md mt-2" id="analyst_card"></div>
+        </div>
+          {% csrf_token %}
+            <div class="form-row mt-3">
+                <div class="form-group col-md mb-0">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.analyst|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    {{ form.ticket_number|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    {{ form.Qfiniti_Transaction_Number|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.issue|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form.call_date|as_crispy_field }}
+                                        </div>
+                                        <div class="col">
+                                            {{ form.type_monitoring|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form.week_number|as_crispy_field }}
+                                        </div>
+                                        <div class="col">
+                                            {{ form.week_starting|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                        {{ form.application_service|as_crispy_field }}
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form.cqm_score|as_crispy_field }}
+                                        </div>
+                                        <div class="col">
+                                            {{ form.tqm_score|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row mt-3">
+                <div class="form-group col-md mb-0">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col border-bottom border-white mb-4 pb-2 text-warning text-center">
+                                    <h3>CQM Category</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col pb-2 text-warning">
+                                    <h5>Call Greeting and Verification</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-1 text-success">
+                                    <p><strong>A. Did analyst follow established call flow?</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Parameter Line Items</p>
+                                </div>
+                                <div class="col-2">
+                                    <p>Met?</p>
+                                </div>
+                                <div class="col-6">
+                                    <p>Comments</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Opened_the_call_properly" class="col-form-label ">
+                                        <p>Opened the call properly</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Opened_the_call_properly|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Opened_the_call_properly|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Validated_customers_contact_details" class="col-form-label ">
+                                        <p>Validated customers contact details</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Validated_customers_contact_details|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Validated_customers_contact_details|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Checked_for_the_customers_ticket_history" class="col-form-label ">
+                                        <p>Checked for the customers ticket history</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Checked_for_the_customers_ticket_history|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Checked_for_the_customers_ticket_history|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Used_the_hold_mute_transfer_procedure_correctly" class="col-form-label ">
+                                        <p>Used the hold mute transfer procedure correctly</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Used_the_hold_mute_transfer_procedure_correctly|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Used_the_hold_mute_transfer_procedure_correctly|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Followed_the_complete_remote_connection_process" class="col-form-label ">
+                                        <p>Followed the complete remote connection process</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Followed_the_complete_remote_connection_process|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Followed_the_complete_remote_connection_process|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Offered_the_call_ticket_number_to_customer" class="col-form-label ">
+                                        <p>Offered the call ticket number to customer</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Offered_the_call_ticket_number_to_customer|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Offered_the_call_ticket_number_to_customer|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Confirmed_closure_of_call_ticket" class="col-form-label ">
+                                        <p>Confirmed closure of call ticket</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Confirmed_closure_of_call_ticket|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Confirmed_closure_of_call_ticket|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Used_the_standard_call_closing" class="col-form-label ">
+                                        <p>Used the standard call closing</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Used_the_standard_call_closing|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Used_the_standard_call_closing|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row text-danger">
+                                <div class="col-4">
+                                    <label for="id_Complied_with_the_CBA_security_process_for_verification" class="col-form-label ">
+                                        <p>Complied with the CBA security process for verification</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Complied_with_the_CBA_security_process_for_verification|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Complied_with_the_CBA_security_process_for_verification|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col border-top border-white pb-2 pt-4 text-warning">
+                                    <h5>Customer Service Skills</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-1 text-success">
+                                    <p><strong>B. Was the analyst professional?</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="row text-danger">
+                                <div class="col-4">
+                                    <label for="id_Maintained_professional_and_positive_approach_while_handling_the_call" class="col-form-label ">
+                                        <p>Maintained professional and positive approach while handling the call</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Maintained_professional_and_positive_approach_while_handling_the_call|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Maintained_professional_and_positive_approach_while_handling_the_call|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Delivered_information_politely_and_courteously" class="col-form-label ">
+                                        <p>Delivered information politely and courteously</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Delivered_information_politely_and_courteously|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Delivered_information_politely_and_courteously|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Usage_of_Jargon_Dual_Language_and_Cultural_Awareness" class="col-form-label ">
+                                        <p>Usage of Jargon Dual Language and Cultural Awareness</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Usage_of_Jargon_Dual_Language_and_Cultural_Awareness|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Usage_of_Jargon_Dual_Language_and_Cultural_Awareness|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Showed_empathy_and_willingness_to_assist" class="col-form-label ">
+                                        <p>Showed empathy and willingness to assist</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Showed_empathy_and_willingness_to_assist|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Showed_empathy_and_willingness_to_assist|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col mb-1">
+                                    <p><strong>C. Did the analyst display good listening skills?</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Displayed_active_listening_throughout_the_call" class="col-form-label ">
+                                        <p>Displayed active listening throughout the call</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Displayed_active_listening_throughout_the_call|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Displayed_active_listening_throughout_the_call|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col mb-1">
+                                    <p><strong>D. Did the analyst display effective communication skills?</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Maintained_call_control" class="col-form-label ">
+                                        <p>Maintained call control</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Maintained_call_control|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Maintained_call_control|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Effective_Speaking" class="col-form-label ">
+                                        <p>Effective Speaking</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Effective_Speaking|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Effective_Speaking|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col border-top border-white pb-2 pt-4 text-warning">
+                                    <h5>Knowledge, Process and Issue Resolution</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-1 text-success">
+                                    <p><strong>E. Was the analyst knowledgeable?</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Paraphrased_issue_of_the_user" class="col-form-label ">
+                                        <p>Paraphrased issue of the user</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Paraphrased_issue_of_the_user|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Paraphrased_issue_of_the_user|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Used_effective_and_appropriate_questioning" class="col-form-label ">
+                                        <p>Used effective and appropriate questioning</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Used_effective_and_appropriate_questioning|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Used_effective_and_appropriate_questioning|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Provide_complete_and_accurate_information" class="col-form-label ">
+                                        <p>Provide complete and accurate information</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Provide_complete_and_accurate_information|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Provide_complete_and_accurate_information|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col mb-1">
+                                    <p><strong>F. Did the analyst resolve the issue?</strong></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Provide_answer_action_to_all_the_customers_requests" class="col-form-label ">
+                                        <p>Provide answer action to all the customers requests</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Provide_answer_action_to_all_the_customers_requests|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Provide_answer_action_to_all_the_customers_requests|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Resolution_Accuracy" class="col-form-label ">
+                                        <p>Resolution Accuracy</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Resolution_Accuracy|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Resolution_Accuracy|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Ensure_customer_understood_resolution" class="col-form-label ">
+                                        <p>Ensure customer understood resolution</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Ensure_customer_understood_resolution|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Ensure_customer_understood_resolution|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Took_Full_Ownership_and_Followed_up" class="col-form-label ">
+                                        <p>Took Full Ownership and Followed up</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Took_Full_Ownership_and_Followed_up|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Took_Full_Ownership_and_Followed_up|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col border-bottom border-white mb-4 py-2 mt-3 text-warning text-center">
+                                    <h3>TQM Category</h3>
+                                </div>
+                            </div>
+
+                            <div class="row text-danger">
+                                <div class="col-4">
+                                    <label for="id_Created_a_call_ticket" class="col-form-label ">
+                                        <p>Created a call ticket</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Created_a_call_ticket|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Created_a_call_ticket|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Entered_the_correct_information_in_the_Brief_Description_field" class="col-form-label ">
+                                        <p>Entered the correct information in the Brief Description field</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Entered_the_correct_information_in_the_Brief_Description_field|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Entered_the_correct_information_in_the_Brief_Description_field|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Entered_the_correct_information_in_the_Call_Type_field" class="col-form-label ">
+                                        <p>Entered the correct information in the Call Type field</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Entered_the_correct_information_in_the_Call_Type_field|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Entered_the_correct_information_in_the_Call_Type_field|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Entered_the_correct_information_in_the_Service_field" class="col-form-label ">
+                                        <p>Entered the correct information in the Service field</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Entered_the_correct_information_in_the_Service_field|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Entered_the_correct_information_in_the_Service_field|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Entered_the_correct_information_in_the_Service_Component_field" class="col-form-label ">
+                                        <p>Entered the correct information in the Service Component field</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Entered_the_correct_information_in_the_Service_Component_field|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Entered_the_correct_information_in_the_Service_Component_field|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Selected_the_correct_source_Phone_Web" class="col-form-label ">
+                                        <p>Selected the correct source Phone Web</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Selected_the_correct_source_Phone_Web|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Selected_the_correct_source_Phone_Web|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user" class="col-form-label ">
+                                        <p>Alternate Contact field used when customer is calling on behalf of the affected user</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Selected_the_correct_Severity_and_Priority_of_ticket" class="col-form-label ">
+                                        <p>Selected the correct Severity and Priority of ticket</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Selected_the_correct_Severity_and_Priority_of_ticket|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Selected_the_correct_Severity_and_Priority_of_ticket|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Dispatched_the_case_to_the_right_Fulfillment_Group" class="col-form-label ">
+                                        <p>Dispatched the case to the right Fulfillment Group</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Dispatched_the_case_to_the_right_Fulfillment_Group|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Dispatched_the_case_to_the_right_Fulfillment_Group|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Selected_correct_Business_Units" class="col-form-label ">
+                                        <p>Selected correct Business Units</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Selected_correct_Business_Units|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Selected_correct_Business_Units|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Used_and_updated_the_Description_field_correctly" class="col-form-label ">
+                                        <p>Used and updated the Description field correctly</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Used_and_updated_the_Description_field_correctly|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Used_and_updated_the_Description_field_correctly|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-4">
+                                    <label for="id_Used_correct_Spelling_Grammar_in_the_ticket" class="col-form-label ">
+                                        <p>Used correct Spelling Grammar in the ticket</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Used_correct_Spelling_Grammar_in_the_ticket|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Used_correct_Spelling_Grammar_in_the_ticket|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Clear_resolution_summary_documented_accurately" class="col-form-label ">
+                                        <p>Clear resolution summary documented accurately</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Clear_resolution_summary_documented_accurately|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Clear_resolution_summary_documented_accurately|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Used_and_completed_the_escalation_template_correctly" class="col-form-label ">
+                                        <p>Used and completed the escalation template correctly</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Used_and_completed_the_escalation_template_correctly|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Used_and_completed_the_escalation_template_correctly|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Analyst_entered_the_right_Asset_ID_tag" class="col-form-label ">
+                                        <p>Analyst entered the right Asset ID tag</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Analyst_entered_the_right_Asset_ID_tag|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Analyst_entered_the_right_Asset_ID_tag|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Correct_closure_code_entered_in_the_Interaction_Outcome_field" class="col-form-label ">
+                                        <p>Correct closure code entered in the Interaction Outcome field</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Correct_closure_code_entered_in_the_Interaction_Outcome_field|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Correct_closure_code_entered_in_the_Interaction_Outcome_field|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="id_Used_and_linked_the_correct_KM_article" class="col-form-label ">
+                                        <p>Used and linked the correct KM article</p>
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                        {{ form.Used_and_linked_the_correct_KM_article|as_crispy_field }}
+                                </div>
+                                <div class="col-6">
+                                        {{ form.comment_Used_and_linked_the_correct_KM_article|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+
+
+    </div>
+</div>
+
+<script>
+
+    $('#id_call_date').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+    $('#id_week_starting').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+
+</script>
+
+
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+
+
+
+<script>
+    $(document).ready(function(){
+        let endpoint = '/../../api/analysts';
+        let analysts = []
+        let scores = []
+
+        $.ajax({
+            method: "GET",
+            url: endpoint,
+            success: function(data){
+                analysts = data.analysts
+                scores = data.scores
+                // console.log(analysts)
+                // console.log(analysts[0].pk)
+                populateAnalystDetails()
+                // cqm_score()
+                cqm_score2()
+                tqm_score2()
+
+
+
+
+
+
+
+
+
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+        });
+
+
+
+        function populateAnalystDetails() {
+            $(document).ready(function(){
+                if ($('#id_analyst').children("option:selected").val()) {
+                    let selectedName = $('#id_analyst').children("option:selected").val()
+                    getDetails(selectedName)
+                }
+            });
+        }
+
+        function getDetails(selectedName) {
+            for(var i = 0; i < analysts.length; i++) {
+                if (selectedName == analysts[i].pk) {
+
+                    $('#analyst_card').html(`
+                        <div class="card text-white bg-dark mb-2 mt-3">
+                          <div class="card-header col border-bottom border-white"><h3><a class="text-decoration-none text-warning" data-toggle="tooltip" title="Update Analyst details" href="../../analyst/${analysts[i].pk}/update">${analysts[i].name}</a></h3>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="card-text">ID: ${analysts[i].pk}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="card-text">SILO: ${analysts[i].silo}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="card-text">Supervisor: ${analysts[i].supervisor}</p>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <p class="card-text">Email: ${analysts[i].email}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="card-text">Team Lead: ${analysts[i].team_lead}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="card-text">Wave: ${analysts[i].wave}</p>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <p class="card-text">Location: ${analysts[i].location}</p>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <button class="btn btn-success my-2 mr-2" name="eval_save" value="eval_save">Save</button>
+                                    <button class="btn btn-success my-2" name="eval_save_send_email" value="eval_save_send_email">Submit and Send EMail</button>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                    `)
+                }
+            }
+        }
+
+        $('#id_analyst').change(function() {
+
+        let selectedName = $(this).children("option:selected").val();
+
+        getDetails(selectedName)
+        });
+
+        function tqm_score2() {
+            $(document).ready(function() {
+
+                let y = 0
+
+                
+                let key_values = Object.keys(scores[0])
+
+                for (var key in scores[0]) {
+
+                    if(y > 23) {
+                        calc_tqm(key.replace('score_',''), scores[0][key])
+                    }
+                        y += 1
+
+                }
+
+                let total_error = 0
+
+                if(parseInt($('#id_tqm_score').val()) == 0){
+                    total_error = 0
+                }
+                else{
+                    total_error = 100 - parseInt($('#id_tqm_score').val())
+                }
+
+
+                let ids = ['#id_Complied_with_the_CBA_security_process_for_verification', '#id_Maintained_professional_and_positive_approach_while_handling_the_call', '#id_Created_a_call_ticket']
+
+
+                function calc_tqm(id_calc, set_score) {
+
+                    let from_na = false
+                    let from_no = false
+                    let from_yes = false
+
+                    $('#id_' + id_calc).change(function() {
+                        let tqm_score = parseInt($('#id_tqm_score').val())
+
+                        if(ids.includes('#id_' + id_calc)){
+
+                            console.log(`${'#id_' + id_calc} in list`)
+
+                            if($(this).find('option:selected').val() == 'False') {
+
+                                $('#id_tqm_score').val(0)
+                            }
+                            else {
+                                console.log('change to no')
+                                $('#id_tqm_score').val(100 - total_error)
+                            }
+                        }
+                        else {
+                            console.log(`${'#id_' + id_calc} NOT in list`)
+
+                            let tqm_score = parseInt($('#id_tqm_score').val())
+
+                                if (tqm_score != 0) {
+
+                                    if((from_na == false) && (from_yes == false) && (from_no == false)) {
+
+                                        if($(this).find('option:selected').val() == 'True') {
+
+                                            from_yes = true
+                                            total_error -= set_score
+                                            $('#id_tqm_score').val(100 - total_error)
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'no_value') {
+
+                                            from_na = true
+
+                                        }
+                                        else {
+
+                                            from_no = true
+                                            total_error += set_score
+                                            $('#id_tqm_score').val(100 - total_error)
+                                        }
+
+                                    }
+                                    else if((from_na == true) && (from_yes == false) && (from_no == false)) {
+
+                                        from_na = false
+
+                                        if($(this).find('option:selected').val() == 'True') {
+
+                                            from_yes = true
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'False') {
+
+                                            from_no = true
+                                            total_error += set_score
+                                            $('#id_tqm_score').val(100 - total_error)
+                                        }
+                                    }else if((from_na == false) && (from_yes == true) && (from_no == false)) {
+
+                                        from_yes = false
+
+                                        if($(this).find('option:selected').val() == 'False') {
+
+                                            from_no = true
+                                            total_error += set_score
+                                            $('#id_tqm_score').val(100 - total_error)
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'no_value') {
+
+                                            from_na = true
+
+                                        }
+                                    }else if((from_na == false) && (from_yes == false) && (from_no == true)) {
+
+                                        from_no = false
+
+                                        if($(this).find('option:selected').val() == 'True') {
+
+                                            from_yes = false
+                                            total_error -= set_score
+                                            $('#id_tqm_score').val(100 - total_error)
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'no_value') {
+
+                                            from_na = true
+                                            total_error -= set_score
+                                            $('#id_tqm_score').val(100 - total_error)
+
+                                        }
+                                    }
+                                }
+                                else {
+
+                                    if($(this).find('option:selected').val() == 'True') {
+
+                                        total_error -= set_score
+
+                                    }
+                                    else {
+
+                                        total_error += set_score
+
+                                    }
+                                }
+                                // console.log(from_na, from_yes, from_no)
+
+                        }
+                    });
+                }
+
+
+            })
+        }
+
+
+        function cqm_score2() {
+            $(document).ready(function() {
+
+
+                let x = 0
+
+                let key_values = Object.keys(scores[0])
+
+                console.log(key_values)
+
+
+                for (var key in scores[0]) {
+
+                    if(x <= 23) {
+                        calc_cqm(key.replace('score_',''), scores[0][key])
+                        x += 1
+                    }
+
+                }
+
+                let total_error = 0
+
+                if(parseInt($('#id_cqm_score').val()) == 0){
+                    total_error = 0
+                }
+                else{
+                    total_error = 100 - parseInt($('#id_cqm_score').val())
+                }
+
+                let ids = ['#id_Complied_with_the_CBA_security_process_for_verification', '#id_Maintained_professional_and_positive_approach_while_handling_the_call', '#id_Created_a_call_ticket']
+
+
+                function calc_cqm(id_calc, set_score) {
+
+                    // console.log(id_calc)
+
+                    let from_na = false
+                    let from_no = false
+                    let from_yes = false
+
+                    $('#id_' + id_calc).change(function() {
+                        let cqm_score = parseInt($('#id_cqm_score').val())
+                        console.log(from_na)
+                        console.log(`${'#id_' + id_calc} in list`)
+                        if(ids.includes('#id_' + id_calc)){
+
+                            console.log(`${'#id_' + id_calc} in list`)
+
+                            if($(this).find('option:selected').val() == 'False') {
+
+                                $('#id_cqm_score').val(0)
+                            }
+                            else {
+                                console.log('change to no')
+                                $('#id_cqm_score').val(100 - total_error)
+                            }
+                        }
+                        else {
+                            console.log(`${'#id_' + id_calc} NOT in list`)
+
+                            let cqm_score = parseInt($('#id_cqm_score').val())
+
+                                if (cqm_score != 0) {
+
+                                    if((from_na == false) && (from_yes == false) && (from_no == false)) {
+
+                                        if($(this).find('option:selected').val() == 'True') {
+
+                                            from_yes = true
+                                            total_error -= set_score
+                                            $('#id_cqm_score').val(100 - total_error)
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'no_value') {
+
+                                            from_na = true
+
+                                        }
+                                        else {
+
+                                            from_no = true
+                                            total_error += set_score
+                                            $('#id_cqm_score').val(100 - total_error)
+                                        }
+
+                                    }
+                                    else if((from_na == true) && (from_yes == false) && (from_no == false)) {
+
+                                        from_na = false
+
+                                        if($(this).find('option:selected').val() == 'True') {
+
+                                            from_yes = true
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'False') {
+
+                                            from_no = true
+                                            total_error += set_score
+                                            $('#id_cqm_score').val(100 - total_error)
+                                        }
+                                    }else if((from_na == false) && (from_yes == true) && (from_no == false)) {
+
+                                        from_yes = false
+
+                                        if($(this).find('option:selected').val() == 'False') {
+
+                                            from_no = true
+                                            total_error += set_score
+                                            $('#id_cqm_score').val(100 - total_error)
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'no_value') {
+
+                                            from_na = true
+
+                                        }
+                                    }else if((from_na == false) && (from_yes == false) && (from_no == true)) {
+
+                                        from_no = false
+
+                                        if($(this).find('option:selected').val() == 'True') {
+
+                                            from_yes = false
+                                            total_error -= set_score
+                                            $('#id_cqm_score').val(100 - total_error)
+
+                                        }
+                                        else if($(this).find('option:selected').val() == 'no_value') {
+
+                                            from_na = true
+                                            total_error -= set_score
+                                            $('#id_cqm_score').val(100 - total_error)
+
+                                        }
+                                    }
+                                }
+                                else {
+
+                                    if($(this).find('option:selected').val() == 'True') {
+
+                                        total_error -= set_score
+
+                                    }
+                                    else {
+
+                                        total_error += set_score
+
+                                    }
+                                }
+                                // console.log(from_na, from_yes, from_no)
+
+                        }
+                    });
+                }
+
+
+            })
+        }
+
+
+    });
+
+</script>
+
+{% endblock content %}

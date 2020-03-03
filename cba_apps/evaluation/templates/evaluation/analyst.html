@@ -1,0 +1,35 @@
+{% extends 'evaluation/base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col mx-auto mt-5">
+      <h2>Analysts</h2>
+    </div>
+  </div>
+      <div class="row">
+        <div class="col-10 mb-4 mx-auto">
+          <div class="row">
+            <div class="col-md mb-2">
+              <a class="btn btn-success float-left mt-3 px-5" href="{% url 'analyst_create'  %}">Add Analyst</a>
+
+            </div>
+          </div>
+          {% for e in analysts %}
+                <div class="card bg-dark text-white mt-1">
+                  <div class="card-header border-bottom border-white">
+                    <h3><a class="text-decoration-none text-warning" data-toggle="tooltip" title="Update Analyst details" href="{% url 'analyst_update' e.cba_lan_id %}">{{ e }}</a></h3>
+                  </div>
+                  <div class="card-body">
+                    <p>CBA LAN ID: {{ e.cba_lan_id }}</p>
+                    <p>SILO: {{ e.silo }}</p>
+                    <p>Supervisor: {{ e.supervisor }}</p>
+                    <p>Email: {{ e.email }}</p>
+                    <p>Team Lead: {{ e.team_lead }}</p>
+                    <p>Wave: {{ e.wave }}</p>
+                    <p>Location: {{ e.location }}</p>
+                  </div>
+                </div>
+          {% endfor %}
+        </div>
+      </div>
+{% endblock %}

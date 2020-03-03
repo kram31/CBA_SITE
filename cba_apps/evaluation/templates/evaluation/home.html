@@ -1,0 +1,156 @@
+{% extends "evaluation/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+
+
+{% block content %}
+
+<div class="row py-2">
+    <div class="col border border-dark bg-white shadow-lg rounded my-4 px-4 pb-3 pt-2">
+        <div class="row">
+            <div class="col-md-3 mt-2">
+                <img src="{% static "evaluation/4b_logo_vt_rev.jpg" %}" alt="dxc" width="100%" height="100%" class="img-fluid max-width: 100% rounded float-left">
+            </div>
+            <!-- <div class="col-md-3 my-auto"> -->
+
+<!--                     <div class="row mt-2">
+                        <div class="col">
+                            <a class="btn btn-outline-dark btn-block shadow" href=" {% url 'eval_create' %} " data-toggle="tooltip" title="Start Evaluation"><i class="fa fa-check-square-o fa-lg"></i> Start Evaluation</a>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <a class="btn btn-outline-dark btn-block shadow" href=" {% url 'analyst_create' %} " data-toggle="tooltip" title="Add Analyst"><i class="fa fa-user-plus fa-lg"></i> Add Analyst</a>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <a class="btn btn-outline-dark btn-block shadow" href=" {% url 'score_update' pk=1 %} " data-toggle="tooltip" title="Parameter Scores Update"><i class="fa fa-slack fa-lg"></i></i> Change Scores</a>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <a class="btn btn-outline-dark btn-block shadow" href=" {% url 'app_create' %} " data-toggle="tooltip" title="Add Application Service"><i class="fa fa-slack fa-lg"></i></i> Add App Service</a>
+                        </div>
+                    </div> -->
+<!--                 <div class="card bg-dark text-white">
+                    <div class="card-header border-bottom border-white">
+                        <h5>Total Audits for the month</h5>
+                    </div>
+                    <div class="card-body">
+                        <h2>{{ num_audits_month }}</h2>
+                    </div>
+
+                </div> -->
+<!--
+            </div> -->
+            <div class="col-md mt-1">
+                <div class="card bg-dark text-white">
+                    <div class="card-header border-bottom border-white">
+                        <h5>Dashboard</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="mb-3">Top Failing Parameters for the month</h5>
+                                    {% for v in violations %}
+                                        <p class="text-warning">{{ v.parameter }} - <strong>{{ v.count }}</strong></p>
+                                    {% endfor %}
+
+                            </div>
+                            <div class="col">
+                                <h5 class="text-center">Total Audits for the month</h5>
+                                <h1 class="text-center text-warning mt-4">{{ num_audits_month }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col border border-dark bg-white shadow-lg rounded my-1 px-4 pb-3 mb-5">
+        <div class="row mt-3 justify-content-center">
+            <div class="col-10 py-4">
+                <div class="card bg-dark text-white shadow-lg rounded">
+                    <div class="card-header border-bottom border-white">
+                        Search Evaluations
+                    </div>
+                    <div class="card-body">
+
+                        <form action="" method="POST">
+                            {% csrf_token%}
+                            <div class="row">
+                                <div class="col-md mt-2">
+                                    <input id="from_date" name="from_date" width="276" autocomplete="off" placeholder="from..." />
+                                </div>
+                                <div class="col-md mt-2">
+                                    <input id="end_date" name="end_date" width="276" autocomplete="off" placeholder="to..."/>
+                                </div>
+                                <div class="col-md mt-2">
+                                    <button class="btn btn-success btn-block mb-1" id="btn-search" name="btn-search" value="search-data" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if home_table %}
+        <div class="row">
+            <div class="col">
+                <div class="row justify-content-center">
+                    <div class="col-10">
+                        {% load render_table from django_tables2 %}
+                        {% render_table home_table %}
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-10">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                    <div class="row">
+                        <div class="col-4">
+                            <button class="btn btn-dark btn-block mb-1" id="btn-download" name="btn-download" value="download-file" type="submit">Download</button>
+                        </div>
+                    </div>
+
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+
+
+    <script>
+        $('#from_date').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+        $('#end_date').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+    </script>
+
+
+
+{% endblock content %}

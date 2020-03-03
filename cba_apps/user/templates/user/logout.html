@@ -1,0 +1,22 @@
+{% extends 'evaluation/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-8 mt-5 mb-5">
+            <div class="card shadow-lg border border-dark">
+                <div class="card-header">
+                    <h4>You have been logged out</h4>
+                </div>
+                <div class="card-body">
+                    <div class="">
+                            Login again? <a class="ml-2" href="{% url 'login' %}">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

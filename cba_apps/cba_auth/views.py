@@ -61,20 +61,20 @@ def sign_in(request):
 
 def callback(request):
 
-    # try:
-    # Get the state saved in session
-    expected_state = request.session.pop('auth_state', '')
-    # Make the token request
+    try:
+        # Get the state saved in session
+        expected_state = request.session.pop('auth_state', '')
+        # Make the token request
 
-    token = get_token_from_code(request.get_full_path(), expected_state)
+        token = get_token_from_code(request.get_full_path(), expected_state)
 
-    # Get the user's profile
-    user = get_user(token)
+        # Get the user's profile
+        user = get_user(token)
 
-    # except:
-    # Temporary! Save the response in an error so it's displayed
-    request.session['flash_error'] = {'message': 'Error during authentication',
-                                      'debug': 'User: {0}\nToken: {1}'.format(user, token)}
+    except:
+        # Temporary! Save the response in an error so it's displayed
+        request.session['flash_error'] = {'message': 'Error during authentication',
+                                          'debug': 'User: {0}\nToken: {1}'.format(user, token)}
 
     store_token(request, token)
     store_user(request, user)

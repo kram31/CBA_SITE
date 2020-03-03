@@ -1,0 +1,37 @@
+{% extends 'evaluation/base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col mx-auto mb-3 mt-5">
+    <h2>Evaluations</h2>
+  </div>
+</div>
+  {% for e in evaluations %}
+    <div class="row">
+      <div class="col-10 mb-4 mx-auto">
+        <div class="card bg-dark text-white mt-1">
+          <div class="card-header border-bottom border-white">
+            <h3><a class="text-decoration-none text-warning" data-toggle="tooltip" title="Update Evaluations details" href="{% url 'eval_update' e.transaction_id %}">{{ e }}</a></h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <p>Total Score: {{ e.total_score }}</p>
+
+              </div>
+              <div class="col">
+                <p>CQM Score: {{ e.cqm_score }}</p>
+
+              </div>
+              <div class="col">
+                <p>TQM Score: {{ e.tqm_score }}</p>
+
+              </div>
+            </div>
+            <p>Audited by: {{ e.audited_by }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

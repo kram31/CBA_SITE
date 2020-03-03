@@ -1,0 +1,41 @@
+{% extends "evaluation/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-8 border border-dark bg-white shadow-lg rounded my-4 px-4 pb-3">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="row justify-content-center mx-3">
+                <div class="col pb-5">
+                    <div class="card bg-dark text-white mt-5">
+                        <div class="card-header border-bottom border-white py-3">
+                            <h4>Update Quality Score</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    {{ form|crispy }}
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col ml-5 pb-4">
+                                <button class="btn btn-success">Submit</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+
+{% endblock content %}

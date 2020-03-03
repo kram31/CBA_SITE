@@ -1,0 +1,33 @@
+{% extends 'evaluation/base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col col-md-8 mx-auto mt-2">
+      <a class="btn btn-success float-left mt-3 px-5" href="{% url 'app_create'  %}">Add Application Service</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 mx-auto mb-3 mt-2">
+      <div class="card bg-dark text-white">
+        <div class="card-header border-bottom border-white">
+          <h2>Application Services</h2>
+        </div>
+
+        <div class="card-body">
+          {% for e in application %}
+          <div class="row">
+            <div class="col">
+
+              <h5><a class="text-decoration-none text-warning" data-toggle="tooltip" title="Update Application" href="{% url 'app_update' e.pk %}">{{ e }}</a></h5>
+
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
