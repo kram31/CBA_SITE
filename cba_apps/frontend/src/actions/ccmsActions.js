@@ -1,6 +1,7 @@
 import {
-    FETCHING,
-    STOP_FETCHING,
+    GET_ALL_DATA_CCMS,
+    FETCHING_CCMS,
+    STOP_FETCHING_CCMS,
     GET_SURVEYS,
     ACK_ENTRY,
     ADD_UPDATE,
@@ -64,9 +65,8 @@ import {
 } from "./types";
 
 import axios from "axios";
-import { axiosDefault } from "./config";
 
-axios.defaults.baseURL = axiosDefault;
+axios.defaults.baseURL = "http://localhost:8000";
 
 export class GeneralRequest {
     constructor(endpoint, data, dispatchType) {
@@ -333,162 +333,79 @@ export const add_cause_code = data => dispatch => {
 
 export const get_all_data = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
-        .get("/api/users/")
-        .then(res => {
+        .all([
+            axios.get("/api/users/"),
+            axios.get("/api/group/"),
+            axios.get("/api/silo/"),
+            axios.get("/api/ticket_type/"),
+            axios.get("/api/ccms_status/"),
+            axios.get("/api/ccms_owners/"),
+            axios.get("/api/site_code/"),
+            axios.get("/api/accountable_team/"),
+            axios.get("/api/escalation_type/"),
+            axios.get("/api/ticket_status/"),
+            axios.get("/api/business_unit/"),
+            axios.get("/api/ccms/"),
+            axios.get("/api/cause_code/"),
+            axios.get("/api/escalation_driver/"),
+            axios.get("/api/escalation_driver_cause/")
+        ])
+        .then(
+            axios.spread(
+                (
+                    users,
+                    group,
+                    silo,
+                    ticket_type,
+                    ccms_status,
+                    ccms_owner,
+                    site_code,
+                    accountable_team,
+                    escalation_type,
+                    ticket_status,
+                    business_unit,
+                    ccms,
+                    cause_code,
+                    escalation_driver,
+                    escalation_driver_cause
+                ) => {
+                    dispatch({
+                        type: GET_ALL_DATA_CCMS,
+                        payload: {
+                            users: users.data,
+                            group: group.data,
+                            silo: silo.data,
+                            ticket_type: ticket_type.data,
+                            ccms_status: ccms_status.data,
+                            ccms_owner: ccms_owner.data,
+                            site_code: site_code.data,
+                            accountable_team: accountable_team.data,
+                            escalation_type: escalation_type.data,
+                            ticket_status: ticket_status.data,
+                            business_unit: business_unit.data,
+                            ccms: ccms.data,
+                            cause_code: cause_code.data,
+                            escalation_driver: escalation_driver.data,
+                            escalation_driver_cause:
+                                escalation_driver_cause.data
+                        }
+                    });
+                    dispatch({
+                        type: STOP_FETCHING_CCMS
+                    });
+                }
+            )
+        )
+        .catch(error => {
             dispatch({
-                type: GET_USERS_LIST,
-                payload: res.data
+                type: STOP_FETCHING_CCMS
             });
-        })
-        .catch(err => console.log(err.response));
-
-    axios
-        .get("/api/group/")
-        .then(res => {
-            dispatch({
-                type: GET_CCMS_ADMIN_LIST,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err.response));
-
-    axios
-        .get("/api/silo/")
-        .then(res => {
-            dispatch({
-                type: GET_SILO,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err.response));
-
-    axios
-        .get("/api/ticket_type/")
-        .then(res => {
-            dispatch({
-                type: GET_TICKET_TYPE,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err.response));
-
-    axios
-        .get("/api/ccms_status/")
-        .then(res => {
-            dispatch({
-                type: GET_CCMS_STATUS,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err.response));
-
-    axios
-        .get("/api/ccms_owners/")
-        .then(res => {
-            dispatch({
-                type: GET_CCMS_OWNER,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err.response));
-
-    axios
-        .get("/api/site_code/")
-        .then(res => {
-            dispatch({
-                type: GET_SITE_CODE,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/accountable_team/")
-        .then(res => {
-            dispatch({
-                type: GET_ACCOUNTABLE_TEAM,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/escalation_type/")
-        .then(res => {
-            dispatch({
-                type: GET_ESCALATION_TYPE,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/ticket_status/")
-        .then(res => {
-            dispatch({
-                type: GET_TICKET_STATUS,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/business_unit/")
-        .then(res => {
-            dispatch({
-                type: GET_BUSINESS_UNIT,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/ccms/")
-        .then(res => {
-            dispatch({
-                type: GET_CCMS,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/cause_code/")
-        .then(res => {
-            dispatch({
-                type: GET_CAUSE_CODE,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/escalation_driver/")
-        .then(res => {
-            dispatch({
-                type: GET_ESCALATION_DRIVER,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    axios
-        .get("/api/escalation_driver_cause/")
-        .then(res => {
-            dispatch({
-                type: GET_ESCALATION_DRIVER_CAUSE,
-                payload: res.data
-            });
-        })
-        .catch(err => console.log(err));
-
-    dispatch({
-        type: STOP_FETCHING
-    });
+            console.log(error.response);
+        });
 };
 
 export const get_access_request = () => dispatch => {
@@ -637,7 +554,7 @@ export const add_user_to_ccms_admin = users_list => dispatch => {
                     payload: res.data
                 });
                 dispatch({
-                    type: STOP_FETCHING
+                    type: STOP_FETCHING_CCMS
                 });
             })
             .catch(err => console.log(err.response));
@@ -656,7 +573,7 @@ export const remove_user_from_ccms_admin = ccms_admin_list => dispatch => {
                     payload: res.data
                 });
                 dispatch({
-                    type: STOP_FETCHING
+                    type: STOP_FETCHING_CCMS
                 });
             })
             .catch(err => console.log(err.response));
@@ -677,7 +594,7 @@ export const add_comment = data => dispatch => {
 
 export const update_ccms = (data, id, prev_data) => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     if (prev_data.date_acknowledged) {
@@ -689,7 +606,7 @@ export const update_ccms = (data, id, prev_data) => dispatch => {
                     payload: res.data
                 });
                 dispatch({
-                    type: STOP_FETCHING
+                    type: STOP_FETCHING_CCMS
                 });
             })
             .catch(err => console.log(err.response));
@@ -712,7 +629,7 @@ export const update_ccms = (data, id, prev_data) => dispatch => {
                     }
                 });
                 dispatch({
-                    type: STOP_FETCHING
+                    type: STOP_FETCHING_CCMS
                 });
             })
             .catch(err => {
@@ -723,7 +640,7 @@ export const update_ccms = (data, id, prev_data) => dispatch => {
 
 export const get_users_list = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -734,7 +651,7 @@ export const get_users_list = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err.response));
@@ -742,7 +659,7 @@ export const get_users_list = () => dispatch => {
 
 export const get_ccms_admin_list = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -753,7 +670,7 @@ export const get_ccms_admin_list = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err.response));
@@ -761,7 +678,7 @@ export const get_ccms_admin_list = () => dispatch => {
 
 export const get_silo = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -772,7 +689,7 @@ export const get_silo = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err.response));
@@ -780,7 +697,7 @@ export const get_silo = () => dispatch => {
 
 export const get_ticket_type = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -791,7 +708,7 @@ export const get_ticket_type = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err.response));
@@ -799,7 +716,7 @@ export const get_ticket_type = () => dispatch => {
 
 export const get_ccms_status = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -810,7 +727,7 @@ export const get_ccms_status = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err.response));
@@ -818,7 +735,7 @@ export const get_ccms_status = () => dispatch => {
 
 export const get_ccms_owner = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -829,7 +746,7 @@ export const get_ccms_owner = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err.response));
@@ -837,7 +754,7 @@ export const get_ccms_owner = () => dispatch => {
 
 export const get_site_code = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -848,7 +765,7 @@ export const get_site_code = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err));
@@ -856,7 +773,7 @@ export const get_site_code = () => dispatch => {
 
 export const get_accountable_team = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -867,7 +784,7 @@ export const get_accountable_team = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err));
@@ -875,7 +792,7 @@ export const get_accountable_team = () => dispatch => {
 
 export const get_escalation_type = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -886,7 +803,7 @@ export const get_escalation_type = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err));
@@ -894,7 +811,7 @@ export const get_escalation_type = () => dispatch => {
 
 export const get_ticket_status = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -905,7 +822,7 @@ export const get_ticket_status = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err));
@@ -913,7 +830,7 @@ export const get_ticket_status = () => dispatch => {
 
 export const get_business_unit = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -924,7 +841,7 @@ export const get_business_unit = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err));
@@ -932,7 +849,7 @@ export const get_business_unit = () => dispatch => {
 
 export const get_ccms_list = () => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -943,7 +860,7 @@ export const get_ccms_list = () => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err));
@@ -951,7 +868,7 @@ export const get_ccms_list = () => dispatch => {
 
 export const ack_entry = (id, data) => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -967,13 +884,13 @@ export const ack_entry = (id, data) => dispatch => {
         });
 
     dispatch({
-        type: STOP_FETCHING
+        type: STOP_FETCHING_CCMS
     });
 };
 
 export const getComments = id => dispatch => {
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -984,7 +901,7 @@ export const getComments = id => dispatch => {
                 payload: res.data
             });
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING_CCMS
             });
         })
         .catch(err => console.log(err));
@@ -993,7 +910,7 @@ export const getComments = id => dispatch => {
 export const add_update = data => dispatch => {
     console.log("add update");
     dispatch({
-        type: FETCHING
+        type: FETCHING_CCMS
     });
 
     axios
@@ -1009,28 +926,12 @@ export const add_update = data => dispatch => {
         });
 
     dispatch({
-        type: STOP_FETCHING
+        type: STOP_FETCHING_CCMS
     });
 };
 
 export const isFetching = () => dispatch => {
     dispatch({
-        type: STOP_FETCHING
+        type: STOP_FETCHING_CCMS
     });
-};
-
-export const getSurveys = () => dispatch => {
-    dispatch({
-        type: FETCHING
-    });
-
-    axios
-        .get("/api/surveys/")
-        .then(res =>
-            dispatch({
-                type: GET_SURVEYS,
-                payload: res.data
-            })
-        )
-        .catch(err => console.log(err.response.data));
 };

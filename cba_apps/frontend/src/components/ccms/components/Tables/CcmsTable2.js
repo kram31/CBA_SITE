@@ -326,7 +326,7 @@ class CcmsTable2 extends Component {
                                             Drivers
                                         </Button>
 
-                                        <a href="https://localhost:443/control">
+                                        <a href="https://10.235.83.26/control">
                                             <Button
                                                 onClick={() =>
                                                     console.log(

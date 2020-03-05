@@ -34,6 +34,8 @@ from django.core.mail import EmailMessage
 
 def send_email(title, body, my_username):
 
+    ccms_group_list = User.objects.filter(groups__name="CCMS Admin")
+
     connection = get_connection(host='smtp.svcs.entsvcs.com',
                                 port=25,
                                 username=my_username,
@@ -41,10 +43,10 @@ def send_email(title, body, my_username):
                                 use_tls=False)
 
     email = EmailMessage(
-        'Title',
-        'Body',
+        title,
+        body,
         'cba-ccms@donot-reply.com',
-        ['mark.lascano@dxc.com'],
+        [item.email for item in ccms_group_list],
         connection=connection
     )
     # email.attach_file()
@@ -408,14 +410,14 @@ class CommentSerializer(serializers.ModelSerializer):
             "expires_at": user.expires_at
         }
 
-        try:
-            send_mail_graph(token=token, subject=f"CCMS ID: {ccms_obj.id} Update", recipients=[
-                "mark.lascano@dxc.com"], body=f"Update - {comment.entry}")
-        except:
-            print("An error occured while sending an email")
+        # try:
+        #     send_mail_graph(token=token, subject=f"CCMS ID: {ccms_obj.id} Update", recipients=[
+        #         "mark.lascano@dxc.com"], body=f"Update - {comment.entry}")
+        # except:
+        #     print("An error occured while sending an email")
 
         # BELOW WILL BE USED FOR PRODUCTION
-        # send_email(f"CCMS ID: {ccms_obj.id} Update", f"Update - {comment.entry}", {user.user.username})
+        send_email(f"CCMS ID: {ccms_obj.id} Update", f"Update - {comment.entry}", {user.user.username})
 
         return comment
 

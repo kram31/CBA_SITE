@@ -1,6 +1,6 @@
 import {
-    FETCHING,
-    STOP_FETCHING,
+    FETCHING_CCMS,
+    STOP_FETCHING_CCMS,
     ACK_ENTRY,
     ADD_UPDATE,
     GET_COMMENTS,
@@ -78,7 +78,8 @@ import {
     EDIT_ESCALATION_TYPE,
     COMPLETE_CCMS,
     SET_TABLE_PAGE,
-    DENY_REQUEST_ACCESS
+    DENY_REQUEST_ACCESS,
+    GET_ALL_DATA_CCMS
 } from "../actions/types";
 
 const initialState = {
@@ -117,6 +118,42 @@ const initialState = {
 
 const ccmsReducer = (state = initialState, action) => {
     switch (action.type) {
+        case GET_ALL_DATA_CCMS:
+            const {
+                users,
+                group,
+                silo,
+                ticket_type,
+                ccms_status,
+                ccms_owner,
+                site_code,
+                accountable_team,
+                escalation_type,
+                ticket_status,
+                business_unit,
+                ccms,
+                cause_code,
+                escalation_driver,
+                escalation_driver_cause
+            } = action.payload;
+            return {
+                ...state,
+                users_list: users,
+                ccms_admin_list: group,
+                silo,
+                ticket_type,
+                ccms_status,
+                ccms_owner,
+                site_code,
+                accountable_team,
+                escalation_type,
+                ticket_status,
+                business_unit,
+                ccms_list: ccms,
+                cause_code,
+                escalation_driver,
+                escalation_driver_cause
+            };
         case SET_TABLE_PAGE:
             return {
                 ...state,
@@ -443,7 +480,7 @@ const ccmsReducer = (state = initialState, action) => {
                 ...state,
                 modal: !state.modal
             };
-        case FETCHING:
+        case FETCHING_CCMS:
             return {
                 ...state,
                 isFetching: true
@@ -468,7 +505,7 @@ const ccmsReducer = (state = initialState, action) => {
                 ...state,
                 collapse: true
             };
-        case STOP_FETCHING:
+        case STOP_FETCHING_CCMS:
             return {
                 ...state,
                 isFetching: false

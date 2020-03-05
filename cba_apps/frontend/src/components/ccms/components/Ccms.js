@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import {
     get_ccms_list,
     isFetching,
-    getSurveys,
     ack_entry,
     getComments,
     get_business_unit,
@@ -133,7 +132,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
     get_ccms_list,
     isFetching,
-    getSurveys,
     ack_entry,
     get_business_unit,
     get_ticket_status,

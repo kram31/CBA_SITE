@@ -1,4 +1,5 @@
 export const CHECK_BUTTON_COLOR = "CHECK_BUTTON_COLOR";
+export const GET_ALL_DATA_CCMS = "GET_ALL_DATA_CCMS";
 
 export const GET_SURVEYS = "GET_SURVEYS";
 export const ADD_SURVEY = "ADD_SURVEY";
@@ -19,6 +20,8 @@ export const GET_ALL_SURVEY_VIEW = "GET_ALL_SURVEY_VIEW";
 export const GET_TEAMS = "GET_TEAMS";
 export const ADD_RCA = "ADD_RCA";
 export const UPDATE_BOTTOMBOX_NOT_COMPLETED = "UPDATE_BOTTOMBOX_NOT_COMPLETED";
+export const FETCHING_CCMS = "FETCHING_CCMS";
+export const STOP_FETCHING_CCMS = "STOP_FETCHING_CCMS";
 export const FETCHING = "FETCHING";
 export const STOP_FETCHING = "STOP_FETCHING";
 export const ADD_SKILL = "ADD_SKILL";

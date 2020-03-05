@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { Jumbotron, Row, Col, Container, Fade, Spinner } from "reactstrap";
 import { NavLink as RouterNavLink } from "react-router-dom";
-import image1 from "../images/feedback.png";
 import { connect } from "react-redux";
 
 const WelcomeContent = props => {
@@ -9,9 +8,7 @@ const WelcomeContent = props => {
     if (props.isAuthenticated) {
         return (
             <div className="mt-2">
-                <h4 style={{ color: "white" }}>
-                    Welcome {props.user.fullname}!
-                </h4>
+                <h4 style={{color: "white"}}>Welcome {props.user.fullname}!</h4>
             </div>
         );
     }
@@ -62,11 +59,12 @@ class Welcome extends React.Component {
         const { user, isAuthenticated } = this.props.auth;
         return (
             <Fragment>
-                <Jumbotron style={{ backgroundColor: "black" }}>
-                    <div className="jumbotroncontent">
-                        <h1 className="mb-2 mt-4" style={{ color: "white" }}>
-                            DXC - CBA App Site
-                        </h1>
+                <Jumbotron style={{ backgroundColor: "#d3d3d3" }}>
+                    <div
+                
+                        style={{ color: "white" }}
+                    >
+                        <h1 className="mb-2 mt-4">DXC - CBA App Site</h1>
                         <WelcomeContent
                             isAuthenticated={isAuthenticated}
                             user={user}
@@ -101,7 +99,7 @@ class Welcome extends React.Component {
                                 </Col>
                                 <Col>
                                     <a
-                                        href="https://localhost:443/eval"
+                                        href="https://10.235.83.26/eval"
                                         className="section-navlink"
                                         style={{ textDecoration: "none" }}
                                     >
@@ -110,7 +108,7 @@ class Welcome extends React.Component {
                                         </h5>
                                     </a>
                                     {/* <RouterNavLink
-                                        to="/eval"
+                                        to="/"
                                         className="section-navlink"
                                         exact
                                         style={{ textDecoration: "none" }}
