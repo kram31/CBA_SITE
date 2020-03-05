@@ -10,6 +10,6 @@ def index(request):
 
     if not 'user' in request.session:
 
-        return HttpResponseRedirect(reverse('home'))
+        return HttpResponseRedirect(reverse('signin'))
 
     return render(request, "build/index.html")

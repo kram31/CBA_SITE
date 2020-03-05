@@ -80,10 +80,9 @@ def callback(request):
     store_user(request, user)
     # save user and token data to models
 
+    uid = user['mail']
     try:
-        uid = user['mail']
         userobj = User.objects.get(username=uid)
-
         user_auth_details = Auth_Details.objects.get(user=userobj)
 
         # Update AuthDetails of User after successful login to Azure AD
@@ -96,7 +95,7 @@ def callback(request):
 
         user_auth_details.save()
 
-    except User.DoesNotExist:
+    except:
         # split fullname
 
         fullname = user['displayName']
@@ -104,9 +103,10 @@ def callback(request):
         firstname = firstname.lstrip()
 
         # create new user
-        userobj = User.objects.create_user(
-            user['mail'], user['mail'], '1234', first_name=firstname, last_name=lastname)
-        userobj.save()
+        if not userobj:
+            userobj = User.objects.create_user(
+                user['mail'], user['mail'], '1234', first_name=firstname, last_name=lastname)
+            userobj.save()
 
         Auth_Details.objects.create(
             user=userobj,
@@ -146,6 +146,6 @@ def sign_out(request):
     remove_user_and_token(request)
     logout(request)
 
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('signin'))
 
 # check trigger > get all emails(specific parameter) > save to database  > return to check trigger
