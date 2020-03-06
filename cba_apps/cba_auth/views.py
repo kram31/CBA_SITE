@@ -81,8 +81,19 @@ def callback(request):
     # save user and token data to models
 
     uid = user['mail']
-    try:
+    # create new user
+    if not User.objects.filter(username=uid).exists():
+        # split fullname
+        fullname = user['displayName']
+        lastname, firstname = fullname.split(",")
+        firstname = firstname.lstrip()
+        userobj = User.objects.create_user(
+            user['mail'], user['mail'], '1234', first_name=firstname, last_name=lastname)
+        userobj.save()
+    else:
         userobj = User.objects.get(username=uid)
+
+    try:
         user_auth_details = Auth_Details.objects.get(user=userobj)
 
         # Update AuthDetails of User after successful login to Azure AD
@@ -96,17 +107,6 @@ def callback(request):
         user_auth_details.save()
 
     except:
-        # split fullname
-
-        fullname = user['displayName']
-        lastname, firstname = fullname.split(",")
-        firstname = firstname.lstrip()
-
-        # create new user
-        if not userobj:
-            userobj = User.objects.create_user(
-                user['mail'], user['mail'], '1234', first_name=firstname, last_name=lastname)
-            userobj.save()
 
         Auth_Details.objects.create(
             user=userobj,
