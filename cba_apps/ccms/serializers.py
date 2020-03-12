@@ -417,7 +417,8 @@ class CommentSerializer(serializers.ModelSerializer):
         #     print("An error occured while sending an email")
 
         # BELOW WILL BE USED FOR PRODUCTION
-        send_email(f"CCMS ID: {ccms_obj.id} Update", f"Update - {comment.entry}", {user.user.username})
+        send_email(f"CCMS ID: {ccms_obj.id} Update",
+                   f"Update - {comment.entry}", {user.user.username})
 
         return comment
 

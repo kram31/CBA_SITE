@@ -3,6 +3,7 @@ export const GET_ALL_DATA_CCMS = "GET_ALL_DATA_CCMS";
 
 export const GET_SURVEYS = "GET_SURVEYS";
 export const ADD_SURVEY = "ADD_SURVEY";
+export const CREATE_CSAT_RCA = "CREATE_CSAT_RCA";
 export const DELETE_SURVEY = "DELETE_SURVEY";
 export const MODAL_TOGGLE = "MODAL_TOGGLE";
 export const GET_SURVEY = "GET_SURVEY";

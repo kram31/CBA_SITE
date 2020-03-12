@@ -15,16 +15,18 @@ import { axiosDefault } from "./config";
 
 // check token and load user
 
-axios.defaults.baseURL = axiosDefault;
+// axios.defaults.baseURL = axiosDefault;
 
 export const loadUser = () => dispatch => {
     // user loading
     dispatch({ type: USER_LOADING });
 
-    axios.get("/api/cba_auth").then(res => {
+    axios.get("http://localhost:8000/api/cba_auth/").then(res => {
+
         dispatch({
             type: USER_LOADED,
-            payload: res.data
+            payload: res.data.filter(user => user.username === "mark.lascano@dxc.com")
+            // payload: res.data
         });
     });
 };

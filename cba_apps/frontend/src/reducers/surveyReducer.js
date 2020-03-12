@@ -1,6 +1,7 @@
 import {
     GET_SURVEYS,
     ADD_SURVEY,
+    CREATE_CSAT_RCA,
     DELETE_SURVEY,
     GET_SURVEY,
     REMOVE_SURVEY,
@@ -114,6 +115,7 @@ let get_data = filtered_list => {
 };
 
 const initialState = {
+    csat_rca: null,
     upload_failed_surveys: [],
     colors: ["#ffed00", "#64ff00", "#00c9ff", "white", "#666666", "#d9d9d9"],
     agent_view_collapse: false,
@@ -354,10 +356,20 @@ const surveyReducer = (state = initialState, action) => {
                 ),
                 isFetching: false
             };
+        case CREATE_CSAT_RCA:
+            return {
+                ...state,
+                csat_rca: [action.payload, ...state.csat_rca]
+                // isFetching: false
+            };
         case ADD_SURVEY:
             return {
                 ...state,
                 surveys: [action.payload, ...state.surveys],
+                bottombox: [
+                    ...(action.payload.bottombox === 1 && [action.payload]),
+                    ...state.bottombox
+                ],
                 surveys_view: [action.payload, ...state.surveys_view]
                 // isFetching: false
             };

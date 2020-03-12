@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
-from .models import Agent, Skill, TeamLead
-from .serializer import AgentSerializer, SkillSerializer, TeamLeadSerializer
+from .models import Agent, AgentSkill, TeamLead, Team, TeamMember
+from .serializer import AgentSerializer, AgentSkillSerializer, TeamLeadSerializer, TeamSerializer, TeamMemberSerializer
 
 
 class AgentViewset(viewsets.ModelViewSet):
@@ -11,9 +11,9 @@ class AgentViewset(viewsets.ModelViewSet):
     ]
 
 
-class SkillViewset(viewsets.ModelViewSet):
-    queryset = Skill.objects.all()
-    serializer_class = SkillSerializer
+class AgentSkillViewset(viewsets.ModelViewSet):
+    queryset = AgentSkill.objects.all()
+    serializer_class = AgentSkillSerializer
     permission_classes = [
         permissions.AllowAny
     ]
@@ -22,6 +22,22 @@ class SkillViewset(viewsets.ModelViewSet):
 class TeamLeadViewset(viewsets.ModelViewSet):
     queryset = TeamLead.objects.all()
     serializer_class = TeamLeadSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+class TeamViewset(viewsets.ModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+class TeamMemberViewset(viewsets.ModelViewSet):
+    queryset = TeamMember.objects.all()
+    serializer_class = TeamMemberSerializer
     permission_classes = [
         permissions.AllowAny
     ]

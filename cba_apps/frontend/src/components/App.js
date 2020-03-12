@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Ccms from "./ccms/components/Ccms";
 
 import BottomBox from "./bottombox/dashboard/BottomBox";
+import Main from "./bottombox/components/main/Main";
 import Alerts from "./bottombox/components/Alerts";
 
 import PrivateRoute from "./common/PrivateRoute";
@@ -96,11 +97,17 @@ class App extends Component {
                             />
                             <div style={{ marginTop: "100px" }}>
                                 <div className="container-fluid">
-                                    <PrivateRoute
+                                    {/* <PrivateRoute
                                         name="BottomBox"
                                         exact
                                         path="/bottombox"
                                         component={BottomBox}
+                                    /> */}
+                                    <PrivateRoute
+                                        name="BottomBox"
+                                        exact
+                                        path="/bottombox"
+                                        component={Main}
                                     />
                                     <PrivateRoute
                                         name="Ccms"

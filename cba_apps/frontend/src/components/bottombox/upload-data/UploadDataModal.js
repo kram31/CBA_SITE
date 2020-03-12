@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import XLSX from "xlsx";
-import { SheetJSFT } from "./helpers/types";
-import { keys } from "./helpers/obj-keys";
+import { SheetJSFT } from "./helpers/types"; // enable other file types
+import { keys } from "./helpers/obj-keys"; // expected headers
 import { addSurveysBulk, getSurveys } from "../../../actions/surveyActions";
 
 import { connect } from "react-redux";
@@ -131,14 +131,6 @@ class UploadDataModal extends Component {
                     <i className="fa fa-upload fa-2x" />
                     <p style={{ fontSize: "12px" }}>Upload Data</p>
                 </NavLink>
-                {/* <Button
-                    color="dark"
-                    size="md"
-                    onClick={this.toggle}
-                    style={{ color: "#ffed00", padding: "7px 30px" }}
-                >
-                    Upload Data
-                </Button> */}
                 <Modal
                     scrollable={true}
                     className="modal-lg modal-main"
@@ -157,7 +149,7 @@ class UploadDataModal extends Component {
                                 type="file"
                                 name="selectedFile"
                                 className="form-control-file"
-                                id="file"
+                                id="id_upload_data"
                                 accept={SheetJSFT}
                                 onChange={this.handleChange}
                             />

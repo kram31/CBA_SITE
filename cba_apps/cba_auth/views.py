@@ -122,8 +122,8 @@ def callback(request):
 
     # IT CURRENTLY MONITORS
 
-    if is_member_of(token, "Automations.ILCManila") and not CCMSOwner.objects.filter(user=userobj).exists():
-        CCMSOwner.objects.create(user=userobj)
+    # if is_member_of(token, "Automations.ILCManila") and not CCMSOwner.objects.filter(user=userobj).exists():
+    #     CCMSOwner.objects.create(user=userobj)
 
     # Redirect to CBA Apps Link
     return HttpResponseRedirect(reverse('index'))

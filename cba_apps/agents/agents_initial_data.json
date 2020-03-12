@@ -1,0 +1,189 @@
+[
+    {
+        "model": "agents.TeamLead",
+        "pk": 73,
+        "fields": {
+            "user": 73
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 77,
+        "fields": {
+            "user": 77
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 78,
+        "fields": {
+            "user": 78
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 80,
+        "fields": {
+            "user": 80
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 74,
+        "fields": {
+            "user": 74
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 81,
+        "fields": {
+            "user": 81
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 79,
+        "fields": {
+            "user": 79
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 76,
+        "fields": {
+            "user": 76
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 85,
+        "fields": {
+            "username": "love.timbol@dxc.com",
+            "email": "love.timbol@dxc.com",
+            "password": 1234,
+            "first_name": "Love Oscar",
+            "last_name": "Timbol"
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 85,
+        "fields": {
+            "user": 85
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 86,
+        "fields": {
+            "username": "SST@donotuse.com",
+            "email": "SST@donotuse.com",
+            "password": 1234,
+            "first_name": "SST",
+            "last_name": "SST"
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 86,
+        "fields": {
+            "user": 86
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 87,
+        "fields": {
+            "username": "mary-marico.shimazu@dxc.com",
+            "email": "mary-marico.shimazu@dxc.com",
+            "password": 1234,
+            "first_name": "Mary Marico C (Max)",
+            "last_name": "Shimazu"
+        }
+    },
+    {
+        "model": "agents.TeamLead",
+        "pk": 87,
+        "fields": {
+            "user": 87
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 1,
+        "fields": {
+            "name": "Bank Apps"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 2,
+        "fields": {
+            "name": "CCA"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 3,
+        "fields": {
+            "name": "CET"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 4,
+        "fields": {
+            "name": "CommSee"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 5,
+        "fields": {
+            "name": "Culture"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 6,
+        "fields": {
+            "name": "Desktop"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 7,
+        "fields": {
+            "name": "FC"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 8,
+        "fields": {
+            "name": "IMAC"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 9,
+        "fields": {
+            "name": "KM"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 9,
+        "fields": {
+            "name": "Password"
+        }
+    },
+    {
+        "model": "agents.AgentSkill",
+        "pk": 9,
+        "fields": {
+            "name": "Platinum"
+        }
+    }
+]

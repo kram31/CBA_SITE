@@ -34,7 +34,7 @@ class Evaluation_Form(forms.ModelForm):
         label='', required=False)
     comment_Complied_with_the_CBA_security_process_for_verification = forms.CharField(
         label='', required=False)
-    comment_Maintained_professional_and_positive_approach_while_handling_the_call = forms.CharField(
+    comment_Maintained_professional_and_positive_approach = forms.CharField(
         label='', required=False)
     comment_Delivered_information_politely_and_courteously = forms.CharField(
         label='', required=False)
@@ -60,17 +60,17 @@ class Evaluation_Form(forms.ModelForm):
     comment_Took_Full_Ownership_and_Followed_up = forms.CharField(
         label='', required=False)
     comment_Created_a_call_ticket = forms.CharField(label='', required=False)
-    comment_Entered_the_correct_information_in_the_Brief_Description_field = forms.CharField(
+    comment_Entered_correct_Brief_Description = forms.CharField(
         label='', required=False)
     comment_Entered_the_correct_information_in_the_Call_Type_field = forms.CharField(
         label='', required=False)
     comment_Entered_the_correct_information_in_the_Service_field = forms.CharField(
         label='', required=False)
-    comment_Entered_the_correct_information_in_the_Service_Component_field = forms.CharField(
+    comment_Entered_correct_Service_Component = forms.CharField(
         label='', required=False)
     comment_Selected_the_correct_source_Phone_Web = forms.CharField(
         label='', required=False)
-    comment_Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user = forms.CharField(
+    comment_Alternate_Contact_field_used_when_customer_calling = forms.CharField(
         label='', required=False)
     comment_Selected_the_correct_Severity_and_Priority_of_ticket = forms.CharField(
         label='', required=False)
@@ -88,7 +88,7 @@ class Evaluation_Form(forms.ModelForm):
         label='', required=False)
     comment_Analyst_entered_the_right_Asset_ID_tag = forms.CharField(
         label='', required=False)
-    comment_Correct_closure_code_entered_in_the_Interaction_Outcome_field = forms.CharField(
+    comment_Correct_closure_code_entered = forms.CharField(
         label='', required=False)
     comment_Used_and_linked_the_correct_KM_article = forms.CharField(
         label='', required=False)
@@ -112,7 +112,7 @@ class Evaluation_Form(forms.ModelForm):
     Complied_with_the_CBA_security_process_for_verification = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES_NO_NA), label="", required=False, initial=True)
 
-    Maintained_professional_and_positive_approach_while_handling_the_call = forms.NullBooleanField(
+    Maintained_professional_and_positive_approach = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES_NO_NA), label="", required=False, initial=True)
     Delivered_information_politely_and_courteously = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES_NO_NA), label="", required=False, initial=True)
@@ -143,17 +143,17 @@ class Evaluation_Form(forms.ModelForm):
 
     Created_a_call_ticket = forms.NullBooleanField(widget=forms.Select(
         choices=CHOICES_NO_NA), label="", required=False, initial=True)
-    Entered_the_correct_information_in_the_Brief_Description_field = forms.NullBooleanField(
+    Entered_correct_Brief_Description = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
     Entered_the_correct_information_in_the_Call_Type_field = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
     Entered_the_correct_information_in_the_Service_field = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
-    Entered_the_correct_information_in_the_Service_Component_field = forms.NullBooleanField(
+    Entered_correct_Service_Component = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
     Selected_the_correct_source_Phone_Web = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
-    Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user = forms.NullBooleanField(
+    Alternate_Contact_field_used_when_customer_calling = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
     Selected_the_correct_Severity_and_Priority_of_ticket = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
@@ -171,7 +171,7 @@ class Evaluation_Form(forms.ModelForm):
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
     Analyst_entered_the_right_Asset_ID_tag = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
-    Correct_closure_code_entered_in_the_Interaction_Outcome_field = forms.NullBooleanField(
+    Correct_closure_code_entered = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)
     Used_and_linked_the_correct_KM_article = forms.NullBooleanField(
         widget=forms.Select(choices=CHOICES), label="", required=False, initial=True)

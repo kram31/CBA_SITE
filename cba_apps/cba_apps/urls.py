@@ -22,7 +22,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', include('agents.urls')),
-    path('', include('bottombox.urls')),
+    path('', include('csat.urls')),
     path('', include('accounts.urls')),
     path('', include('cba_auth.urls')),
     path('', include('ccms.urls')),

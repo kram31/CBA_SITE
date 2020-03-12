@@ -1,4 +1,5 @@
 import {
+    CREATE_CSAT_RCA,
     GET_SURVEYS,
     ADD_SURVEY,
     DELETE_SURVEY,
@@ -227,7 +228,7 @@ export const deleteRca = data => (dispatch, getState) => {
     });
 
     axios
-        .delete(`/api/rca/${data.id}`, tokenConfig(getState))
+        .delete(`/api/csat_rca/${data.id}`, tokenConfig(getState))
         .then(res => {
             // dispatch(
             //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
@@ -259,7 +260,7 @@ export const updateRca = rca_data => (dispatch, getState) => {
     });
 
     axios
-        .put(`/api/rca/${rca_data.id}/`, rca_data, tokenConfig(getState))
+        .put(`/api/csat_rca/${rca_data.id}/`, rca_data, tokenConfig(getState))
         .then(res => {
             console.log(res.data);
             dispatch({
@@ -298,12 +299,12 @@ export const getAllData2 = () => (dispatch, getState) => {
     axios
         .all([
             axios.get("/api/surveys/", tokenConfig(getState)),
-            axios.get("/api/rca/", tokenConfig(getState)),
-            axios.get("/api/skills/"),
+            axios.get("/api/csat_rca/", tokenConfig(getState)),
+            axios.get("/api/agent_skills/"),
             axios.get("/api/dsat_code1/"),
             axios.get("/api/bb_driver_code2/"),
             axios.get("/api/bb_driver_code3/"),
-            axios.get("/api/team/"),
+            axios.get("/api/csat_accountable_team/"),
             axios.get("/api/agents/"),
             axios.get("/api/teamleads/")
         ])
@@ -346,86 +347,6 @@ export const getAllData2 = () => (dispatch, getState) => {
             });
             console.log(error.response);
         });
-};
-
-export const getAllData = () => (dispatch, getState) => {
-    dispatch({
-        type: FETCHING
-    });
-    Promise.all([
-        axios
-            .get("/api/surveys/", tokenConfig(getState))
-            .then(res =>
-                dispatch({
-                    type: GET_SURVEYS,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data)),
-        axios
-            .get("/api/rca/")
-            .then(res =>
-                dispatch({
-                    type: GET_RCAS,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data)),
-        axios
-            .get("/api/skills/")
-            .then(res =>
-                dispatch({
-                    type: GET_SKILLS,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data)),
-        axios
-            .get("/api/dsat_code1/")
-            .then(res =>
-                dispatch({
-                    type: GET_DSAT_CODE1,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data)),
-        axios
-            .get("/api/bb_driver_code2/")
-            .then(res =>
-                dispatch({
-                    type: GET_BB_DRIVER_CODE2,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data)),
-        axios
-            .get("/api/bb_driver_code3/")
-            .then(res =>
-                dispatch({
-                    type: GET_BB_DRIVER_CODE3,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data)),
-        axios
-            .get("/api/team/")
-            .then(res =>
-                dispatch({
-                    type: GET_TEAMS,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data)),
-        axios
-            .get("/api/agents/")
-            .then(res =>
-                dispatch({
-                    type: GET_AGENTS,
-                    payload: res.data
-                })
-            )
-            .catch(err => console.log(err.response.data))
-    ]);
 };
 
 export const isFetching = () => dispatch => {
@@ -472,7 +393,7 @@ export const getRcas = () => dispatch => {
     });
 
     axios
-        .get("/api/rca/")
+        .get("/api/csat_rca/")
         .then(res =>
             dispatch({
                 type: GET_RCAS,
@@ -501,49 +422,39 @@ export const deleteSurvey = id => (dispatch, getState) => {
         .catch(err => console.log(err.response.data));
 };
 
-export const addSurveysBulk = list_data => (dispatch, getState) => {
+export const addCsatRca = data => dispatch => {
+    axios
+        .post(`/api/csat_rca/`, data)
+        .then(res =>
+            dispatch({
+                type: CREATE_CSAT_RCA,
+                payload: res.data
+            })
+        )
+        .catch(err => console.log(err.response.data));
+};
+
+export const addSurveysBulk = list_data => dispatch => {
     dispatch({
         type: FETCHING
     });
 
-    const post_reqs = list_data.map(data => {
+    const post_reqs = list_data.map((data, index) =>
         axios
-            .post("/api/surveys/", data, tokenConfig(getState))
+            .post("/api/surveys/", data)
             .then(res => {
                 dispatch({
                     type: ADD_SURVEY,
                     payload: res.data
                 });
-                dispatch({
-                    type: GET_BOTTOMBOX,
-                    payload: res.data
-                });
+                console.log(index);
+                addCsatRca(res.data);
             })
-            .catch(err => {
-                console.log(err.response);
-                let errors;
+            .catch(err => console.log(err.response))
+    );
 
-                if (err.response) {
-                    errors = {
-                        msg: err.response.data,
-                        status: err.response.status
-                    };
-                    dispatch({
-                        type: GET_ERRORS,
-                        payload: errors
-                    });
-                    dispatch({
-                        type: ADD_FAILED_SURVEY,
-                        payload: {
-                            data: err.config.data,
-                            msg: err.response.data,
-                            status: err.response.status
-                        }
-                    });
-                }
-            });
-    });
-    Promise.all(post_reqs);
+    axios.all(post_reqs);
+
     dispatch({
         type: STOP_FETCHING
     });
@@ -588,7 +499,7 @@ export const addSkill = data => dispatch => {
     });
 
     axios
-        .post("/api/skills/", data)
+        .post("/api/agent_skills/", data)
         .then(res =>
             dispatch({
                 type: ADD_SKILL,
@@ -604,7 +515,7 @@ export const getSkills = () => dispatch => {
     });
 
     axios
-        .get("/api/skills/")
+        .get("/api/agent_skills/")
         .then(res =>
             dispatch({
                 type: GET_SKILLS,
@@ -668,7 +579,7 @@ export const addTeam = data => dispatch => {
     });
 
     axios
-        .post("/api/team/", data)
+        .post("/api/csat_accountable_team/", data)
         .then(res =>
             dispatch({
                 type: ADD_TEAM,
@@ -684,7 +595,7 @@ export const getTeams = () => dispatch => {
     });
 
     axios
-        .get("/api/team/")
+        .get("/api/csat_accountable_team/")
         .then(res =>
             dispatch({
                 type: GET_TEAMS,
@@ -700,7 +611,7 @@ export const addRCA = (rcaData, agentData) => (dispatch, getState) => {
     });
 
     axios
-        .post("/api/rca/", rcaData, tokenConfig(getState))
+        .post("/api/csat_rca/", rcaData, tokenConfig(getState))
         .then(res => {
             dispatch({
                 type: ADD_RCA,

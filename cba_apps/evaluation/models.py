@@ -80,7 +80,7 @@ class Evaluation(models.Model):
     Complied_with_the_CBA_security_process_for_verification = models.NullBooleanField(
         choices=CHOICES_NO_NA, default=True)
 
-    Maintained_professional_and_positive_approach_while_handling_the_call = models.NullBooleanField(
+    Maintained_professional_and_positive_approach = models.NullBooleanField(
         choices=CHOICES_NO_NA, default=True)
     Delivered_information_politely_and_courteously = models.NullBooleanField(
         choices=CHOICES_NO_NA, default=True)
@@ -111,17 +111,17 @@ class Evaluation(models.Model):
 
     Created_a_call_ticket = models.NullBooleanField(
         choices=CHOICES_NO_NA, default=True)
-    Entered_the_correct_information_in_the_Brief_Description_field = models.NullBooleanField(
+    Entered_correct_Brief_Description = models.NullBooleanField(
         choices=CHOICES, default=True)
     Entered_the_correct_information_in_the_Call_Type_field = models.NullBooleanField(
         choices=CHOICES, default=True)
     Entered_the_correct_information_in_the_Service_field = models.NullBooleanField(
         choices=CHOICES, default=True)
-    Entered_the_correct_information_in_the_Service_Component_field = models.NullBooleanField(
+    Entered_correct_Service_Component = models.NullBooleanField(
         choices=CHOICES, default=True)
     Selected_the_correct_source_Phone_Web = models.NullBooleanField(
         choices=CHOICES, default=True)
-    Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user = models.NullBooleanField(
+    Alternate_Contact_field_used_when_customer_calling = models.NullBooleanField(
         choices=CHOICES, default=True)
     Selected_the_correct_Severity_and_Priority_of_ticket = models.NullBooleanField(
         choices=CHOICES, default=True)
@@ -139,7 +139,7 @@ class Evaluation(models.Model):
         choices=CHOICES, default=True)
     Analyst_entered_the_right_Asset_ID_tag = models.NullBooleanField(
         choices=CHOICES, default=True)
-    Correct_closure_code_entered_in_the_Interaction_Outcome_field = models.NullBooleanField(
+    Correct_closure_code_entered = models.NullBooleanField(
         choices=CHOICES, default=True)
     Used_and_linked_the_correct_KM_article = models.NullBooleanField(
         choices=CHOICES, default=True)
@@ -164,7 +164,7 @@ class Evaluation(models.Model):
         max_length=300, blank=True, null=True)
     comment_Complied_with_the_CBA_security_process_for_verification = models.CharField(
         max_length=300, blank=True, null=True)
-    comment_Maintained_professional_and_positive_approach_while_handling_the_call = models.CharField(
+    comment_Maintained_professional_and_positive_approach = models.CharField(
         max_length=300, blank=True, null=True)
     comment_Delivered_information_politely_and_courteously = models.CharField(
         max_length=300, blank=True, null=True)
@@ -194,17 +194,17 @@ class Evaluation(models.Model):
         max_length=300, blank=True, null=True)
     comment_Created_a_call_ticket = models.CharField(
         max_length=300, blank=True, null=True)
-    comment_Entered_the_correct_information_in_the_Brief_Description_field = models.CharField(
+    comment_Entered_correct_Brief_Description = models.CharField(
         max_length=300, blank=True, null=True)
     comment_Entered_the_correct_information_in_the_Call_Type_field = models.CharField(
         max_length=300, blank=True, null=True)
     comment_Entered_the_correct_information_in_the_Service_field = models.CharField(
         max_length=300, blank=True, null=True)
-    comment_Entered_the_correct_information_in_the_Service_Component_field = models.CharField(
+    comment_Entered_correct_Service_Component = models.CharField(
         max_length=300, blank=True, null=True)
     comment_Selected_the_correct_source_Phone_Web = models.CharField(
         max_length=300, blank=True, null=True)
-    comment_Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user = models.CharField(
+    comment_Alternate_Contact_field_used_when_customer_calling = models.CharField(
         max_length=300, blank=True, null=True)
     comment_Selected_the_correct_Severity_and_Priority_of_ticket = models.CharField(
         max_length=300, blank=True, null=True)
@@ -222,7 +222,7 @@ class Evaluation(models.Model):
         max_length=300, blank=True, null=True)
     comment_Analyst_entered_the_right_Asset_ID_tag = models.CharField(
         max_length=300, blank=True, null=True)
-    comment_Correct_closure_code_entered_in_the_Interaction_Outcome_field = models.CharField(
+    comment_Correct_closure_code_entered = models.CharField(
         max_length=300, blank=True, null=True)
     comment_Used_and_linked_the_correct_KM_article = models.CharField(
         max_length=300, blank=True, null=True)
@@ -251,7 +251,7 @@ class Score(models.Model):
     score_Confirmed_closure_of_call_ticket = models.IntegerField()
     score_Used_the_standard_call_closing = models.IntegerField()
     score_Complied_with_the_CBA_security_process_for_verification = models.IntegerField()
-    score_Maintained_professional_and_positive_approach_while_handling_the_call = models.IntegerField()
+    score_Maintained_professional_and_positive_approach = models.IntegerField()
     score_Delivered_information_politely_and_courteously = models.IntegerField()
     score_Usage_of_Jargon_Dual_Language_and_Cultural_Awareness = models.IntegerField()
     score_Showed_empathy_and_willingness_to_assist = models.IntegerField()
@@ -266,12 +266,12 @@ class Score(models.Model):
     score_Ensure_customer_understood_resolution = models.IntegerField()
     score_Took_Full_Ownership_and_Followed_up = models.IntegerField()
     score_Created_a_call_ticket = models.IntegerField()
-    score_Entered_the_correct_information_in_the_Brief_Description_field = models.IntegerField()
+    score_Entered_correct_Brief_Description = models.IntegerField()
     score_Entered_the_correct_information_in_the_Call_Type_field = models.IntegerField()
     score_Entered_the_correct_information_in_the_Service_field = models.IntegerField()
-    score_Entered_the_correct_information_in_the_Service_Component_field = models.IntegerField()
+    score_Entered_correct_Service_Component = models.IntegerField()
     score_Selected_the_correct_source_Phone_Web = models.IntegerField()
-    score_Alternate_Contact_field_used_when_customer_is_calling_on_behalf_of_the_affected_user = models.IntegerField()
+    score_Alternate_Contact_field_used_when_customer_calling = models.IntegerField()
     score_Selected_the_correct_Severity_and_Priority_of_ticket = models.IntegerField()
     score_Dispatched_the_case_to_the_right_Fulfillment_Group = models.IntegerField()
     score_Selected_correct_Business_Units = models.IntegerField()
@@ -280,7 +280,7 @@ class Score(models.Model):
     score_Clear_resolution_summary_documented_accurately = models.IntegerField()
     score_Used_and_completed_the_escalation_template_correctly = models.IntegerField()
     score_Analyst_entered_the_right_Asset_ID_tag = models.IntegerField()
-    score_Correct_closure_code_entered_in_the_Interaction_Outcome_field = models.IntegerField()
+    score_Correct_closure_code_entered = models.IntegerField()
     score_Used_and_linked_the_correct_KM_article = models.IntegerField()
 
 
