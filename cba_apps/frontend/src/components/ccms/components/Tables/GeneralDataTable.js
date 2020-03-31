@@ -26,14 +26,14 @@ class GeneralDataTable extends Component {
         // const table = { name: "Business Unit", endpoint: "business_unit" };
 
         const { table } = this.props;
-        let columns =
-            table.data.length &&
-            Object.keys(table.data[0]).map(item => ({
-                Header: item.charAt(0).toUpperCase() + item.slice(1),
-                accessor: item,
-                show: !item.includes("id"),
-                filterable: item.includes("name") && this.state.filterOn
-            }));
+        let columns = table.data.length
+            ? Object.keys(table.data[0]).map(item => ({
+                  Header: item.charAt(0).toUpperCase() + item.slice(1),
+                  accessor: item,
+                  show: !item.includes("id"),
+                  filterable: item.includes("name") && this.state.filterOn
+              }))
+            : [];
 
         let buttons = [
             {
