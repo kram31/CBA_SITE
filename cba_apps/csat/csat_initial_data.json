@@ -1,0 +1,655 @@
+[
+    {
+        "model": "csat.DSAT_Code1",
+        "pk": 1,
+        "fields": {
+            "name": "Time spent to resolve"
+        }
+    },
+    {
+        "model": "csat.DSAT_Code1",
+        "pk": 2,
+        "fields": {
+            "name": "Issue was not fixed"
+        }
+    },
+    {
+        "model": "csat.DSAT_Code1",
+        "pk": 3,
+        "fields": {
+            "name": "Analyst Behavior"
+        }
+    },
+    {
+        "model": "csat.DSAT_Code1",
+        "pk": 4,
+        "fields": {
+            "name": "Agent not Knowledgeable"
+        }
+    },
+    {
+        "model": "csat.DSAT_Code1",
+        "pk": 5,
+        "fields": {
+            "name": "Process Complaint"
+        }
+    },
+    {
+        "model": "csat.DSAT_Code1",
+        "pk": 6,
+        "fields": {
+            "name": "Tool/Application Issues"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 1,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Incorrect Diagnosis"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 2,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Incorrect KM Used"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 3,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Lacked Tools Utilization"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 4,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Lack of Ownership"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 5,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Unhappy with resolution time (Within SLA)"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 6,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Did not set proper expectation"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 7,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Time Spent on the phone"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 8,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Incomplete TS Steps"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 9,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "User uncooperative"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 10,
+        "fields": {
+            "dsat_Code1": 1,
+            "name": "Standard Process"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 1,
+        "fields": {
+            "bb_Driver_Code2": 1,
+            "name": "No Active Listening"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 2,
+        "fields": {
+            "bb_Driver_Code2": 1,
+            "name": "No KM Available"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 3,
+        "fields": {
+            "bb_Driver_Code2": 1,
+            "name": "Incorrect KM Used"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 4,
+        "fields": {
+            "bb_Driver_Code2": 1,
+            "name": "Lacked Probing"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 5,
+        "fields": {
+            "bb_Driver_Code2": 2,
+            "name": "KM Hard to Search"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 6,
+        "fields": {
+            "bb_Driver_Code2": 2,
+            "name": "Lacked Probing"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 7,
+        "fields": {
+            "bb_Driver_Code2": 2,
+            "name": "No Active Listening"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 8,
+        "fields": {
+            "bb_Driver_Code2": 2,
+            "name": "Overview KM Abuse"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 9,
+        "fields": {
+            "bb_Driver_Code2": 3,
+            "name": "Not aware / Trained"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 10,
+        "fields": {
+            "bb_Driver_Code2": 3,
+            "name": "Neglect"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 11,
+        "fields": {
+            "bb_Driver_Code2": 3,
+            "name": "Not available"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 12,
+        "fields": {
+            "bb_Driver_Code2": 3,
+            "name": "Tools Outage"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 13,
+        "fields": {
+            "bb_Driver_Code2": 4,
+            "name": "Lack of Ownership"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 14,
+        "fields": {
+            "bb_Driver_Code2": 5,
+            "name": "Unhappy with resolution time (Within SLA)"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 15,
+        "fields": {
+            "bb_Driver_Code2": 6,
+            "name": "Agent not comfortable"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 16,
+        "fields": {
+            "bb_Driver_Code2": 6,
+            "name": "Agent not aware"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 17,
+        "fields": {
+            "bb_Driver_Code2": 6,
+            "name": "Neglect"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 18,
+        "fields": {
+            "bb_Driver_Code2": 7,
+            "name": "Call Avoidance"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 19,
+        "fields": {
+            "bb_Driver_Code2": 7,
+            "name": "Unnecessary hold"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 20,
+        "fields": {
+            "bb_Driver_Code2": 7,
+            "name": "Tools Issue"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 21,
+        "fields": {
+            "bb_Driver_Code2": 7,
+            "name": "User Initiated"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 22,
+        "fields": {
+            "bb_Driver_Code2": 8,
+            "name": "Neglect"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 23,
+        "fields": {
+            "bb_Driver_Code2": 8,
+            "name": "KM not followed"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 24,
+        "fields": {
+            "bb_Driver_Code2": 8,
+            "name": "Tools Issue"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 25,
+        "fields": {
+            "bb_Driver_Code2": 9,
+            "name": "User uncooperative"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 26,
+        "fields": {
+            "bb_Driver_Code2": 10,
+            "name": "Standard Process"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 11,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Incorrect Diagnosis"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 12,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Incorrect KM Used"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 13,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Incomplete TS Steps"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 14,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Lacked Tools Utilization"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 15,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "User uncooperative"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 16,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Did not set proper expectation"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 17,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Lack of Ownership"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 18,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Working as designed"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 19,
+        "fields": {
+            "dsat_Code1": 2,
+            "name": "Standard Process"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 27,
+        "fields": {
+            "bb_Driver_Code2": 11,
+            "name": "No Active Listening"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 28,
+        "fields": {
+            "bb_Driver_Code2": 11,
+            "name": "No KM Available"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 29,
+        "fields": {
+            "bb_Driver_Code2": 11,
+            "name": "Incorrect KM Used"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 30,
+        "fields": {
+            "bb_Driver_Code2": 11,
+            "name": "Lacked Probing"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 31,
+        "fields": {
+            "bb_Driver_Code2": 12,
+            "name": "KM Hard to Search"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 32,
+        "fields": {
+            "bb_Driver_Code2": 12,
+            "name": "Lacked Probing"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 33,
+        "fields": {
+            "bb_Driver_Code2": 12,
+            "name": "No Active Listening"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 34,
+        "fields": {
+            "bb_Driver_Code2": 12,
+            "name": "Overview KM Abuse"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 35,
+        "fields": {
+            "bb_Driver_Code2": 13,
+            "name": "Neglect"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 36,
+        "fields": {
+            "bb_Driver_Code2": 13,
+            "name": "KM not followed"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 37,
+        "fields": {
+            "bb_Driver_Code2": 13,
+            "name": "Tools Issue"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 38,
+        "fields": {
+            "bb_Driver_Code2": 14,
+            "name": "Not aware / Trained"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 39,
+        "fields": {
+            "bb_Driver_Code2": 14,
+            "name": "Neglect"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 40,
+        "fields": {
+            "bb_Driver_Code2": 14,
+            "name": "Not available"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 41,
+        "fields": {
+            "bb_Driver_Code2": 14,
+            "name": "Tools Outage"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 42,
+        "fields": {
+            "bb_Driver_Code2": 15,
+            "name": "User uncooperative"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 43,
+        "fields": {
+            "bb_Driver_Code2": 16,
+            "name": "Agent not comfortable"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 44,
+        "fields": {
+            "bb_Driver_Code2": 16,
+            "name": "Agent not aware"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 45,
+        "fields": {
+            "bb_Driver_Code2": 16,
+            "name": "Neglect"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 46,
+        "fields": {
+            "bb_Driver_Code2": 17,
+            "name": "Promise not fulfilled"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 47,
+        "fields": {
+            "bb_Driver_Code2": 18,
+            "name": "Working as designed"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code3",
+        "pk": 48,
+        "fields": {
+            "bb_Driver_Code2": 19,
+            "name": "Process Not Followed"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 20,
+        "fields": {
+            "dsat_Code1": 3,
+            "name": "Rudeness"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 21,
+        "fields": {
+            "dsat_Code1": 3,
+            "name": "Lacked Empathy"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 22,
+        "fields": {
+            "dsat_Code1": 3,
+            "name": "Lacked Ownership"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 23,
+        "fields": {
+            "dsat_Code1": 3,
+            "name": "Call Avoidance"
+        }
+    },
+    {
+        "model": "csat.BB_Driver_Code2",
+        "pk": 24,
+        "fields": {
+            "dsat_Code1": 3,
+            "name": "Poor Softskills"
+        }
+    },
+    {
+        "model": "csat.AccountableTeam",
+        "pk": 1,
+        "fields": {
+            "name": "SPG"
+        }
+    },
+    {
+        "model": "csat.AccountableTeam",
+        "pk": 2,
+        "fields": {
+            "name": "User"
+        }
+    },
+    {
+        "model": "csat.AccountableTeam",
+        "pk": 3,
+        "fields": {
+            "name": "Business"
+        }
+    },
+    {
+        "model": "csat.AccountableTeam",
+        "pk": 4,
+        "fields": {
+            "name": "ITSD"
+        }
+    },
+    {
+        "model": "csat.AccountableTeam",
+        "pk": 5,
+        "fields": {
+            "name": "Service owner"
+        }
+    }
+]

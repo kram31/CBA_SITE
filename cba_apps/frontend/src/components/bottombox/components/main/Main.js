@@ -1,24 +1,28 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import UploadData from "../upload/UploadData"
+import UploadData from "../upload/UploadData";
+import DriverView from "../drivers/DriverView";
+import SurveyView from "../survey/SurveyView";
 
-import {
-    Spinner,
+import { Spinner } from "reactstrap";
 
-} from "reactstrap";
-
-import {
-    getAllData2
-} from "../../../../actions/surveyActions";
+import { getAllData2 } from "../../../../actions/surveyActions";
 
 class Main extends Component {
-    componentDidMount() {
-        this.props.getAllData2();
+    constructor(props) {
+        super(props);
 
+        this.props.getAllData2();
     }
 
+    // componentDidMount() {
+    //     this.props.getAllData2();
+    // }
+
     render() {
+        const { surveys, csat_rcas } = this.props;
+
         return (
             <Fragment>
                 {this.props.isFetching ? (
@@ -32,7 +36,16 @@ class Main extends Component {
                         }}
                     />
                 ) : (
-                    <UploadData />
+                    <Fragment>
+                        {csat_rcas ? (
+                            <Fragment>
+                                <DriverView />
+                                <SurveyView data={csat_rcas} />
+                            </Fragment>
+                        ) : (
+                            "No Survey found"
+                        )}
+                    </Fragment>
                 )}
             </Fragment>
         );
@@ -41,11 +54,11 @@ class Main extends Component {
 
 const mapStateToProps = state => ({
     surveys: state.surveys.surveys,
+    csat_rcas: state.surveys.csat_rcas,
     isFetching: state.surveys.isFetching,
     auth: state.auth
 });
 
 export default connect(mapStateToProps, {
-
     getAllData2
 })(Main);

@@ -25,7 +25,8 @@ from .api import (
     EscalationDriverCauseViewset,
     CcmsRcaViewset,
     FindingsAndInvestigationViewset,
-    CorrectiveActionViewset
+    CorrectiveActionViewset,
+    RecipientViewset
 )
 
 urlpatterns = [
@@ -65,5 +66,7 @@ router.register('api/findings_and_investigation',
                 FindingsAndInvestigationViewset, 'findings_and_investigation')
 router.register('api/corrective_action',
                 CorrectiveActionViewset, 'corrective_action')
+router.register('api/recipients',
+                RecipientViewset, 'recipients')
 
 urlpatterns.extend(router.urls)

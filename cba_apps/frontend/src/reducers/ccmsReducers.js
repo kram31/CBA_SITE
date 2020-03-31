@@ -8,6 +8,7 @@ import {
     GET_BUSINESS_UNIT,
     GET_TICKET_STATUS,
     GET_ESCALATION_TYPE,
+    GET_RECIPIENTS,
     GET_ACCOUNTABLE_TEAM,
     GET_SITE_CODE,
     UPDATE_CCMS,
@@ -79,7 +80,10 @@ import {
     COMPLETE_CCMS,
     SET_TABLE_PAGE,
     DENY_REQUEST_ACCESS,
-    GET_ALL_DATA_CCMS
+    GET_ALL_DATA_CCMS,
+    ADD_RECIPIENTS,
+    EDIT_RECIPIENTS,
+    DELETE_RECIPIENTS
 } from "../actions/types";
 
 const initialState = {
@@ -91,6 +95,7 @@ const initialState = {
     business_unit: null,
     ticket_status: null,
     escalation_type: null,
+    recipients: null,
     accountable_team: null,
     site_code: null,
     ccms_owner: null,
@@ -129,6 +134,7 @@ const ccmsReducer = (state = initialState, action) => {
                 site_code,
                 accountable_team,
                 escalation_type,
+                recipients,
                 ticket_status,
                 business_unit,
                 ccms,
@@ -147,6 +153,7 @@ const ccmsReducer = (state = initialState, action) => {
                 site_code,
                 accountable_team,
                 escalation_type,
+                recipients,
                 ticket_status,
                 business_unit,
                 ccms_list: ccms,
@@ -212,6 +219,21 @@ const ccmsReducer = (state = initialState, action) => {
                     state.accountable_team,
                     action.payload
                 )
+            };
+        case EDIT_RECIPIENTS:
+            return {
+                ...state,
+                recipients: update_list(state.recipients, action.payload)
+            };
+        case ADD_RECIPIENTS:
+            return {
+                ...state,
+                recipients: [action.payload, ...state.recipients]
+            };
+        case DELETE_RECIPIENTS:
+            return {
+                ...state,
+                recipients: removeItemFromList(state.recipients, action.payload)
             };
         case EDIT_SITE_CODE:
             return {
@@ -587,6 +609,11 @@ const ccmsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 accountable_team: action.payload
+            };
+        case GET_RECIPIENTS:
+            return {
+                ...state,
+                recipients: action.payload
             };
         case GET_ESCALATION_TYPE:
             return {

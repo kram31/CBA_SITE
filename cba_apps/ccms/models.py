@@ -262,11 +262,9 @@ class CorrectiveAction(models.Model):
         return f"Corrective Action for {self.fni.ticket_number}"
 
 
-# class RcaTicketNumber(models.Model):
+class Recipient(models.Model):
 
-#     ccms_rca = models.ForeignKey(
-#         "CcmsRca", on_delete=models.CASCADE, related_name="ccms_rca_ticket_numbers", blank=True, null=True)
-#     ticket_number = models.CharField(
-#         max_length=2000, blank=True, null=True, unique=True)
-#     event_description = models.TextField(blank=True)
-#     submitted_date = models.DateField(auto_now=True)
+    name = models.EmailField()
+
+    def __str__(self):
+        return self.name

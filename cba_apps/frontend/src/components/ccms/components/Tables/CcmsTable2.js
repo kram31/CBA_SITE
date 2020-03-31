@@ -205,6 +205,10 @@ class CcmsTable2 extends Component {
             {
                 name: "Business Unit",
                 endpoint: "business_unit"
+            },
+            {
+                name: "Recipients",
+                endpoint: "recipients"
             }
         ];
 

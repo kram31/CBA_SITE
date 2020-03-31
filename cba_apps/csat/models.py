@@ -1,5 +1,5 @@
 from django.db import models
-from agents.models import Agent
+from agents.models import Agent, AgentSkill
 
 # Create your models here.
 
@@ -45,6 +45,7 @@ class Survey(models.Model):
     budi_lv7 = models.CharField(max_length=100, blank=True)
     bu_catg = models.CharField(max_length=100, blank=True)
     date_issued = models.CharField(max_length=100, blank=True)
+    scope = models.CharField(max_length=1000, blank=True)
 
     bottombox = models.IntegerField(blank=True)
     uploaded_by = models.CharField(max_length=100, blank=True)
@@ -76,8 +77,8 @@ class RCA(models.Model):
         Survey, on_delete=models.CASCADE, related_name="surveyed_tickets")
     agent = models.ForeignKey(
         Agent, on_delete=models.SET_NULL, null=True, related_name="agents")
-    support_silo_issue_based = models.CharField(
-        max_length=100, blank=True, null=True)
+    support_silo_issue_based = models.ForeignKey(
+        AgentSkill, on_delete=models.SET_NULL, null=True, related_name="agent_skills")
     service = models.CharField(max_length=100, blank=True, null=True)
     service_component = models.CharField(max_length=100, blank=True, null=True)
     brief_description = models.CharField(
@@ -104,6 +105,14 @@ class RCA(models.Model):
     accountable_entity = models.CharField(
         max_length=1000, blank=True, null=True)
     overall_reason_dsat = models.CharField(
+        max_length=3000, blank=True, null=True)
+    service_component_bb_ticket = models.CharField(
+        max_length=3000, blank=True, null=True)
+    service_bb_ticket = models.CharField(
+        max_length=3000, blank=True, null=True)
+    transferred_bb = models.CharField(
+        max_length=3000, blank=True, null=True)
+    employee_type = models.CharField(
         max_length=3000, blank=True, null=True)
     coaching = models.BooleanField(default=False)
     corrective_actions = models.CharField(

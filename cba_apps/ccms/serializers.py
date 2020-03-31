@@ -22,7 +22,8 @@ from .models import (Mail,
                      EscalationDriverCause,
                      CcmsRca,
                      FindingsAndInvestigation,
-                     CorrectiveAction
+                     CorrectiveAction,
+                     Recipient
                      )
 
 from cba_auth.auth_helper import get_token
@@ -34,7 +35,10 @@ from django.core.mail import EmailMessage
 
 def send_email(title, body, my_username):
 
-    ccms_group_list = User.objects.filter(groups__name="CCMS Admin")
+    recipients = Recipient.objects.all().values_list('name', flat=True)
+
+    ccms_group_list = User.objects.filter(
+        groups__name="CCMS Admin").values_list("email", flat=True)
 
     connection = get_connection(host='smtp.svcs.entsvcs.com',
                                 port=25,
@@ -46,11 +50,19 @@ def send_email(title, body, my_username):
         title,
         body,
         'cba-ccms@donot-reply.com',
-        [item.email for item in ccms_group_list],
+        [*ccms_group_list, *recipients],
+        cc=my_username,
         connection=connection
     )
     # email.attach_file()
     email.send()
+
+
+class RecipientSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recipient
+        fields = '__all__'
 
 
 class MailSerializer(serializers.ModelSerializer):

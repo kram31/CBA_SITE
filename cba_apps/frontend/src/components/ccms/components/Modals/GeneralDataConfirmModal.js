@@ -153,7 +153,10 @@ const AddContent = ({
         <div className="mb-3">
             <Form onSubmit={handleSubmit} autoComplete="off">
                 <FormGroup>
-                    <Label for="id_general_data">{table.name} Name:</Label>
+                    <Label for="id_general_data">
+                        {table.name}{" "}
+                        {table.name === "Recipients" ? "Email:" : "Name:"}
+                    </Label>
 
                     <Input
                         type="text"
@@ -282,7 +285,9 @@ const EditContent = ({
             <Collapse isOpen={isCollapseOpen}>
                 <Form onSubmit={handleSubmit} autoComplete="off">
                     <FormGroup>
-                        <Label for="id_general_data">Name:</Label>
+                        <Label for="id_general_data">
+                            {table.name === "Recipients" ? "Email:" : "Name:"}
+                        </Label>
 
                         <Input
                             type="text"

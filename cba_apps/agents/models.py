@@ -32,7 +32,7 @@ class TeamLead(models.Model):
 
 class Team(models.Model):
 
-    agent_skill = models.ForeignKey(AgentSkill, on_delete=models.SET_NULL,
+    agent_skill = models.ForeignKey(AgentSkill, on_delete=models.CASCADE,
                                     blank=True, null=True, related_name="team_agent_skills")
 
     team_lead = models.ForeignKey(

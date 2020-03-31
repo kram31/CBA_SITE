@@ -1,4 +1,5 @@
 import {
+    REQ_ERROR,
     GET_SURVEYS,
     ADD_SURVEY,
     CREATE_CSAT_RCA,
@@ -25,7 +26,6 @@ import {
     GET_AGENTS,
     STOP_FETCHING,
     GET_ALL_DATA,
-    UPDATE_SURVEY,
     UPDATE_RCA,
     DELETE_RCA,
     UPDATE_AGENT,
@@ -53,7 +53,10 @@ import {
     GET_BOTTOMBOX_SURVEY_VIEW,
     GET_TOPBOX_SURVEY_VIEW,
     GET_COMPLETED_SURVEY_VIEW,
-    GET_ALL_SURVEY_VIEW
+    GET_ALL_SURVEY_VIEW,
+    UPDATE_SURVEY,
+    GET_CBA_TEAMS,
+    ADD_CBA_TEAMS
 } from "../actions/types";
 import { keys } from "../components/bottombox/upload-data/helpers/obj-keys";
 
@@ -115,7 +118,9 @@ let get_data = filtered_list => {
 };
 
 const initialState = {
-    csat_rca: null,
+    req_error: [],
+    success_uploads: [],
+    csat_rcas: null,
     upload_failed_surveys: [],
     colors: ["#ffed00", "#64ff00", "#00c9ff", "white", "#666666", "#d9d9d9"],
     agent_view_collapse: false,
@@ -127,7 +132,8 @@ const initialState = {
     headers: keys,
     survey: {},
     agent: {},
-    skills: [],
+    agent_skills: [],
+    cba_teams: [],
     dsat_code1: [],
     bb_driver_code2: [],
     bb_driver_code3: [],
@@ -169,61 +175,46 @@ const surveyReducer = (state = initialState, action) => {
         case GET_ALL_DATA:
             const {
                 surveys,
-                rcas,
-                skills,
+                csat_rcas,
+                agent_skills,
                 dsat_code1,
                 bb_driver_code2,
                 bb_driver_code3,
-                teams,
+                csat_accountable_team,
                 agents,
-                teamleads
+                teamleads,
+                cba_teams
             } = action.payload;
             return {
                 ...state,
                 surveys: surveys,
-                surveys_view: surveys,
-                bottombox: surveys.filter(
-                    item => item.bottombox == 1 && !item.rca
-                ),
-                pieChartCompletedSurveysCount: [
-                    surveys.filter(item => item.completed == true).length,
-                    surveys.length
-                ],
-                rcas,
-                skills,
+                csat_rcas,
+                agent_skills,
                 dsat_code1,
                 bb_driver_code2,
                 bb_driver_code3,
-                teams,
+                csat_accountable_team,
                 agents,
                 teamleads,
-                yearSelection: [
-                    new Date().getFullYear(),
-
-                    ...new Set(
-                        surveys.map(survey =>
-                            new Date(survey.date_issued).getFullYear()
-                        )
-                    )
-                ],
-                chart_data: get_data(
-                    surveys
-                        .map(survey => {
-                            let x = rcas.filter(
-                                rca =>
-                                    rca.surveyed_ticket ===
-                                    survey.reference_number
-                            )[0];
-                            return { ...survey, ...x };
-                        })
-                        .filter(
-                            data =>
-                                new Date(data.date_issued).getFullYear() ===
-                                curr_year
-                        )
-                )
+                cba_teams
             };
             break;
+        case REQ_ERROR:
+            return {
+                ...state,
+                req_error: [action.payload, ...state.req_error]
+            };
+        case ADD_CBA_TEAMS:
+            return {
+                ...state,
+                cba_teams: [action.payload, ...state.cba_teams]
+            };
+        case GET_CBA_TEAMS:
+            return {
+                ...state,
+                cba_teams: action.payload
+            };
+        case GET_COMPLETED_SURVEY_VIEW:
         case GET_ALL_SURVEY_VIEW:
             return {
                 ...state,
@@ -359,19 +350,32 @@ const surveyReducer = (state = initialState, action) => {
         case CREATE_CSAT_RCA:
             return {
                 ...state,
-                csat_rca: [action.payload, ...state.csat_rca]
+                csat_rcas: [action.payload, ...state.csat_rcas]
                 // isFetching: false
             };
         case ADD_SURVEY:
             return {
                 ...state,
                 surveys: [action.payload, ...state.surveys],
-                bottombox: [
-                    ...(action.payload.bottombox === 1 && [action.payload]),
-                    ...state.bottombox
+                success_uploads: [action.payload, ...state.success_uploads],
+                csat_rcas: [
+                    action.payload.rca,
+                    ...(state.csat_rcas ? state.csat_rcas : null)
                 ],
-                surveys_view: [action.payload, ...state.surveys_view]
-                // isFetching: false
+                req_error: state.req_error.filter(
+                    err =>
+                        action.payload.reference_number !== err.reference_number
+                )
+            };
+        case UPDATE_SURVEY:
+            return {
+                ...state,
+                surveys: state.surveys.map(item =>
+                    action.payload.reference_number === item.reference_number
+                        ? action.payload
+                        : item
+                ),
+                success_uploads: [action.payload, ...state.success_uploads]
             };
         case ADD_FAILED_SURVEY:
             return {
@@ -443,7 +447,7 @@ const surveyReducer = (state = initialState, action) => {
         case GET_SKILLS:
             return {
                 ...state,
-                skills: action.payload,
+                agent_skills: action.payload,
                 isFetching: false
             };
         case GET_DSAT_CODE1:
@@ -534,7 +538,10 @@ const surveyReducer = (state = initialState, action) => {
         case ADD_TEAM:
             return {
                 ...state,
-                teams: [action.payload, ...state.teams],
+                csat_accountable_team: [
+                    action.payload,
+                    ...state.csat_accountable_team
+                ],
                 isFetching: false
             };
         case ADD_RCA:
@@ -553,7 +560,7 @@ const surveyReducer = (state = initialState, action) => {
         case ADD_SKILL:
             return {
                 ...state,
-                skills: [action.payload, ...state.skills],
+                agent_skills: [action.payload, ...state.agent_skills],
                 isFetching: false
             };
         case GET_TEAMLEADS:
@@ -586,28 +593,7 @@ const surveyReducer = (state = initialState, action) => {
                 bb_driver_code3: [action.payload, ...state.bb_driver_code3],
                 isFetching: false
             };
-        case UPDATE_SURVEY:
-            return {
-                ...state,
-                surveys_view: [
-                    action.payload,
-                    ...state.surveys_view.filter(
-                        survey =>
-                            survey.reference_number !==
-                            action.payload.reference_number
-                    )
-                ],
-                surveys: [
-                    action.payload,
-                    ...state.surveys.filter(
-                        survey =>
-                            survey.reference_number !==
-                            action.payload.reference_number
-                    )
-                ],
 
-                isFetching: false
-            };
         case UPDATE_RCA:
             return {
                 ...state,

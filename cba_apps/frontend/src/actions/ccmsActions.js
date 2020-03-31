@@ -10,6 +10,7 @@ import {
     GET_BUSINESS_UNIT,
     GET_TICKET_STATUS,
     GET_ESCALATION_TYPE,
+    GET_RECIPIENTS,
     GET_ACCOUNTABLE_TEAM,
     GET_SITE_CODE,
     UPDATE_CCMS,
@@ -347,6 +348,7 @@ export const get_all_data = () => dispatch => {
             axios.get("/api/site_code/"),
             axios.get("/api/accountable_team/"),
             axios.get("/api/escalation_type/"),
+            axios.get("/api/recipients/"),
             axios.get("/api/ticket_status/"),
             axios.get("/api/business_unit/"),
             axios.get("/api/ccms/"),
@@ -366,6 +368,7 @@ export const get_all_data = () => dispatch => {
                     site_code,
                     accountable_team,
                     escalation_type,
+                    recipients,
                     ticket_status,
                     business_unit,
                     ccms,
@@ -385,6 +388,7 @@ export const get_all_data = () => dispatch => {
                             site_code: site_code.data,
                             accountable_team: accountable_team.data,
                             escalation_type: escalation_type.data,
+                            recipients: recipients.data,
                             ticket_status: ticket_status.data,
                             business_unit: business_unit.data,
                             ccms: ccms.data,
@@ -800,6 +804,25 @@ export const get_escalation_type = () => dispatch => {
         .then(res => {
             dispatch({
                 type: GET_ESCALATION_TYPE,
+                payload: res.data
+            });
+            dispatch({
+                type: STOP_FETCHING_CCMS
+            });
+        })
+        .catch(err => console.log(err));
+};
+
+export const get_recipients = () => dispatch => {
+    dispatch({
+        type: FETCHING_CCMS
+    });
+
+    axios
+        .get("/api/recipients/")
+        .then(res => {
+            dispatch({
+                type: GET_RECIPIENTS,
                 payload: res.data
             });
             dispatch({

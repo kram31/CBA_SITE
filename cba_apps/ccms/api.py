@@ -24,7 +24,8 @@ from .models import (
     EscalationDriverCause,
     CcmsRca,
     FindingsAndInvestigation,
-    CorrectiveAction
+    CorrectiveAction,
+    Recipient
 )
 from .serializers import (
     MailSerializer,
@@ -47,7 +48,8 @@ from .serializers import (
     EscalationDriverCauseSerializer,
     CcmsRcaSerializer,
     FindingsAndInvestigationSerializer,
-    CorrectiveActionSerializer
+    CorrectiveActionSerializer,
+    RecipientSerializer
 )
 
 
@@ -64,6 +66,15 @@ class CCMSOwnerListViewset(viewsets.ModelViewSet):
         user = self.request.user
 
         return Ccms.objects.filter(ccms_owner__user__username=user)
+
+
+class RecipientViewset(viewsets.ModelViewSet):
+    queryset = Recipient.objects.all()
+    serializer_class = RecipientSerializer
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [
+        permissions.AllowAny
+    ]
 
 
 class UserViewset(viewsets.ModelViewSet):

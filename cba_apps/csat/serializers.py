@@ -1,11 +1,27 @@
 from rest_framework import serializers
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+from django.core import serializers as se
+import json
+
 from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, AccountableTeam
 from django.core.exceptions import FieldDoesNotExist
 
 from agents.models import AgentSkill, Agent, Team, TeamMember
-from agents.serializer import AgentSerializer
+from agents.serializer import AgentSerializer, TeamMemberSerializer
 
 from django.contrib.auth.models import User
+
+
+class RCAInitialSerializer(serializers.ModelSerializer):
+
+    # agent = AgentSerializer()
+    agent = AgentSerializer()
+
+    class Meta:
+        model = RCA
+        fields = '__all__'
+        depth = 2
 
 
 class SurveySerializer(serializers.ModelSerializer):
@@ -29,6 +45,20 @@ class SurveySerializer(serializers.ModelSerializer):
     #     read_only=True,
     #     view_name='rca-detail'
     # )
+
+    def to_representation(self, instance):
+        # return {
+        #     'score': "test",
+        #     'player_name': "TEST"
+        # }
+
+        ret = super().to_representation(instance)
+        data = RCA.objects.get(
+            surveyed_ticket=instance.reference_number)
+        ret['rca'] = RCAInitialSerializer(data).data
+        # ret['rca'] = JsonResponse(data[0])
+
+        return ret
 
     class Meta:
         model = Survey
@@ -56,22 +86,36 @@ class SurveySerializer(serializers.ModelSerializer):
         # CREATE AGENT
 
         owner_email_add = request_data.get('owner_name_email_address').strip()
+        owner_name = request_data.get('owner_name').strip()
 
         if not User.objects.filter(username=owner_email_add).exists():
             # CREATE USER LOGIN
 
-            print("FROM USER QUERY", owner_email_add,
-                  User.objects.filter(email=owner_email_add).exists())
+            # print("FROM USER QUERY", owner_email_add,
+            #       User.objects.filter(email=owner_email_add).exists())
 
-            owner_name = request_data.get('owner_name').strip()
-            *firstname, lastname = owner_name.split(" ")
-            firstname = " ".join(firstname)
+            if owner_name == "ITSD_AskIT_Ticket_Triage":
+                if not User.objects.filter(username="ITSD_AskIT_Ticket_Triage").exists():
+                    user_obj = User.objects.create_user(
+                        "ITSD_AskIT_Ticket_Triage", "ITSD_AskIT_Ticket_Triage", '1234')
+                    user_obj.save()
+                else:
+                    print("SHOULD WORK")
+                    user_obj = User.objects.get(
+                        username="ITSD_AskIT_Ticket_Triage")
 
-            user_obj = User.objects.create_user(
-                owner_email_add, owner_email_add, '1234', first_name=firstname, last_name=lastname)
-            user_obj.save()
+            else:
+                print("&&&&&&&&FROM USER CREATION/ DOES NOT EXIST",
+                      User.objects.filter(username=owner_email_add).exists(), owner_email_add)
+                *firstname, lastname = owner_name.split(" ")
+                firstname = " ".join(firstname)
+
+                user_obj = User.objects.create_user(
+                    owner_email_add, owner_email_add, '1234', first_name=firstname, last_name=lastname)
+                user_obj.save()
 
         else:
+            # print("SHOULD NOT WORK")
             user_obj = User.objects.get(email=owner_email_add)
 
         operator_lan_id = request_data.get('operator_lan_id').strip()
@@ -81,9 +125,19 @@ class SurveySerializer(serializers.ModelSerializer):
         if not Agent.objects.filter(operator_lan_id=operator_lan_id).exists():
             # CREATE USER LOGIN
 
-            agent_obj = Agent.objects.create(
-                user=user_obj, operator_lan_id=operator_lan_id, location=location, wave=wave)
-            agent_obj.save()
+            if owner_name == "ITSD_AskIT_Ticket_Triage":
+                if not Agent.objects.filter(operator_lan_id="ITSD_AskIT_Ticket_Triage").exists():
+                    agent_obj = Agent.objects.create(
+                        user=user_obj, operator_lan_id="ITSD_AskIT_Ticket_Triage", location=location, wave=wave)
+                    agent_obj.save()
+                else:
+                    agent_obj = Agent.objects.get(
+                        operator_lan_id="ITSD_AskIT_Ticket_Triage")
+            else:
+
+                agent_obj = Agent.objects.create(
+                    user=user_obj, operator_lan_id=operator_lan_id, location=location, wave=wave)
+                agent_obj.save()
 
         else:
             agent_obj = Agent.objects.get(operator_lan_id=operator_lan_id)
@@ -120,14 +174,14 @@ class DSAT_Code1Serializer(serializers.ModelSerializer):
         model = DSAT_Code1
         fields = '__all__'
 
-        extra_kwargs = {
-            'id': {
-                'validators': []
-            },
-            'name': {
-                'validators': []
-            }
-        }
+        # extra_kwargs = {
+        #     'id': {
+        #         'validators': []
+        #     },
+        #     'name': {
+        #         'validators': []
+        #     }
+        # }
 
 
 class BB_Driver_Code2Serializer(serializers.ModelSerializer):
@@ -170,10 +224,17 @@ class BB_Driver_Code3Serializer(serializers.ModelSerializer):
         }
 
 
+class SurveySerializerRca(serializers.ModelSerializer):
+
+    class Meta:
+        model = Survey
+        fields = "__all__"
+
+
 class RCASerializer(serializers.ModelSerializer):
 
-    surveyed_ticket = SurveySerializer()
-    agent = AgentSerializer()
+    surveyed_ticket = SurveySerializerRca(required=False)
+    agent = AgentSerializer(required=False)
 
     class Meta:
         model = RCA

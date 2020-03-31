@@ -8,13 +8,20 @@ class SurveyTable extends Component {
         this.state = {};
     }
     render() {
+        const { data, columns } = this.props;
+
+        // const columns = Object.keys(data[0]).map(item => ({
+        //     Header: item,
+        //     accessor: item
+        // }));
+
         return (
             <Fragment>
                 <ReactTable
+                    style={{ backgroundColor: "white" }}
                     className="-striped -highlight"
-                    data={this.props.data}
+                    data={data}
                     columns={columns}
-                    minRows={10}
                     defaultPageSize={10}
                 />
             </Fragment>

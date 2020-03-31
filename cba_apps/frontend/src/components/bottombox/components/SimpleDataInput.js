@@ -12,8 +12,8 @@ import {
 
 import { connect } from "react-redux";
 import {
-    addTeam,
-    addSkill,
+    addCsatAccountableTeam,
+    addAgentSkill,
     addTeamLead,
     addDsatCode1,
     addBbDriverCode2,
@@ -56,8 +56,8 @@ class SimpleDataInput extends Component {
         console.log(e.target.name.id);
 
         switch (e.target.name.id) {
-            case "addSkill":
-                this.props.addSkill(data);
+            case "addAgentSkill":
+                this.props.addAgentSkill(data);
                 // console.log(e.target.name.id)
                 break;
             case "addTeamLead":
@@ -76,8 +76,8 @@ class SimpleDataInput extends Component {
                 this.props.addBbDriverCode3(data);
                 // console.log(e.target.name.id)
                 break;
-            case "addTeam":
-                this.props.addTeam(data);
+            case "addCsatAccountableTeam":
+                this.props.addCsatAccountableTeam(data);
                 // console.log(e.target.name.id)
                 break;
             default:
@@ -128,13 +128,13 @@ class SimpleDataInput extends Component {
                                     <DataTable
                                         table={
                                             (this.props.data_name ==
-                                                "addSkill" &&
+                                                "addAgentSkill" &&
                                                 this.props.skills) ||
                                             (this.props.data_name ==
                                                 "addTeamLead" &&
                                                 this.props.teamleads) ||
                                             (this.props.data_name ==
-                                                "addTeam" &&
+                                                "addCsatAccountableTeam" &&
                                                 this.props.teams)
                                         }
                                     />
@@ -171,8 +171,8 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-    addTeam,
-    addSkill,
+    addCsatAccountableTeam,
+    addAgentSkill,
     addTeamLead,
     addDsatCode1,
     addBbDriverCode2,
