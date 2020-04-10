@@ -1,6 +1,23 @@
 from rest_framework import viewsets, permissions
-from .models import Agent, AgentSkill, TeamLead, Team, TeamMember
-from .serializer import AgentSerializer, AgentSkillSerializer, TeamLeadSerializer, TeamSerializer, TeamMemberSerializer
+from .models import Agent, AgentSkill, TeamLead, Team, TeamMember, CsatAdministrator
+from .serializer import AgentSerializer, AgentSkillSerializer, TeamLeadSerializer, TeamSerializer, TeamMemberSerializer, TeamReadSerializer, CsatAdministratorSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+class CsatAdministratorViewset(viewsets.ModelViewSet):
+    queryset = CsatAdministrator.objects.all()
+    serializer_class = CsatAdministratorSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+class TeamReadViewset(viewsets.ModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamReadSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
 
 
 class AgentViewset(viewsets.ModelViewSet):
@@ -38,6 +55,8 @@ class TeamViewset(viewsets.ModelViewSet):
 class TeamMemberViewset(viewsets.ModelViewSet):
     queryset = TeamMember.objects.all()
     serializer_class = TeamMemberSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['agent', ]
     permission_classes = [
         permissions.AllowAny
     ]

@@ -13,6 +13,8 @@ import { ADD_DSAT_CODE1 } from "../../../../actions/types";
 
 import DriverForm from "./DriverForm";
 
+import DriverData from "./DriverData";
+
 class DriversTable extends Component {
     constructor(props) {
         super(props);
@@ -89,7 +91,13 @@ class DriversTable extends Component {
                                     selectCallback(index, tableName);
                                 }}
                             >
-                                {code.name}
+                                <DriverData
+                                    tableName={tableName}
+                                    driverDetails={code}
+                                    color={
+                                        selected.id == code.id ? "green" : null
+                                    }
+                                />
                             </td>
                         </tr>
                     ))}

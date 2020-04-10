@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Agent, AgentSkill, TeamLead, Team, TeamMember
+from .models import Agent, AgentSkill, TeamLead, Team, TeamMember, CsatAdministrator
 from ccms.serializers import UserSerializer
 
 from django.contrib.auth.models import User
@@ -12,23 +12,141 @@ class AgentSkillSerializer(serializers.ModelSerializer):
         model = AgentSkill
         fields = '__all__'
 
+    def create(self, validated_data):
+
+        validated_name = validated_data.pop('name')
+
+        agent_skill_qs = AgentSkill.objects.filter(
+            name=validated_name)
+
+        if agent_skill_qs.exists():
+            agent_skill_obj = agent_skill_qs.first()
+        else:
+            agent_skill_obj = AgentSkill.objects.create(name=validated_name)
+
+        return agent_skill_obj
+
+
+class UserAgentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        # fields = '__all__'
+        # read_only_fields = ('username', 'email')
+        fields = ('id', 'first_name', "last_name", 'username', 'email')
+        # exclude = ['password']
+        extra_kwargs = {
+            'username': {'validators': []},
+        }
+
+        # exclude = ["username", "password"]
+
+        # extra_kwargs = {
+        #     'username': {
+        #         'validators': []
+        #     }
+        # }
+    def update(self, instance, validated_data):
+
+        print("FROM USER SERIAL")
+
+        return instance
+
 
 class TeamLeadSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    # user = UserSerializer(required=False)
+    user = UserAgentSerializer()
 
     class Meta:
         model = TeamLead
         fields = '__all__'
+        # read_only_fields = ('user',)
+
+    def create(self, validated_data):
+
+        validated_user = validated_data.pop('user')
+        user = User.objects.get(
+            username=validated_user['username'])
+
+        return TeamLead.objects.create(user=user)
+
+
+class CsatAdministratorSerializer(serializers.ModelSerializer):
+
+    user = UserAgentSerializer()
+
+    class Meta:
+        model = CsatAdministrator
+        fields = '__all__'
+
+    def create(self, validated_data):
+
+        validated_user = validated_data.pop('user')
+
+        csat_admin_qs = CsatAdministrator.objects.filter(
+            user__username=validated_user['username'])
+
+        if csat_admin_qs.exists():
+            csat_admin_obj = csat_admin_qs.first()
+        else:
+            user = User.objects.get(
+                username=validated_user['username'])
+            csat_admin_obj = CsatAdministrator.objects.create(user=user)
+
+        return csat_admin_obj
+
+# FIX UPDATE METHOD OF TEAMSERIALIZER
+
+
+class TeamReadSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Team
+        fields = '__all__'
+        depth = 2
 
 
 class TeamSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
 
-    agent_skill = AgentSkillSerializer()
-    team_lead = TeamLeadSerializer(required=False)
+    agent_skill = AgentSkillSerializer(required=False)
+    # team_leads = serializers.PrimaryKeyRelatedField(
+    #     many=True, read_only=False, queryset=TeamLead.objects.all())
+    team_leads = TeamLeadSerializer(many=True, read_only=False)
 
     class Meta:
         model = Team
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+
+        leads_data = validated_data.pop('team_leads')
+
+        # print("FROM TEAM SERIAL",
+        #       instance.team_leads.all().values_list('id', flat=True))
+
+        instance.team_leads.clear()
+
+        # instance = super(TeamSerializer, self).update(instance, validated_data)
+
+        for lead in leads_data:
+
+            lead_qs = TeamLead.objects.filter(
+                user__username=lead['user']['username'])
+
+            if lead_qs.exists():
+                lead_obj = lead_qs.first()
+            else:
+                user = User.objects.get(
+                    username=lead['user']['username'])
+                lead_obj = TeamLead.objects.create(user=user)
+
+            instance.team_leads.add(lead_obj)
+            # instance.user =
+
+        return instance
 
     def create(self, validated_data):
 
@@ -38,25 +156,10 @@ class TeamSerializer(serializers.ModelSerializer):
 
         return Team.objects.create(agent_skill=agent_skill)
 
-    # def update_or_create_team(self, validated_data):
-
-    #     data = validated_data.pop('bb_driver_code3', None)
-
-    #     if not data:
-    #         return None
-
-    #     bb_driver_code3, created = BB_Driver_Code3.objects.update_or_create(
-    #         name=data.pop('name'), bb_Driver_Code2=data.pop('bb_Driver_Code2'), defaults=data)
-
-    #     validated_data['bb_driver_code3'] = bb_driver_code3
-
-    # def update(self, instance, validated_data):
-    #     return super(TeamSerializer, self).update(instance, validated_data)
-
 
 class TeamMemberSerializer(serializers.ModelSerializer):
 
-    team = TeamSerializer()
+    team = TeamReadSerializer()
 
     class Meta:
         model = TeamMember
@@ -67,19 +170,48 @@ class AgentSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(required=False)
 
-    teams = serializers.SerializerMethodField()
+    teams = TeamSerializer(many=True, read_only=False)
 
-    def get_teams(self, obj):
+    # teams = serializers.SerializerMethodField()
 
-        team = TeamMember.objects.filter(agent=obj)
+    # def get_teams(self, obj):
 
-        return TeamMemberSerializer(team, many=True).data
+    #     team = TeamMember.objects.filter(agent=obj)
 
-    user = UserSerializer(required=False)
+    #     return TeamMemberSerializer(team, many=True).data
+
+    user = UserAgentSerializer(required=False)
 
     class Meta:
         model = Agent
         fields = '__all__'
+
+        extra_kwargs = {
+            'teams': {'validators': []},
+        }
+
+    def update(self, instance, validated_data):
+
+        print("FROM AGENT SERIALIZER")
+
+        teams_data = validated_data.pop('teams')
+
+        instance.teams.clear()
+
+        # instance = super(TeamSerializer, self).update(instance, validated_data)
+
+        for team in teams_data:
+
+            team_qs = Team.objects.filter(id=team['id'])
+
+            if team_qs.exists():
+                team_obj = team_qs.first()
+            else:
+                team_obj = Team.objects.create(**team)
+
+            instance.teams.add(team_obj)
+
+        return instance
 
     def create(self, validated_data):
 
@@ -157,7 +289,9 @@ class AgentSerializer(serializers.ModelSerializer):
 
         # ADD AGENT AS MEMBER OF THE TEAM AS PER SCOPE
 
-        tm_obj = TeamMember.objects.get_or_create(
-            agent=agent_obj, team=team_obj)
+        agent_obj.teams.add(team_obj)
+
+        # tm_obj = TeamMember.objects.get_or_create(
+        #     agent=agent_obj, team=team_obj)
 
         return agent_obj

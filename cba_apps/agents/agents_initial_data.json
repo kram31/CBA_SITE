@@ -110,80 +110,21 @@
         }
     },
     {
-        "model": "agents.AgentSkill",
-        "pk": 1,
+        "model": "auth.user",
+        "pk": 88,
         "fields": {
-            "name": "Bank Apps"
+            "username": "maricris.aqu.allorde@dxc.com",
+            "email": "maricris.aqu.allorde@dxc.com",
+            "password": 1234,
+            "first_name": "Maricris",
+            "last_name": "Allorde"
         }
     },
     {
-        "model": "agents.AgentSkill",
-        "pk": 2,
+        "model": "agents.CsatAdministrator",
+        "pk": 88,
         "fields": {
-            "name": "CCA"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 3,
-        "fields": {
-            "name": "CET"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 4,
-        "fields": {
-            "name": "CommSee"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 5,
-        "fields": {
-            "name": "Culture"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 6,
-        "fields": {
-            "name": "Desktop"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 7,
-        "fields": {
-            "name": "FC"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 8,
-        "fields": {
-            "name": "IMAC"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 9,
-        "fields": {
-            "name": "KM"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 9,
-        "fields": {
-            "name": "Password"
-        }
-    },
-    {
-        "model": "agents.AgentSkill",
-        "pk": 9,
-        "fields": {
-            "name": "Platinum"
+            "user": 88
         }
     }
 ]

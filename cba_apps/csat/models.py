@@ -1,6 +1,8 @@
 from django.db import models
 from agents.models import Agent, AgentSkill
 
+from django.contrib.auth.models import User
+
 # Create your models here.
 
 
@@ -154,3 +156,11 @@ class AccountableTeam(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CsatAccessRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name="csat_access_request_users", null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username

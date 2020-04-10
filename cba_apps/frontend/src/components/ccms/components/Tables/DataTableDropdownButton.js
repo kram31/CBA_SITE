@@ -4,14 +4,14 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-    ButtonDropdown
+    ButtonDropdown,
 } from "reactstrap";
 
 const DataTableDropdownButton = ({
     dataList,
     color,
     selectionCallback,
-    toggleCollapse
+    toggleCollapse,
 }) => {
     const [dropdownOpen, setdropdownOpen] = useState(false);
 

@@ -12,16 +12,16 @@ body.modal-open {
 
 .jumbotron {
   margin-top: 100px;
-  background-image: url(../images/black-and-white-business-chart-computer-241544.jpg);
-  background-size: 100% auto;
-  background-repeat: no-repeat;
-  background-position: center center;
   margin-bottom: 0;
   height: 380px;
 }
 
 .popover-container > .popover {
   max-width: 700px;
+}
+
+.popover-container-team-lead > .popover {
+  max-width: 1000px;
 }
 
 .dynamic_list_row:hover {
@@ -179,8 +179,6 @@ a:hover {
 }
 
 #bg-image {
-  background-image: url(../images/access-adult-black-and-white-1449052.jpg);
-  background-size: cover;
   background-color: black;
 }
 

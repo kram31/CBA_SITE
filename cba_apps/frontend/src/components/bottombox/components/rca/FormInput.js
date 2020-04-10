@@ -24,33 +24,34 @@ class FormInput extends Component {
                             match.toUpperCase()
                         )}
                 </Label>
-                <Col>
-                    {type === "text" ? (
-                        <Input
-                            size="sm"
-                            type={type}
-                            name={objKey}
-                            id={`id_${objKey}`}
-                            value={inputValue}
-                            disabled={disabled}
-                            onChange={e => onChange(e)}
-                        ></Input>
-                    ) : (
-                        <Input
-                            type={type}
-                            size="sm"
-                            name={objKey}
-                            id={`id_${objKey}`}
-                            value={inputValue}
-                            disabled={disabled}
-                            onChange={e => onChange(e)}
-                        >
-                            {this.getInputValue(inputValue, options)}
 
-                            {options ? this.getOptions(options) : null}
-                        </Input>
-                    )}
-                </Col>
+                {type === "text" ? (
+                    <Input
+                        bsSize="sm"
+                        type={type}
+                        name={objKey}
+                        id={`id_${objKey}`}
+                        value={inputValue}
+                        disabled={disabled}
+                        onChange={e => onChange(e)}
+                        required
+                    ></Input>
+                ) : (
+                    <Input
+                        type={type}
+                        bsSize="sm"
+                        name={objKey}
+                        id={`id_${objKey}`}
+                        value={inputValue}
+                        disabled={disabled}
+                        onChange={e => onChange(e)}
+                        required
+                    >
+                        {this.getInputValue(inputValue, options)}
+
+                        {options ? this.getOptions(options) : null}
+                    </Input>
+                )}
             </FormGroup>
         );
     }

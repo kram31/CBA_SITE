@@ -14,7 +14,7 @@ import {
     Button,
     Container,
     Collapse,
-    ButtonGroup
+    ButtonGroup,
 } from "reactstrap";
 
 import { Link } from "react-router-dom";
@@ -44,82 +44,82 @@ class CcmsTable2 extends Component {
             collapseGeneralTable: false,
             table: null,
             search: props.search,
-            page: props.page
+            page: props.page,
         };
     }
 
     toggleModal = () => this.setState({ isModalOpen: !this.state.isModalOpen });
 
-    buttonOptions = title => {
+    buttonOptions = (title) => {
         if (title) {
             return [
                 {
                     Header: "Open CCMS Case",
-                    Cell: cellprops => {
+                    Cell: (cellprops) => {
                         return (
                             <NewCcmsFormModal
                                 ccms_entry={cellprops.original}
                                 list_type={this.props.title}
                             />
                         );
-                    }
+                    },
                 },
                 {
                     Header: "Reassign Case",
-                    Cell: cellprops => (
+                    Cell: (cellprops) => (
                         <DynamicFormModal
                             modal={this.state.isModalOpen}
                             form_inputs={{
-                                select_ccms_owner: ""
+                                select_ccms_owner: "",
                             }}
                             formattedFormTitle="Change Owner"
                             form_title="change_owner"
                             toggleModal={this.toggleModal}
                             ComponentForm={DynamicForm}
                             select_options={this.props.ccms.ccms_owner}
-                            labelKey={option => `${option.user.email}`}
+                            labelKey={(option) => `${option.user.email}`}
                             size="lg"
                             ccms_entry={cellprops.original}
                         />
-                    )
-                }
+                    ),
+                },
             ];
         } else {
             return [
                 {
                     Header: "Update CCMS Case",
-                    Cell: cellprops => (
+                    Cell: (cellprops) => (
                         <NewCcmsFormModal
                             ccms_entry={cellprops.original}
                             list_type={this.props.title}
                         />
-                    )
+                    ),
                 },
                 {
                     Header: "Review Case",
-                    Cell: cellprops =>
+                    Cell: (cellprops) =>
                         cellprops.original.rca_required ? (
                             <CcmsRcaModal ccms={cellprops.original} />
                         ) : (
                             "RCA not required"
-                        )
-                }
+                        ),
+                },
             ];
         }
     };
 
-    handleSearch = e => {
+    handleSearch = (e) => {
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
 
         let kw = e.target.value;
         this.props.search_ccms(kw);
     };
 
-    handlePageChange = data => {
+    handlePageChange = (data) => {
         this.setState({
-            page: data
+            page: data,
         });
 
         this.props.set_table_page(data);
@@ -127,15 +127,15 @@ class CcmsTable2 extends Component {
 
     handlecollapseDrivers = () =>
         this.setState({
-            collapseDrivers: !this.state.collapseDrivers
+            collapseDrivers: !this.state.collapseDrivers,
         });
 
     // HANDLERS FOR DATA TABLE LIST
-    tableSelectionCallback = childData => {
+    tableSelectionCallback = (childData) => {
         // close collapse > remove data table > update data table > open collapse
-        this.closeCollapse().then(res =>
-            this.removeDataTable().then(res =>
-                this.updateTable(childData).then(res =>
+        this.closeCollapse().then((res) =>
+            this.removeDataTable().then((res) =>
+                this.updateTable(childData).then((res) =>
                     this.setState({ collapseGeneralTable: true })
                 )
             )
@@ -148,21 +148,21 @@ class CcmsTable2 extends Component {
 
     async removeDataTable() {
         this.setState({
-            table: null
+            table: null,
         });
     }
 
     async updateTable(childData) {
-        this.closeCollapse().then(res =>
+        this.closeCollapse().then((res) =>
             this.setState({
-                table: childData
+                table: childData,
             })
         );
     }
 
     handlecollapseGeneralTable = () =>
         this.setState({
-            collapseGeneralTable: false
+            collapseGeneralTable: false,
         });
 
     render() {
@@ -172,7 +172,7 @@ class CcmsTable2 extends Component {
             table,
             collapseGeneralTable,
             collapseDrivers,
-            search
+            search,
         } = this.state;
 
         const { ccms } = this.props;
@@ -180,36 +180,36 @@ class CcmsTable2 extends Component {
         const dataList = [
             {
                 name: "SILO",
-                endpoint: "silo"
+                endpoint: "silo",
             },
             {
                 name: "CCMS Status",
-                endpoint: "ccms_status"
+                endpoint: "ccms_status",
             },
             {
                 name: "Site Code",
-                endpoint: "site_code"
+                endpoint: "site_code",
             },
             {
                 name: "Accountable Team",
-                endpoint: "accountable_team"
+                endpoint: "accountable_team",
             },
             {
                 name: "Ticket Type",
-                endpoint: "ticket_type"
+                endpoint: "ticket_type",
             },
             {
                 name: "Escalation Type",
-                endpoint: "escalation_type"
+                endpoint: "escalation_type",
             },
             {
                 name: "Business Unit",
-                endpoint: "business_unit"
+                endpoint: "business_unit",
             },
             {
                 name: "Recipients",
-                endpoint: "recipients"
-            }
+                endpoint: "recipients",
+            },
         ];
 
         return (
@@ -241,7 +241,7 @@ class CcmsTable2 extends Component {
                                             ...table,
                                             data: this.props.ccms[
                                                 table.endpoint
-                                            ]
+                                            ],
                                         }}
                                     />
                                 </Container>
@@ -362,11 +362,11 @@ class CcmsTable2 extends Component {
                             }
                             columns={[
                                 ...columns,
-                                ...this.buttonOptions(this.props.title)
+                                ...this.buttonOptions(this.props.title),
                             ]}
                             minRows={5}
                             defaultPageSize={10}
-                            onPageChange={page => this.handlePageChange(page)}
+                            onPageChange={(page) => this.handlePageChange(page)}
                             page={this.state.page}
                         />
                     </CardBody>
@@ -376,17 +376,17 @@ class CcmsTable2 extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     business_unit: state.ccms.business_unit,
     comments: state.ccms.comments,
     filtered_ccms_list: state.ccms.filtered_ccms_list,
     search: state.ccms.search,
     page: state.ccms.page,
     ccms: state.ccms,
-    access_request: state.ccms.access_request
+    access_request: state.ccms.access_request,
 });
 
 export default connect(mapStateToProps, {
     search_ccms,
-    set_table_page
+    set_table_page,
 })(CcmsTable2);

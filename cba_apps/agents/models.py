@@ -9,6 +9,7 @@ class Agent(models.Model):
         'Operator Lan ID', max_length=100, primary_key=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     wave = models.CharField(max_length=100, blank=True, null=True)
+    teams = models.ManyToManyField("Team")
 
     def __str__(self):
         return self.operator_lan_id
@@ -35,8 +36,7 @@ class Team(models.Model):
     agent_skill = models.ForeignKey(AgentSkill, on_delete=models.CASCADE,
                                     blank=True, null=True, related_name="team_agent_skills")
 
-    team_lead = models.ForeignKey(
-        TeamLead, on_delete=models.SET_NULL, blank=True, null=True, related_name="team_lead_names")
+    team_leads = models.ManyToManyField(TeamLead)
 
     def __str__(self):
         return f"Team {self.agent_skill.name}"
@@ -49,3 +49,12 @@ class TeamMember(models.Model):
 
     team = models.ForeignKey(Team, on_delete=models.CASCADE,
                              blank=True, null=True, related_name="team_member_teams")
+
+
+class CsatAdministrator(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name="csat_administrator_users", blank=True, null=True)
+
+    def __str__(self):
+        return f"CSAT Admin - {self.user.username}"

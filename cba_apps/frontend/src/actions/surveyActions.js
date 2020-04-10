@@ -1,4 +1,11 @@
 import {
+    REMOVE_CSAT_ADMIN,
+    ADD_CSAT_ADMIN,
+    GET_USERS,
+    DELETE_REQUEST_ACCESS,
+    REQUEST_ACCESS,
+    GET_ADMIN,
+    COLLAPSE_COMPONENT,
     REQ_ERROR,
     CREATE_CSAT_RCA,
     GET_SURVEYS,
@@ -13,6 +20,7 @@ import {
     GET_BB_DRIVER_CODE3,
     GET_TEAMS,
     GET_CBA_TEAMS,
+    EDIT_CBA_TEAMS,
     ADD_CBA_TEAMS,
     ADD_RCA,
     FETCHING,
@@ -57,7 +65,7 @@ import {
     GET_COMPLETED_SURVEY_VIEW,
     GET_ALL_SURVEY_VIEW,
     COLLAPSE_DASHBOARD_VIEW,
-    UPDATE_SURVEY
+    UPDATE_SURVEY,
 } from "./types";
 
 import { tokenConfig } from "./auth";
@@ -76,97 +84,157 @@ export class GeneralRequest {
         this.dispatchType = dispatchType;
     }
 
-    addData = () => dispatch => {
+    addData = () => (dispatch) => {
         axios
             .post(`/api/${this.endpoint}/`, this.data)
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: this.dispatchType,
-                    payload: res.data
+                    payload: res.data,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     };
 
-    deleteData = () => dispatch => {
+    deleteData = () => (dispatch) => {
         axios
             .delete(`/api/${this.endpoint}/${this.data.id}`)
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: this.dispatchType,
-                    payload: this.data
+                    payload: this.data,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     };
 
-    editData = () => dispatch => {
+    editData = () => (dispatch) => {
+        console.log("FROM ACTIONS", this.data);
         axios
             .put(`/api/${this.endpoint}/${this.data.id}/`, this.data)
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: this.dispatchType,
-                    payload: res.data
+                    payload: res.data,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     };
 }
 
-export const addSurvey = data => dispatch => {
+export const collapseComponent = (data) => (dispatch) =>
+    dispatch({ type: COLLAPSE_COMPONENT, payload: data });
+
+export const deleteCsatAdmin = (data) => (dispatch) => {
+    axios
+        .delete(`/api/csat_admins/${data.id}/`)
+        .then((res) => {
+            dispatch({
+                type: REMOVE_CSAT_ADMIN,
+                payload: data,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+export const addCsatAdmin = (data) => (dispatch) => {
+    axios
+        .post(`/api/csat_admins/`, data)
+        .then((res) => {
+            dispatch({
+                type: ADD_CSAT_ADMIN,
+                payload: res.data,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+export const getUsers = () => (dispatch) => {
+    axios
+        .get(`/api/users/`)
+        .then((res) => {
+            dispatch({
+                type: GET_USERS,
+                payload: res.data,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+export const deleteRequestAccess = (data) => (dispatch) => {
+    axios
+        .delete(`/api/csat_access_request/${data.id}`)
+        .then((res) => {
+            dispatch({
+                type: DELETE_REQUEST_ACCESS,
+                payload: data,
+            });
+        })
+        .catch((err) => {
+            console.log(err.response);
+        });
+};
+
+export const addSurvey = (data) => (dispatch) => {
     // console.log(data);
     axios
         .post("/api/surveys/", data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_SURVEY,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err.response);
             dispatch({
                 type: REQ_ERROR,
-                payload: err.response
+                payload: err.response,
             });
         });
 };
 
-export const updateSurvey = data => dispatch => {
+export const updateSurvey = (data) => (dispatch) => {
     // console.log(data);
     axios
         .put(`/api/surveys/${data.reference_number}/`, data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: UPDATE_SURVEY,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err.response);
             dispatch({
                 type: REQ_ERROR,
-                payload: err.response
+                payload: err.response,
             });
         });
 };
 
-export const addSurveysBulk = list_data => dispatch => {
+export const addSurveysBulk = (list_data) => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     if (list_data.put) {
-        list_data.put.forEach(data => {
+        list_data.put.forEach((data) => {
             axios
                 .put(`/api/surveys/${data.reference_number}/`, data)
-                .then(res => {
+                .then((res) => {
                     dispatch({
                         type: UPDATE_SURVEY,
-                        payload: res.data
+                        payload: res.data,
                     });
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
 
                     if ("response" in err) {
@@ -177,8 +245,8 @@ export const addSurveysBulk = list_data => dispatch => {
                             payload: {
                                 statusText,
                                 status,
-                                ...JSON.parse(err.response.config.data)
-                            }
+                                ...JSON.parse(err.response.config.data),
+                            },
                         });
                     }
                 });
@@ -186,16 +254,16 @@ export const addSurveysBulk = list_data => dispatch => {
     }
 
     if (list_data.post) {
-        list_data.post.forEach(data => {
+        list_data.post.forEach((data) => {
             axios
                 .post("/api/surveys/", data)
-                .then(res => {
+                .then((res) => {
                     dispatch({
                         type: ADD_SURVEY,
-                        payload: res.data
+                        payload: res.data,
                     });
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
 
                     if ("response" in err) {
@@ -206,8 +274,8 @@ export const addSurveysBulk = list_data => dispatch => {
                             payload: {
                                 statusText,
                                 status,
-                                ...JSON.parse(err.response.config.data)
-                            }
+                                ...JSON.parse(err.response.config.data),
+                            },
                         });
                     }
                 });
@@ -215,7 +283,7 @@ export const addSurveysBulk = list_data => dispatch => {
     }
 
     dispatch({
-        type: STOP_FETCHING
+        type: STOP_FETCHING,
     });
 };
 
@@ -228,132 +296,132 @@ export const addSurveysBulk = list_data => dispatch => {
 // teams: this.props.getTeams(),
 // agents: this.props.getAgents()
 
-export const getAllSurveyView = () => dispatch => {
+export const getAllSurveyView = () => (dispatch) => {
     dispatch({
-        type: GET_ALL_SURVEY_VIEW
+        type: GET_ALL_SURVEY_VIEW,
     });
 };
 
-export const getCompletedSurveyView = () => dispatch => {
+export const getCompletedSurveyView = () => (dispatch) => {
     dispatch({
-        type: GET_COMPLETED_SURVEY_VIEW
+        type: GET_COMPLETED_SURVEY_VIEW,
     });
 };
 
-export const getTopboxSurveyView = () => dispatch => {
+export const getTopboxSurveyView = () => (dispatch) => {
     dispatch({
-        type: GET_TOPBOX_SURVEY_VIEW
+        type: GET_TOPBOX_SURVEY_VIEW,
     });
 };
 
-export const getBottomboxSurveyView = () => dispatch => {
+export const getBottomboxSurveyView = () => (dispatch) => {
     dispatch({
-        type: GET_BOTTOMBOX_SURVEY_VIEW
+        type: GET_BOTTOMBOX_SURVEY_VIEW,
     });
 };
 
-export const dashboardViewCollapse = () => dispatch => {
+export const dashboardViewCollapse = () => (dispatch) => {
     dispatch({
-        type: COLLAPSE_DASHBOARD_VIEW
+        type: COLLAPSE_DASHBOARD_VIEW,
     });
 };
 
-export const agentViewCollapse = () => dispatch => {
+export const agentViewCollapse = () => (dispatch) => {
     dispatch({
-        type: COLLAPSE_AGENT_VIEW
+        type: COLLAPSE_AGENT_VIEW,
     });
 };
 
-export const surveyViewCollapse = () => dispatch => {
+export const surveyViewCollapse = () => (dispatch) => {
     dispatch({
-        type: COLLAPSE_SURVEY_VIEW
+        type: COLLAPSE_SURVEY_VIEW,
     });
 };
 
-export const bottomboxDriverViewCollapse = () => dispatch => {
+export const bottomboxDriverViewCollapse = () => (dispatch) => {
     dispatch({
-        type: COLLAPSE_BOTTOMBOX_DRIVER_VIEW
+        type: COLLAPSE_BOTTOMBOX_DRIVER_VIEW,
     });
 };
 
-export const updateChartData = data => dispatch => {
+export const updateChartData = (data) => (dispatch) => {
     dispatch({
         type: UPDATE_CHART_DATA,
-        payload: data
+        payload: data,
     });
 };
 
-export const updateAgentChartData = data => dispatch => {
+export const updateAgentChartData = (data) => (dispatch) => {
     dispatch({
         type: UPDATE_AGENT_CHART_DATA,
-        payload: data
+        payload: data,
     });
 };
 
-export const updatedSelectedYear = data => dispatch => {
+export const updatedSelectedYear = (data) => (dispatch) => {
     dispatch({
         type: UPDATE_SELECTED_YEAR,
-        payload: data
+        payload: data,
     });
 };
 
-export const updatedSelectedWeek = data => dispatch => {
+export const updatedSelectedWeek = (data) => (dispatch) => {
     dispatch({
         type: UPDATE_SELECTED_WEEK,
-        payload: data
+        payload: data,
     });
 };
 
-export const updatedSelectedMonth = data => dispatch => {
+export const updatedSelectedMonth = (data) => (dispatch) => {
     dispatch({
         type: UPDATE_SELECTED_MONTH,
-        payload: data
+        payload: data,
     });
 };
 
-export const updateBBDriverState = data => dispatch => {
+export const updateBBDriverState = (data) => (dispatch) => {
     dispatch({
         type: UPDATE_BOTTOMBOX_DRIVER_STATE,
-        payload: data
+        payload: data,
     });
 };
 
-export const updateAgentComponentState = data => dispatch => {
+export const updateAgentComponentState = (data) => (dispatch) => {
     dispatch({
         type: UPDATE_AGENTS_COMPONENT_STATE,
-        payload: data
+        payload: data,
     });
 };
 
-export const removeRca = () => dispatch => {
+export const removeRca = () => (dispatch) => {
     dispatch({
-        type: REMOVE_RCA
+        type: REMOVE_RCA,
     });
 };
 
-export const getRca = surveyData => dispatch => {
+export const getRca = (surveyData) => (dispatch) => {
     dispatch({
         type: GET_RCA,
-        payload: surveyData.reference_number
+        payload: surveyData.reference_number,
     });
 };
 
-export const addAgent = newAgent => dispatch => {
+export const addAgent = (newAgent) => (dispatch) => {
     return axios
         .post("/api/agents/", newAgent)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_AGENT,
-                payload: res.data
+                payload: res.data,
             });
             return res.data;
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const updateAgent = agentData => (dispatch, getState) => {
+export const updateAgent = (agentData) => (dispatch, getState) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
@@ -362,30 +430,30 @@ export const updateAgent = agentData => (dispatch, getState) => {
             agentData,
             tokenConfig(getState)
         )
-        .then(res => {
+        .then((res) => {
             console.log(res.data);
             dispatch({
                 type: UPDATE_AGENT,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const deleteRca = data => (dispatch, getState) => {
+export const deleteRca = (data) => (dispatch, getState) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .delete(`/api/csat_rcas/${data.id}`, tokenConfig(getState))
-        .then(res => {
+        .then((res) => {
             // dispatch(
             //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
             // );
             dispatch({
                 type: DELETE_RCA,
-                payload: data
+                payload: data,
             });
             axios
                 .put(
@@ -393,37 +461,33 @@ export const deleteRca = data => (dispatch, getState) => {
                     { agent: data.agent, completed: false },
                     tokenConfig(getState)
                 )
-                .then(res =>
+                .then((res) =>
                     dispatch({
                         type: UPDATE_SURVEY,
-                        payload: res.data
+                        payload: res.data,
                     })
                 )
-                .catch(err => console.log(err.response));
+                .catch((err) => console.log(err.response));
         })
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const updateRca = rca_data => (dispatch, getState) => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const updateRca = (rca) => (dispatch) => {
+    console.log("FROM ACTIONS", rca);
     axios
-        .put(`/api/csat_rcas/${rca_data.id}/`, rca_data, tokenConfig(getState))
-        .then(res => {
-            console.log(res.data);
+        .put(`/api/csat_rcas/${rca.id}/`, rca)
+        .then((res) => {
             dispatch({
                 type: UPDATE_RCA,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const getAllData2 = () => (dispatch, getState) => {
+export const getAllData2 = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
     axios
         .all([
@@ -436,7 +500,9 @@ export const getAllData2 = () => (dispatch, getState) => {
             axios.get("/api/csat_accountable_team/"),
             axios.get("/api/agents/"),
             axios.get("/api/teamleads/"),
-            axios.get("/api/cba_teams/")
+            axios.get("/api/cba_teams_readonly/"),
+            axios.get("/api/csat_admins/"),
+            axios.get("/api/csat_access_request/"),
         ])
         .then(
             axios.spread(
@@ -450,7 +516,9 @@ export const getAllData2 = () => (dispatch, getState) => {
                     csat_accountable_team,
                     agents,
                     teamleads,
-                    cba_teams
+                    cba_teams,
+                    csat_admin,
+                    csat_access_request
                 ) => {
                     dispatch({
                         type: GET_ALL_DATA,
@@ -464,286 +532,301 @@ export const getAllData2 = () => (dispatch, getState) => {
                             csat_accountable_team: csat_accountable_team.data,
                             agents: agents.data,
                             teamleads: teamleads.data,
-                            cba_teams: cba_teams.data
-                        }
+                            cba_teams: cba_teams.data,
+                            csat_admin: csat_admin.data,
+                            csat_access_request: csat_access_request.data,
+                        },
                     });
                     dispatch({
-                        type: STOP_FETCHING
+                        type: STOP_FETCHING,
                     });
                 }
             )
         )
-        .catch(error => {
+        .catch((error) => {
             dispatch({
-                type: STOP_FETCHING
+                type: STOP_FETCHING,
             });
             console.log(error.response);
         });
 };
 
-export const isFetching = () => dispatch => {
+export const isFetching = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 };
 
-export const addCbaTeam = data => dispatch => {
+export const addCbaTeam = (data) => (dispatch) => {
     return axios
         .post("/api/cba_teams/", data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_CBA_TEAMS,
-                payload: res.data
+                payload: res.data,
             });
             return res.data;
         })
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getCbaTeams = () => dispatch => {
+export const getCbaTeams = () => (dispatch) => {
     axios
-        .get("/api/cba_teams/")
-        .then(res =>
+        .get("/api/cba_teams_readonly/")
+        .then((res) =>
             dispatch({
                 type: GET_CBA_TEAMS,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
+};
+
+export const editCbaTeam = (cba_team) => (dispatch) => {
+    return axios
+        .patch(`/api/cba_teams/${cba_team.id}/`, cba_team)
+        .then((res) => {
+            dispatch({
+                type: EDIT_CBA_TEAMS,
+                payload: res.data,
+            });
+            return res.data;
+        })
+        .catch((err) => console.log(err));
 };
 
 export const getSurveys = () => (dispatch, getState) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/surveys/", tokenConfig(getState))
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_SURVEYS,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getAgents = () => dispatch => {
+export const getAgents = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/agents/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_AGENTS,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getRcas = () => dispatch => {
+export const getRcas = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/csat_rcas/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_RCAS,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const deleteSurvey = id => (dispatch, getState) => {
+export const deleteSurvey = (id) => (dispatch, getState) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .delete(`/api/surveys/${id}`, tokenConfig(getState))
-        .then(res => {
+        .then((res) => {
             dispatch(
                 createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
             );
             dispatch({
                 type: DELETE_SURVEY,
-                payload: id
+                payload: id,
             });
         })
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const addCsatRca = data => dispatch => {
+export const addCsatRca = (data) => (dispatch) => {
     axios
         .post(`/api/csat_rcas/`, data)
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: CREATE_CSAT_RCA,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getSurvey = data => dispatch => {
+export const getSurvey = (data) => (dispatch) => {
     dispatch({
         type: GET_SURVEY,
-        payload: data
+        payload: data,
     });
 };
 
-export const removeSurvey = () => dispatch => {
+export const removeSurvey = () => (dispatch) => {
     dispatch({
         type: REMOVE_SURVEY,
-        payload: {}
+        payload: {},
     });
 };
 
-export const getAgentDetails = lan_id => dispatch => {
+export const getAgentDetails = (lan_id) => (dispatch) => {
     axios
         .get(`/api/agents/${lan_id}`)
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_AGENT,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getAgent = data => dispatch => {
+export const getAgent = (data) => (dispatch) => {
     dispatch({
         type: GET_AGENT,
-        payload: data
+        payload: data,
     });
 };
 
-export const addAgentSkill = data => dispatch => {
+export const addAgentSkill = (data) => (dispatch) => {
     return axios
         .post("/api/agent_skills/", data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_SKILL,
-                payload: res.data
+                payload: res.data,
             });
             return res.data;
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const getSkills = () => dispatch => {
+export const getSkills = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/agent_skills/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_SKILLS,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getDsatCode1 = () => dispatch => {
+export const getDsatCode1 = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/dsat_code1/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_DSAT_CODE1,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getBBDriverCode2 = () => dispatch => {
+export const getBBDriverCode2 = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/bb_driver_code2/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_BB_DRIVER_CODE2,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const getBBDriverCode3 = () => dispatch => {
+export const getBBDriverCode3 = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/bb_driver_code3/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_BB_DRIVER_CODE3,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const addCsatAccountableTeam = data => dispatch => {
+export const addCsatAccountableTeam = (data) => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .post("/api/csat_accountable_team/", data)
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: ADD_TEAM,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const getTeams = () => dispatch => {
+export const getTeams = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/csat_accountable_team/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_TEAMS,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
 export const addRCA = (rcaData, agentData) => (dispatch, getState) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .post("/api/csat_rcas/", rcaData, tokenConfig(getState))
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_RCA,
-                payload: res.data
+                payload: res.data,
             });
             axios
                 .put(
@@ -751,251 +834,158 @@ export const addRCA = (rcaData, agentData) => (dispatch, getState) => {
                     agentData,
                     tokenConfig(getState)
                 )
-                .then(res => {
+                .then((res) => {
                     console.log(res.data);
                     dispatch({
                         type: UPDATE_SURVEY,
-                        payload: res.data
+                        payload: res.data,
                     });
                 })
-                .catch(err => console.log(err.response));
+                .catch((err) => console.log(err.response));
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const getTeamLeads = () => dispatch => {
+export const getTeamLeads = () => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .get("/api/teamleads/")
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: GET_TEAMLEADS,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const addTeamLead = data => dispatch => {
+export const addTeamLead = (data) => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .post("/api/teamleads/", data)
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: ADD_TEAMLEAD,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const addDsatCode1 = data => dispatch => {
+export const addDsatCode1 = (data) => (dispatch) => {
     dispatch({
-        type: FETCHING
+        type: FETCHING,
     });
 
     axios
         .post("/api/dsat_code1/", data)
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: ADD_DSAT_CODE1,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const deleteDsatCode1 = (id, survey_list) => (dispatch, getState) => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const deleteDsatCode1 = (data) => (dispatch) => {
     axios
-        .delete(`/api/dsat_code1/${id}`, tokenConfig(getState))
-        .then(res => {
-            // dispatch(
-            //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
-            // );
+        .delete(`/api/dsat_code1/${data.id}`)
+        .then((res) => {
             dispatch({
                 type: DELETE_DSAT_CODE1,
-                payload: id
-            });
-            survey_list.forEach(element => {
-                axios
-                    .put(
-                        `/api/surveys/${element.surveyed_ticket}/`,
-                        { agent: element.agent, completed: false },
-                        tokenConfig(getState)
-                    )
-                    .then(res => {
-                        dispatch({
-                            type: UPDATE_SURVEY,
-                            payload: res.data
-                        });
-                    })
-                    .catch(err => console.log(err.response));
+                payload: data,
             });
         })
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const updateDsatCode1 = data => (dispatch, getState) => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const updateDsatCode1 = (oldData, newData) => (dispatch) => {
     axios
-        .put(`/api/dsat_code1/${data.id}/`, data, tokenConfig(getState))
-        .then(res => {
-            console.log(res.data);
+        .put(`/api/dsat_code1/${oldData.id}/`, newData)
+        .then((res) => {
             dispatch({
                 type: UPDATE_DSAT_CODE1,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const addBbDriverCode2 = data => dispatch => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const addBbDriverCode2 = (data) => (dispatch) => {
     axios
         .post("/api/bb_driver_code2/", data)
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: ADD_BB_DRIVER_CODE2,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const deleteBbDriverCode2 = (id, survey_list) => (
-    dispatch,
-    getState
-) => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const deleteBbDriverCode2 = (data) => (dispatch) => {
     axios
-        .delete(`/api/bb_driver_code2/${id}`, tokenConfig(getState))
-        .then(res => {
-            // dispatch(
-            //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
-            // );
+        .delete(`/api/bb_driver_code2/${data.id}`)
+        .then((res) => {
             dispatch({
                 type: DELETE_BB_DRIVER_CODE2,
-                payload: id
-            });
-            survey_list.forEach(element => {
-                axios
-                    .put(
-                        `/api/surveys/${element.surveyed_ticket}/`,
-                        { agent: element.agent, completed: false },
-                        tokenConfig(getState)
-                    )
-                    .then(res => {
-                        dispatch({
-                            type: UPDATE_SURVEY,
-                            payload: res.data
-                        });
-                    })
-                    .catch(err => console.log(err.response));
+                payload: data,
             });
         })
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const deleteBbDriverCode3 = (id, survey_list) => (
-    dispatch,
-    getState
-) => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const deleteBbDriverCode3 = (data) => (dispatch) => {
     axios
-        .delete(`/api/bb_driver_code3/${id}`, tokenConfig(getState))
-        .then(res => {
-            // dispatch(
-            //     createMessage({ surveyDeleted: `Survey ID ${id} Deleted` })
-            // );
+        .delete(`/api/bb_driver_code3/${data.id}`)
+        .then((res) => {
             dispatch({
                 type: DELETE_BB_DRIVER_CODE3,
-                payload: id
-            });
-            survey_list.forEach(element => {
-                axios
-                    .put(
-                        `/api/surveys/${element.surveyed_ticket}/`,
-                        { agent: element.agent, completed: false },
-                        tokenConfig(getState)
-                    )
-                    .then(res => {
-                        dispatch({
-                            type: UPDATE_SURVEY,
-                            payload: res.data
-                        });
-                    })
-                    .catch(err => console.log(err.response));
+                payload: data,
             });
         })
-        .catch(err => console.log(err.response.data));
+        .catch((err) => console.log(err.response.data));
 };
 
-export const updateBbDriverCode2 = data => (dispatch, getState) => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const updateBbDriverCode2 = (oldData, newData) => (dispatch) => {
     axios
-        .put(`/api/bb_driver_code2/${data.id}/`, data, tokenConfig(getState))
-        .then(res => {
+        .put(`/api/bb_driver_code2/${oldData.id}/`, newData)
+        .then((res) => {
             dispatch({
                 type: UPDATE_BB_DRIVER_CODE2,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const updateBbDriverCode3 = data => (dispatch, getState) => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const updateBbDriverCode3 = (oldData, newData) => (dispatch) => {
     axios
-        .put(`/api/bb_driver_code3/${data.id}/`, data, tokenConfig(getState))
-        .then(res => {
+        .put(`/api/bb_driver_code3/${oldData.id}/`, newData)
+        .then((res) => {
             dispatch({
                 type: UPDATE_BB_DRIVER_CODE3,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const addBbDriverCode3 = data => dispatch => {
-    dispatch({
-        type: FETCHING
-    });
-
+export const addBbDriverCode3 = (data) => (dispatch) => {
     axios
         .post("/api/bb_driver_code3/", data)
-        .then(res =>
+        .then((res) =>
             dispatch({
                 type: ADD_BB_DRIVER_CODE3,
-                payload: res.data
+                payload: res.data,
             })
         )
-        .catch(err => console.log(err.reponse));
+        .catch((err) => console.log(err.reponse));
 };

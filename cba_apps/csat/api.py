@@ -3,8 +3,8 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from agents.models import Agent
-from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, AccountableTeam
-from .serializers import SurveySerializer, RCASerializer, DSAT_Code1Serializer, BB_Driver_Code2Serializer, BB_Driver_Code3Serializer, AccountableTeamSerializer
+from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, AccountableTeam, CsatAccessRequest
+from .serializers import SurveySerializer, RCASerializer, DSAT_Code1Serializer, BB_Driver_Code2Serializer, BB_Driver_Code3Serializer, AccountableTeamSerializer, CsatAccessRequestSerializer
 
 
 class SurveyViewset(viewsets.ModelViewSet):
@@ -35,6 +35,15 @@ class SurveyViewset(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class CsatAccessRequestViewset(viewsets.ModelViewSet):
+    queryset = CsatAccessRequest.objects.all()
+    serializer_class = CsatAccessRequestSerializer
+    permission_classes = [
+        permissions.AllowAny
+        # permissions.IsAuthenticated
+    ]
+
+
 class RCAViewset(viewsets.ModelViewSet):
     queryset = RCA.objects.all()
     serializer_class = RCASerializer
@@ -42,17 +51,6 @@ class RCAViewset(viewsets.ModelViewSet):
         permissions.AllowAny
         # permissions.IsAuthenticated
     ]
-
-    def create(self, request, *args, **kwargs):
-
-        # request.data['completed_by'] = str(self.request.user)
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class DSAT_Code1Viewset(viewsets.ModelViewSet):

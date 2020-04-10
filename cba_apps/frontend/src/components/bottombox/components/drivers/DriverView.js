@@ -20,7 +20,6 @@ class DriverView extends Component {
     }
 
     filteredDriverList = (driverName, selectedData, tableName) => {
-        console.log("driver name", driverName, "SELECTED DATA", selectedData);
         return driverName.filter(item => {
             if (tableName == "Driver Code 3") {
                 return item.bb_Driver_Code2 == selectedData.id;
@@ -58,12 +57,9 @@ class DriverView extends Component {
             )[index];
         }
 
-        this.setState(
-            {
-                selected
-            },
-            () => console.log(this.state.selected)
-        );
+        this.setState({
+            selected
+        });
     };
 
     render() {

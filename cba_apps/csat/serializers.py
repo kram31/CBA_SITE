@@ -1,16 +1,76 @@
+from datetime import datetime
 from rest_framework import serializers
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.core import serializers as se
 import json
 
-from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, AccountableTeam
+from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, AccountableTeam, CsatAccessRequest
 from django.core.exceptions import FieldDoesNotExist
 
-from agents.models import AgentSkill, Agent, Team, TeamMember
-from agents.serializer import AgentSerializer, TeamMemberSerializer
+from agents.models import AgentSkill, Agent, Team, TeamMember, CsatAdministrator
+from agents.serializer import AgentSerializer, TeamMemberSerializer, AgentSkillSerializer, UserSerializer, UserAgentSerializer
 
 from django.contrib.auth.models import User
+from django.core.mail import get_connection
+from django.core.mail import EmailMessage
+
+
+def send_email(title, body, my_username):
+
+    admin_emails = CsatAdministrator.objects.all(
+    ).values_list('user__username', flat=True)
+
+    # ccms_group_list = User.objects.filter(
+    #     groups__name="CCMS Admin").values_list("email", flat=True)
+
+    connection = get_connection(host='smtp.svcs.entsvcs.com',
+                                port=25,
+                                username=my_username,
+                                use_ssl=False,
+                                use_tls=False)
+
+    email = EmailMessage(
+        title,
+        body,
+        'cba-csat@donot-reply.com',
+        ["mark.lascano@dxc.com"],
+        # [*admin_emails],
+        cc=my_username,
+        connection=connection
+    )
+    # email.attach_file()
+    email.send()
+
+
+class CsatAccessRequestSerializer(serializers.ModelSerializer):
+
+    user = UserAgentSerializer()
+
+    class Meta:
+        model = CsatAccessRequest
+        fields = '__all__'
+
+    def create(self, validated_data):
+
+        validated_user = validated_data.pop('user')
+
+        ar_qs = CsatAccessRequest.objects.filter(
+            user__username=validated_user['username'])
+
+        if ar_qs.exists():
+            ar_obj = ar_qs.first()
+            print("SEND FOLLOW UP EMAIL", ar_obj)
+            # send_email(f"Access Request Follow up for CSAT CBA App - {validated_user['username']}",
+            #            f"Access Request Follow up for CSAT CBA App - {validated_user['username']}", validated_user['username'])
+        else:
+            user = User.objects.get(
+                username=validated_user['username'])
+            ar_obj = CsatAccessRequest.objects.create(user=user)
+            # send_email(f"New Access Request for CSAT CBA App - {validated_user['username']}",
+            #            f"New Access Request for CSAT CBA App - {validated_user['username']}", validated_user['username'])
+
+        return ar_obj
 
 
 class RCAInitialSerializer(serializers.ModelSerializer):
@@ -153,8 +213,10 @@ class SurveySerializer(serializers.ModelSerializer):
 
         # ADD AGENT AS MEMBER OF THE TEAM AS PER SCOPE
 
-        tm_obj = TeamMember.objects.get_or_create(
-            agent=agent_obj, team=team_obj)
+        agent_obj.teams.add(team_obj)
+
+        # tm_obj = TeamMember.objects.get_or_create(
+        #     agent=agent_obj, team=team_obj)
 
         # CREATE SURVEY
         survey = Survey.objects.create(**validated_data)
@@ -169,27 +231,29 @@ class SurveySerializer(serializers.ModelSerializer):
 
 
 class DSAT_Code1Serializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = DSAT_Code1
         fields = '__all__'
 
-        # extra_kwargs = {
-        #     'id': {
-        #         'validators': []
-        #     },
-        #     'name': {
-        #         'validators': []
-        #     }
-        # }
+        extra_kwargs = {
+            'id': {
+                'validators': []
+            },
+            'name': {
+                'validators': []
+            }
+        }
 
 
 class BB_Driver_Code2Serializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = BB_Driver_Code2
-
         fields = '__all__'
+
         extra_kwargs = {
             'id': {
                 'validators': []
@@ -205,11 +269,12 @@ class BB_Driver_Code2Serializer(serializers.ModelSerializer):
 
 
 class BB_Driver_Code3Serializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = BB_Driver_Code3
-
         fields = '__all__'
+
         extra_kwargs = {
             'id': {
                 'validators': []
@@ -224,6 +289,21 @@ class BB_Driver_Code3Serializer(serializers.ModelSerializer):
         }
 
 
+class AccountableTeamSerializer(serializers.ModelSerializer):
+
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = AccountableTeam
+        fields = '__all__'
+
+        extra_kwargs = {
+            'name': {
+                'validators': []
+            }
+        }
+
+
 class SurveySerializerRca(serializers.ModelSerializer):
 
     class Meta:
@@ -231,66 +311,79 @@ class SurveySerializerRca(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class AgentSerializerRca(serializers.ModelSerializer):
+
+    id = serializers.IntegerField(required=False)
+
+    # user = UserSerializer(required=False)
+
+    class Meta:
+        model = Agent
+        fields = "__all__"
+        depth = 4
+
+
 class RCASerializer(serializers.ModelSerializer):
 
-    surveyed_ticket = SurveySerializerRca(required=False)
-    agent = AgentSerializer(required=False)
+    surveyed_ticket = SurveySerializerRca(required=False, read_only=True)
+    agent = AgentSerializerRca(required=False, read_only=True)
+
+    support_silo_issue_based = AgentSkillSerializer(required=False)
+    dsat_code1 = DSAT_Code1Serializer(required=False)
+    bb_driver_code2 = BB_Driver_Code2Serializer(required=False)
+    bb_driver_code3 = BB_Driver_Code3Serializer(required=False)
+    accountable_team = AccountableTeamSerializer(required=False)
 
     class Meta:
         model = RCA
         fields = '__all__'
 
-    # def update_or_create_dsat_cause(self, validated_data):
+    def update(self, instance, validated_data):
 
-    #     data = validated_data.pop('dsat_cause', None)
+        request_data = self.context.get("request").data
+        user = request_data.get('user')
+        surveyed_ticket = request_data.get('surveyed_ticket')
 
-    #     if not data:
-    #         return None
+        if "support_silo_issue_based" in validated_data.keys():
+            support_silo_issue_based = validated_data.pop(
+                'support_silo_issue_based')
+            instance.support_silo_issue_based = AgentSkill.objects.get(
+                id=support_silo_issue_based['id'])
+            instance.save()
 
-    #     dsat_cause, created = DSAT_Code1.objects.update_or_create(
-    #         name=data.pop('name'), defaults=data)
+        if "dsat_code1" in validated_data.keys():
+            dsat_code1 = validated_data.pop('dsat_code1')
+            instance.dsat_code1 = DSAT_Code1.objects.get(
+                id=dsat_code1['id'])
+            instance.save()
 
-    #     validated_data['dsat_cause'] = dsat_cause
+        if "bb_driver_code2" in validated_data.keys():
+            bb_driver_code2 = validated_data.pop('bb_driver_code2')
+            instance.bb_driver_code2 = BB_Driver_Code2.objects.get(
+                id=bb_driver_code2['id'])
+            instance.save()
 
-    # def update_or_create_bb_driver_code2(self, validated_data):
+        if "bb_driver_code3" in validated_data.keys():
+            bb_driver_code3 = validated_data.pop('bb_driver_code3')
+            instance.bb_driver_code3 = BB_Driver_Code3.objects.get(
+                id=bb_driver_code3['id'])
+            instance.save()
 
-    #     data = validated_data.pop('bb_driver_code2', None)
+        if "accountable_team" in validated_data.keys():
+            accountable_team = validated_data.pop(
+                'accountable_team')
+            instance.accountable_team = AccountableTeam.objects.get(
+                name=accountable_team['name'])
+            instance.save()
 
-    #     if not data:
-    #         return None
+        instance = super().update(instance, validated_data)
 
-    #     bb_driver_code2, created = BB_Driver_Code2.objects.update_or_create(
-    #         name=data.pop('name'), dsat_Code1=data.pop('dsat_Code1'), defaults=data)
+        instance.date_completed = instance.date_completed or datetime.now().date()
+        instance.completed_by = user['username']
 
-    #     validated_data['bb_driver_code2'] = bb_driver_code2
+        instance.save()
 
-    # def update_or_create_bb_driver_code3(self, validated_data):
+        # send_email(f"CSAT for Ticket Number: {surveyed_ticket['reference_number']} has been completed",
+        #            f"Completed - Ticket Number: {surveyed_ticket['reference_number']}", user['username'])
 
-    #     data = validated_data.pop('bb_driver_code3', None)
-
-    #     if not data:
-    #         return None
-
-    #     bb_driver_code3, created = BB_Driver_Code3.objects.update_or_create(
-    #         name=data.pop('name'), bb_Driver_Code2=data.pop('bb_Driver_Code2'), defaults=data)
-
-    #     validated_data['bb_driver_code3'] = bb_driver_code3
-
-    # def create(self, validated_data):
-    #     self.update_or_create_dsat_cause(validated_data)
-    #     self.update_or_create_bb_driver_code2(validated_data)
-    #     self.update_or_create_bb_driver_code3(validated_data)
-    #     return super(RCASerializer, self).create(validated_data)
-
-    # def update(self, instance, validated_data):
-    #     self.update_or_create_dsat_cause(validated_data)
-    #     self.update_or_create_bb_driver_code2(validated_data)
-    #     self.update_or_create_bb_driver_code3(validated_data)
-    #     return super(RCASerializer, self).update(instance, validated_data)
-
-
-class AccountableTeamSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AccountableTeam
-        fields = '__all__'
+        return instance

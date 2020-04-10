@@ -1,13 +1,20 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-import UploadData from "../upload/UploadData";
 import DriverView from "../drivers/DriverView";
+import AgentView from "../agent/AgentView";
 import SurveyView from "../survey/SurveyView";
+import RequestAccess from "./RequestAccess";
+import AccessRequest from "../access_request/AccessRequest";
+import AdminRequest from "../admin_request/AdminRequest";
+import AgentSkill from "../agent_skill/AgentSkill";
 
-import { Spinner } from "reactstrap";
+import { Spinner, Collapse, Card, CardHeader, CardBody } from "reactstrap";
 
-import { getAllData2 } from "../../../../actions/surveyActions";
+import {
+    getAllData2,
+    collapseComponent,
+} from "../../../../actions/surveyActions";
 
 class Main extends Component {
     constructor(props) {
@@ -16,12 +23,56 @@ class Main extends Component {
         this.props.getAllData2();
     }
 
-    // componentDidMount() {
-    //     this.props.getAllData2();
-    // }
+    handleClose = () => this.props.collapseComponent("");
+
+    getListOfTeamLeads = (list) => list.map(({ user }) => user.username);
+
+    getListOfCsatPerTeamLead = (csats, username) =>
+        csats.filter((csat) =>
+            csat.agent.teams
+                .map((team) =>
+                    team.team_leads.map((lead) => lead.user.username)
+                )[0]
+                .includes(username)
+        );
 
     render() {
-        const { surveys, csat_rcas } = this.props;
+        const {
+            surveys,
+            csat_rcas,
+            collapse_component,
+            teamleads,
+            auth,
+            csat_admin,
+        } = this.props;
+
+        let componentList = [
+            {
+                title: "Agent View",
+                component: AgentView,
+                collapseValue: "AgentView",
+            },
+            {
+                title: "Driver View",
+                component: DriverView,
+                collapseValue: "DriverView",
+            },
+            {
+                title: "CSAT Request Access View",
+                component: AccessRequest,
+                collapseValue: "AccessRequest",
+            },
+            {
+                title: "CSAT Administrator View",
+                component: AdminRequest,
+                collapseValue: "AdminRequest",
+            },
+            {
+                title: "Agent Skill View",
+                component: AgentSkill,
+                collapseValue: "AgentSkill",
+            },
+        ];
 
         return (
             <Fragment>
@@ -32,33 +83,109 @@ class Main extends Component {
                             height: "3rem",
                             top: "50%",
                             left: "50%",
-                            position: "fixed"
+                            position: "fixed",
                         }}
                     />
                 ) : (
                     <Fragment>
-                        {csat_rcas ? (
+                        {this.getListOfTeamLeads(teamleads).includes(
+                            auth.user.username
+                        ) || this.checkAdmin(csat_admin, auth.user.username) ? (
                             <Fragment>
-                                <DriverView />
-                                <SurveyView data={csat_rcas} />
+                                {csat_rcas ? (
+                                    <Fragment>
+                                        {componentList.map(
+                                            (
+                                                {
+                                                    title,
+                                                    component,
+                                                    collapseValue,
+                                                },
+                                                i
+                                            ) => (
+                                                <CollapseComponent
+                                                    isOpen={
+                                                        collapse_component ===
+                                                        collapseValue
+                                                    }
+                                                    title={title}
+                                                    component={component}
+                                                    close={this.handleClose}
+                                                    className="mb-3"
+                                                    key={i}
+                                                />
+                                            )
+                                        )}
+
+                                        <SurveyView
+                                            data={
+                                                this.getListOfTeamLeads(
+                                                    teamleads
+                                                ).includes(
+                                                    auth.user.username
+                                                ) &&
+                                                !this.checkAdmin(
+                                                    csat_admin,
+                                                    auth.user.username
+                                                )
+                                                    ? this.getListOfCsatPerTeamLead(
+                                                          csat_rcas,
+                                                          auth.user.username
+                                                      )
+                                                    : csat_rcas
+                                            }
+                                        />
+                                    </Fragment>
+                                ) : (
+                                    "No Survey found"
+                                )}
                             </Fragment>
                         ) : (
-                            "No Survey found"
+                            <RequestAccess user={auth.user} />
                         )}
                     </Fragment>
                 )}
             </Fragment>
         );
     }
+
+    checkAdmin = (admin_list, username) =>
+        admin_list.map(({ user }) => user.username).includes(username);
 }
 
-const mapStateToProps = state => ({
+const CollapseComponent = ({ isOpen, title, component: Component, close }) => (
+    <Collapse isOpen={isOpen}>
+        <Card className="my-2">
+            <CardHeader>
+                <div style={{ float: "left" }}>{title}</div>
+                <div
+                    style={{
+                        float: "right",
+                        cursor: "pointer",
+                    }}
+                    onClick={close}
+                >
+                    <i className="fas fa-times"></i>
+                </div>
+            </CardHeader>
+            <CardBody>
+                <Component />
+            </CardBody>
+        </Card>
+    </Collapse>
+);
+
+const mapStateToProps = (state) => ({
     surveys: state.surveys.surveys,
     csat_rcas: state.surveys.csat_rcas,
     isFetching: state.surveys.isFetching,
-    auth: state.auth
+    auth: state.auth,
+    collapse_component: state.surveys.collapse_component,
+    teamleads: state.surveys.teamleads,
+    csat_admin: state.surveys.csat_admin,
 });
 
 export default connect(mapStateToProps, {
-    getAllData2
+    getAllData2,
+    collapseComponent,
 })(Main);

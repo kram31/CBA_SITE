@@ -6,14 +6,21 @@ import { Form, Input, Label, FormGroup } from "reactstrap";
 
 import ConfirmModal from "../../../ccms/components/Drivers/ConfirmModal";
 
-import { addDsatCode1 } from "../../../../actions/surveyActions";
+import {
+    addDsatCode1,
+    addBbDriverCode2,
+    addBbDriverCode3,
+    updateDsatCode1,
+    updateBbDriverCode2,
+    updateBbDriverCode3
+} from "../../../../actions/surveyActions";
 
 class DriverForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: "",
+            name: props.task == "add" ? "" : props.driverDetails.name,
             isOpen: false
         };
     }
@@ -30,12 +37,12 @@ class DriverForm extends Component {
 
     parentCallback = childData => {
         const {
-            editEscalationDriverCause,
-            addEscalationDriverCause,
-            addEscalationDriver,
-            editEscalationDriver,
+            updateBbDriverCode3,
+            updateBbDriverCode2,
+            updateDsatCode1,
+            addBbDriverCode3,
+            addBbDriverCode2,
             addDsatCode1,
-            edit_cause_code,
             tableName,
             task,
             cancelEdit,
@@ -55,41 +62,43 @@ class DriverForm extends Component {
 
                         break;
                     } else if (task == "edit") {
-                        edit_cause_code(driverDetails, { name });
+                        console.log("DSAT Code 1 EDIT", driverDetails, {
+                            name
+                        });
+                        updateDsatCode1(driverDetails, { name });
                         break;
                     }
 
-                case "Escalation Driver":
+                case "Driver Code 2":
                     if (task == "add") {
-                        addEscalationDriver({
+                        addBbDriverCode2({
                             name,
-                            cause_code: selectedCode.id
+                            dsat_Code1: selectedCode.id
                         });
                         break;
                     } else if (task == "edit") {
-                        editEscalationDriver(driverDetails, {
+                        updateBbDriverCode2(driverDetails, {
                             name,
-                            cause_code: driverDetails.cause_code
+                            dsat_Code1: driverDetails.dsat_Code1
                         });
                         break;
                     }
-                case "Escalation Driver Cause":
+                case "Driver Code 3":
                     if (task == "add") {
-                        console.log(selectedCode);
-                        addEscalationDriverCause({
+                        addBbDriverCode3({
                             name,
-                            escalation_driver: selectedCode.id
+                            bb_Driver_Code2: selectedCode.id
                         });
                         break;
                     } else if (task == "edit") {
-                        editEscalationDriverCause(driverDetails, {
+                        updateBbDriverCode3(driverDetails, {
                             name,
-                            escalation_driver: driverDetails.escalation_driver
+                            bb_Driver_Code2: driverDetails.bb_Driver_Code2
                         });
                         break;
                     }
                 // else if (task == "edit") {
-                //     edit_cause_code(driverDetails, { name });
+                //     updateDsatCode1(driverDetails, { name });
                 //     break;
                 // }
 
@@ -101,7 +110,7 @@ class DriverForm extends Component {
             // } else if (task == "edit") {
             //     // EDIT
 
-            //     edit_cause_code(driverDetails, { name });
+            //     updateDsatCode1(driverDetails, { name });
             // }
         }
 
@@ -129,29 +138,30 @@ class DriverForm extends Component {
             () => console.log(this.state)
         );
     };
+
     handleKeyDown = e => {
         if (e.keyCode == 27) {
             this.props.cancelEdit();
         }
     };
+
     render() {
         const { isOpen, name } = this.state;
         const { tableName, task } = this.props;
         return (
             <Form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
                 <FormGroup>
-                    <Label for={`id_name`}>Name</Label>
-
                     <Input
                         bsSize="sm"
+                        className="w-200"
+                        required
                         type="text"
                         name="name"
-                        required
-                        id={`id_name`}
-                        value={name}
                         onKeyDown={e => this.handleKeyDown(e)}
                         onChange={e => this.handleChange(e)}
-                    ></Input>
+                        value={name}
+                        placeholder="Input here..."
+                    />
 
                     <ConfirmModal
                         open={isOpen}
@@ -167,4 +177,11 @@ class DriverForm extends Component {
     }
 }
 
-export default connect(null, { addDsatCode1 })(DriverForm);
+export default connect(null, {
+    addDsatCode1,
+    addBbDriverCode2,
+    addBbDriverCode3,
+    updateDsatCode1,
+    updateBbDriverCode2,
+    updateBbDriverCode3
+})(DriverForm);

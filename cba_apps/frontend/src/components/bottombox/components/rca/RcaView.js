@@ -27,20 +27,17 @@ class RcaView extends Component {
                                                     match => match.toUpperCase()
                                                 )}
                                         </Label>
-                                        <Col>
-                                            <Input
-                                                size="sm"
-                                                type="text"
-                                                name={key}
-                                                id={`id ${key}`}
-                                                value={
-                                                    cellData.surveyed_ticket[
-                                                        key
-                                                    ]
-                                                }
-                                                disabled
-                                            />
-                                        </Col>
+
+                                        <Input
+                                            bsSize="sm"
+                                            type="text"
+                                            name={key}
+                                            id={`id ${key}`}
+                                            value={
+                                                cellData.surveyed_ticket[key]
+                                            }
+                                            disabled
+                                        />
                                     </FormGroup>
                                 </Fragment>
                             ))}

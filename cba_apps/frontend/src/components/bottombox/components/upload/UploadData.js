@@ -8,7 +8,7 @@ import {
     updateSurvey,
     addAgentSkill,
     addCbaTeam,
-    addAgent
+    addAgent,
 } from "../../../../actions/surveyActions";
 
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
@@ -28,8 +28,8 @@ class UploadData extends Component {
             data: [],
             filtered_data: {
                 post: null,
-                put: null
-            }
+                put: null,
+            },
         };
 
         this.LoadingOn = this.LoadingOn.bind(this);
@@ -54,7 +54,7 @@ class UploadData extends Component {
         const reader = new FileReader();
         const rABS = !!reader.readAsBinaryString;
 
-        reader.onload = e => {
+        reader.onload = (e) => {
             /* Parse data */
 
             const bstr = e.target.result;
@@ -62,7 +62,7 @@ class UploadData extends Component {
             const wb = XLSX.read(bstr, {
                 type: rABS ? "binary" : "array",
                 bookVBA: true,
-                sheetStubs: true
+                sheetStubs: true,
             });
             /* Get first worksheet */
             const wsname = wb.SheetNames[0];
@@ -72,7 +72,7 @@ class UploadData extends Component {
             const data = XLSX.utils.sheet_to_json(ws, {
                 defval: "",
                 header: surveyKeys,
-                range: 1
+                range: 1,
             });
 
             // let filtered_data = data.filter(
@@ -90,18 +90,28 @@ class UploadData extends Component {
 
             // check for non existing scopes/ agent_skill
 
-            this.processNewAgentSkillandTeam(cba_teams, data);
-            this.processNewAgent(agents, data);
+            const processData = new Promise(
+                (resolve, reject) =>
+                    this.processNewAgentSkillandTeam(cba_teams, data) ===
+                        "success" && resolve("success")
+            );
 
-            let changedData = data.map(item => ({
+            processData.then(
+                (res) => res === "success" && this.processNewAgent(agents, data)
+            );
+
+            // this.processNewAgentSkillandTeam(cba_teams, data);
+            // this.processNewAgent(agents, data);
+
+            let changedData = data.map((item) => ({
                 ...item,
-                uploaded_by: this.props.user.user.email
+                uploaded_by: this.props.user.user.email,
             }));
 
             let existingData = [];
             let newData = [];
 
-            changedData.forEach(item => {
+            changedData.forEach((item) => {
                 if (
                     surveys
                         .map(({ reference_number }) => reference_number)
@@ -124,8 +134,8 @@ class UploadData extends Component {
                 {
                     filtered_data: {
                         post: newData.length ? newData : null,
-                        put: existingData.length ? existingData : null
-                    }
+                        put: existingData.length ? existingData : null,
+                    },
                 },
                 () => this.setState({ isLoading: false })
             );
@@ -143,7 +153,7 @@ class UploadData extends Component {
     processNewAgent = (existingList, data) => {
         if (existingList.length) {
             let newDataRaw = data.filter(
-                item =>
+                (item) =>
                     !existingList
                         .map(({ operator_lan_id }) => operator_lan_id)
                         .includes(
@@ -160,7 +170,7 @@ class UploadData extends Component {
             if (newDataRaw.length) {
                 let seen = new Set();
 
-                let newData = newDataRaw.filter(item => {
+                let newData = newDataRaw.filter((item) => {
                     if (!seen.has(item.operator_lan_id)) {
                         seen.add(item.operator_lan_id);
                         return item;
@@ -172,7 +182,7 @@ class UploadData extends Component {
                 // send post requests for creating agent_skill and cba_team
 
                 if (newData.length) {
-                    newData.forEach(survey => {
+                    newData.forEach((survey) => {
                         let newAgentReq = {
                             operator_lan_id:
                                 survey.owner_name !== "ITSD_AskIT_Ticket_Triage"
@@ -183,7 +193,8 @@ class UploadData extends Component {
                             owner_name: survey.owner_name,
                             owner_name_email_address:
                                 survey.owner_name_email_address,
-                            scope: survey.scope
+                            scope: survey.scope,
+                            teams: [],
                         };
 
                         console.log(newAgentReq);
@@ -198,7 +209,7 @@ class UploadData extends Component {
     processNewAgentSkillandTeam = (existingList, data) => {
         if (existingList.length) {
             let newScopesRaw = data.filter(
-                item =>
+                (item) =>
                     !existingList
                         .map(({ agent_skill }) => agent_skill.name)
                         .includes(item.scope)
@@ -209,7 +220,7 @@ class UploadData extends Component {
             if (newScopesRaw.length) {
                 let seen = new Set();
 
-                let newScopes = newScopesRaw.filter(item => {
+                let newScopes = newScopesRaw.filter((item) => {
                     if (!seen.has(item.scope)) {
                         seen.add(item.scope);
                         return item;
@@ -219,9 +230,9 @@ class UploadData extends Component {
                 // send post requests for creating agent_skill and cba_team
 
                 if (newScopes.length) {
-                    newScopes.forEach(survey => {
+                    newScopes.forEach((survey) => {
                         let newSkillReq = {
-                            name: survey.scope
+                            name: survey.scope,
                         };
 
                         this.createNewAgentSkillAndCbaTeam(newSkillReq, survey);
@@ -229,12 +240,13 @@ class UploadData extends Component {
                 }
             }
         }
+        return "success";
     };
 
     async createNewAgent(newAgentReq) {
         let newAgent = await this.props
             .addAgent(newAgentReq)
-            .then(data => data);
+            .then((data) => data);
         console.log(newAgent);
 
         return newAgent;
@@ -243,19 +255,19 @@ class UploadData extends Component {
     async createNewAgentSkillAndCbaTeam(newSkillReq, survey) {
         let newSkill = await this.props
             .addAgentSkill(newSkillReq)
-            .then(data => data);
+            .then((data) => data);
         console.log(newSkill);
 
         let newCbaTeam = await this.props
             .addCbaTeam({ agent_skill: newSkill })
-            .then(data => data);
+            .then((data) => data);
 
         console.log(newCbaTeam);
 
         return { team: newCbaTeam };
     }
 
-    handleFile = e => {
+    handleFile = (e) => {
         e.preventDefault();
 
         const { post, put } = this.state.filtered_data;
@@ -277,9 +289,9 @@ class UploadData extends Component {
         this.setState({
             filtered_data: {
                 post: null,
-                put: null
+                put: null,
             },
-            file: null
+            file: null,
         });
     };
 
@@ -291,10 +303,10 @@ class UploadData extends Component {
         await this.props.addSurvey(data);
     }
 
-    getColumns = list =>
-        Object.keys(list[0]).map(item => ({
+    getColumns = (list) =>
+        Object.keys(list[0]).map((item) => ({
             Header: item,
-            accessor: item
+            accessor: item,
         }));
 
     render() {
@@ -307,28 +319,29 @@ class UploadData extends Component {
             {
                 Header: "Reference Number",
                 id: "reference_number",
-                accessor: ({ reference_number }) => reference_number
+                accessor: ({ reference_number }) => reference_number,
             },
             {
                 Header: "Escalator Name",
                 id: "escalator_name",
-                accessor: row => `${row.first_name} ${row.last_name}`
+                accessor: (row) => `${row.first_name} ${row.last_name}`,
             },
             {
                 Header: "Escalator Email Address",
                 id: "customer_email_address",
-                accessor: ({ customer_email_address }) => customer_email_address
+                accessor: ({ customer_email_address }) =>
+                    customer_email_address,
             },
             {
                 Header: "Date Escalated",
                 id: "date_time",
-                accessor: ({ date_time }) => date_time
+                accessor: ({ date_time }) => date_time,
             },
             {
                 Header: "Bottombox",
                 id: "bottombox",
-                accessor: ({ bottombox }) => bottombox
-            }
+                accessor: ({ bottombox }) => bottombox,
+            },
         ];
 
         return (
@@ -422,14 +435,14 @@ class UploadData extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     user: state.auth.user,
     surveys: state.surveys.surveys,
     cba_teams: state.surveys.cba_teams,
     agents: state.surveys.agents,
     success_uploads: state.surveys.success_uploads,
     req_error: state.surveys.req_error,
-    isFetching: state.surveys.isFetching
+    isFetching: state.surveys.isFetching,
 });
 
 export default connect(mapStateToProps, {
@@ -438,5 +451,5 @@ export default connect(mapStateToProps, {
     updateSurvey,
     addAgentSkill,
     addCbaTeam,
-    addAgent
+    addAgent,
 })(UploadData);
