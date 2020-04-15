@@ -12,11 +12,9 @@ import {
     UncontrolledPopover,
     PopoverHeader,
     PopoverBody,
-    Popover,
 } from "reactstrap";
 
 import FormInput from "../rca/FormInput";
-import TeamView from "../team/TeamView";
 import TeamLeadDataForm from "../team/TeamLeadDataForm";
 
 class AgentForm extends Component {

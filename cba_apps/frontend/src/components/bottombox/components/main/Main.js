@@ -8,6 +8,9 @@ import RequestAccess from "./RequestAccess";
 import AccessRequest from "../access_request/AccessRequest";
 import AdminRequest from "../admin_request/AdminRequest";
 import AgentSkill from "../agent_skill/AgentSkill";
+import TeamLeadView from "../team_lead/TeamLeadView";
+import TeamView from "../team/TeamView";
+import AccountableTeam from "../accountable_team/AccountableTeam";
 
 import { Spinner, Collapse, Card, CardHeader, CardBody } from "reactstrap";
 
@@ -71,6 +74,21 @@ class Main extends Component {
                 title: "Agent Skill View",
                 component: AgentSkill,
                 collapseValue: "AgentSkill",
+            },
+            {
+                title: "Team Leads View",
+                component: TeamLeadView,
+                collapseValue: "TeamLeadView",
+            },
+            {
+                title: "Team View",
+                component: TeamView,
+                collapseValue: "TeamView",
+            },
+            {
+                title: "Accountable Team View",
+                component: AccountableTeam,
+                collapseValue: "AccountableTeam",
             },
         ];
 

@@ -8,7 +8,7 @@ class SurveyTable extends Component {
         this.state = {};
     }
     render() {
-        const { data, columns } = this.props;
+        const { data, columns, filter } = this.props;
 
         // const columns = Object.keys(data[0]).map(item => ({
         //     Header: item,
@@ -23,6 +23,7 @@ class SurveyTable extends Component {
                     data={data}
                     columns={columns}
                     defaultPageSize={10}
+                    filterable={filter}
                 />
             </Fragment>
         );

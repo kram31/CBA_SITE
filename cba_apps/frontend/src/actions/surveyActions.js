@@ -1,4 +1,5 @@
 import {
+    ADD_AGENT_SKILL,
     REMOVE_CSAT_ADMIN,
     ADD_CSAT_ADMIN,
     GET_USERS,
@@ -30,7 +31,9 @@ import {
     ADD_DSAT_CODE1,
     ADD_BB_DRIVER_CODE2,
     ADD_BB_DRIVER_CODE3,
-    ADD_TEAM,
+    ADD_CSAT_ACCOUNTABLE_TEAM,
+    EDIT_CSAT_ACCOUNTABLE_TEAM,
+    DELETE_CSAT_ACCOUNTABLE_TEAM,
     GET_RCAS,
     GET_BOTTOMBOX,
     GET_AGENTS,
@@ -419,19 +422,10 @@ export const addAgent = (newAgent) => (dispatch) => {
         .catch((err) => console.log(err.response));
 };
 
-export const updateAgent = (agentData) => (dispatch, getState) => {
-    dispatch({
-        type: FETCHING,
-    });
-
+export const updateAgent = (agentData) => (dispatch) => {
     axios
-        .put(
-            `/api/agents/${agentData.operator_lan_id}/`,
-            agentData,
-            tokenConfig(getState)
-        )
+        .patch(`/api/agents/${agentData.operator_lan_id}/`, agentData)
         .then((res) => {
-            console.log(res.data);
             dispatch({
                 type: UPDATE_AGENT,
                 payload: res.data,
@@ -712,7 +706,7 @@ export const addAgentSkill = (data) => (dispatch) => {
         .post("/api/agent_skills/", data)
         .then((res) => {
             dispatch({
-                type: ADD_SKILL,
+                type: ADD_AGENT_SKILL,
                 payload: res.data,
             });
             return res.data;
@@ -785,16 +779,34 @@ export const getBBDriverCode3 = () => (dispatch) => {
 };
 
 export const addCsatAccountableTeam = (data) => (dispatch) => {
-    dispatch({
-        type: FETCHING,
-    });
-
     axios
         .post("/api/csat_accountable_team/", data)
         .then((res) =>
             dispatch({
-                type: ADD_TEAM,
+                type: ADD_CSAT_ACCOUNTABLE_TEAM,
                 payload: res.data,
+            })
+        )
+        .catch((err) => console.log(err));
+};
+export const editCsatAccountableTeam = (data) => (dispatch) => {
+    axios
+        .put("/api/csat_accountable_team/", data)
+        .then((res) =>
+            dispatch({
+                type: EDIT_CSAT_ACCOUNTABLE_TEAM,
+                payload: { new: res.data, old: data },
+            })
+        )
+        .catch((err) => console.log(err));
+};
+export const deleteCsatAccountableTeam = (data) => (dispatch) => {
+    axios
+        .delete(`/api/csat_accountable_team/${data.name}/`)
+        .then((res) =>
+            dispatch({
+                type: DELETE_CSAT_ACCOUNTABLE_TEAM,
+                payload: data,
             })
         )
         .catch((err) => console.log(err));
@@ -863,10 +875,6 @@ export const getTeamLeads = () => (dispatch) => {
 };
 
 export const addTeamLead = (data) => (dispatch) => {
-    dispatch({
-        type: FETCHING,
-    });
-
     axios
         .post("/api/teamleads/", data)
         .then((res) =>

@@ -20,8 +20,8 @@ const GeneralDropDown = ({ dataList }) => {
 
     return (
         <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} className="ml-1">
-            <DropdownToggle color="success" caret>
-                <i className="fas fa-list mr-1"></i>Data Table List
+            <DropdownToggle size="sm" color="success" caret>
+                <i className="fas fa-list mr-1"></i>Others
             </DropdownToggle>
             <DropdownMenu>
                 {dataList.map((item, index) => (

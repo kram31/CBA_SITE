@@ -4,12 +4,21 @@ import { connect } from "react-redux";
 
 import SurveyTable from "../surveyTable/SurveyTable";
 
-import { ButtonGroup, Button, Card, CardTitle, Badge } from "reactstrap";
+import {
+    ButtonGroup,
+    Button,
+    Card,
+    CardTitle,
+    Badge,
+    Row,
+    Col,
+} from "reactstrap";
 
 import UploadData from "../upload/UploadData";
 import CsatModal from "../modal/CsatModal";
 import RcaView from "../rca/RcaView";
 import GeneralDropDown from "../reusable/GeneralDropDown";
+import DownloadOption from "../download/DownloadOption";
 
 import { collapseComponent } from "../../../../actions/surveyActions";
 
@@ -17,15 +26,29 @@ class SurveyView extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = { filter: false };
     }
 
     handleRcaButton = (cellprops) => {
         console.log("working", cellprops.original);
     };
 
+    handleFilter = () => this.setState({ filter: !this.state.filter });
+
     render() {
         const dataList = [
+            {
+                name: "Driver View",
+                component: "DriverView",
+            },
+            {
+                name: "Team Lead View",
+                component: "TeamLeadView",
+            },
+            {
+                name: "Team View",
+                component: "TeamView",
+            },
             {
                 name: "Agent List",
                 component: "AgentView",
@@ -33,6 +56,10 @@ class SurveyView extends Component {
             {
                 name: "CSAT Administrators",
                 component: "AdminRequest",
+            },
+            {
+                name: "Accountable Team View",
+                component: "AccountableTeam",
             },
             {
                 name: "Agent Skills",
@@ -52,7 +79,14 @@ class SurveyView extends Component {
                             component={RcaView}
                             buttonLabel="RCA"
                             className="modal-xl"
-                            buttonColor="primary"
+                            buttonColor={
+                                cellprops.original.date_completed
+                                    ? "success"
+                                    : cellprops.original.surveyed_ticket
+                                          .bottombox === 1
+                                    ? "danger"
+                                    : "warning"
+                            }
                             cellData={cellprops.original}
                         />
                     </ButtonGroup>
@@ -94,50 +128,99 @@ class SurveyView extends Component {
                 id: "bottombox",
                 accessor: ({ surveyed_ticket }) => surveyed_ticket.bottombox,
             },
+            {
+                Header: "Completed",
+                id: "completed",
+                accessor: ({ date_completed }) =>
+                    date_completed ? (
+                        <i
+                            value={1}
+                            style={{ color: "#5cb85c" }}
+                            className="far fa-thumbs-up"
+                        ></i>
+                    ) : (
+                        <i
+                            value={0}
+                            style={{ color: "#d9534f" }}
+                            className="far fa-thumbs-down"
+                        ></i>
+                    ),
+            },
+            {
+                Header: "Scope",
+                id: "scope",
+                accessor: ({ surveyed_ticket }) => surveyed_ticket.scope,
+            },
         ];
         return (
             <Fragment>
                 <Card className="my-2" body style={{ borderColor: "white" }}>
                     <CardTitle>CSAT Table</CardTitle>
-                    {this.checkAdmin(csat_admin, auth.user.username) ? (
-                        <ButtonGroup size="sm" className="col-5 mb-3">
-                            <CsatModal
-                                component={UploadData}
-                                buttonLabel="Upload Data"
-                                className="modal-xl"
-                                buttonColor="success"
-                            />
-                            <Button
-                                className="ml-1"
-                                color="success"
-                                onClick={() =>
-                                    this.props.collapseComponent("DriverView")
-                                }
-                            >
-                                Drivers
-                            </Button>
+                    <div>
+                        {this.checkAdmin(csat_admin, auth.user.username) ? (
+                            <div className="float-left">
+                                <ButtonGroup size="sm" className="mb-3">
+                                    <CsatModal
+                                        component={UploadData}
+                                        buttonLabel="Upload Data"
+                                        className="modal-xl"
+                                        buttonColor="success"
+                                    />
+                                    {this.props.csat_rcas ? (
+                                        <DownloadOption />
+                                    ) : null}
 
-                            {csat_access_request.length ? (
+                                    {csat_access_request.length ? (
+                                        <Button
+                                            className="ml-1"
+                                            color="success"
+                                            onClick={() =>
+                                                this.props.collapseComponent(
+                                                    "AccessRequest"
+                                                )
+                                            }
+                                        >
+                                            CSAT Access Request (Team Lead)
+                                            <Badge
+                                                color="danger"
+                                                className="ml-2"
+                                            >
+                                                {csat_access_request.length}
+                                            </Badge>
+                                        </Button>
+                                    ) : null}
+                                    <GeneralDropDown dataList={dataList} />
+                                </ButtonGroup>
+                            </div>
+                        ) : null}
+                        <div className="float-right">
+                            <ButtonGroup size="sm" className="mb-3">
                                 <Button
                                     className="ml-1"
                                     color="success"
-                                    onClick={() =>
-                                        this.props.collapseComponent(
-                                            "AccessRequest"
-                                        )
-                                    }
+                                    onClick={this.handleFilter}
                                 >
-                                    CSAT Access Request (Team Lead)
-                                    <Badge color="danger" className="ml-2">
-                                        {csat_access_request.length}
-                                    </Badge>
+                                    Filter{" "}
+                                    <span>
+                                        <i
+                                            style={{
+                                                color:
+                                                    this.state.filter &&
+                                                    "#d9534f",
+                                            }}
+                                            className="fas fa-power-off"
+                                        ></i>
+                                    </span>
                                 </Button>
-                            ) : null}
-                            <GeneralDropDown dataList={dataList} />
-                        </ButtonGroup>
-                    ) : null}
+                            </ButtonGroup>
+                        </div>
+                    </div>
                     {data.length ? (
-                        <SurveyTable data={data} columns={columns} />
+                        <SurveyTable
+                            data={data}
+                            columns={columns}
+                            filter={this.state.filter}
+                        />
                     ) : null}
                 </Card>
             </Fragment>
@@ -151,6 +234,7 @@ const mapStateToProps = (state) => ({
     csat_admin: state.surveys.csat_admin,
     auth: state.auth,
     csat_access_request: state.surveys.csat_access_request,
+    csat_rcas: state.surveys.csat_rcas,
 });
 
 export default connect(mapStateToProps, { collapseComponent })(SurveyView);

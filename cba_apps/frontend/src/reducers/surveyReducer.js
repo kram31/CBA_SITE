@@ -1,4 +1,7 @@
 import {
+    DELETE_CBA_TEAMS,
+    EDIT_TEAMLEAD,
+    DELETE_TEAMLEAD,
     DELETE_AGENT_SKILL,
     ADD_AGENT_SKILL,
     REMOVE_CSAT_ADMIN,
@@ -30,7 +33,9 @@ import {
     ADD_DSAT_CODE1,
     ADD_BB_DRIVER_CODE2,
     ADD_BB_DRIVER_CODE3,
-    ADD_TEAM,
+    ADD_CSAT_ACCOUNTABLE_TEAM,
+    EDIT_CSAT_ACCOUNTABLE_TEAM,
+    DELETE_CSAT_ACCOUNTABLE_TEAM,
     GET_RCAS,
     GET_BOTTOMBOX,
     GET_AGENTS,
@@ -256,7 +261,17 @@ const surveyReducer = (state = initialState, action) => {
         case ADD_CBA_TEAMS:
             return {
                 ...state,
-                cba_teams: [action.payload, ...state.cba_teams],
+                // cba_teams: [action.payload, ...state.cba_teams],
+                cba_teams: !state.cba_teams
+                    .map(({ id }) => id)
+                    .includes(action.payload.id)
+                    ? [action.payload, ...state.cba_teams]
+                    : state.cba_teams,
+                agent_skills: !state.agent_skills
+                    .map(({ id }) => id)
+                    .includes(action.payload.agent_skill.id)
+                    ? [action.payload.agent_skill, ...state.agent_skills]
+                    : state.agent_skills,
             };
         case GET_CBA_TEAMS:
             return {
@@ -301,7 +316,6 @@ const surveyReducer = (state = initialState, action) => {
                 csat_admin: action.payload,
             };
         case EDIT_CBA_TEAMS:
-            console.log(updateAgentsTeam(state.agents, action.payload));
             return {
                 ...state,
                 cba_teams: state.cba_teams.map((team) =>
@@ -309,6 +323,31 @@ const surveyReducer = (state = initialState, action) => {
                 ),
                 agents: updateAgentsTeam(state.agents, action.payload),
                 csat_rcas: updateRcaAgentsTeam(state.csat_rcas, action.payload),
+            };
+        case DELETE_CBA_TEAMS:
+            return {
+                ...state,
+                cba_teams: state.cba_teams.filter(
+                    (team) => team.id !== action.payload.id
+                ),
+                agent_skills: state.agent_skills.filter(
+                    (item) => item.id !== action.payload.agent_skill.id
+                ),
+                agents: state.agents.map((agent) => ({
+                    ...agent,
+                    teams: agent.teams.filter(
+                        (team) => team.id !== action.payload.id
+                    ),
+                })),
+                csat_rcas: state.csat_rcas.filter((rca) => ({
+                    ...rca,
+                    agent: {
+                        ...rca.agent,
+                        teams: rca.agent.teams.filter(
+                            (team) => team.id !== action.payload.id
+                        ),
+                    },
+                })),
             };
         case GET_COMPLETED_SURVEY_VIEW:
         case GET_ALL_SURVEY_VIEW:
@@ -462,6 +501,29 @@ const surveyReducer = (state = initialState, action) => {
                     (err) =>
                         action.payload.reference_number !== err.reference_number
                 ),
+                agent_skills: !state.agent_skills
+                    .map(({ name }) => name)
+                    .includes(action.payload.scope)
+                    ? [
+                          ...action.payload.rca.agent.teams.map(
+                              ({ agent_skill }) => agent_skill
+                          ),
+                          ...state.agent_skills,
+                      ]
+                    : state.agent_skills,
+                agents: !state.agents
+                    .map(({ operator_lan_id }) => operator_lan_id)
+                    .includes(action.payload.rca.agent.operator_lan_id)
+                    ? [action.payload.rca.agent, ...state.agents]
+                    : state.agents,
+                cba_teams: !state.cba_teams
+                    .map(({ agent_skill }) => agent_skill.name)
+                    .includes(action.payload.scope)
+                    ? [
+                          ...action.payload.rca.agent.teams.map((team) => team),
+                          ...state.cba_teams,
+                      ]
+                    : state.cba_teams,
             };
         case UPDATE_SURVEY:
             return {
@@ -470,6 +532,9 @@ const surveyReducer = (state = initialState, action) => {
                     action.payload.reference_number === item.reference_number
                         ? action.payload
                         : item
+                ),
+                csat_rcas: state.csat_rcas.map((rca) =>
+                    rca.id === action.payload.rca.id ? action.payload.rca : rca
                 ),
                 success_uploads: [action.payload, ...state.success_uploads],
             };
@@ -618,13 +683,31 @@ const surveyReducer = (state = initialState, action) => {
                 teams: action.payload,
                 isFetching: false,
             };
-        case ADD_TEAM:
+        case ADD_CSAT_ACCOUNTABLE_TEAM:
             return {
                 ...state,
                 csat_accountable_team: [
                     action.payload,
                     ...state.csat_accountable_team,
                 ],
+                isFetching: false,
+            };
+        case EDIT_CSAT_ACCOUNTABLE_TEAM:
+            return {
+                ...state,
+                csat_accountable_team: state.csat_accountable_team.map((team) =>
+                    team.name === action.payload.old.name
+                        ? action.payload.new
+                        : team
+                ),
+                isFetching: false,
+            };
+        case DELETE_CSAT_ACCOUNTABLE_TEAM:
+            return {
+                ...state,
+                csat_accountable_team: state.csat_accountable_team.filter(
+                    (team) => team.name !== action.payload.name
+                ),
                 isFetching: false,
             };
         case ADD_RCA:
@@ -652,10 +735,33 @@ const surveyReducer = (state = initialState, action) => {
                 teamleads: action.payload,
                 isFetching: false,
             };
+        case EDIT_TEAMLEAD:
+            return {
+                ...state,
+                // teamleads: [action.payload, ...state.teamleads],
+                teamleads: state.teamleads.map((lead) =>
+                    lead.id === action.payload.id ? action.payload : lead
+                ),
+                isFetching: false,
+            };
+        case DELETE_TEAMLEAD:
+            return {
+                ...state,
+                // teamleads: [action.payload, ...state.teamleads],
+                teamleads: state.teamleads.filter(
+                    (lead) => lead.id != action.payload.id
+                ),
+                isFetching: false,
+            };
         case ADD_TEAMLEAD:
             return {
                 ...state,
-                teamleads: [action.payload, ...state.teamleads],
+                // teamleads: [action.payload, ...state.teamleads],
+                teamleads: !state.teamleads
+                    .map(({ user }) => user.username)
+                    .includes(action.payload.user.username)
+                    ? [action.payload, ...state.teamleads]
+                    : state.teamleads,
                 isFetching: false,
             };
         case ADD_DSAT_CODE1:

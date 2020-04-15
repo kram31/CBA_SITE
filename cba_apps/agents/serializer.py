@@ -67,10 +67,45 @@ class TeamLeadSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         validated_user = validated_data.pop('user')
-        user = User.objects.get(
-            username=validated_user['username'])
 
-        return TeamLead.objects.create(user=user)
+        tl_qs = TeamLead.objects.filter(
+            user__username=validated_user['username'])
+
+        if tl_qs.exists():
+            tl_obj = tl_qs.first()
+        else:
+            user_qs = User.objects.filter(username=validated_user['username'])
+
+            if user_qs.exists():
+                user_obj = user_qs.first()
+            else:
+                user_obj = User.objects.create_user(
+                    username=validated_user['username'], email=validated_user['username'], first_name=validated_user['first_name'], last_name=validated_user['last_name'])
+
+            tl_obj = TeamLead.objects.create(user=user_obj)
+
+        return tl_obj
+
+    def update(self, instance, validated_data):
+
+        user = validated_data.pop("user")
+
+        user_qs = User.objects.filter(username=user["username"])
+
+        if user_qs.exists():
+            user_obj = user_qs.first()
+            for attr, value in validated_data['user'].items():
+                setattr(user_obj, attr, value)
+            user_obj.save()
+        else:
+            user_obj = User.objects.create_user(
+                username=user['username'], email=user['username'], first_name=user['first_name'], last_name=user['last_name'])
+
+        instance.user = user_obj
+
+        instance.save()
+
+        return instance
 
 
 class CsatAdministratorSerializer(serializers.ModelSerializer):
@@ -124,12 +159,7 @@ class TeamSerializer(serializers.ModelSerializer):
 
         leads_data = validated_data.pop('team_leads')
 
-        # print("FROM TEAM SERIAL",
-        #       instance.team_leads.all().values_list('id', flat=True))
-
         instance.team_leads.clear()
-
-        # instance = super(TeamSerializer, self).update(instance, validated_data)
 
         for lead in leads_data:
 
@@ -151,10 +181,41 @@ class TeamSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         validated_agent_skill = validated_data.pop('agent_skill')
-        agent_skill = AgentSkill.objects.get(
-            name=validated_agent_skill['name'])
 
-        return Team.objects.create(agent_skill=agent_skill)
+        team_qs = Team.objects.filter(
+            agent_skill__name=validated_agent_skill['name'])
+
+        if team_qs.exists():
+            team_obj = team_qs.first()
+        else:
+            agent_skill_qs = AgentSkill.objects.filter(
+                name=validated_agent_skill['name'])
+
+            if agent_skill_qs.exists():
+                agent_skill_obj = agent_skill_qs.first()
+            else:
+                agent_skill_obj = AgentSkill.objects.create(
+                    name=validated_agent_skill['name'])
+
+            team_obj = Team.objects.create(agent_skill=agent_skill_obj)
+
+        validated_team_leads = validated_data.pop('team_leads')
+
+        for lead in validated_team_leads:
+
+            lead_qs = TeamLead.objects.filter(
+                user__username=lead['user']['username'])
+
+            if lead_qs.exists():
+                lead_obj = lead_qs.first()
+            else:
+                user = User.objects.get(
+                    username=lead['user']['username'])
+                lead_obj = TeamLead.objects.create(user=user)
+
+            team_obj.team_leads.add(lead_obj)
+
+        return team_obj
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
@@ -172,14 +233,6 @@ class AgentSerializer(serializers.ModelSerializer):
 
     teams = TeamSerializer(many=True, read_only=False)
 
-    # teams = serializers.SerializerMethodField()
-
-    # def get_teams(self, obj):
-
-    #     team = TeamMember.objects.filter(agent=obj)
-
-    #     return TeamMemberSerializer(team, many=True).data
-
     user = UserAgentSerializer(required=False)
 
     class Meta:
@@ -192,13 +245,9 @@ class AgentSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
 
-        print("FROM AGENT SERIALIZER")
-
         teams_data = validated_data.pop('teams')
 
         instance.teams.clear()
-
-        # instance = super(TeamSerializer, self).update(instance, validated_data)
 
         for team in teams_data:
 
@@ -224,35 +273,59 @@ class AgentSerializer(serializers.ModelSerializer):
         owner_email_add = request_data.get('owner_name_email_address').strip()
         owner_name = request_data.get('owner_name').strip()
 
-        if not User.objects.filter(username=owner_email_add).exists():
-            # CREATE USER LOGIN
+        # CREATE/GET USER OBJ
 
-            # print("FROM USER QUERY", owner_email_add,
-            #       User.objects.filter(email=owner_email_add).exists())
+        user_qs = User.objects.filter(username=owner_email_add)
 
+        if user_qs.exists():
+            user_obj = user_qs.first()
+        else:
             if owner_name == "ITSD_AskIT_Ticket_Triage":
-                if not User.objects.filter(username="ITSD_AskIT_Ticket_Triage").exists():
+                user_qs = User.objects.filter(
+                    username="ITSD_AskIT_Ticket_Triage")
+                if user_qs.exists():
+                    user_obj = user_qs.first()
+                else:
                     user_obj = User.objects.create_user(
                         "ITSD_AskIT_Ticket_Triage", "ITSD_AskIT_Ticket_Triage", '1234')
-                    user_obj.save()
-                else:
-                    print("SHOULD WORK")
-                    user_obj = User.objects.get(
-                        username="ITSD_AskIT_Ticket_Triage")
 
             else:
-                print("&&&&&&&&FROM USER CREATION/ DOES NOT EXIST",
-                      User.objects.filter(username=owner_email_add).exists(), owner_email_add)
+
                 *firstname, lastname = owner_name.split(" ")
                 firstname = " ".join(firstname)
 
                 user_obj = User.objects.create_user(
                     owner_email_add, owner_email_add, '1234', first_name=firstname, last_name=lastname)
-                user_obj.save()
 
-        else:
-            # print("SHOULD NOT WORK")
-            user_obj = User.objects.get(email=owner_email_add)
+        # if not User.objects.filter(username=owner_email_add).exists():
+        #     # CREATE USER LOGIN
+
+        #     # print("FROM USER QUERY", owner_email_add,
+        #     #       User.objects.filter(email=owner_email_add).exists())
+
+        #     if owner_name == "ITSD_AskIT_Ticket_Triage":
+        #         if not User.objects.filter(username="ITSD_AskIT_Ticket_Triage").exists():
+        #             user_obj = User.objects.create_user(
+        #                 "ITSD_AskIT_Ticket_Triage", "ITSD_AskIT_Ticket_Triage", '1234')
+        #             user_obj.save()
+        #         else:
+        #             print("SHOULD WORK")
+        #             user_obj = User.objects.get(
+        #                 username="ITSD_AskIT_Ticket_Triage")
+
+        #     else:
+        #         print("&&&&&&&&FROM USER CREATION/ DOES NOT EXIST",
+        #               User.objects.filter(username=owner_email_add).exists(), owner_email_add)
+        #         *firstname, lastname = owner_name.split(" ")
+        #         firstname = " ".join(firstname)
+
+        #         user_obj = User.objects.create_user(
+        #             owner_email_add, owner_email_add, '1234', first_name=firstname, last_name=lastname)
+        #         user_obj.save()
+
+        # else:
+        #     # print("SHOULD NOT WORK")
+        #     user_obj = User.objects.get(email=owner_email_add)
 
         location = request_data.get('location').strip()
         wave = request_data.get('wave').strip()
@@ -280,10 +353,17 @@ class AgentSerializer(serializers.ModelSerializer):
 
         scope = request_data.get('scope').strip()
 
-        scope_obj = AgentSkill.objects.get(name=scope)
+        # CREATE/GET agent_skill
+
+        agent_skill_qs = AgentSkill.objects.filter(name=scope)
+
+        if agent_skill_qs.exists():
+            agent_skill_obj = agent_skill_qs.first()
+        else:
+            agent_skill_obj = AgentSkill.objects.create(name=scope)
 
         if not Team.objects.filter(agent_skill__name=scope).exists():
-            team_obj = Team.objects.create(agent_skill=scope_obj)
+            team_obj = Team.objects.create(agent_skill=agent_skill_obj)
         else:
             team_obj = Team.objects.get(agent_skill__name=scope)
 

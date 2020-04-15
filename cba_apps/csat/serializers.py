@@ -88,35 +88,12 @@ class SurveySerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(required=False)
 
-    # owner_name = serializers.SerializerMethodField()
-
-    # def get_owner_name(self, obj):
-
-    #     return obj.agent.name
-
-    # operator_lan_id = serializers.SerializerMethodField()
-
-    # def get_operator_lan_id(self, obj):
-
-    #     return obj.agent.operator_lan_id
-
-    # rca = serializers.HyperlinkedRelatedField(
-    #     many=False,
-    #     read_only=True,
-    #     view_name='rca-detail'
-    # )
-
     def to_representation(self, instance):
-        # return {
-        #     'score': "test",
-        #     'player_name': "TEST"
-        # }
 
         ret = super().to_representation(instance)
         data = RCA.objects.get(
             surveyed_ticket=instance.reference_number)
         ret['rca'] = RCAInitialSerializer(data).data
-        # ret['rca'] = JsonResponse(data[0])
 
         return ret
 

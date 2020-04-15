@@ -1,22 +1,10 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 
 import { connect } from "react-redux";
 
-import {
-    Row,
-    Col,
-    FormGroup,
-    Label,
-    Input,
-    Form,
-    InputGroup,
-    InputGroupAddon,
-    Button,
-} from "reactstrap";
+import { FormGroup, Label, Input, Form, Button } from "reactstrap";
 
 import { editCbaTeam } from "../../../../actions/surveyActions";
-
-import FormInput from "../rca/FormInput";
 
 class TeamLeadDataForm extends Component {
     constructor(props) {
@@ -74,25 +62,12 @@ class TeamLeadDataForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        // console.log("Submit", this.state);
-
         const { team_leads, id } = this.state;
-        console.log("Submit", { id, team_leads });
+        // console.log("Submit", { id, team_leads });
 
         this.editCbaTeam({ id, team_leads });
 
         this.props.toggle();
-
-        // let newTeam = this.props.editCbaTeam(this.state);
-
-        // this.props.callbackTeamLead({
-        //     team_id: this.props.team_id,
-        //     team: newTeam,
-        // });
-
-        // Open Modal
-
-        // this.setState({ isOpen: !isOpen });
     };
 
     async editCbaTeam(data) {
@@ -127,10 +102,6 @@ class TeamLeadDataForm extends Component {
                         multiple
                         size="10"
                     >
-                        {/* {this.getInputValue(
-                                team_lead,
-                                this.props.teamleads
-                            )} */}
                         {this.props.teamleads &&
                             this.props.teamleads.map((item, index) => (
                                 <option key={index} value={item.user.username}>

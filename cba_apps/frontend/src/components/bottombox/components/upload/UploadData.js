@@ -9,6 +9,7 @@ import {
     addAgentSkill,
     addCbaTeam,
     addAgent,
+    getAllData2,
 } from "../../../../actions/surveyActions";
 
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
@@ -90,18 +91,18 @@ class UploadData extends Component {
 
             // check for non existing scopes/ agent_skill
 
-            const processData = new Promise(
-                (resolve, reject) =>
-                    this.processNewAgentSkillandTeam(cba_teams, data) ===
-                        "success" && resolve("success")
-            );
+            // const processData = new Promise(
+            //     (resolve, reject) =>
+            //         this.processNewAgentSkillandTeam(cba_teams, data) ===
+            //             "success" && resolve("success")
+            // );
 
-            processData.then(
-                (res) => res === "success" && this.processNewAgent(agents, data)
-            );
+            // processData.then(
+            //     (res) => res === "success" && this.processNewAgent(agents, data)
+            // );
 
             // this.processNewAgentSkillandTeam(cba_teams, data);
-            // this.processNewAgent(agents, data);
+            this.processNewAgent(agents, data);
 
             let changedData = data.map((item) => ({
                 ...item,
@@ -203,6 +204,39 @@ class UploadData extends Component {
                     });
                 }
             }
+        } else {
+            let seen = new Set();
+
+            let newData = data.filter((item) => {
+                if (!seen.has(item.operator_lan_id)) {
+                    seen.add(item.operator_lan_id);
+                    return item;
+                }
+            });
+
+            console.log("NEW DATA", newData);
+
+            if (newData.length) {
+                newData.forEach((survey) => {
+                    let newAgentReq = {
+                        operator_lan_id:
+                            survey.owner_name !== "ITSD_AskIT_Ticket_Triage"
+                                ? survey.operator_lan_id
+                                : "ITSD_AskIT_Ticket_Triage",
+                        location: survey.location,
+                        wave: survey.wave,
+                        owner_name: survey.owner_name,
+                        owner_name_email_address:
+                            survey.owner_name_email_address,
+                        scope: survey.scope,
+                        teams: [],
+                    };
+
+                    console.log(newAgentReq);
+
+                    this.createNewAgent(newAgentReq);
+                });
+            }
         }
     };
 
@@ -239,6 +273,27 @@ class UploadData extends Component {
                     });
                 }
             }
+        } else {
+            let seen = new Set();
+
+            let newScopes = data.filter((item) => {
+                if (!seen.has(item.scope)) {
+                    seen.add(item.scope);
+                    return item;
+                }
+            });
+
+            // send post requests for creating agent_skill and cba_team
+
+            if (newScopes.length) {
+                newScopes.forEach((survey) => {
+                    let newSkillReq = {
+                        name: survey.scope,
+                    };
+
+                    this.createNewAgentSkillAndCbaTeam(newSkillReq, survey);
+                });
+            }
         }
         return "success";
     };
@@ -256,13 +311,12 @@ class UploadData extends Component {
         let newSkill = await this.props
             .addAgentSkill(newSkillReq)
             .then((data) => data);
-        console.log(newSkill);
 
         let newCbaTeam = await this.props
             .addCbaTeam({ agent_skill: newSkill })
             .then((data) => data);
 
-        console.log(newCbaTeam);
+        console.log("CBA TEAM", newCbaTeam);
 
         return { team: newCbaTeam };
     }
@@ -275,17 +329,7 @@ class UploadData extends Component {
         // console.log("send Data", this.state.filtered_data);
 
         this.props.addSurveysBulk(this.state.filtered_data);
-        // if (post !== null) {
-        //     post.forEach((data, index) => {
-        //         this.runPostRequest(data);
-        //     });
 
-        // }
-        // if (put !== null) {
-        //     put.forEach((data, index) => {
-        //         this.runPutRequest(data);
-        //     });
-        // }
         this.setState({
             filtered_data: {
                 post: null,
@@ -452,4 +496,5 @@ export default connect(mapStateToProps, {
     addAgentSkill,
     addCbaTeam,
     addAgent,
+    getAllData2,
 })(UploadData);
