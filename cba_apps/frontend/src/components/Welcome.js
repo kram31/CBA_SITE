@@ -3,12 +3,14 @@ import { Jumbotron, Row, Col, Container, Fade, Spinner } from "reactstrap";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { connect } from "react-redux";
 
-const WelcomeContent = props => {
+const WelcomeContent = (props) => {
     // If authenticated, greet the user
     if (props.isAuthenticated) {
         return (
             <div className="mt-2">
-                <h4 style={{color: "white"}}>Welcome {props.user.fullname}!</h4>
+                <h4 style={{ color: "white" }}>
+                    Welcome {props.user.fullname}!
+                </h4>
             </div>
         );
     }
@@ -21,7 +23,7 @@ const WelcomeContent = props => {
                 height: "3rem",
                 top: "50%",
                 left: "50%",
-                position: "fixed"
+                position: "fixed",
             }}
         />
     );
@@ -30,10 +32,10 @@ const WelcomeContent = props => {
 class Welcome extends React.Component {
     state = {
         isHovered: false,
-        target_div: null
+        target_div: null,
     };
 
-    handleMouseEnter = e => {
+    handleMouseEnter = (e) => {
         this.setState({ isHovered: true, target_div: e.target.id });
     };
 
@@ -41,7 +43,7 @@ class Welcome extends React.Component {
         this.setState({ isHovered: false, target_div: null });
     };
 
-    div_style = section => {
+    div_style = (section) => {
         return {
             backgroundColor: "black",
             width:
@@ -51,7 +53,7 @@ class Welcome extends React.Component {
                     ? "80%"
                     : "20%",
             height: "400px",
-            transition: "width 0.5s"
+            transition: "width 0.5s",
         };
     };
 
@@ -59,11 +61,8 @@ class Welcome extends React.Component {
         const { user, isAuthenticated } = this.props.auth;
         return (
             <Fragment>
-                <Jumbotron style={{ backgroundColor: "#d3d3d3" }}>
-                    <div
-                
-                        style={{ color: "white" }}
-                    >
+                <Jumbotron style={{ backgroundColor: "black" }}>
+                    <div style={{ color: "white" }}>
                         <h1 className="mb-2 mt-4">DXC - CBA App Site</h1>
                         <WelcomeContent
                             isAuthenticated={isAuthenticated}
@@ -137,8 +136,8 @@ class Welcome extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    auth: state.auth
+const mapStateToProps = (state) => ({
+    auth: state.auth,
 });
 
 export default connect(mapStateToProps, [])(Welcome);
