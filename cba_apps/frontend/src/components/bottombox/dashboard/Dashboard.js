@@ -23,8 +23,8 @@ class Dashboard extends Component {
         noDataStyle: {
             lineHeight: "100px",
             textAlign: "center",
-            margin: "auto"
-        }
+            margin: "auto",
+        },
     };
     // componentDidMount() {
     //     let curr = new Date();
@@ -66,29 +66,29 @@ class Dashboard extends Component {
 
     datasetKeyProvider = () => Math.random();
 
-    handleChange = e => {
+    handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value,
             dateFilteredSurveys: this.props.surveys.filter(
-                survey =>
+                (survey) =>
                     new Date(survey.date_issued).getMonth() + 1 ==
                     e.target.value
             ),
             dateFilteredRcas: this.props.rcas.filter(
-                rca =>
+                (rca) =>
                     new Date(rca.survey_date_issued).getMonth() + 1 ==
                     e.target.value
-            )
+            ),
         });
     };
 
     // FIX THIS!!!!
 
     getListTopDrivers = () => {
-        return this.props.chart_data.map(item =>
+        return this.props.chart_data.map((item) =>
             Object.values(item)[0]
-                .filter(survey => survey.completed === true)
-                .map(item => item.dsat_cause.name)
+                .filter((survey) => survey.completed === true)
+                .map((item) => item.dsat_cause.name)
                 .reduce((r, k) => {
                     r[k] = 1 + r[k] || 1;
                     return r;
@@ -97,10 +97,10 @@ class Dashboard extends Component {
     };
 
     getTopDrivers = () => {
-        let dataset = this.props.chart_data.map(item =>
+        let dataset = this.props.chart_data.map((item) =>
             Object.values(item)[0]
-                .filter(survey => survey.completed === true)
-                .map(item => item.dsat_cause.name)
+                .filter((survey) => survey.completed === true)
+                .map((item) => item.dsat_cause.name)
                 .reduce((r, k) => {
                     r[k] = 1 + r[k] || 1;
                     return r;
@@ -110,7 +110,7 @@ class Dashboard extends Component {
         return this.props.dsat_code1
             .map((code, i) => {
                 let data = [];
-                dataset.forEach(x => {
+                dataset.forEach((x) => {
                     return Object.keys(x).includes(code.name)
                         ? data.push(x[code.name])
                         : data.push(0);
@@ -121,17 +121,19 @@ class Dashboard extends Component {
                     data: data,
                     backgroundColor: !this.props.colors[i]
                         ? this.getRandomColor()
-                        : this.props.colors[i]
+                        : this.props.colors[i],
                 };
             })
-            .filter(item => item.data.reduce((total, num) => total - num) != 0);
+            .filter(
+                (item) => item.data.reduce((total, num) => total - num) != 0
+            );
     };
 
     getAccountableTeams = () => {
-        let dataset = this.props.chart_data.map(item =>
+        let dataset = this.props.chart_data.map((item) =>
             Object.values(item)[0]
-                .filter(survey => survey.completed === true)
-                .map(item => item.accountable_team)
+                .filter((survey) => survey.completed === true)
+                .map((item) => item.accountable_team)
                 .reduce((r, k) => {
                     r[k] = 1 + r[k] || 1;
                     return r;
@@ -141,7 +143,7 @@ class Dashboard extends Component {
         return this.props.teams
             .map((team, i) => {
                 let data = [];
-                dataset.forEach(x => {
+                dataset.forEach((x) => {
                     return Object.keys(x).includes(team.name)
                         ? data.push(x[team.name])
                         : data.push(0);
@@ -152,17 +154,19 @@ class Dashboard extends Component {
                     data: data,
                     backgroundColor: !this.props.colors[i]
                         ? this.getRandomColor()
-                        : this.props.colors[i]
+                        : this.props.colors[i],
                 };
             })
-            .filter(item => item.data.reduce((total, num) => total - num) != 0);
+            .filter(
+                (item) => item.data.reduce((total, num) => total - num) != 0
+            );
     };
 
     getSurveyPerSilo = () => {
-        let dataset = this.props.chart_data.map(item =>
+        let dataset = this.props.chart_data.map((item) =>
             Object.values(item)[0]
-                .filter(survey => survey.completed === true)
-                .map(item => item.support_silo_issue_based)
+                .filter((survey) => survey.completed === true)
+                .map((item) => item.support_silo_issue_based)
                 .reduce((r, k) => {
                     r[k] = 1 + r[k] || 1;
                     return r;
@@ -172,7 +176,7 @@ class Dashboard extends Component {
         return this.props.skills
             .map((team, i) => {
                 let data = [];
-                dataset.forEach(x => {
+                dataset.forEach((x) => {
                     return Object.keys(x).includes(team.name)
                         ? data.push(x[team.name])
                         : data.push(0);
@@ -183,19 +187,21 @@ class Dashboard extends Component {
                     data: data,
                     backgroundColor: !this.props.colors[i]
                         ? this.getRandomColor()
-                        : this.props.colors[i]
+                        : this.props.colors[i],
                 };
             })
-            .filter(item => item.data.reduce((total, num) => total - num) != 0);
+            .filter(
+                (item) => item.data.reduce((total, num) => total - num) != 0
+            );
     };
 
     getSPGControllability = () => {
         let budi_bu_list = [
-            ...new Set(this.props.surveys.map(survey => survey.budi_bu))
+            ...new Set(this.props.surveys.map((survey) => survey.budi_bu)),
         ];
-        let dataset = this.props.chart_data.map(item =>
+        let dataset = this.props.chart_data.map((item) =>
             Object.values(item)[0]
-                .map(item => item.budi_bu)
+                .map((item) => item.budi_bu)
                 .reduce((r, k) => {
                     r[k] = 1 + r[k] || 1;
                     return r;
@@ -205,7 +211,7 @@ class Dashboard extends Component {
         return budi_bu_list
             .map((spg, i) => {
                 let data = [];
-                dataset.forEach(x => {
+                dataset.forEach((x) => {
                     return Object.keys(x).includes(spg)
                         ? data.push(x[spg])
                         : data.push(0);
@@ -216,10 +222,12 @@ class Dashboard extends Component {
                     data: data,
                     backgroundColor: !this.props.colors[i]
                         ? this.getRandomColor()
-                        : this.props.colors[i]
+                        : this.props.colors[i],
                 };
             })
-            .filter(item => item.data.reduce((total, num) => total - num) != 0);
+            .filter(
+                (item) => item.data.reduce((total, num) => total - num) != 0
+            );
     };
 
     getRandomColor = () => {
@@ -233,9 +241,9 @@ class Dashboard extends Component {
 
     chart_height = 350;
 
-    combinedData = this.props.surveys.map(survey => {
+    combinedData = this.props.surveys.map((survey) => {
         let x = this.props.rcas.filter(
-            rca => rca.surveyed_ticket === survey.reference_number
+            (rca) => rca.surveyed_ticket === survey.reference_number
         )[0];
         return { ...survey, ...x };
     });
@@ -265,7 +273,7 @@ class Dashboard extends Component {
                                                             label:
                                                                 "Bottombox %",
                                                             data: this.props.chart_data.map(
-                                                                item => {
+                                                                (item) => {
                                                                     let surveyCount = Object.values(
                                                                         item
                                                                     )[0].length;
@@ -273,7 +281,9 @@ class Dashboard extends Component {
                                                                     let bottomboxCount = Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.bottombox ===
                                                                             1
                                                                     ).length;
@@ -294,28 +304,29 @@ class Dashboard extends Component {
                                                             backgroundColor:
                                                                 "rgba(100, 255, 0, .8)",
 
-                                                            borderColor: "white"
-                                                        }
+                                                            borderColor:
+                                                                "white",
+                                                        },
                                                     ],
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     title: {
                                                         display: true,
                                                         text:
                                                             "Bottombox % Trend",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
@@ -325,22 +336,22 @@ class Dashboard extends Component {
                                                         yAxes: [
                                                             {
                                                                 ticks: {
-                                                                    callback: function(
+                                                                    callback: function (
                                                                         value
                                                                     ) {
                                                                         return (
                                                                             value +
                                                                             "%"
                                                                         );
-                                                                    }
-                                                                }
+                                                                    },
+                                                                },
                                                                 // scaleLabel: {
                                                                 //     display: true,
                                                                 //     labelString:
                                                                 //         "Percentage"
                                                                 // }
-                                                            }
-                                                        ]
+                                                            },
+                                                        ],
                                                     },
                                                     plugins: {
                                                         datalabels: {
@@ -348,10 +359,10 @@ class Dashboard extends Component {
                                                             align: "top",
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
-                                                            }
-                                                        }
-                                                    }
+                                                                weight: "bold",
+                                                            },
+                                                        },
+                                                    },
                                                 }}
                                                 height={this.chart_height}
                                             />
@@ -369,53 +380,57 @@ class Dashboard extends Component {
                                                         {
                                                             label: "Topbox",
                                                             data: this.props.chart_data.map(
-                                                                item =>
+                                                                (item) =>
                                                                     Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.bottombox !=
                                                                             1
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "#ffed00"
+                                                                "#ffed00",
                                                         },
                                                         {
                                                             label: "Bottombox",
                                                             data: this.props.chart_data.map(
-                                                                item =>
+                                                                (item) =>
                                                                     Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.bottombox ===
                                                                             1
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "#64ff00"
-                                                        }
+                                                                "#64ff00",
+                                                        },
                                                     ],
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     title: {
                                                         display: true,
                                                         text:
                                                             "Bottombox count trend",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
@@ -423,14 +438,14 @@ class Dashboard extends Component {
                                                     scales: {
                                                         xAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
+                                                                stacked: true,
+                                                            },
                                                         ],
                                                         yAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
-                                                        ]
+                                                                stacked: true,
+                                                            },
+                                                        ],
                                                     },
                                                     plugins: {
                                                         datalabels: {
@@ -438,9 +453,9 @@ class Dashboard extends Component {
                                                             align: "top",
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
+                                                                weight: "bold",
                                                             },
-                                                            display: function(
+                                                            display: function (
                                                                 context
                                                             ) {
                                                                 return (
@@ -451,9 +466,9 @@ class Dashboard extends Component {
                                                                             .dataIndex
                                                                     ] > 1
                                                                 );
-                                                            }
-                                                        }
-                                                    }
+                                                            },
+                                                        },
+                                                    },
                                                 }}
                                                 height={this.chart_height}
                                             />
@@ -469,75 +484,79 @@ class Dashboard extends Component {
                                                             label:
                                                                 "Completed RCA",
                                                             data: this.props.chart_data.map(
-                                                                item =>
+                                                                (item) =>
                                                                     Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.completed ===
                                                                             true
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "#ffed00"
+                                                                "#ffed00",
                                                         },
                                                         {
                                                             label: "",
                                                             data: this.props.chart_data.map(
-                                                                item =>
+                                                                (item) =>
                                                                     Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.completed ===
                                                                             false
                                                                     ).length
                                                             ),
                                                             backgroundColor:
-                                                                "#64ff00"
-                                                        }
+                                                                "#64ff00",
+                                                        },
                                                     ],
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     title: {
                                                         display: true,
                                                         text:
                                                             "RCA completion count",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
                                                     scales: {
                                                         xAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
+                                                                stacked: true,
+                                                            },
                                                         ],
                                                         yAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
-                                                        ]
+                                                                stacked: true,
+                                                            },
+                                                        ],
                                                     },
                                                     plugins: {
                                                         datalabels: {
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
+                                                                weight: "bold",
                                                             },
-                                                            display: function(
+                                                            display: function (
                                                                 context
                                                             ) {
                                                                 return (
@@ -548,9 +567,9 @@ class Dashboard extends Component {
                                                                             .dataIndex
                                                                     ] > 1
                                                                 );
-                                                            }
-                                                        }
-                                                    }
+                                                            },
+                                                        },
+                                                    },
                                                 }}
                                                 height={this.chart_height}
                                             />
@@ -566,9 +585,9 @@ class Dashboard extends Component {
                                                 data={{
                                                     datasets: this.getTopDrivers(),
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     barShowStroke: false,
@@ -576,39 +595,39 @@ class Dashboard extends Component {
                                                         display: true,
                                                         text:
                                                             "Bottombox Top Drivers",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
+                                                                stacked: true,
+                                                            },
                                                         ],
                                                         xAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
-                                                        ]
+                                                                stacked: true,
+                                                            },
+                                                        ],
                                                     },
 
                                                     plugins: {
                                                         datalabels: {
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
-                                                            }
+                                                                weight: "bold",
+                                                            },
                                                         },
-                                                        display: function(
+                                                        display: function (
                                                             context
                                                         ) {
                                                             return (
@@ -618,8 +637,8 @@ class Dashboard extends Component {
                                                                         .dataIndex
                                                                 ] > 1
                                                             );
-                                                        }
-                                                    }
+                                                        },
+                                                    },
                                                 }}
                                                 height={this.chart_height}
                                             />
@@ -632,9 +651,9 @@ class Dashboard extends Component {
                                                 data={{
                                                     datasets: this.getAccountableTeams(),
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     barShowStroke: false,
@@ -642,41 +661,41 @@ class Dashboard extends Component {
                                                         display: true,
                                                         text:
                                                             "Bottombox Accountable Teams",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
+                                                                stacked: true,
+                                                            },
                                                         ],
                                                         xAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
-                                                        ]
+                                                                stacked: true,
+                                                            },
+                                                        ],
                                                     },
 
                                                     plugins: {
                                                         datalabels: {
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
+                                                                weight: "bold",
                                                             },
 
-                                                            color: "gray"
+                                                            color: "gray",
                                                         },
-                                                        display: function(
+                                                        display: function (
                                                             context
                                                         ) {
                                                             return (
@@ -686,8 +705,8 @@ class Dashboard extends Component {
                                                                         .dataIndex
                                                                 ] > 1
                                                             );
-                                                        }
-                                                    }
+                                                        },
+                                                    },
                                                 }}
                                                 height={this.chart_height}
                                             />
@@ -705,11 +724,13 @@ class Dashboard extends Component {
                                                             label:
                                                                 "ITSD Controllable",
                                                             data: this.props.chart_data.map(
-                                                                item => {
+                                                                (item) => {
                                                                     let itsd_count = Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.controllability ===
                                                                             "ITSD Controllable"
                                                                     ).length;
@@ -717,7 +738,9 @@ class Dashboard extends Component {
                                                                     let bottombox_count = Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.completed ===
                                                                             true
                                                                     ).length;
@@ -732,17 +755,19 @@ class Dashboard extends Component {
                                                                 }
                                                             ),
                                                             backgroundColor:
-                                                                "#ffed00"
+                                                                "#ffed00",
                                                         },
                                                         {
                                                             label:
                                                                 "Non ITSD Controllable",
                                                             data: this.props.chart_data.map(
-                                                                item => {
+                                                                (item) => {
                                                                     let non_itsd_count = Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.controllability ===
                                                                             "Non ITSD Controllable"
                                                                     ).length;
@@ -750,7 +775,9 @@ class Dashboard extends Component {
                                                                     let bottombox_count = Object.values(
                                                                         item
                                                                     )[0].filter(
-                                                                        survey =>
+                                                                        (
+                                                                            survey
+                                                                        ) =>
                                                                             survey.completed ===
                                                                             true
                                                                     ).length;
@@ -765,53 +792,53 @@ class Dashboard extends Component {
                                                                 }
                                                             ),
                                                             backgroundColor:
-                                                                "#64ff00"
-                                                        }
+                                                                "#64ff00",
+                                                        },
                                                     ],
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     title: {
                                                         display: true,
                                                         text:
                                                             "Bottombox Controllability",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
                                                     scales: {
                                                         xAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
+                                                                stacked: true,
+                                                            },
                                                         ],
                                                         yAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
-                                                        ]
+                                                                stacked: true,
+                                                            },
+                                                        ],
                                                     },
                                                     plugins: {
                                                         datalabels: {
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
+                                                                weight: "bold",
                                                             },
 
-                                                            color: "white"
+                                                            color: "white",
                                                         },
-                                                        display: function(
+                                                        display: function (
                                                             context
                                                         ) {
                                                             return (
@@ -821,8 +848,8 @@ class Dashboard extends Component {
                                                                         .dataIndex
                                                                 ] > 1
                                                             );
-                                                        }
-                                                    }
+                                                        },
+                                                    },
                                                 }}
                                                 height={this.chart_height}
                                             />
@@ -835,50 +862,50 @@ class Dashboard extends Component {
                                                 data={{
                                                     datasets: this.getSurveyPerSilo(),
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     barShowStroke: false,
                                                     title: {
                                                         display: true,
                                                         text: "Survey Per SILO",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
+                                                                stacked: true,
+                                                            },
                                                         ],
                                                         xAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
-                                                        ]
+                                                                stacked: true,
+                                                            },
+                                                        ],
                                                     },
 
                                                     plugins: {
                                                         datalabels: {
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
+                                                                weight: "bold",
                                                             },
 
-                                                            color: "gray"
+                                                            color: "gray",
                                                         },
-                                                        display: function(
+                                                        display: function (
                                                             context
                                                         ) {
                                                             return (
@@ -888,8 +915,8 @@ class Dashboard extends Component {
                                                                         .dataIndex
                                                                 ] > 1
                                                             );
-                                                        }
-                                                    }
+                                                        },
+                                                    },
                                                 }}
                                                 height={this.chart_height}
                                             />
@@ -904,54 +931,54 @@ class Dashboard extends Component {
                                                 data={{
                                                     datasets: this.getSPGControllability(),
                                                     labels: this.props.chart_data.map(
-                                                        item =>
+                                                        (item) =>
                                                             Object.keys(item)[0]
-                                                    )
+                                                    ),
                                                 }}
                                                 options={{
                                                     legend: {
                                                         display: true,
                                                         position: "right",
-                                                        onClick: null
+                                                        onClick: null,
                                                     },
                                                     barShowStroke: false,
                                                     title: {
                                                         display: true,
                                                         text:
                                                             "SPG Controllability",
-                                                        fontSize: "20"
+                                                        fontSize: "20",
                                                     },
                                                     tooltips: {
                                                         mode: "index",
-                                                        intersect: false
+                                                        intersect: false,
                                                     },
                                                     hover: {
                                                         mode: "nearest",
-                                                        intersect: true
+                                                        intersect: true,
                                                     },
                                                     responsive: true,
                                                     maintainAspectRatio: false,
                                                     scales: {
                                                         yAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
+                                                                stacked: true,
+                                                            },
                                                         ],
                                                         xAxes: [
                                                             {
-                                                                stacked: true
-                                                            }
-                                                        ]
+                                                                stacked: true,
+                                                            },
+                                                        ],
                                                     },
 
                                                     plugins: {
                                                         datalabels: {
                                                             // formatter: Math.round,
                                                             font: {
-                                                                weight: "bold"
-                                                            }
+                                                                weight: "bold",
+                                                            },
                                                         },
-                                                        display: function(
+                                                        display: function (
                                                             context
                                                         ) {
                                                             return (
@@ -961,8 +988,8 @@ class Dashboard extends Component {
                                                                         .dataIndex
                                                                 ] > 1
                                                             );
-                                                        }
-                                                    }
+                                                        },
+                                                    },
                                                 }}
                                                 height={600}
                                             />
@@ -978,7 +1005,7 @@ class Dashboard extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     agents: state.surveys.agents,
     agent: state.surveys.agent,
     teams: state.surveys.teams,
@@ -992,7 +1019,7 @@ const mapStateToProps = state => ({
     dsat_code1: state.surveys.dsat_code1,
     agent_view_collapse: state.surveys.agent_view_collapse,
     bottombox_view_collapse: state.surveys.bottombox_view_collapse,
-    colors: state.surveys.colors
+    colors: state.surveys.colors,
 });
 
 export default connect(mapStateToProps, {})(Dashboard);

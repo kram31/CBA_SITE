@@ -241,6 +241,7 @@ class AgentSerializer(serializers.ModelSerializer):
 
         extra_kwargs = {
             'teams': {'validators': []},
+            'operator_lan_id': {'validators': []},
         }
 
     def update(self, instance, validated_data):
@@ -267,6 +268,7 @@ class AgentSerializer(serializers.ModelSerializer):
         request_data = self.context.get("request").data
 
         validated_operator_lan_id = validated_data.pop('operator_lan_id')
+        # validated_operator_lan_id = request_data.get('operator_lan_id').strip()
         validated_location = validated_data.pop('location')
         validated_wave = validated_data.pop('wave')
 

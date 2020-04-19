@@ -8,9 +8,11 @@ import { Typeahead } from "react-bootstrap-typeahead";
 
 import FormInput from "./FormInput";
 
-import { updateRca } from "../../../../actions/surveyActions";
+import { updateRca, loadingToggle } from "../../../../actions/surveyActions";
 
 import ConfirmRcaSubmitModal from "../../../ccms/components/CcmsRca/ConfirmRcaSubmitModal";
+
+import Loading from "../loaders/Loading";
 
 class RcaForm extends Component {
     constructor(props) {
@@ -143,12 +145,22 @@ class RcaForm extends Component {
             rca["user"] = this.props.user;
 
             console.log(rca);
-
-            updateRca(rca);
+            this.sendData(rca);
         }
 
         this.toggle();
     };
+
+    async sendData(rca) {
+        const { updateRca, loadingToggle } = this.props;
+        try {
+            loadingToggle();
+            await updateRca(rca);
+            loadingToggle();
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     toggle = () => {
         this.setState({ modal: !this.state.modal });
@@ -404,7 +416,11 @@ class RcaForm extends Component {
                         </Button>
                     ) : (
                         <Button color="primary">
-                            <i className="fas fa-paper-plane mr-1"></i>
+                            {this.props.isLoading ? (
+                                <Loading />
+                            ) : (
+                                <i className="fas fa-paper-plane mr-1"></i>
+                            )}
                             Complete RCA
                         </Button>
                     )}
@@ -433,6 +449,7 @@ const mapStateToProps = (state) => ({
     bb_driver_code2: state.surveys.bb_driver_code2,
     bb_driver_code3: state.surveys.bb_driver_code3,
     user: state.auth.user,
+    isLoading: state.surveys.isLoading,
 });
 
-export default connect(mapStateToProps, { updateRca })(RcaForm);
+export default connect(mapStateToProps, { updateRca, loadingToggle })(RcaForm);

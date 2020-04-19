@@ -1,4 +1,8 @@
 import {
+    TOGGLE_FETCHING,
+    LOADING_TOGGLE,
+    CLEAR_UPLOAD_DETAILS,
+    GET_CSAT_ADMIN,
     DELETE_CBA_TEAMS,
     EDIT_TEAMLEAD,
     DELETE_TEAMLEAD,
@@ -134,6 +138,7 @@ let get_data = (filtered_list) => {
 };
 
 const initialState = {
+    isLoading: false,
     cba_users: [],
     csat_access_request: [],
     csat_admin: [],
@@ -223,6 +228,11 @@ const surveyReducer = (state = initialState, action) => {
                 csat_access_request,
             };
             break;
+        case LOADING_TOGGLE:
+            return {
+                ...state,
+                isLoading: !state.isLoading,
+            };
         case GET_USERS:
             return {
                 ...state,
@@ -258,6 +268,12 @@ const surveyReducer = (state = initialState, action) => {
                 ...state,
                 req_error: [action.payload, ...state.req_error],
             };
+        case CLEAR_UPLOAD_DETAILS:
+            return {
+                ...state,
+                req_error: [],
+                success_uploads: [],
+            };
         case ADD_CBA_TEAMS:
             return {
                 ...state,
@@ -277,6 +293,11 @@ const surveyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 cba_teams: action.payload,
+            };
+        case GET_CSAT_ADMIN:
+            return {
+                ...state,
+                csat_admin: action.payload,
             };
         case REMOVE_CSAT_ADMIN:
             return {
@@ -432,6 +453,11 @@ const surveyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 agentCompState: { ...state.agentCompState, ...action.payload },
+            };
+        case TOGGLE_FETCHING:
+            return {
+                ...state,
+                isFetching: !state.isFetching,
             };
         case FETCHING:
             return {
@@ -733,7 +759,6 @@ const surveyReducer = (state = initialState, action) => {
             return {
                 ...state,
                 teamleads: action.payload,
-                isFetching: false,
             };
         case EDIT_TEAMLEAD:
             return {

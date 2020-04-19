@@ -10,6 +10,8 @@ import {
     addCbaTeam,
     addAgent,
     getAllData2,
+    clearUploadDetails,
+    loadingToggle,
 } from "../../../../actions/surveyActions";
 
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
@@ -18,6 +20,8 @@ import SurveyTable from "../surveyTable/SurveyTable";
 import Loader from "../loaders/Loader";
 
 import { connect } from "react-redux";
+
+import Loading from "../loaders/Loading";
 
 class UploadData extends Component {
     constructor(props) {
@@ -76,33 +80,11 @@ class UploadData extends Component {
                 range: 1,
             });
 
-            // let filtered_data = data.filter(
-            //     item =>
-            //         !this.props.surveys
-            //             .map(survey => survey.reference_number)
-            //             .includes(item.reference_number)
-            // );
-
             /* Update state */
 
             const { surveys } = this.props;
 
             const { cba_teams, agents } = this.props;
-
-            // check for non existing scopes/ agent_skill
-
-            // const processData = new Promise(
-            //     (resolve, reject) =>
-            //         this.processNewAgentSkillandTeam(cba_teams, data) ===
-            //             "success" && resolve("success")
-            // );
-
-            // processData.then(
-            //     (res) => res === "success" && this.processNewAgent(agents, data)
-            // );
-
-            // this.processNewAgentSkillandTeam(cba_teams, data);
-            this.processNewAgent(agents, data);
 
             let changedData = data.map((item) => ({
                 ...item,
@@ -324,11 +306,11 @@ class UploadData extends Component {
     handleFile = (e) => {
         e.preventDefault();
 
-        const { post, put } = this.state.filtered_data;
-
         // console.log("send Data", this.state.filtered_data);
 
-        this.props.addSurveysBulk(this.state.filtered_data);
+        // this.props.addSurveysBulk(this.state.filtered_data);
+
+        this.runPostRequest();
 
         this.setState({
             filtered_data: {
@@ -343,8 +325,59 @@ class UploadData extends Component {
         await this.props.updateSurvey(data);
     }
 
-    async runPostRequest(data) {
-        await this.props.addSurvey(data);
+    async runPostRequest() {
+        const { post, put } = this.state.filtered_data;
+        const { cba_teams, agents, addAgent, loadingToggle } = this.props;
+
+        loadingToggle();
+
+        // await
+        if (post) {
+            for (const data of post) {
+                try {
+                    !agents
+                        .map(({ operator_lan_id }) => operator_lan_id)
+                        .includes(data.operator_lan_id) &&
+                        (await addAgent({
+                            operator_lan_id:
+                                data.owner_name !== "ITSD_AskIT_Ticket_Triage"
+                                    ? data.operator_lan_id
+                                    : "ITSD_AskIT_Ticket_Triage",
+                            location: data.location,
+                            wave: data.wave,
+                            owner_name: data.owner_name,
+                            owner_name_email_address:
+                                data.owner_name_email_address,
+                            scope: data.scope,
+                            teams: [],
+                        }));
+                    !cba_teams
+                        .map(({ agent_skill }) => agent_skill.name)
+                        .includes(data.scope) &&
+                        (await this.props.addCbaTeam({
+                            agent_skill: {
+                                name: data.scope,
+                            },
+                            team_leads: [],
+                        }));
+                    await this.props.addSurvey(data);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+
+        if (put) {
+            for (const data of put) {
+                try {
+                    await this.props.updateSurvey(data);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+
+        loadingToggle();
     }
 
     getColumns = (list) =>
@@ -355,7 +388,7 @@ class UploadData extends Component {
 
     render() {
         let processedData = this.state.filtered_data;
-        const { success_uploads, req_error } = this.props;
+        const { success_uploads, req_error, isLoading } = this.props;
 
         let tableHeaderStyle = { color: "black" };
 
@@ -395,25 +428,39 @@ class UploadData extends Component {
                         <FormGroup>
                             <Label
                                 onChange={this.handleChange}
-                                className="btn btn-success py-2 my-auto"
+                                className={`btn btn-${
+                                    isLoading ? "primary" : "success"
+                                } py-2 my-auto`}
                                 for="id_upload_data"
+                                style={{
+                                    cursor: isLoading ? "default" : "pointer",
+                                }}
                             >
-                                {!this.state.isLoading ? null : <Loader />}
-                                Upload data
+                                <span>
+                                    <Loading />
+                                </span>
+                                {isLoading
+                                    ? "Uploading data"
+                                    : "Select CSAT Excel template file"}
                                 <Input
                                     id="id_upload_data"
                                     name="selectedFile"
                                     accept={SheetJSFT}
                                     type="file"
-                                    style={{ display: "none" }}
+                                    style={{
+                                        display: "none",
+                                    }}
+                                    disabled={isLoading}
 
                                     // onChange={this.handleChange}
                                 />
                             </Label>
 
-                            <FormText color="muted">
-                                IMPORTANT! Check headers and data before
-                                upload...
+                            <FormText color="danger">
+                                IMPORTANT!{" "}
+                                {isLoading
+                                    ? "Uploading data... Do not refresh or close this window!"
+                                    : "Check headers and data before upload..."}
                             </FormText>
                         </FormGroup>
                     ) : processedData.post !== null ||
@@ -487,6 +534,7 @@ const mapStateToProps = (state) => ({
     success_uploads: state.surveys.success_uploads,
     req_error: state.surveys.req_error,
     isFetching: state.surveys.isFetching,
+    isLoading: state.surveys.isLoading,
 });
 
 export default connect(mapStateToProps, {
@@ -497,4 +545,6 @@ export default connect(mapStateToProps, {
     addCbaTeam,
     addAgent,
     getAllData2,
+    clearUploadDetails,
+    loadingToggle,
 })(UploadData);

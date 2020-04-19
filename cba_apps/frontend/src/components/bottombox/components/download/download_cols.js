@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const download_cols = [
     {
         label: "Surveyed Ticket #",
@@ -50,7 +52,11 @@ export const download_cols = [
         label: "Service Component of the BB ticket",
         value: (col) => col.service_component_bb_ticket,
     },
-    { label: "RCA Date", value: (col) => col.date_completed },
+    {
+        label: "RCA Date",
+        value: ({ date_completed }) =>
+            moment(date_completed).format("DD-MM-YYYY"),
+    },
     { label: "Controllability", value: (col) => col.controllability },
     {
         label: "Accountable team",

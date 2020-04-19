@@ -10,7 +10,7 @@ import {
     getBottomboxSurveyView,
     getTopboxSurveyView,
     getCompletedSurveyView,
-    getAllSurveyView
+    getAllSurveyView,
 } from "../../../../actions/surveyActions";
 import { toggle } from "../../../../actions/modalToggleActions";
 
@@ -22,7 +22,7 @@ import {
     getSurvey,
     getAgentDetails,
     getRca,
-    removeRca
+    removeRca,
 } from "../../../../actions/surveyActions";
 
 import ReactExport from "react-data-export";
@@ -40,7 +40,7 @@ let agent_headers = [
     "location",
     "wave",
     "skill",
-    "team_lead"
+    "team_lead",
 ];
 
 const ExcelFile = ReactExport.ExcelFile;
@@ -58,7 +58,7 @@ class DatatablePage extends Component {
         sortedData: [],
         rca_headers: [],
 
-        agent: []
+        agent: [],
     };
 
     componentDidUpdate(prevProps) {
@@ -66,17 +66,17 @@ class DatatablePage extends Component {
         if (rcas != prevProps.rcas) {
             this.setState({
                 rca_headers: rcas[0] && Object.keys(rcas[0]),
-                rcas
+                rcas,
             });
         }
         if (agents != prevProps.agents) {
             this.setState({
-                agents
+                agents,
             });
         }
     }
 
-    getData = data => {
+    getData = (data) => {
         if (data === "bottombox") {
             this.props.getBottomboxSurveyView();
         } else if (data === "topbox") {
@@ -88,9 +88,9 @@ class DatatablePage extends Component {
         }
     };
 
-    handleDelete = e => this.props.deleteSurvey(e);
+    handleDelete = (e) => this.props.deleteSurvey(e);
 
-    handleToggle = data => {
+    handleToggle = (data) => {
         data.completed == true
             ? this.props.getRca(data)
             : this.props.removeRca();
@@ -104,9 +104,9 @@ class DatatablePage extends Component {
         this.setState({ sortedData });
     };
 
-    handleChange = e => {
+    handleChange = (e) => {
         this.setState({
-            [e.target.name]: moment(e.target.value).format("DD/MM/YYYY")
+            [e.target.name]: moment(e.target.value).format("DD/MM/YYYY"),
         });
     };
 
@@ -116,7 +116,7 @@ class DatatablePage extends Component {
 
     filterToggle = () => {
         this.setState((state, props) => ({
-            filter: !state.filter
+            filter: !state.filter,
         }));
     };
 
@@ -151,7 +151,7 @@ class DatatablePage extends Component {
         // };
 
         // Creating Headers for table
-        const headers = this.props.headers.map(val => {
+        const headers = this.props.headers.map((val) => {
             switch (val) {
                 case "date_issued":
                     return Object.assign({
@@ -188,20 +188,20 @@ class DatatablePage extends Component {
                             ) {
                                 return true;
                             }
-                        }
+                        },
                     });
 
                 case "completed":
                     return Object.assign({
                         ["Header"]: val,
                         ["id"]: val,
-                        ["accessor"]: val => val.completed.toString()
+                        ["accessor"]: (val) => val.completed.toString(),
                     });
 
                 default:
                     return Object.assign({
                         ["Header"]: val,
-                        ["accessor"]: val
+                        ["accessor"]: val,
                     });
             }
         });
@@ -210,7 +210,7 @@ class DatatablePage extends Component {
         const buttons = {
             Header: "Actions",
             filterable: false,
-            Cell: cellprops => (
+            Cell: (cellprops) => (
                 <Fragment>
                     <div className="btn-group">
                         <SurveyDetailsModal survey={cellprops.original} />
@@ -219,12 +219,12 @@ class DatatablePage extends Component {
                             color={
                                 this.props.surveys
                                     .filter(
-                                        survey =>
+                                        (survey) =>
                                             cellprops.original
                                                 .reference_number ===
                                             survey.reference_number
                                     )
-                                    .map(item => item.completed)[0] == true
+                                    .map((item) => item.completed)[0] == true
                                     ? "success"
                                     : cellprops.original.bottombox == 1
                                     ? "danger"
@@ -255,7 +255,7 @@ class DatatablePage extends Component {
                     </div>
                 </Fragment>
             ),
-            width: 200
+            width: 200,
         };
         const columns = [buttons, ...headers];
 
@@ -268,7 +268,7 @@ class DatatablePage extends Component {
                 }
                 name="Surveys"
             >
-                {this.props.headers.map(item => (
+                {this.props.headers.map((item) => (
                     <ExcelColumn key={item} label={item} value={item} />
                 ))}
             </ExcelSheet>
@@ -287,7 +287,7 @@ class DatatablePage extends Component {
             rca_headers = Object.keys(this.props.rcas[0]);
             rcaTableExcelSheet = (
                 <ExcelSheet data={this.props.rcas} name="RCAS">
-                    {rca_headers.map(item => (
+                    {rca_headers.map((item) => (
                         <ExcelColumn key={item} label={item} value={item} />
                     ))}
                 </ExcelSheet>
@@ -370,7 +370,7 @@ class DatatablePage extends Component {
                                         data={this.props.agents}
                                         name="Agents"
                                     >
-                                        {this.props.agent_headers.map(item =>
+                                        {this.props.agent_headers.map((item) =>
                                             item != "surveys" ? (
                                                 <ExcelColumn
                                                     key={item}
@@ -409,13 +409,13 @@ class DatatablePage extends Component {
 
                 <ReactTable
                     className="-striped -highlight"
-                    ref={r => (this.reactTable = r)}
+                    ref={(r) => (this.reactTable = r)}
                     filtered={this.state.filtered}
-                    onFilteredChange={filtered => {
+                    onFilteredChange={(filtered) => {
                         this.setState({
                             filtered,
                             sortedData: this.reactTable.getResolvedState()
-                                .sortedData
+                                .sortedData,
                         });
                     }}
                     style={{ backgroundColor: "white" }}
@@ -431,7 +431,7 @@ class DatatablePage extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     headers: state.surveys.headers,
     data: state.surveys.surveys,
     surveys_view: state.surveys.surveys_view,
@@ -442,14 +442,14 @@ const mapStateToProps = state => ({
     rcas: state.surveys.rcas,
     rca: state.surveys.rca,
     incomplete_bottombox_count: state.surveys.surveys.filter(
-        survey => survey.bottombox === 1 && survey.completed === false
+        (survey) => survey.bottombox === 1 && survey.completed === false
     ).length,
     incomplete_topbox_count: state.surveys.surveys.filter(
-        survey => survey.bottombox === 0 && survey.completed === false
+        (survey) => survey.bottombox === 0 && survey.completed === false
     ).length,
     completed_survey_count: state.surveys.surveys.filter(
-        survey => survey.completed === true
-    ).length
+        (survey) => survey.completed === true
+    ).length,
 });
 
 export default connect(mapStateToProps, {
@@ -462,5 +462,5 @@ export default connect(mapStateToProps, {
     getBottomboxSurveyView,
     getTopboxSurveyView,
     getCompletedSurveyView,
-    getAllSurveyView
+    getAllSurveyView,
 })(DatatablePage);

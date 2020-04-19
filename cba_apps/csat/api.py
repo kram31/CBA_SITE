@@ -6,10 +6,30 @@ from agents.models import Agent
 from .models import Survey, RCA, DSAT_Code1, BB_Driver_Code2, BB_Driver_Code3, AccountableTeam, CsatAccessRequest
 from .serializers import SurveySerializer, RCASerializer, DSAT_Code1Serializer, BB_Driver_Code2Serializer, BB_Driver_Code3Serializer, AccountableTeamSerializer, CsatAccessRequestSerializer
 
+from django_filters.rest_framework import DjangoFilterBackend
+
+from django_filters import rest_framework as filters
+
+from rest_framework.authentication import TokenAuthentication
+
+
+class RcaScopeFilter(filters.BaseInFilter, filters.CharFilter):
+    pass
+
+
+class ScopeFilter(filters.FilterSet):
+    surveyed_ticket__scope = RcaScopeFilter(
+        field_name='surveyed_ticket__scope', lookup_expr='in')
+
+    class Meta:
+        model = RCA
+        fields = ['surveyed_ticket__scope', ]
+
 
 class SurveyViewset(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
         # permissions.IsAuthenticated
@@ -38,6 +58,7 @@ class SurveyViewset(viewsets.ModelViewSet):
 class CsatAccessRequestViewset(viewsets.ModelViewSet):
     queryset = CsatAccessRequest.objects.all()
     serializer_class = CsatAccessRequestSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
         # permissions.IsAuthenticated
@@ -45,8 +66,13 @@ class CsatAccessRequestViewset(viewsets.ModelViewSet):
 
 
 class RCAViewset(viewsets.ModelViewSet):
+
     queryset = RCA.objects.all()
     serializer_class = RCASerializer
+    authentication_classes = [TokenAuthentication, ]
+    filter_backends = [DjangoFilterBackend]
+    filter_class = ScopeFilter
+
     permission_classes = [
         permissions.AllowAny
         # permissions.IsAuthenticated
@@ -56,6 +82,7 @@ class RCAViewset(viewsets.ModelViewSet):
 class DSAT_Code1Viewset(viewsets.ModelViewSet):
     queryset = DSAT_Code1.objects.all()
     serializer_class = DSAT_Code1Serializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -64,6 +91,7 @@ class DSAT_Code1Viewset(viewsets.ModelViewSet):
 class BB_Driver_Code2Viewset(viewsets.ModelViewSet):
     queryset = BB_Driver_Code2.objects.all()
     serializer_class = BB_Driver_Code2Serializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -72,6 +100,7 @@ class BB_Driver_Code2Viewset(viewsets.ModelViewSet):
 class BB_Driver_Code3Viewset(viewsets.ModelViewSet):
     queryset = BB_Driver_Code3.objects.all()
     serializer_class = BB_Driver_Code3Serializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]
@@ -80,6 +109,7 @@ class BB_Driver_Code3Viewset(viewsets.ModelViewSet):
 class AccountableTeamViewset(viewsets.ModelViewSet):
     queryset = AccountableTeam.objects.all()
     serializer_class = AccountableTeamSerializer
+    authentication_classes = [TokenAuthentication, ]
     permission_classes = [
         permissions.AllowAny
     ]

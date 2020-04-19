@@ -35,7 +35,7 @@ const TeamView = () => {
         (surveys) => surveys.collapse_component
     );
 
-    useEffect(() => console.log("TEAM VIEW"), []);
+    // useEffect(() => console.log("TEAM VIEW"), []);
 
     return (
         <Container>

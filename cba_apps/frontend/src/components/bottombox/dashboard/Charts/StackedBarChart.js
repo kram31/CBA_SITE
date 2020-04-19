@@ -12,7 +12,7 @@ import {
     updatedSelectedMonth,
     updatedSelectedWeek,
     updatedSelectedYear,
-    updateAgentChartData
+    updateAgentChartData,
 } from "../../../../actions/surveyActions";
 
 // default by month > select month > by week
@@ -29,7 +29,7 @@ class StackedBarChart extends Component {
         curr_month: "",
         curr_month_string: "",
         days_per_week: [],
-        selectedMonth_chart_data: []
+        selectedMonth_chart_data: [],
     };
 
     componentDidMount() {
@@ -40,7 +40,7 @@ class StackedBarChart extends Component {
 
         let monthRangeInt = Array.from(new Array(curr_month), (x, i) => i + 1);
 
-        let monthSelection = monthRangeInt.map(item => {
+        let monthSelection = monthRangeInt.map((item) => {
             let monthName = new Intl.DateTimeFormat("en-US", { month: "short" })
                 .format;
             let name = monthName(new Date(`${curr_year}-${item}-01`));
@@ -50,7 +50,7 @@ class StackedBarChart extends Component {
         this.setState({
             monthSelection,
             curr_year,
-            curr_month
+            curr_month,
             // curr_month_string: monthSelection[10].string
         });
     }
@@ -68,9 +68,9 @@ class StackedBarChart extends Component {
         console.log(monthRangeInt);
 
         // filter data per month
-        let surveyCountPerMonth = monthRangeInt.map(month => {
+        let surveyCountPerMonth = monthRangeInt.map((month) => {
             let filteredSurveyPerMonth = filtered_list.filter(
-                survey =>
+                (survey) =>
                     new Date(survey.date_issued).getMonth() + 1 == month &&
                     new Date(survey.date_issued).getFullYear() == curr_year
             );
@@ -80,7 +80,7 @@ class StackedBarChart extends Component {
             let name = monthName(new Date(`${curr_year}-${month}-01`));
 
             return {
-                [name]: filteredSurveyPerMonth
+                [name]: filteredSurveyPerMonth,
             };
         });
 
@@ -97,13 +97,13 @@ class StackedBarChart extends Component {
         // console.log(days_per_week);
 
         this.setState({
-            days_per_week
+            days_per_week,
         });
 
         let data_per_week = [];
 
         days_per_week.forEach((item, i) => {
-            let m = filtered_list.filter(survey => {
+            let m = filtered_list.filter((survey) => {
                 let date = new Date(survey.date_issued);
 
                 return (
@@ -141,7 +141,7 @@ class StackedBarChart extends Component {
                 if (start != end) {
                     weeks.push({
                         start: start,
-                        end: end
+                        end: end,
                     });
                 }
             }
@@ -158,20 +158,20 @@ class StackedBarChart extends Component {
         scales: {
             xAxes: [
                 {
-                    stacked: true
-                }
+                    stacked: true,
+                },
             ],
             yAxes: [
                 {
-                    stacked: true
-                }
-            ]
-        }
+                    stacked: true,
+                },
+            ],
+        },
     };
 
-    handleChange = e => {
+    handleChange = (e) => {
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
 
         if (e.target.name === "selectedYear") {
@@ -190,16 +190,16 @@ class StackedBarChart extends Component {
                     ? Array.from(new Array(curr_month), (x, i) => i + 1)
                     : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-            let monthSelection = monthRangeInt.map(item => {
+            let monthSelection = monthRangeInt.map((item) => {
                 let monthName = new Intl.DateTimeFormat("en-US", {
-                    month: "short"
+                    month: "short",
                 }).format;
                 let name = monthName(new Date(`${curr_year}-${item}-01`));
                 return { string: name, int: item };
             });
 
             this.setState({
-                monthSelection
+                monthSelection,
             });
 
             if (this.props.agent_chart_data) {
@@ -223,10 +223,10 @@ class StackedBarChart extends Component {
             }
             this.props.updateChartData(selectedMonth_chart_data);
             this.setState({
-                weekSelection: selectedMonth_chart_data.map(item =>
+                weekSelection: selectedMonth_chart_data.map((item) =>
                     Object.keys(item)
                 ),
-                selectedMonth_chart_data
+                selectedMonth_chart_data,
             });
 
             let resetWeek = "";
@@ -296,8 +296,8 @@ class StackedBarChart extends Component {
 
                 let week_data_array = Object.values(week_data)[0];
 
-                let selectedWeek_data = selectedWeek_dates.map(item => {
-                    let x = week_data_array.filter(survey => {
+                let selectedWeek_data = selectedWeek_dates.map((item) => {
+                    let x = week_data_array.filter((survey) => {
                         // console.log(`${survey.date_issued} === ${item}`);
                         return survey.date_issued === item;
                     });
@@ -360,7 +360,7 @@ class StackedBarChart extends Component {
                             >
                                 <option value="reset">----</option>
 
-                                {this.state.monthSelection.map(item => (
+                                {this.state.monthSelection.map((item) => (
                                     <option key={item.int} value={item.int}>
                                         {item.string}
                                     </option>
@@ -403,7 +403,7 @@ class StackedBarChart extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     surveys: state.surveys.surveys,
     agent: state.surveys.agent,
     filtered_agent_data: state.surveys.filtered_agent_data,
@@ -412,7 +412,7 @@ const mapStateToProps = state => ({
     selectedMonth: state.surveys.selectedMonth,
     selectedYear: state.surveys.selectedYear,
     selectedWeek: state.surveys.selectedWeek,
-    yearSelection: state.surveys.yearSelection
+    yearSelection: state.surveys.yearSelection,
 });
 
 export default connect(mapStateToProps, {
@@ -420,5 +420,5 @@ export default connect(mapStateToProps, {
     updatedSelectedMonth,
     updatedSelectedWeek,
     updatedSelectedYear,
-    updateAgentChartData
+    updateAgentChartData,
 })(StackedBarChart);

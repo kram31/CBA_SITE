@@ -1,4 +1,8 @@
 import {
+    TOGGLE_FETCHING,
+    LOADING_TOGGLE,
+    CLEAR_UPLOAD_DETAILS,
+    GET_CSAT_ADMIN,
     ADD_AGENT_SKILL,
     REMOVE_CSAT_ADMIN,
     ADD_CSAT_ADMIN,
@@ -128,6 +132,27 @@ export class GeneralRequest {
 export const collapseComponent = (data) => (dispatch) =>
     dispatch({ type: COLLAPSE_COMPONENT, payload: data });
 
+export const clearUploadDetails = () => (dispatch) =>
+    dispatch({ type: CLEAR_UPLOAD_DETAILS });
+
+export const loadingToggle = () => (dispatch) =>
+    dispatch({ type: LOADING_TOGGLE });
+
+export const getCsatAdmin = () => (dispatch) => {
+    return axios
+        .get(`/api/csat_admins/`)
+        .then((res) => {
+            dispatch({
+                type: GET_CSAT_ADMIN,
+                payload: res.data,
+            });
+            return res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
 export const deleteCsatAdmin = (data) => (dispatch) => {
     axios
         .delete(`/api/csat_admins/${data.id}/`)
@@ -184,41 +209,61 @@ export const deleteRequestAccess = (data) => (dispatch) => {
         });
 };
 
-export const addSurvey = (data) => (dispatch) => {
-    // console.log(data);
-    axios
-        .post("/api/surveys/", data)
-        .then((res) => {
-            dispatch({
-                type: ADD_SURVEY,
-                payload: res.data,
-            });
-        })
-        .catch((err) => {
-            console.log(err.response);
-            dispatch({
-                type: REQ_ERROR,
-                payload: err.response,
-            });
-        });
-};
-
 export const updateSurvey = (data) => (dispatch) => {
     // console.log(data);
-    axios
+    return axios
         .put(`/api/surveys/${data.reference_number}/`, data)
         .then((res) => {
             dispatch({
                 type: UPDATE_SURVEY,
                 payload: res.data,
             });
+            return res.data;
         })
         .catch((err) => {
-            console.log(err.response);
+            console.log(err);
+
+            if ("response" in err) {
+                const { status, statusText } = err.response;
+
+                dispatch({
+                    type: REQ_ERROR,
+                    payload: {
+                        statusText,
+                        status,
+                        ...JSON.parse(err.response.config.data),
+                    },
+                });
+            }
+        });
+};
+
+export const addSurvey = (data) => (dispatch) => {
+    // console.log(data);
+    return axios
+        .post("/api/surveys/", data)
+        .then((res) => {
             dispatch({
-                type: REQ_ERROR,
-                payload: err.response,
+                type: ADD_SURVEY,
+                payload: res.data,
             });
+            return res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+
+            if ("response" in err) {
+                const { status, statusText } = err.response;
+
+                dispatch({
+                    type: REQ_ERROR,
+                    payload: {
+                        statusText,
+                        status,
+                        ...JSON.parse(err.response.config.data),
+                    },
+                });
+            }
         });
 };
 
@@ -468,22 +513,78 @@ export const deleteRca = (data) => (dispatch, getState) => {
 
 export const updateRca = (rca) => (dispatch) => {
     console.log("FROM ACTIONS", rca);
-    axios
+    return axios
         .put(`/api/csat_rcas/${rca.id}/`, rca)
         .then((res) => {
             dispatch({
                 type: UPDATE_RCA,
                 payload: res.data,
             });
+            return res.data;
         })
         .catch((err) => console.log(err.response));
 };
 
-export const getAllData2 = () => (dispatch) => {
+export const toggleFetch = () => (dispatch) =>
     dispatch({
-        type: FETCHING,
+        type: TOGGLE_FETCHING,
     });
-    axios
+
+export const getAllDataTeamLead = (myTeams) => (dispatch) => {
+    console.log("NOT ADMIN", myTeams);
+    return axios
+        .all([
+            axios.get(`/api/csat_rcas/?surveyed_ticket__scope=${myTeams}`),
+            axios.get("/api/agent_skills/"),
+            axios.get("/api/dsat_code1/"),
+            axios.get("/api/bb_driver_code2/"),
+            axios.get("/api/bb_driver_code3/"),
+            axios.get("/api/csat_accountable_team/"),
+            axios.get("/api/teamleads/"),
+            axios.get("/api/cba_teams_readonly/"),
+            axios.get("/api/csat_admins/"),
+            axios.get("/api/csat_access_request/"),
+        ])
+        .then(
+            axios.spread(
+                (
+                    csat_rcas,
+                    agent_skills,
+                    dsat_code1,
+                    bb_driver_code2,
+                    bb_driver_code3,
+                    csat_accountable_team,
+                    teamleads,
+                    cba_teams,
+                    csat_admin,
+                    csat_access_request
+                ) => {
+                    dispatch({
+                        type: GET_ALL_DATA,
+                        payload: {
+                            csat_rcas: csat_rcas.data,
+                            agent_skills: agent_skills.data,
+                            dsat_code1: dsat_code1.data,
+                            bb_driver_code2: bb_driver_code2.data,
+                            bb_driver_code3: bb_driver_code3.data,
+                            csat_accountable_team: csat_accountable_team.data,
+                            teamleads: teamleads.data,
+                            cba_teams: cba_teams.data,
+                            csat_admin: csat_admin.data,
+                            csat_access_request: csat_access_request.data,
+                        },
+                    });
+                    return "Success";
+                }
+            )
+        )
+        .catch((error) => {
+            console.log(error.response);
+        });
+};
+
+export const getAllData2 = () => (dispatch) => {
+    return axios
         .all([
             axios.get("/api/surveys/"),
             axios.get("/api/csat_rcas/"),
@@ -531,16 +632,11 @@ export const getAllData2 = () => (dispatch) => {
                             csat_access_request: csat_access_request.data,
                         },
                     });
-                    dispatch({
-                        type: STOP_FETCHING,
-                    });
+                    return "Success";
                 }
             )
         )
         .catch((error) => {
-            dispatch({
-                type: STOP_FETCHING,
-            });
             console.log(error.response);
         });
 };
@@ -565,14 +661,15 @@ export const addCbaTeam = (data) => (dispatch) => {
 };
 
 export const getCbaTeams = () => (dispatch) => {
-    axios
+    return axios
         .get("/api/cba_teams_readonly/")
-        .then((res) =>
+        .then((res) => {
             dispatch({
                 type: GET_CBA_TEAMS,
                 payload: res.data,
-            })
-        )
+            });
+            return res.data;
+        })
         .catch((err) => console.log(err.response.data));
 };
 
@@ -859,18 +956,15 @@ export const addRCA = (rcaData, agentData) => (dispatch, getState) => {
 };
 
 export const getTeamLeads = () => (dispatch) => {
-    dispatch({
-        type: FETCHING,
-    });
-
-    axios
+    return axios
         .get("/api/teamleads/")
-        .then((res) =>
+        .then((res) => {
             dispatch({
                 type: GET_TEAMLEADS,
                 payload: res.data,
-            })
-        )
+            });
+            return res.data;
+        })
         .catch((err) => console.log(err.response.data));
 };
 

@@ -11,43 +11,88 @@ import AgentSkill from "../agent_skill/AgentSkill";
 import TeamLeadView from "../team_lead/TeamLeadView";
 import TeamView from "../team/TeamView";
 import AccountableTeam from "../accountable_team/AccountableTeam";
+import Dashboard from "../dashboard/Dashboard";
 
 import { Spinner, Collapse, Card, CardHeader, CardBody } from "reactstrap";
 
 import {
     getAllData2,
     collapseComponent,
+    getAllDataTeamLead,
+    getCbaTeams,
+    getCsatAdmin,
+    getTeamLeads,
+    isFetching,
+    toggleFetch,
 } from "../../../../actions/surveyActions";
 
 class Main extends Component {
     constructor(props) {
         super(props);
 
-        this.props.getAllData2();
+        this.getInitialData();
+
+        this.state = {
+            isAdmin: false,
+            isTeamLead: false,
+        };
+    }
+
+    async getInitialData() {
+        const {
+            getCbaTeams,
+            getCsatAdmin,
+            auth,
+            getAllData2,
+            getAllDataTeamLead,
+            getTeamLeads,
+            isFetching,
+            toggleFetch,
+        } = this.props;
+
+        try {
+            await toggleFetch();
+            let cbaTeams = await getCbaTeams();
+            let myTeams =
+                cbaTeams &&
+                cbaTeams
+                    .filter(({ team_leads }) =>
+                        team_leads
+                            .map(({ user }) => user.username)
+                            .includes(auth.user.username)
+                    )
+                    .map(({ agent_skill }) => agent_skill.name)
+                    .join(", ");
+            console.log("FIRST REQ", myTeams);
+            let cbaAdmins = await getCsatAdmin();
+            // console.log("SECOND REQ", cbaAdmins);
+            let cbaTeamLeads = await getTeamLeads();
+            // console.log("THIRD REQ", cbaTeamLeads);
+            console.log(this.checkAdmin(cbaAdmins, auth.user.username));
+            this.checkAdmin(cbaAdmins, auth.user.username)
+                ? await getAllData2()
+                : myTeams && (await getAllDataTeamLead(myTeams));
+
+            this.setState({
+                isAdmin: this.checkAdmin(cbaAdmins, auth.user.username),
+                isTeamLead: this.getListOfTeamLeads(cbaTeamLeads).includes(
+                    auth.user.username
+                ),
+            });
+            await toggleFetch();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     handleClose = () => this.props.collapseComponent("");
 
     getListOfTeamLeads = (list) => list.map(({ user }) => user.username);
 
-    getListOfCsatPerTeamLead = (csats, username) =>
-        csats.filter((csat) =>
-            csat.agent.teams
-                .map((team) =>
-                    team.team_leads.map((lead) => lead.user.username)
-                )[0]
-                .includes(username)
-        );
-
     render() {
-        const {
-            surveys,
-            csat_rcas,
-            collapse_component,
-            teamleads,
-            auth,
-            csat_admin,
-        } = this.props;
+        const { csat_rcas, collapse_component, auth, csat_admin } = this.props;
+
+        const { isAdmin, isTeamLead } = this.state;
 
         let componentList = [
             {
@@ -94,7 +139,7 @@ class Main extends Component {
 
         return (
             <Fragment>
-                {this.props.isFetching ? (
+                {this.props.fetch ? (
                     <Spinner
                         style={{
                             width: "3rem",
@@ -102,60 +147,68 @@ class Main extends Component {
                             top: "50%",
                             left: "50%",
                             position: "fixed",
+                            color: "white",
                         }}
                     />
                 ) : (
                     <Fragment>
-                        {this.getListOfTeamLeads(teamleads).includes(
-                            auth.user.username
-                        ) || this.checkAdmin(csat_admin, auth.user.username) ? (
+                        {isAdmin || isTeamLead ? (
                             <Fragment>
                                 {csat_rcas ? (
                                     <Fragment>
-                                        {componentList.map(
-                                            (
-                                                {
-                                                    title,
-                                                    component,
-                                                    collapseValue,
-                                                },
-                                                i
-                                            ) => (
-                                                <CollapseComponent
-                                                    isOpen={
-                                                        collapse_component ===
-                                                        collapseValue
-                                                    }
-                                                    title={title}
-                                                    component={component}
-                                                    close={this.handleClose}
-                                                    className="mb-3"
-                                                    key={i}
-                                                />
-                                            )
-                                        )}
-
-                                        <SurveyView
-                                            data={
-                                                this.getListOfTeamLeads(
-                                                    teamleads
-                                                ).includes(
-                                                    auth.user.username
-                                                ) &&
-                                                !this.checkAdmin(
-                                                    csat_admin,
-                                                    auth.user.username
+                                        {isAdmin &&
+                                            componentList.map(
+                                                (
+                                                    {
+                                                        title,
+                                                        component,
+                                                        collapseValue,
+                                                    },
+                                                    i
+                                                ) => (
+                                                    <CollapseComponent
+                                                        isOpen={
+                                                            collapse_component ===
+                                                            collapseValue
+                                                        }
+                                                        title={title}
+                                                        component={component}
+                                                        close={this.handleClose}
+                                                        className="mb-3"
+                                                        key={i}
+                                                    />
                                                 )
-                                                    ? this.getListOfCsatPerTeamLead(
-                                                          csat_rcas,
-                                                          auth.user.username
-                                                      )
-                                                    : csat_rcas
-                                            }
-                                        />
+                                            )}
+                                        {/* <Dashboard /> */}
+                                        <SurveyView data={csat_rcas} />
                                     </Fragment>
                                 ) : (
-                                    "No Survey found"
+                                    <div
+                                        className="text-center"
+                                        style={{
+                                            color: "white",
+                                        }}
+                                    >
+                                        <h4>No RCA/ Survey found</h4>
+                                        <div style={{ fontSize: "14px" }}>
+                                            <div>
+                                                Please reach out to the
+                                                application adminstrator(s).
+                                            </div>
+                                            {csat_admin.length &&
+                                                csat_admin
+                                                    .filter(
+                                                        ({ user }) =>
+                                                            user.username !=
+                                                            "mark.lascano@dxc.com"
+                                                    )
+                                                    .map(({ user }, i) => (
+                                                        <div key={i}>
+                                                            {user.username}
+                                                        </div>
+                                                    ))}
+                                        </div>
+                                    </div>
                                 )}
                             </Fragment>
                         ) : (
@@ -194,16 +247,22 @@ const CollapseComponent = ({ isOpen, title, component: Component, close }) => (
 );
 
 const mapStateToProps = (state) => ({
-    surveys: state.surveys.surveys,
     csat_rcas: state.surveys.csat_rcas,
-    isFetching: state.surveys.isFetching,
+    fetch: state.surveys.isFetching,
     auth: state.auth,
     collapse_component: state.surveys.collapse_component,
     teamleads: state.surveys.teamleads,
     csat_admin: state.surveys.csat_admin,
+    cba_teams: state.surveys.cba_teams,
 });
 
 export default connect(mapStateToProps, {
     getAllData2,
     collapseComponent,
+    getAllDataTeamLead,
+    getCbaTeams,
+    getCsatAdmin,
+    getTeamLeads,
+    isFetching,
+    toggleFetch,
 })(Main);

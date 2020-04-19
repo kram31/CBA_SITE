@@ -16,7 +16,7 @@ from django.core.mail import get_connection
 from django.core.mail import EmailMessage
 
 
-def send_email(title, body, my_username):
+def send_email(title, body, my_username, recipients):
 
     admin_emails = CsatAdministrator.objects.all(
     ).values_list('user__username', flat=True)
@@ -34,9 +34,34 @@ def send_email(title, body, my_username):
         title,
         body,
         'cba-csat@donot-reply.com',
-        ["mark.lascano@dxc.com"],
-        # [*admin_emails],
-        cc=my_username,
+        recipients,
+        cc=[*admin_emails],
+        connection=connection
+    )
+    # email.attach_file()
+    email.send()
+
+
+def send_email_access_req(title, body, my_username):
+
+    admin_emails = CsatAdministrator.objects.all(
+    ).values_list('user__username', flat=True)
+
+    # ccms_group_list = User.objects.filter(
+    #     groups__name="CCMS Admin").values_list("email", flat=True)
+
+    connection = get_connection(host='smtp.svcs.entsvcs.com',
+                                port=25,
+                                username=my_username,
+                                use_ssl=False,
+                                use_tls=False)
+
+    email = EmailMessage(
+        title,
+        body,
+        'cba-csat@donot-reply.com',
+        [*admin_emails],
+        cc=[my_username, ],
         connection=connection
     )
     # email.attach_file()
@@ -61,14 +86,14 @@ class CsatAccessRequestSerializer(serializers.ModelSerializer):
         if ar_qs.exists():
             ar_obj = ar_qs.first()
             print("SEND FOLLOW UP EMAIL", ar_obj)
-            # send_email(f"Access Request Follow up for CSAT CBA App - {validated_user['username']}",
-            #            f"Access Request Follow up for CSAT CBA App - {validated_user['username']}", validated_user['username'])
+            send_email_access_req(f"Access Request Follow up for CSAT CBA App - {validated_user['username']}",
+                                  f"Access Request Follow up for CSAT CBA App - {validated_user['username']}", validated_user['username'])
         else:
             user = User.objects.get(
                 username=validated_user['username'])
             ar_obj = CsatAccessRequest.objects.create(user=user)
-            # send_email(f"New Access Request for CSAT CBA App - {validated_user['username']}",
-            #            f"New Access Request for CSAT CBA App - {validated_user['username']}", validated_user['username'])
+            send_email_access_req(f"New Access Request for CSAT CBA App - {validated_user['username']}",
+                                  f"New Access Request for CSAT CBA App - {validated_user['username']}", validated_user['username'])
 
         return ar_obj
 
@@ -203,6 +228,18 @@ class SurveySerializer(serializers.ModelSerializer):
         rca = RCA.objects.create(surveyed_ticket=survey, agent=agent_obj)
 
         print("SEND EMAIL NOTIF TO RECIPIENTS")
+
+        # SEND EMAIL IF TEAM_LEAD IS NOT EMPTY
+
+        # teamlead_list = team_obj.team_leads.values_list(
+        #     "user__username", flat=True)
+
+        # if len(teamlead_list):
+        #     title = f"New RCA for ticket number {survey.reference_number} - {survey.scope}"
+        #     body = f"""New RCA for ticket number {survey.reference_number} - {survey.scope} saved to CBA CSAT App.
+        #     Do not reply this is a system generated email."""
+
+        #     send_email(title, body, survey.uploaded_by, teamlead_list)
 
         return survey
 
@@ -360,7 +397,7 @@ class RCASerializer(serializers.ModelSerializer):
 
         instance.save()
 
-        # send_email(f"CSAT for Ticket Number: {surveyed_ticket['reference_number']} has been completed",
-        #            f"Completed - Ticket Number: {surveyed_ticket['reference_number']}", user['username'])
+        send_email(f"CSAT for Ticket Number: {surveyed_ticket['reference_number']} has been completed",
+                   f"Completed - Ticket Number: {surveyed_ticket['reference_number']}", user['username'], [user['username'], ])
 
         return instance

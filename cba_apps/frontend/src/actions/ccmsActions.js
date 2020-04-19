@@ -62,7 +62,7 @@ import {
     DELETE_BUSINESS_UNIT,
     COMPLETE_CCMS,
     SET_TABLE_PAGE,
-    DENY_REQUEST_ACCESS
+    DENY_REQUEST_ACCESS,
 } from "./types";
 
 import axios from "axios";
@@ -76,165 +76,165 @@ export class GeneralRequest {
         this.dispatchType = dispatchType;
     }
 
-    addData = () => dispatch => {
+    addData = () => (dispatch) => {
         axios
             .post(`/api/${this.endpoint}/`, this.data)
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: this.dispatchType,
-                    payload: res.data
+                    payload: res.data,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     };
 
-    deleteData = () => dispatch => {
+    deleteData = () => (dispatch) => {
         axios
             .delete(`/api/${this.endpoint}/${this.data.id}`)
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: this.dispatchType,
-                    payload: this.data
+                    payload: this.data,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     };
 
-    editData = () => dispatch => {
+    editData = () => (dispatch) => {
         axios
             .put(`/api/${this.endpoint}/${this.data.id}/`, this.data)
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: this.dispatchType,
-                    payload: res.data
+                    payload: res.data,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     };
 }
 
-export const submit_ca = data => dispatch => {
+export const submit_ca = (data) => (dispatch) => {
     // console.log({ fni: data.ticket_number.id, ...data });
     axios
         .post(`/api/corrective_action/`, {
             fni: data.ticket_number.id,
-            ...data
+            ...data,
         })
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: SUBMIT_CA,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_fni_list = data => dispatch => {
+export const get_fni_list = (data) => (dispatch) => {
     axios
         .get(`/api/findings_and_investigation/?ccms_rca__id=${data}`)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_FNI_LIST,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const complete_fni = data => dispatch => {
+export const complete_fni = (data) => (dispatch) => {
     axios
         .post(`/api/findings_and_investigation/`, data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: COMPLETE_FNI,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const toggle_active_tab = tab => dispatch => {
+export const toggle_active_tab = (tab) => (dispatch) => {
     dispatch({
         type: TOGGLE_ACTIVE_TAB,
-        payload: tab
+        payload: tab,
     });
 };
 
-export const close_ccms_rca = () => dispatch => {
+export const close_ccms_rca = () => (dispatch) => {
     dispatch({
-        type: CLOSE_RCA_MODAL
+        type: CLOSE_RCA_MODAL,
     });
 };
 
-export const complete_ccms_rca = data => dispatch => {
+export const complete_ccms_rca = (data) => (dispatch) => {
     axios
         .put(`/api/ccms_rca/${data.ccms_rca.id}/`, data.ccms_rca_state)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: COMPLETE_CCMS_RCA,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_ccms_rca = data => dispatch => {
-    axios.get(`/api/ccms_rca/?ccms__id=${data.id}`).then(res => {
+export const get_ccms_rca = (data) => (dispatch) => {
+    axios.get(`/api/ccms_rca/?ccms__id=${data.id}`).then((res) => {
         dispatch({
             type: GET_CCMS_RCA,
-            payload: res.data
+            payload: res.data,
         });
 
         axios
             .get(
                 `/api/findings_and_investigation/?ccms_rca__id=${res.data[0].id}`
             )
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: GET_FNI_LIST,
-                    payload: res.data
+                    payload: res.data,
                 });
 
                 axios
                     .get(
                         `/api/corrective_action/?fni__ccms_rca__id=${res.data[0].ccms_rca}`
                     )
-                    .then(res => {
+                    .then((res) => {
                         dispatch({
                             type: GET_CA_LIST,
-                            payload: res.data
+                            payload: res.data,
                         });
                     });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     });
 };
 
-export const addEscalationDriverCause = data => dispatch => {
+export const addEscalationDriverCause = (data) => (dispatch) => {
     axios
         .post(`/api/escalation_driver_cause/`, data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_ESCALATION_DRIVER_CAUSE,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const deleteEscalationDriverCause = data => dispatch => {
+export const deleteEscalationDriverCause = (data) => (dispatch) => {
     // console.log(`FROM REDUX ACTION - DELETE`);
     // console.log(data);
 
-    axios.delete(`/api/escalation_driver_cause/${data.id}/`).then(res => {
+    axios.delete(`/api/escalation_driver_cause/${data.id}/`).then((res) => {
         dispatch({
             type: DELETE_ESCALATION_DRIVER_CAUSE,
-            payload: data
+            payload: data,
         });
     });
 };
 
-export const editEscalationDriverCause = (oldData, newData) => dispatch => {
+export const editEscalationDriverCause = (oldData, newData) => (dispatch) => {
     console.log(`FROM REDUX ACTION - EDIT`);
     console.log("OLDDATA");
     console.log(oldData);
@@ -243,40 +243,40 @@ export const editEscalationDriverCause = (oldData, newData) => dispatch => {
 
     axios
         .put(`/api/escalation_driver_cause/${oldData.id}/`, newData)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: EDIT_ESCALATION_DRIVER_CAUSE,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const addEscalationDriver = data => dispatch => {
+export const addEscalationDriver = (data) => (dispatch) => {
     axios
         .post(`/api/escalation_driver/`, data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_ESCALATION_DRIVER,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const deleteEscalationDriver = data => dispatch => {
+export const deleteEscalationDriver = (data) => (dispatch) => {
     // console.log(`FROM REDUX ACTION - DELETE`);
     // console.log(data);
 
-    axios.delete(`/api/escalation_driver/${data.id}/`).then(res => {
+    axios.delete(`/api/escalation_driver/${data.id}/`).then((res) => {
         dispatch({
             type: DELETE_ESCALATION_DRIVER,
-            payload: data
+            payload: data,
         });
     });
 };
 
-export const editEscalationDriver = (oldData, newData) => dispatch => {
+export const editEscalationDriver = (oldData, newData) => (dispatch) => {
     console.log(`FROM REDUX ACTION - EDIT`);
     console.log("OLDDATA");
     console.log(oldData);
@@ -285,56 +285,56 @@ export const editEscalationDriver = (oldData, newData) => dispatch => {
 
     axios
         .put(`/api/escalation_driver/${oldData.id}/`, newData)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: EDIT_ESCALATION_DRIVER,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const edit_cause_code = (oldData, newData) => dispatch => {
+export const edit_cause_code = (oldData, newData) => (dispatch) => {
     console.log(`FROM REDUX ACTION - EDIT`);
     console.log("OLDDATA");
     console.log(oldData);
     console.log("NewDATA");
     console.log(newData);
 
-    axios.put(`/api/cause_code/${oldData.id}/`, newData).then(res => {
+    axios.put(`/api/cause_code/${oldData.id}/`, newData).then((res) => {
         dispatch({
             type: EDIT_CAUSE_CODE,
-            payload: res.data
+            payload: res.data,
         });
     });
 };
 
-export const delete_cause_code = data => dispatch => {
+export const delete_cause_code = (data) => (dispatch) => {
     // console.log(`FROM REDUX ACTION - DELETE`);
     // console.log(data);
 
-    axios.delete(`/api/cause_code/${data.id}/`).then(res => {
+    axios.delete(`/api/cause_code/${data.id}/`).then((res) => {
         dispatch({
             type: DELETE_CAUSE_CODE,
-            payload: data
+            payload: data,
         });
     });
 };
 
-export const add_cause_code = data => dispatch => {
+export const add_cause_code = (data) => (dispatch) => {
     console.log(`FROM REDUX ACTION - ADD`);
     console.log(data);
-    axios.post(`/api/cause_code/`, data).then(res => {
+    axios.post(`/api/cause_code/`, data).then((res) => {
         dispatch({
             type: ADD_CAUSE_CODE,
-            payload: res.data
+            payload: res.data,
         });
     });
 };
 
-export const get_all_data = () => dispatch => {
+export const get_all_data = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
@@ -354,7 +354,7 @@ export const get_all_data = () => dispatch => {
             axios.get("/api/ccms/"),
             axios.get("/api/cause_code/"),
             axios.get("/api/escalation_driver/"),
-            axios.get("/api/escalation_driver_cause/")
+            axios.get("/api/escalation_driver_cause/"),
         ])
         .then(
             axios.spread(
@@ -395,225 +395,225 @@ export const get_all_data = () => dispatch => {
                             cause_code: cause_code.data,
                             escalation_driver: escalation_driver.data,
                             escalation_driver_cause:
-                                escalation_driver_cause.data
-                        }
+                                escalation_driver_cause.data,
+                        },
                     });
                     dispatch({
-                        type: STOP_FETCHING_CCMS
+                        type: STOP_FETCHING_CCMS,
                     });
                 }
             )
         )
-        .catch(error => {
+        .catch((error) => {
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
             console.log(error.response);
         });
 };
 
-export const get_access_request = () => dispatch => {
-    axios.get(`/api/ccms_access_request/`).then(res => {
+export const get_access_request = () => (dispatch) => {
+    axios.get(`/api/ccms_access_request/`).then((res) => {
         dispatch({
             type: GET_REQUEST_ACCESS,
-            payload: res.data
+            payload: res.data,
         });
     });
 };
 
-export const add_ccms_owner = data => dispatch => {
+export const add_ccms_owner = (data) => (dispatch) => {
     console.log(data.user.user);
     axios
         .post(`/api/ccms_owners/`, { user: data.user.user })
         .then(
-            res => {
+            (res) => {
                 dispatch({
                     type: ADD_CCMS_OWNER,
-                    payload: res.data
+                    payload: res.data,
                 });
             },
-            axios.delete(`/api/ccms_access_request/${data.id}`).then(res => {
+            axios.delete(`/api/ccms_access_request/${data.id}`).then((res) => {
                 dispatch({
                     type: REMOVE_ACCESS_REQUEST,
-                    payload: data
+                    payload: data,
                 });
             })
         )
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const deny_access_request = data => dispatch => {
+export const deny_access_request = (data) => (dispatch) => {
     axios
         .delete(`/api/ccms_access_request/${data.id}`)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: DENY_REQUEST_ACCESS,
-                payload: data
+                payload: data,
             });
             console.log(res.data);
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const add_access_request = data => dispatch => {
+export const add_access_request = (data) => (dispatch) => {
     axios
         .post(`/api/ccms_access_request/`, { user: data })
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_REQUEST_ACCESS,
-                payload: res.data
+                payload: res.data,
             });
             console.log(res.data);
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_selected_ccms_new = data => dispatch => {
+export const get_selected_ccms_new = (data) => (dispatch) => {
     dispatch({
-        type: FETCHING_COMMENTS
+        type: FETCHING_COMMENTS,
     });
 
     // WILL INCLUDE
-    axios.get(`/api/comments/?ccms__id=${data.id}`).then(res => {
+    axios.get(`/api/comments/?ccms__id=${data.id}`).then((res) => {
         dispatch({
             type: GET_SELECTED_CCMS,
-            payload: { comments: res.data, selected_ccms: data }
+            payload: { comments: res.data, selected_ccms: data },
         });
     });
 };
 
-export const open_modal = () => dispatch => {
+export const open_modal = () => (dispatch) => {
     dispatch({
-        type: OPEN_MODAL
+        type: OPEN_MODAL,
     });
 };
-export const close_modal = () => dispatch => {
+export const close_modal = () => (dispatch) => {
     dispatch({
-        type: CLOSE_MODAL
-    });
-};
-
-export const toggle_modal = () => dispatch => {
-    dispatch({
-        type: TOGGLE_MODAL
+        type: CLOSE_MODAL,
     });
 };
 
-export const set_table_page = data => dispatch => {
+export const toggle_modal = () => (dispatch) => {
+    dispatch({
+        type: TOGGLE_MODAL,
+    });
+};
+
+export const set_table_page = (data) => (dispatch) => {
     dispatch({
         type: SET_TABLE_PAGE,
-        payload: data
+        payload: data,
     });
 };
 
-export const search_ccms = data => dispatch => {
+export const search_ccms = (data) => (dispatch) => {
     dispatch({
         type: SEARCH,
-        payload: data
+        payload: data,
     });
 };
 
-export const close_collapse = () => dispatch => {
+export const close_collapse = () => (dispatch) => {
     dispatch({
-        type: CLOSE_COLLAPSE
+        type: CLOSE_COLLAPSE,
     });
 };
 
-export const open_collapse = () => dispatch => {
+export const open_collapse = () => (dispatch) => {
     dispatch({
-        type: OPEN_COLLAPSE
+        type: OPEN_COLLAPSE,
     });
 };
 
-export const get_ccms_list_per_user = data => dispatch => {
+export const get_ccms_list_per_user = (data) => (dispatch) => {
     dispatch({
         type: GET_CCMS_LIST_PER_USER,
-        payload: data
+        payload: data,
     });
 };
 
-export const remove_selected_ccms = () => dispatch => {
+export const remove_selected_ccms = () => (dispatch) => {
     dispatch({
-        type: REMOVE_SELECTED_CCMS
+        type: REMOVE_SELECTED_CCMS,
     });
 };
 
-export const get_selected_ccms = data => dispatch => {
+export const get_selected_ccms = (data) => (dispatch) => {
     console.log(data);
     dispatch({
         type: GET_SELECTED_CCMS_ONLY,
-        payload: data
+        payload: data,
     });
 };
 
-export const add_user_to_ccms_admin = users_list => dispatch => {
-    users_list.forEach(item => {
+export const add_user_to_ccms_admin = (users_list) => (dispatch) => {
+    users_list.forEach((item) => {
         axios
             .put(`/api/users/${item.user.id}/`, {
-                groups: [1]
+                groups: [1],
             })
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: ADD_USER_TO_CCMS_ADMIN,
-                    payload: res.data
+                    payload: res.data,
                 });
                 dispatch({
-                    type: STOP_FETCHING_CCMS
+                    type: STOP_FETCHING_CCMS,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     });
 };
 
-export const remove_user_from_ccms_admin = ccms_admin_list => dispatch => {
-    ccms_admin_list.forEach(item => {
+export const remove_user_from_ccms_admin = (ccms_admin_list) => (dispatch) => {
+    ccms_admin_list.forEach((item) => {
         axios
             .put(`/api/users/${item.id}/`, {
-                groups: []
+                groups: [],
             })
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: REMOVE_USER_FROM_CCMS_ADMIN,
-                    payload: res.data
+                    payload: res.data,
                 });
                 dispatch({
-                    type: STOP_FETCHING_CCMS
+                    type: STOP_FETCHING_CCMS,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     });
 };
 
-export const add_comment = data => dispatch => {
+export const add_comment = (data) => (dispatch) => {
     axios
         .post("/api/comments/", data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_COMMENT,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const update_ccms = (data, id, prev_data) => dispatch => {
+export const update_ccms = (data, id, prev_data) => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     if (prev_data.date_acknowledged) {
         axios
             .put(`/api/ccms/${id}/`, data)
-            .then(res => {
+            .then((res) => {
                 dispatch({
                     type: UPDATE_CCMS,
-                    payload: res.data
+                    payload: res.data,
                 });
                 dispatch({
-                    type: STOP_FETCHING_CCMS
+                    type: STOP_FETCHING_CCMS,
                 });
             })
-            .catch(err => console.log(err.response));
+            .catch((err) => console.log(err.response));
     } else {
         Promise.all([
             axios.put(`/api/ccms/${id}/`, data),
@@ -621,340 +621,340 @@ export const update_ccms = (data, id, prev_data) => dispatch => {
                 contributor: data.cba_auth_user,
                 ccms: { ...data, id: prev_data.id },
                 ccms_status: data.ccms_status,
-                entry: `Assigned by ${data.cba_auth_user.fullname}`
-            })
+                entry: `Assigned by ${data.cba_auth_user.fullname}`,
+            }),
         ])
             .then(([res_ccms, res_comment]) => {
                 dispatch({
                     type: COMPLETE_CCMS,
                     payload: {
                         completed_ccms: res_ccms.data,
-                        comment: res_comment.data
-                    }
+                        comment: res_comment.data,
+                    },
                 });
                 dispatch({
-                    type: STOP_FETCHING_CCMS
+                    type: STOP_FETCHING_CCMS,
                 });
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err.response, err);
             });
     }
 };
 
-export const get_users_list = () => dispatch => {
+export const get_users_list = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/users/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_USERS_LIST,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_ccms_admin_list = () => dispatch => {
+export const get_ccms_admin_list = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/group/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_CCMS_ADMIN_LIST,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_silo = () => dispatch => {
+export const get_silo = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/silo/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_SILO,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_ticket_type = () => dispatch => {
+export const get_ticket_type = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/ticket_type/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_TICKET_TYPE,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_ccms_status = () => dispatch => {
+export const get_ccms_status = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/ccms_status/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_CCMS_STATUS,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_ccms_owner = () => dispatch => {
+export const get_ccms_owner = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/ccms_owners/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_CCMS_OWNER,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
 };
 
-export const get_site_code = () => dispatch => {
+export const get_site_code = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/site_code/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_SITE_CODE,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const get_accountable_team = () => dispatch => {
+export const get_accountable_team = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/accountable_team/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_ACCOUNTABLE_TEAM,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const get_escalation_type = () => dispatch => {
+export const get_escalation_type = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/escalation_type/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_ESCALATION_TYPE,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const get_recipients = () => dispatch => {
+export const get_recipients = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/recipients/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_RECIPIENTS,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const get_ticket_status = () => dispatch => {
+export const get_ticket_status = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/ticket_status/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_TICKET_STATUS,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const get_business_unit = () => dispatch => {
+export const get_business_unit = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/business_unit/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_BUSINESS_UNIT,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const get_ccms_list = () => dispatch => {
+export const get_ccms_list = () => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get("/api/ccms/")
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_CCMS,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const ack_entry = (id, data) => dispatch => {
+export const ack_entry = (id, data) => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .put(`/api/ccms/${id}/`, data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ACK_ENTRY,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err.response);
         });
 
     dispatch({
-        type: STOP_FETCHING_CCMS
+        type: STOP_FETCHING_CCMS,
     });
 };
 
-export const getComments = id => dispatch => {
+export const getComments = (id) => (dispatch) => {
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .get(`/api/comments/?ccms__id=${id}`)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_COMMENTS,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: STOP_FETCHING_CCMS
+                type: STOP_FETCHING_CCMS,
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
 };
 
-export const add_update = data => dispatch => {
+export const add_update = (data) => (dispatch) => {
     console.log("add update");
     dispatch({
-        type: FETCHING_CCMS
+        type: FETCHING_CCMS,
     });
 
     axios
         .post("/api/comments/", data)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: ADD_UPDATE,
-                payload: res.data
+                payload: res.data,
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err.response);
         });
 
     dispatch({
-        type: STOP_FETCHING_CCMS
+        type: STOP_FETCHING_CCMS,
     });
 };
 
-export const isFetching = () => dispatch => {
+export const isFetching = () => (dispatch) => {
     dispatch({
-        type: STOP_FETCHING_CCMS
+        type: STOP_FETCHING_CCMS,
     });
 };

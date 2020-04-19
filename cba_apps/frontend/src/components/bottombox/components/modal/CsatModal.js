@@ -1,7 +1,13 @@
 import React, { useState, Fragment } from "react";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 
+import { useDispatch } from "react-redux";
+
+import { clearUploadDetails } from "../../../../actions/surveyActions";
+
 const CsatModal = (props) => {
+    const dispatch = useDispatch();
+
     const {
         buttonLabel,
         buttonColor,
@@ -14,6 +20,11 @@ const CsatModal = (props) => {
 
     const toggle = () => setModal(!modal);
 
+    const uploadToggle = () => {
+        dispatch(clearUploadDetails());
+        toggle();
+    };
+
     const color = cellData
         ? cellData.date_completed
             ? "#5cb85c"
@@ -24,7 +35,10 @@ const CsatModal = (props) => {
 
     return (
         <Fragment>
-            <Button color={buttonColor} onClick={toggle}>
+            <Button
+                color={buttonColor}
+                onClick={buttonLabel === "Upload Data" ? uploadToggle : toggle}
+            >
                 {buttonLabel}
             </Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>

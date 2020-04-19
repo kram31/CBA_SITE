@@ -11,7 +11,7 @@ class FormInput extends Component {
             inputValue,
             disabled,
             onChange,
-            options
+            options,
         } = this.props;
 
         return (
@@ -20,7 +20,7 @@ class FormInput extends Component {
                     {objKey
                         .split("_")
                         .join(" ")
-                        .replace(/(^\w{1})|(\s{1}\w{1})/g, match =>
+                        .replace(/(^\w{1})|(\s{1}\w{1})/g, (match) =>
                             match.toUpperCase()
                         )}
                 </Label>
@@ -33,7 +33,7 @@ class FormInput extends Component {
                         id={`id_${objKey}`}
                         value={inputValue}
                         disabled={disabled}
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                         required
                     ></Input>
                 ) : (
@@ -44,7 +44,7 @@ class FormInput extends Component {
                         id={`id_${objKey}`}
                         value={inputValue}
                         disabled={disabled}
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                         required
                     >
                         {this.getInputValue(inputValue, options)}
@@ -56,7 +56,7 @@ class FormInput extends Component {
         );
     }
 
-    getOptions = options =>
+    getOptions = (options) =>
         options.map((item, index) => (
             <option key={index} value={index}>
                 {item.name}
@@ -66,15 +66,15 @@ class FormInput extends Component {
     getInputValue = (inputValue, options) =>
         inputValue ? (
             options
-                .filter(item => inputValue.name === item.name)
+                .filter((item) => inputValue.name === item.name)
                 .map((item, index) => (
                     <option key={index} value={index}>
                         {item.name}
                     </option>
                 ))[0]
         ) : (
-            <option key={options.length + 1} value={null}>
-                {"Select..."}
+            <option key={options.length + 1} value="">
+                Select...
             </option>
         );
 }
